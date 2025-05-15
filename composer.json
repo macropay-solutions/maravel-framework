@@ -104,8 +104,8 @@
                 "illuminate/Collections/",
                 "illuminate/Conditionable/"
             ],
-            "Laravel\\Prompts\\": "laravel/prompts/",
-            "Laravel\\SerializableClosure\\": "laravel/serializable-closure/"
+            "Laravel\\Prompts\\": "prompts/",
+            "Laravel\\SerializableClosure\\": "serializable-closure/"
         },
         "files": [
             "src/helpers.php",
