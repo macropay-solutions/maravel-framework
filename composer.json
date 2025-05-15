@@ -1,0 +1,93 @@
+{
+    "name": "macropay-solutions/maravel-framework",
+    "description": "The Macropay-Solutions Maravel Framework from Lumen 10.0.4 and Illuminate 10.48.29",
+    "keywords": ["framework", "macropay-solutions", "maravel", "lumen"],
+    "license": "MIT",
+    "type": "library",
+    "support": {
+        "issues": "https://github.com/macropay-solutions/maravel-framework/issues",
+        "source": "https://github.com/macropay-solutions/maravel-framework"
+    },
+    "require": {
+        "php": "^8.1",
+        "composer-runtime-api": "^2.2",
+        "dragonmantank/cron-expression": "^3.1",
+        "nikic/fast-route": "^1.3",
+        "symfony/console": "^6.1",
+        "symfony/error-handler": "^6.1",
+        "symfony/http-kernel": "^6.1",
+        "symfony/http-foundation": "^6.1",
+        "symfony/mime": "^6.1",
+        "symfony/var-dumper": "^6.1",
+        "vlucas/phpdotenv": "^5.4.1"
+    },
+    "replace": {
+        "illuminate/auth": "self.version",
+        "illuminate/broadcasting": "self.version",
+        "illuminate/bus": "self.version",
+        "illuminate/cache": "self.version",
+        "illuminate/collections": "self.version",
+        "illuminate/conditionable": "self.version",
+        "illuminate/config": "self.version",
+        "illuminate/console": "self.version",
+        "illuminate/container": "self.version",
+        "illuminate/contracts": "self.version",
+        "illuminate/cookie": "self.version",
+        "illuminate/database": "self.version",
+        "illuminate/encryption": "self.version",
+        "illuminate/events": "self.version",
+        "illuminate/filesystem": "self.version",
+        "illuminate/hashing": "self.version",
+        "illuminate/http": "self.version",
+        "illuminate/log": "self.version",
+        "illuminate/macroable": "self.version",
+        "illuminate/mail": "self.version",
+        "illuminate/notifications": "self.version",
+        "illuminate/pagination": "self.version",
+        "illuminate/pipeline": "self.version",
+        "illuminate/process": "self.version",
+        "illuminate/queue": "self.version",
+        "illuminate/redis": "self.version",
+        "illuminate/routing": "self.version",
+        "illuminate/session": "self.version",
+        "illuminate/support": "self.version",
+        "illuminate/testing": "self.version",
+        "illuminate/translation": "self.version",
+        "illuminate/validation": "self.version",
+        "illuminate/view": "self.version"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.4.4",
+        "phpunit/phpunit": "10.5.3"
+    },
+    "suggest": {
+        "macropay-solutions/laravel-crud-wizard-free": "*",
+        "macropay-solutions/laravel-crud-wizard-decorator-free": "*",
+        "macropay-solutions/laravel-crud-wizard-client-free": "*",
+        "macropay-solutions/laravel-crud-wizard-generator": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laravel\\Lumen\\": "src/",
+            "Illuminate\\": "illuminate/",
+            "Illuminate\\Support\\": [
+                "illuminate/Macroable/",
+                "illuminate/Collections/",
+                "illuminate/Conditionable/"
+            ]
+        },
+        "files": [
+            "src/helpers.php",
+            "illuminate/Collections/helpers.php",
+            "illuminate/Events/functions.php",
+            "illuminate/Filesystem/functions.php"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "10.x-dev"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
