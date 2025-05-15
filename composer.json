@@ -108,10 +108,7 @@
             "Laravel\\SerializableClosure\\": "serializable-closure/src/"
         },
         "files": [
-            "src/helpers.php",
-            "illuminate/Collections/helpers.php",
-            "illuminate/Events/functions.php",
-            "illuminate/Filesystem/functions.php"
+            "src/helpers.php"
         ]
     },
     "extra": {
