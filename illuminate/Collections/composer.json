@@ -14,10 +14,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
-        "illuminate/conditionable": "^10.0",
-        "illuminate/contracts": "^10.0",
-        "illuminate/macroable": "^10.0"
+        "php": "^8.1"
     },
     "autoload": {
         "psr-4": {
@@ -33,7 +30,10 @@
         }
     },
     "suggest": {
-        "symfony/var-dumper": "Required to use the dump method (^6.2)."
+        "symfony/var-dumper": "Required to use the dump method (^6.2).",
+        "illuminate/conditionable": "^10.0",
+        "illuminate/contracts": "^10.0",
+        "illuminate/macroable": "^10.0"
     },
     "config": {
         "sort-packages": true

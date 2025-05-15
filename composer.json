@@ -9,17 +9,44 @@
         "source": "https://github.com/macropay-solutions/maravel-framework"
     },
     "require": {
-        "php": "^8.1",
+        "brick/math": "^0.9.3|^0.10.2|^0.11|^0.12",
         "composer-runtime-api": "^2.2",
+        "doctrine/inflector": "^2.0",
         "dragonmantank/cron-expression": "^3.1",
+        "egulias/email-validator": "^3.2.5|^4.0",
+        "ext-ctype": "*",
+        "ext-filter": "*",
+        "ext-hash": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-pdo": "*",
+        "ext-session": "*",
+        "ext-tokenizer": "*",
+        "fruitcake/php-cors": "^1.2",
+        "guzzlehttp/uri-template": "^1.0",
+        "league/commonmark": "^2.6",
+        "monolog/monolog": "^3.0",
+        "nesbot/carbon": "^2.67",
         "nikic/fast-route": "^1.3",
-        "symfony/console": "^6.1",
+        "nunomaduro/termwind": "^1.13",
+        "php": "^8.1",
+        "psr/container": "^1.1.1|^2.0.1",
+        "psr/log": "^1.0|^2.0|^3.0",
+        "ramsey/uuid": "^4.7",
+        "symfony/console": "^6.2",
         "symfony/error-handler": "^6.1",
-        "symfony/http-kernel": "^6.1",
-        "symfony/http-foundation": "^6.1",
-        "symfony/mime": "^6.1",
+        "symfony/finder": "^6.2",
+        "symfony/http-foundation": "^6.4",
+        "symfony/http-kernel": "^6.2",
+        "symfony/mailer": "^6.2",
+        "symfony/mime": "^6.2",
+        "symfony/process": "^6.2",
+        "symfony/routing": "^6.2",
         "symfony/var-dumper": "^6.1",
-        "vlucas/phpdotenv": "^5.4.1"
+        "tijsverkoyen/css-to-inline-styles": "^2.2.5",
+        "vlucas/phpdotenv": "^5.4.1",
+        "voku/portable-ascii": "^2.0"
     },
     "replace": {
         "illuminate/auth": "self.version",
@@ -54,7 +81,9 @@
         "illuminate/testing": "self.version",
         "illuminate/translation": "self.version",
         "illuminate/validation": "self.version",
-        "illuminate/view": "self.version"
+        "illuminate/view": "self.version",
+        "laravel/prompts": "self.version",
+        "laravel/serializable-closure": "self.version"
     },
     "require-dev": {
         "mockery/mockery": "^1.4.4",
@@ -74,7 +103,9 @@
                 "illuminate/Macroable/",
                 "illuminate/Collections/",
                 "illuminate/Conditionable/"
-            ]
+            ],
+            "Laravel\\Prompts\\": "prompts/",
+            "Laravel\\SerializableClosure\\": "serializable-closure/"
         },
         "files": [
             "src/helpers.php",

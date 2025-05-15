@@ -16,12 +16,7 @@
     "require": {
         "php": "^8.1",
         "ext-mbstring": "*",
-        "illuminate/collections": "^10.0",
-        "illuminate/contracts": "^10.0",
-        "illuminate/macroable": "^10.0",
         "laravel/prompts": "^0.1.9",
-        "illuminate/support": "^10.0",
-        "illuminate/view": "^10.0",
         "nunomaduro/termwind": "^1.13",
         "symfony/console": "^6.2",
         "symfony/process": "^6.2"
@@ -43,7 +38,12 @@
         "illuminate/bus": "Required to use the scheduled job dispatcher (^10.0).",
         "illuminate/container": "Required to use the scheduler (^10.0).",
         "illuminate/filesystem": "Required to use the generator command (^10.0).",
-        "illuminate/queue": "Required to use closures for scheduled jobs (^10.0)."
+        "illuminate/queue": "Required to use closures for scheduled jobs (^10.0).",
+        "illuminate/collections": "^10.0",
+        "illuminate/contracts": "^10.0",
+        "illuminate/macroable": "^10.0",
+        "illuminate/support": "^10.0",
+        "illuminate/view": "^10.0",
     },
     "config": {
         "sort-packages": true
