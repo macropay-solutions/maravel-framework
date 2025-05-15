@@ -72,6 +72,7 @@ class PostgresConnection extends Connection
         }
 
         return new PostgresBuilder($this);
+        return \app(PostgresBuilder::class, [$this]);
     }
 
     /**

@@ -1564,7 +1564,8 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
      */
     public function newEloquentBuilder($query)
     {
-        return new Builder($query);
+//        return new Builder($query);
+        return \app(Builder::class, [$query]);
     }
 
     /**
@@ -1585,7 +1586,8 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
      */
     public function newCollection(array $models = [])
     {
-        return new Collection($models);
+//        return new Collection($models);
+        return \app(Collection::class, [$models]);
     }
 
     /**

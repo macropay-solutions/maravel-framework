@@ -225,7 +225,8 @@ class PendingRequest
     public function __construct(?Factory $factory = null, $middleware = [])
     {
         $this->factory = $factory;
-        $this->middleware = new Collection($middleware);
+//        $this->middleware = new Collection($middleware);
+        $this->middleware = \app(Collection::class, [$middleware]);
 
         $this->asJson();
 
@@ -925,7 +926,8 @@ class PendingRequest
                     }
                 });
             } catch (ConnectException $e) {
-                $this->dispatchConnectionFailedEvent(new Request($e->getRequest()));
+//                $this->dispatchConnectionFailedEvent(new Request($e->getRequest()));
+                $this->dispatchConnectionFailedEvent(\app(Request::class, [$e->getRequest()]));
 
                 throw new ConnectionException($e->getMessage(), 0, $e);
             }
@@ -1014,7 +1016,8 @@ class PendingRequest
             })
             ->otherwise(function (OutOfBoundsException|TransferException $e) {
                 if ($e instanceof ConnectException) {
-                    $this->dispatchConnectionFailedEvent(new Request($e->getRequest()));
+//                    $this->dispatchConnectionFailedEvent(new Request($e->getRequest()));
+                    $this->dispatchConnectionFailedEvent(\app(Request::class, [$e->getRequest()]));
                 }
 
                 return $e instanceof RequestException && $e->hasResponse() ? $this->populateResponse($this->newResponse($e->getResponse())) : $e;
@@ -1223,7 +1226,8 @@ class PendingRequest
 
                 return $promise->then(function ($response) use ($request, $options) {
                     $this->factory?->recordRequestResponsePair(
-                        (new Request($request))->withData($options['laravel_data']),
+//                        (new Request($request))->withData($options['laravel_data']),
+                        \app(Request::class, [$request])->withData($options['laravel_data']),
                         $this->newResponse($response)
                     );
 
@@ -1244,7 +1248,8 @@ class PendingRequest
             return function ($request, $options) use ($handler) {
                 $response = ($this->stubCallbacks ?? collect())
                      ->map
-                     ->__invoke((new Request($request))->withData($options['laravel_data']), $options)
+//                     ->__invoke((new Request($request))->withData($options['laravel_data']), $options)
+                     ->__invoke(\app(Request::class, [$request])->withData($options['laravel_data']), $options)
                      ->filter()
                      ->first();
 
@@ -1303,7 +1308,8 @@ class PendingRequest
         return tap($request, function (&$request) use ($options) {
             $this->beforeSendingCallbacks->each(function ($callback) use (&$request, $options) {
                 $callbackResult = call_user_func(
-                    $callback, (new Request($request))->withData($options['laravel_data']), $options, $this
+//                    $callback, (new Request($request))->withData($options['laravel_data']), $options, $this
+                    $callback, \app(Request::class, [$request])->withData($options['laravel_data']), $options, $this
                 );
 
                 if ($callbackResult instanceof RequestInterface) {
@@ -1337,7 +1343,8 @@ class PendingRequest
      */
     protected function newResponse($response)
     {
-        return new Response($response);
+//        return new Response($response);
+        return \app(Response::class, [$response]);
     }
 
     /**

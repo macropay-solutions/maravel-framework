@@ -178,13 +178,18 @@ class Gate implements GateContract
         if ($condition instanceof Closure) {
             $response = $this->canBeCalledWithUser($user, $condition)
                             ? $condition($user)
-                            : new Response(false, $message, $code);
+//                            : new Response(false, $message, $code);
+                            : \app(Response::class, [false, $message, $code]);
         } else {
             $response = $condition;
         }
 
-        return with($response instanceof Response ? $response : new Response(
-            (bool) $response === $allowWhenResponseIs, $message, $code
+//        return with($response instanceof Response ? $response : new Response(
+//            (bool) $response === $allowWhenResponseIs, $message, $code
+//        ))->authorize();
+        return with($response instanceof Response ? $response : \app(
+            Response::class,
+            [(bool)$response === $allowWhenResponseIs, $message, $code]
         ))->authorize();
     }
 

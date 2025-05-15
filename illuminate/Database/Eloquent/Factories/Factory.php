@@ -143,13 +143,13 @@ abstract class Factory
                                 ?Collection $recycle = null)
     {
         $this->count = $count;
-        $this->states = $states ?? new Collection;
-        $this->has = $has ?? new Collection;
-        $this->for = $for ?? new Collection;
-        $this->afterMaking = $afterMaking ?? new Collection;
-        $this->afterCreating = $afterCreating ?? new Collection;
+        $this->states = $states ?? \app(Collection::class);
+        $this->has = $has ?? \app(Collection::class);
+        $this->for = $for ?? \app(Collection::class);
+        $this->afterMaking = $afterMaking ?? \app(Collection::class);
+        $this->afterCreating = $afterCreating ?? \app(Collection::class);
         $this->connection = $connection;
-        $this->recycle = $recycle ?? new Collection;
+        $this->recycle = $recycle ?? \app(Collection::class);
         $this->faker = $this->withFaker();
     }
 
@@ -442,9 +442,10 @@ abstract class Factory
     protected function getRawAttributes(?Model $parent)
     {
         return $this->states->pipe(function ($states) {
-            return $this->for->isEmpty() ? $states : new Collection(array_merge([function () {
+//            return $this->for->isEmpty() ? $states : new Collection(array_merge([function () {
+            return $this->for->isEmpty() ? $states : \app(Collection::class, [array_merge([function () {
                 return $this->parentResolvers();
-            }], $states->all()));
+            }], $states->all())]);
         })->reduce(function ($carry, $state) use ($parent) {
             if ($state instanceof Closure) {
                 $state = $state->bindTo($this);

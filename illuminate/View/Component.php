@@ -377,7 +377,8 @@ abstract class Component
      */
     protected function newAttributeBag(array $attributes = [])
     {
-        return new ComponentAttributeBag($attributes);
+//        return new ComponentAttributeBag($attributes);
+        return \app(ComponentAttributeBag::class, [$attributes]);
     }
 
     /**

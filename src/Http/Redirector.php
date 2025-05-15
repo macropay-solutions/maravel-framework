@@ -67,7 +67,8 @@ class Redirector
      */
     protected function createRedirect($path, $status, $headers)
     {
-        $redirect = new RedirectResponse($path, $status, $headers);
+//        $redirect = new RedirectResponse($path, $status, $headers);
+        $redirect = \app(RedirectResponse::class, [$path, $status, $headers]);
 
         $redirect->setRequest($this->app->make('request'));
 

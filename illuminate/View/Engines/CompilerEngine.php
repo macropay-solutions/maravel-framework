@@ -41,7 +41,8 @@ class CompilerEngine extends PhpEngine
      */
     public function __construct(CompilerInterface $compiler, ?Filesystem $files = null)
     {
-        parent::__construct($files ?: new Filesystem);
+//        parent::__construct($files ?: new Filesystem);
+        parent::__construct($files ?: \app(Filesystem::class));
 
         $this->compiler = $compiler;
     }

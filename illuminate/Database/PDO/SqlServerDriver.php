@@ -17,9 +17,11 @@ class SqlServerDriver extends AbstractSQLServerDriver
      */
     public function connect(array $params, $username = null, $password = null, array $driverOptions = [])
     {
-        return new SqlServerConnection(
-            new Connection($params['pdo'])
-        );
+//        return new SqlServerConnection(
+        return \app(SqlServerConnection::class, [
+//            new Connection($params['pdo'])
+            \app(Connection::class, [$params['pdo']])
+        ]);
     }
 
     /**

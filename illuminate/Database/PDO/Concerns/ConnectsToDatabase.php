@@ -25,6 +25,7 @@ trait ConnectsToDatabase
             throw new InvalidArgumentException('Laravel requires the "pdo" property to be set and be a PDO instance.');
         }
 
-        return new Connection($params['pdo']);
+//        return new Connection($params['pdo']);
+        return \app(Connection::class, [$params['pdo']]);
     }
 }

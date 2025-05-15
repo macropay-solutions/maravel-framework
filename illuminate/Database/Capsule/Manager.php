@@ -60,7 +60,8 @@ class Manager
     {
         $factory = new ConnectionFactory($this->container);
 
-        $this->manager = new DatabaseManager($this->container, $factory);
+//        $this->manager = new DatabaseManager($this->container, $factory);
+        $this->manager = \app(DatabaseManager::class, [$this->container, $factory]);
     }
 
     /**

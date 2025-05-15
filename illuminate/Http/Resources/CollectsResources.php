@@ -26,7 +26,8 @@ trait CollectsResources
         }
 
         if (is_array($resource)) {
-            $resource = new Collection($resource);
+//            $resource = new Collection($resource);
+            $resource = \app(Collection::class, [$resource]);
         }
 
         $collects = $this->collects();

@@ -115,9 +115,10 @@ class Schedule
      */
     public function call($callback, array $parameters = [])
     {
-        $this->events[] = $event = new CallbackEvent(
+//        $this->events[] = $event = new CallbackEvent(
+        $this->events[] = $event = \app(CallbackEvent::class, [
             $this->eventMutex, $callback, $parameters, $this->timezone
-        );
+        ]);
 
         return $event;
     }
@@ -245,7 +246,8 @@ class Schedule
             $command .= ' '.$this->compileParameters($parameters);
         }
 
-        $this->events[] = $event = new Event($this->eventMutex, $command, $this->timezone);
+//        $this->events[] = $event = new Event($this->eventMutex, $command, $this->timezone);
+        $this->events[] = $event = \app(Event::class, [$this->eventMutex, $command, $this->timezone]);
 
         return $event;
     }

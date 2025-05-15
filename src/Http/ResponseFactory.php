@@ -23,7 +23,8 @@ class ResponseFactory
      */
     public function make($content = '', $status = 200, array $headers = [])
     {
-        return new Response($content, $status, $headers);
+//        return new Response($content, $status, $headers);
+        return \app(Response::class, [$content, $status, $headers]);
     }
 
     /**
@@ -37,7 +38,8 @@ class ResponseFactory
      */
     public function json($data = [], $status = 200, array $headers = [], $options = 0)
     {
-        return new JsonResponse($data, $status, $headers, $options);
+//        return new JsonResponse($data, $status, $headers, $options);
+        return \app(JsonResponse::class, [$data, $status, $headers, $options]);
     }
 
     /**
@@ -65,7 +67,8 @@ class ResponseFactory
      */
     public function stream($callback, $status = 200, array $headers = [])
     {
-        return new StreamedResponse($callback, $status, $headers);
+//        return new StreamedResponse($callback, $status, $headers);
+        return \app(StreamedResponse::class, [$callback, $status, $headers]);
     }
 
     /**
@@ -79,7 +82,8 @@ class ResponseFactory
      */
     public function streamDownload($callback, $name = null, array $headers = [], $disposition = 'attachment')
     {
-        $response = new StreamedResponse($callback, 200, $headers);
+//        $response = new StreamedResponse($callback, 200, $headers);
+        $response = \app(StreamedResponse::class, [$callback, 200, $headers]);
 
         if (! is_null($name)) {
             $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
@@ -103,7 +107,8 @@ class ResponseFactory
      */
     public function download($file, $name = null, array $headers = [], $disposition = 'attachment')
     {
-        $response = new BinaryFileResponse($file, 200, $headers, true, $disposition);
+//        $response = new BinaryFileResponse($file, 200, $headers, true, $disposition);
+        $response = \app(BinaryFileResponse::class, [$file, 200, $headers, true, $disposition]);
 
         if (! is_null($name)) {
             return $response->setContentDisposition($disposition, $name, $this->fallbackName($name));
@@ -132,6 +137,7 @@ class ResponseFactory
      */
     public function file($file, array $headers = [])
     {
-        return new BinaryFileResponse($file, 200, $headers);
+//        return new BinaryFileResponse($file, 200, $headers);
+        return \app(BinaryFileResponse::class, [$file, 200, $headers]);
     }
 }

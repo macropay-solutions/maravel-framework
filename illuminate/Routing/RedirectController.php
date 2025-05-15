@@ -25,9 +25,10 @@ class RedirectController extends Controller
 
         $parameters->forget('status')->forget('destination');
 
-        $route = (new Route('GET', $destination, [
+//        $route = (new Route('GET', $destination, [
+        $route = \app(Route::class, ['GET', $destination, [
             'as' => 'laravel_route_redirect_destination',
-        ]))->bind($request);
+        ]])->bind($request);
 
         $parameters = $parameters->only(
             $route->getCompiled()->getPathVariables()
@@ -39,6 +40,7 @@ class RedirectController extends Controller
             $url = Str::after($url, '/');
         }
 
-        return new RedirectResponse($url, $status);
+//        return new RedirectResponse($url, $status);
+        return \app(RedirectResponse::class, [$url, $status]);
     }
 }

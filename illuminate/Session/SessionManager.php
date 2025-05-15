@@ -191,12 +191,13 @@ class SessionManager extends Manager
     {
         return $this->config->get('session.encrypt')
                 ? $this->buildEncryptedSession($handler)
-                : new Store(
+//                : new Store(
+                : \app(Store::class, [
                     $this->config->get('session.cookie'),
                     $handler,
                     $id = null,
                     $this->config->get('session.serialization', 'php')
-                );
+                ]);
     }
 
     /**
@@ -207,13 +208,14 @@ class SessionManager extends Manager
      */
     protected function buildEncryptedSession($handler)
     {
-        return new EncryptedStore(
+//        return new EncryptedStore(
+        return \app(EncryptedStore::class, [
             $this->config->get('session.cookie'),
             $handler,
             $this->container['encrypter'],
             $id = null,
             $this->config->get('session.serialization', 'php'),
-        );
+        ]);
     }
 
     /**

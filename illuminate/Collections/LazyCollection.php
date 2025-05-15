@@ -1343,7 +1343,8 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
         return new static(function () use ($callback) {
             $iterator = $this->getIterator();
 
-            $chunk = new Collection;
+//            $chunk = new Collection;
+            $chunk = \app(Collection::class);
 
             if ($iterator->valid()) {
                 $chunk[$iterator->key()] = $iterator->current();
@@ -1355,7 +1356,8 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
                 if (! $callback($iterator->current(), $iterator->key(), $chunk)) {
                     yield new static($chunk);
 
-                    $chunk = new Collection;
+//                    $chunk = new Collection;
+                    $chunk = \app(Collection::class);
                 }
 
                 $chunk[$iterator->key()] = $iterator->current();

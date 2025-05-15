@@ -84,7 +84,8 @@ class SQLiteConnection extends Connection
             $this->useDefaultSchemaGrammar();
         }
 
-        return new SQLiteBuilder($this);
+//        return new SQLiteBuilder($this);
+        return \app(SQLiteBuilder::class, [$this]);
     }
 
     /**

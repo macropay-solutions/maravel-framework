@@ -232,7 +232,8 @@ class Application extends Container implements ApplicationContract, CachesConfig
         $this->singleton(Mix::class);
 
         $this->singleton(PackageManifest::class, fn () => new PackageManifest(
-            new Filesystem, $this->basePath(), $this->getCachedPackagesPath()
+//            new Filesystem, $this->basePath(), $this->getCachedPackagesPath()
+            \app(Filesystem::class), $this->basePath(), $this->getCachedPackagesPath()
         ));
     }
 
@@ -790,7 +791,8 @@ class Application extends Container implements ApplicationContract, CachesConfig
 
         $providers->splice(1, 0, [$this->make(PackageManifest::class)->providers()]);
 
-        (new ProviderRepository($this, new Filesystem, $this->getCachedServicesPath()))
+//        (new ProviderRepository($this, new Filesystem, $this->getCachedServicesPath()))
+        (new ProviderRepository($this, \app(Filesystem::class), $this->getCachedServicesPath()))
                     ->load($providers->collapse()->toArray());
     }
 

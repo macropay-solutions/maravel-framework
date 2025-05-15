@@ -755,7 +755,8 @@ class Builder implements BuilderContract
      */
     protected function newJoinClause(self $parentQuery, $type, $table)
     {
-        return new JoinClause($parentQuery, $type, $table);
+//        return new JoinClause($parentQuery, $type, $table);
+        return \app(JoinClause::class, [$parentQuery, $type, $table]);
     }
 
     /**
@@ -768,7 +769,8 @@ class Builder implements BuilderContract
      */
     protected function newJoinLateralClause(self $parentQuery, $type, $table)
     {
-        return new JoinLateralClause($parentQuery, $type, $table);
+//        return new JoinLateralClause($parentQuery, $type, $table);
+        return \app(JoinLateralClause::class, [$parentQuery, $type, $table]);
     }
 
     /**
@@ -3102,11 +3104,12 @@ class Builder implements BuilderContract
             $this->columns = ['*'];
         }
 
-        return new LazyCollection(function () {
+//        return new LazyCollection(function () {
+        return \app(LazyCollection::class, [function () {
             yield from $this->connection->cursor(
                 $this->toSql(), $this->getBindings(), ! $this->useWritePdo
             );
-        });
+        }]);
     }
 
     /**

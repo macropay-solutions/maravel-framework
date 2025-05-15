@@ -901,7 +901,8 @@ class Event
 
             return $onlyIfOutputExists && empty($output)
                             ? null
-                            : $container->call($callback, ['output' => new Stringable($output)]);
+//                            : $container->call($callback, ['output' => new Stringable($output)]);
+                            : $container->call($callback, ['output' => \app(Stringable::class, [$output])]);
         };
     }
 

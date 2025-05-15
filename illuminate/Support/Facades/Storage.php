@@ -101,7 +101,8 @@ class Storage extends Facade
             $root = "{$root}_test_{$token}";
         }
 
-        (new Filesystem)->cleanDirectory($root);
+//        (new Filesystem)->cleanDirectory($root);
+        \app(Filesystem::class)->cleanDirectory($root);
 
         static::set($disk, $fake = static::createLocalDriver(array_merge($config, [
             'root' => $root,

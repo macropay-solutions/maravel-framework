@@ -114,7 +114,8 @@ trait ProvidesConvenienceMethods
             return (static::$responseBuilder)($request, $errors);
         }
 
-        return new JsonResponse($errors, 422);
+//        return new JsonResponse($errors, 422);
+        return \app(JsonResponse::class, [$errors, 422]);
     }
 
     /**

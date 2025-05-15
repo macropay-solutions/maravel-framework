@@ -130,12 +130,13 @@ class Handler implements ExceptionHandler
      */
     protected function prepareJsonResponse($request, Throwable $e)
     {
-        return new JsonResponse(
+//        return new JsonResponse(
+        return \app(JsonResponse::class, [
             $this->convertExceptionToArray($e),
             $this->isHttpException($e) ? $e->getStatusCode() : 500,
             $this->isHttpException($e) ? $e->getHeaders() : [],
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
-        );
+        ]);
     }
 
     /**
@@ -168,11 +169,12 @@ class Handler implements ExceptionHandler
      */
     protected function prepareResponse($request, Throwable $e)
     {
-        $response = new Response(
+//        $response = new Response(
+        $response = \app(Response::class, [
             $this->renderExceptionWithSymfony($e, config('app.debug', false)),
             $this->isHttpException($e) ? $e->getStatusCode() : 500,
             $this->isHttpException($e) ? $e->getHeaders() : []
-        );
+        ]);
 
         $response->exception = $e;
 
@@ -188,7 +190,8 @@ class Handler implements ExceptionHandler
      */
     protected function renderExceptionWithSymfony(Throwable $e, $debug)
     {
-        $renderer = new HtmlErrorRenderer($debug);
+//        $renderer = new HtmlErrorRenderer($debug);
+        $renderer = \app(HtmlErrorRenderer::class, [$debug]);
 
         return $renderer->render($e)->getAsString();
     }
@@ -208,18 +211,22 @@ class Handler implements ExceptionHandler
             if (! empty($alternatives = $e->getAlternatives())) {
                 $message .= '. Did you mean one of these?';
 
-                with(new Error($output))->render($message);
-                with(new BulletList($output))->render($e->getAlternatives());
+//                with(new Error($output))->render($message);
+                with(\app(Error::class, [$output]))->render($message);
+//                with(new BulletList($output))->render($e->getAlternatives());
+                with(\app(BulletList::class, [$output]))->render($e->getAlternatives());
 
                 $output->writeln('');
             } else {
-                with(new Error($output))->render($message);
+//                with(new Error($output))->render($message);
+                with(\app(Error::class, [$output]))->render($message);
             }
 
             return;
         }
 
-        (new ConsoleApplication)->renderThrowable($e, $output);
+//        (new ConsoleApplication)->renderThrowable($e, $output);
+        \app(ConsoleApplication::class)->renderThrowable($e, $output);
     }
 
     /**

@@ -33,7 +33,8 @@ class LangPublishCommand extends Command
     public function handle()
     {
         if (! is_dir($langPath = $this->laravel->basePath('lang/en'))) {
-            (new Filesystem)->makeDirectory($langPath, recursive: true);
+//            (new Filesystem)->makeDirectory($langPath, recursive: true);
+            \app(Filesystem::class)->makeDirectory($langPath, recursive: true);
         }
 
         $stubs = [

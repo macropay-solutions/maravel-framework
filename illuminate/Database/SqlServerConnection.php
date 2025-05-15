@@ -102,7 +102,8 @@ class SqlServerConnection extends Connection
             $this->useDefaultSchemaGrammar();
         }
 
-        return new SqlServerBuilder($this);
+//        return new SqlServerBuilder($this);
+        return \app(SqlServerBuilder::class, [$this]);
     }
 
     /**

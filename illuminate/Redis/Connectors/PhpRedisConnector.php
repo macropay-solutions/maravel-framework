@@ -35,7 +35,8 @@ class PhpRedisConnector implements Connector
             ));
         };
 
-        return new PhpRedisConnection($connector(), $connector, $config);
+//        return new PhpRedisConnection($connector(), $connector, $config);
+        return \app(PhpRedisConnection::class, [$connector(), $connector, $config]);
     }
 
     /**
@@ -50,9 +51,13 @@ class PhpRedisConnector implements Connector
     {
         $options = array_merge($options, $clusterOptions, Arr::pull($config, 'options', []));
 
-        return new PhpRedisClusterConnection($this->createRedisClusterInstance(
-            array_map([$this, 'buildClusterConnectionString'], $config), $options
-        ));
+//        return new PhpRedisClusterConnection($this->createRedisClusterInstance(
+//            array_map([$this, 'buildClusterConnectionString'], $config), $options
+//        ));
+        return \app(PhpRedisClusterConnection::class, [$this->createRedisClusterInstance(
+            array_map([$this, 'buildClusterConnectionString'], $config),
+            $options
+        )]);
     }
 
     /**

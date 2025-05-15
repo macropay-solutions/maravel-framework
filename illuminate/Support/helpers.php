@@ -203,7 +203,8 @@ if (! function_exists('optional')) {
     function optional($value = null, ?callable $callback = null)
     {
         if (is_null($callback)) {
-            return new Optional($value);
+//            return new Optional($value);
+            return \app(Optional::class, [$value]);
         } elseif (! is_null($value)) {
             return $callback($value);
         }

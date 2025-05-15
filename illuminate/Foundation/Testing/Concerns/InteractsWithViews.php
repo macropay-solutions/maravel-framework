@@ -20,7 +20,8 @@ trait InteractsWithViews
      */
     protected function view(string $view, $data = [])
     {
-        return new TestView(view($view, $data));
+//        return new TestView(view($view, $data));
+        return \app(TestView::class, [view($view, $data)]);
     }
 
     /**
@@ -44,7 +45,8 @@ trait InteractsWithViews
 
         file_put_contents($tempFile, $template);
 
-        return new TestView(view($tempFileInfo['filename'], $data));
+//        return new TestView(view($tempFileInfo['filename'], $data));
+        return \app(TestView::class, [view($tempFileInfo['filename'], $data)]);
     }
 
     /**

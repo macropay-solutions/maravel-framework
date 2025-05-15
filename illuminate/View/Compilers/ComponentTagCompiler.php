@@ -60,7 +60,8 @@ class ComponentTagCompiler
         $this->aliases = $aliases;
         $this->namespaces = $namespaces;
 
-        $this->blade = $blade ?: new BladeCompiler(new Filesystem, sys_get_temp_dir());
+//        $this->blade = $blade ?: new BladeCompiler(new Filesystem, sys_get_temp_dir());
+        $this->blade = $blade ?: new BladeCompiler(\app(Filesystem::class), sys_get_temp_dir());
     }
 
     /**

@@ -33,7 +33,8 @@ class PredisConnector implements Connector
             $config['host'] = Str::after($config['host'], 'tls://');
         }
 
-        return new PredisConnection(new Client($config, $formattedOptions));
+//        return new PredisConnection(new Client($config, $formattedOptions));
+        return \app(PredisConnection::class, [\app(Client::class, [$config, $formattedOptions])]);
     }
 
     /**
@@ -52,8 +53,14 @@ class PredisConnector implements Connector
             $clusterSpecificOptions['prefix'] = $config['prefix'];
         }
 
-        return new PredisClusterConnection(new Client(array_values($config), array_merge(
-            $options, $clusterOptions, $clusterSpecificOptions
-        )));
+//        return new PredisClusterConnection(new Client(array_values($config), array_merge(
+//            $options, $clusterOptions, $clusterSpecificOptions
+//        )));
+        return \app(PredisClusterConnection::class, [
+            \app(Client::class, [
+                array_values($config),
+                array_merge($options, $clusterOptions, $clusterSpecificOptions)
+            ])
+        ]);
     }
 }

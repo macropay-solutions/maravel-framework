@@ -51,7 +51,8 @@ class DumpCommand extends Command
         $info = 'Database schema dumped';
 
         if ($this->option('prune')) {
-            (new Filesystem)->deleteDirectory(
+//            (new Filesystem)->deleteDirectory(
+            \app(Filesystem::class)->deleteDirectory(
                 database_path('migrations'), $preserve = false
             );
 
@@ -84,7 +85,8 @@ class DumpCommand extends Command
     protected function path(Connection $connection)
     {
         return tap($this->option('path') ?: database_path('schema/'.$connection->getName().'-schema.sql'), function ($path) {
-            (new Filesystem)->ensureDirectoryExists(dirname($path));
+//            (new Filesystem)->ensureDirectoryExists(dirname($path));
+            \app(Filesystem::class)->ensureDirectoryExists(dirname($path));
         });
     }
 }

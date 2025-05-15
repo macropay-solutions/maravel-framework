@@ -129,6 +129,7 @@ class DatabaseNotification extends Model
      */
     public function newCollection(array $models = [])
     {
-        return new DatabaseNotificationCollection($models);
+//        return new DatabaseNotificationCollection($models);
+        return \app(DatabaseNotificationCollection::class, [$models]);
     }
 }

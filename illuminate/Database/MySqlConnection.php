@@ -117,7 +117,8 @@ class MySqlConnection extends Connection
             $this->useDefaultSchemaGrammar();
         }
 
-        return new MySqlBuilder($this);
+//        return new MySqlBuilder($this);
+        return \app(MySqlBuilder::class, [$this]);
     }
 
     /**

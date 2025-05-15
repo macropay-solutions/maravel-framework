@@ -24,7 +24,7 @@ class ArrayTransport implements TransportInterface
      */
     public function __construct()
     {
-        $this->messages = new Collection;
+        $this->messages = \app(Collection::class);
     }
 
     /**
@@ -52,7 +52,7 @@ class ArrayTransport implements TransportInterface
      */
     public function flush()
     {
-        return $this->messages = new Collection;
+        return $this->messages = \app(Collection::class);
     }
 
     /**
