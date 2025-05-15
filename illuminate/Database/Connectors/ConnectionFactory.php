@@ -267,10 +267,14 @@ class ConnectionFactory
         }
 
         return match ($driver) {
-            'mysql' => new MySqlConnection($connection, $database, $prefix, $config),
-            'pgsql' => new PostgresConnection($connection, $database, $prefix, $config),
-            'sqlite' => new SQLiteConnection($connection, $database, $prefix, $config),
-            'sqlsrv' => new SqlServerConnection($connection, $database, $prefix, $config),
+//            'mysql' => new MySqlConnection($connection, $database, $prefix, $config),
+            'mysql' => \app(MySqlConnection::class, [$connection, $database, $prefix, $config]),
+//            'pgsql' => new PostgresConnection($connection, $database, $prefix, $config),
+            'pgsql' => \app(PostgresConnection::class, [$connection, $database, $prefix, $config]),
+//            'sqlite' => new SQLiteConnection($connection, $database, $prefix, $config),
+            'sqlite' => \app(SQLiteConnection::class, [$connection, $database, $prefix, $config]),
+//            'sqlsrv' => new SqlServerConnection($connection, $database, $prefix, $config),
+            'sqlsrv' => \app(SqlServerConnection::class, [$connection, $database, $prefix, $config]),
             default => throw new InvalidArgumentException("Unsupported driver [{$driver}]."),
         };
     }

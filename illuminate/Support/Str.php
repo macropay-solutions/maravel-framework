@@ -73,7 +73,8 @@ class Str
      */
     public static function of($string)
     {
-        return new Stringable($string);
+//        return new Stringable($string);
+        return \app(Stringable::class, [$string]);
     }
 
     /**
@@ -885,9 +886,11 @@ class Str
      */
     public static function password($length = 32, $letters = true, $numbers = true, $symbols = true, $spaces = false)
     {
-        $password = new Collection();
+//        $password = new Collection();
+        $password = \app(Collection::class);
 
-        $options = (new Collection([
+//        $options = (new Collection([
+        $options = \app(Collection::class, [[
             'letters' => $letters === true ? [
                 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
                 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
@@ -904,8 +907,7 @@ class Str
                 ']', '|', ':', ';',
             ] : null,
             'spaces' => $spaces === true ? [' '] : null,
-        ]))->filter()->each(fn ($c) => $password->push($c[random_int(0, count($c) - 1)])
-        )->flatten();
+        ]])->filter()->each(fn ($c) => $password->push($c[random_int(0, count($c) - 1)]))->flatten();
 
         $length = $length - $password->count();
 

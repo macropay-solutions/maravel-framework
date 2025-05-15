@@ -347,7 +347,7 @@ class Message
                     $cid = $file->as ?? Str::random();
 
                     $this->message->addPart(
-                        (new DataPart(new File($path), $cid, $file->mime))->asInline()
+                        (new DataPart(\app(File::class, [$path]), $cid, $file->mime))->asInline()
                     );
 
                     return "cid:{$cid}";
@@ -365,7 +365,7 @@ class Message
         $cid = Str::random(10);
 
         $this->message->addPart(
-            (new DataPart(new File($file), $cid))->asInline()
+            (new DataPart(\app(File::class, [$file]), $cid))->asInline()
         );
 
         return "cid:$cid";

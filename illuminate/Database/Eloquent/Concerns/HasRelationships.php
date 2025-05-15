@@ -120,7 +120,8 @@ trait HasRelationships
      */
     protected function newHasOne(Builder $query, Model $parent, $foreignKey, $localKey)
     {
-        return new HasOne($query, $parent, $foreignKey, $localKey);
+//        return new HasOne($query, $parent, $foreignKey, $localKey);
+        return \app(HasOne::class, [$query, $parent, $foreignKey, $localKey]);
     }
 
     /**
@@ -163,7 +164,11 @@ trait HasRelationships
      */
     protected function newHasOneThrough(Builder $query, Model $farParent, Model $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey)
     {
-        return new HasOneThrough($query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey);
+//        return new HasOneThrough($query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey);
+        return \app(
+            HasOneThrough::class,
+            [$query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey]
+        );
     }
 
     /**
@@ -201,7 +206,8 @@ trait HasRelationships
      */
     protected function newMorphOne(Builder $query, Model $parent, $type, $id, $localKey)
     {
-        return new MorphOne($query, $parent, $type, $id, $localKey);
+//        return new MorphOne($query, $parent, $type, $id, $localKey);
+        return \app(MorphOne::class, [$query, $parent, $type, $id, $localKey]);
     }
 
     /**
@@ -253,7 +259,8 @@ trait HasRelationships
      */
     protected function newBelongsTo(Builder $query, Model $child, $foreignKey, $ownerKey, $relation)
     {
-        return new BelongsTo($query, $child, $foreignKey, $ownerKey, $relation);
+//        return new BelongsTo($query, $child, $foreignKey, $ownerKey, $relation);
+        return \app(BelongsTo::class, [$query, $child, $foreignKey, $ownerKey, $relation]);
     }
 
     /**
@@ -334,7 +341,8 @@ trait HasRelationships
      */
     protected function newMorphTo(Builder $query, Model $parent, $foreignKey, $ownerKey, $type, $relation)
     {
-        return new MorphTo($query, $parent, $foreignKey, $ownerKey, $type, $relation);
+//        return new MorphTo($query, $parent, $foreignKey, $ownerKey, $type, $relation);
+        return \app(MorphTo::class, [$query, $parent, $foreignKey, $ownerKey, $type, $relation]);
     }
 
     /**
@@ -407,7 +415,8 @@ trait HasRelationships
      */
     protected function newHasMany(Builder $query, Model $parent, $foreignKey, $localKey)
     {
-        return new HasMany($query, $parent, $foreignKey, $localKey);
+//        return new HasMany($query, $parent, $foreignKey, $localKey);
+        return \app(HasMany::class, [$query, $parent, $foreignKey, $localKey]);
     }
 
     /**
@@ -454,7 +463,11 @@ trait HasRelationships
      */
     protected function newHasManyThrough(Builder $query, Model $farParent, Model $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey)
     {
-        return new HasManyThrough($query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey);
+//        return new HasManyThrough($query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey);
+        return \app(
+            HasManyThrough::class,
+            [$query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey]
+        );
     }
 
     /**
@@ -495,7 +508,8 @@ trait HasRelationships
      */
     protected function newMorphMany(Builder $query, Model $parent, $type, $id, $localKey)
     {
-        return new MorphMany($query, $parent, $type, $id, $localKey);
+//        return new MorphMany($query, $parent, $type, $id, $localKey);
+        return \app(MorphMany::class, [$query, $parent, $type, $id, $localKey]);
     }
 
     /**
@@ -559,7 +573,11 @@ trait HasRelationships
     protected function newBelongsToMany(Builder $query, Model $parent, $table, $foreignPivotKey, $relatedPivotKey,
                                         $parentKey, $relatedKey, $relationName = null)
     {
-        return new BelongsToMany($query, $parent, $table, $foreignPivotKey, $relatedPivotKey, $parentKey, $relatedKey, $relationName);
+//        return new BelongsToMany($query, $parent, $table, $foreignPivotKey, $relatedPivotKey, $parentKey, $relatedKey, $relationName);
+        return \app(
+            BelongsToMany::class,
+            [$query, $parent, $table, $foreignPivotKey, $relatedPivotKey, $parentKey, $relatedKey, $relationName]
+        );
     }
 
     /**
@@ -628,8 +646,20 @@ trait HasRelationships
                                       $relatedPivotKey, $parentKey, $relatedKey,
                                       $relationName = null, $inverse = false)
     {
-        return new MorphToMany($query, $parent, $name, $table, $foreignPivotKey, $relatedPivotKey, $parentKey, $relatedKey,
-            $relationName, $inverse);
+//        return new MorphToMany($query, $parent, $name, $table, $foreignPivotKey, $relatedPivotKey, $parentKey, $relatedKey,
+//            $relationName, $inverse);
+        return \app(MorphToMany::class, [
+            $query,
+            $parent,
+            $name,
+            $table,
+            $foreignPivotKey,
+            $relatedPivotKey,
+            $parentKey,
+            $relatedKey,
+            $relationName,
+            $inverse
+        ]);
     }
 
     /**

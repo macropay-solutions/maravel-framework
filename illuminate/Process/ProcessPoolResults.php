@@ -32,7 +32,8 @@ class ProcessPoolResults implements ArrayAccess
      */
     public function collect()
     {
-        return new Collection($this->results);
+//        return new Collection($this->results);
+        return \app(Collection::class, [$this->results]);
     }
 
     /**

@@ -271,7 +271,8 @@ class Factory implements FactoryContract
      */
     protected function viewInstance($view, $path, $data)
     {
-        return new View($this, $this->getEngineFromPath($path), $view, $path, $data);
+//        return new View($this, $this->getEngineFromPath($path), $view, $path, $data);
+        return \app(View::class, [$this, $this->getEngineFromPath($path), $view, $path, $data]);
     }
 
     /**

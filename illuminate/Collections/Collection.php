@@ -73,7 +73,8 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
      */
     public function lazy()
     {
-        return new LazyCollection($this->items);
+//        return new LazyCollection($this->items);
+        return \app(LazyCollection::class, [$this->items]);
     }
 
     /**

@@ -38,7 +38,8 @@ trait InteractsWithRedis
             $this->markTestSkipped('Trying default host/port failed, please set environment variable REDIS_HOST & REDIS_PORT to enable '.__CLASS__);
         }
 
-        $app = $this->app ?? new Application;
+//        $app = $this->app ?? new Application;
+        $app = $this->app ?? \app(Application::class);
         $host = Env::get('REDIS_HOST', '127.0.0.1');
         $port = Env::get('REDIS_PORT', 6379);
 

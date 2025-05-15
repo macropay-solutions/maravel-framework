@@ -337,9 +337,10 @@ class Router implements BindingRegistrar, RegistrarContract
             $registrar = new ResourceRegistrar($this);
         }
 
-        return new PendingResourceRegistration(
-            $registrar, $name, $controller, $options
-        );
+//        return new PendingResourceRegistration(
+//            $registrar, $name, $controller, $options
+//        );
+        return \app(PendingResourceRegistration::class, [$registrar, $name, $controller, $options]);
     }
 
     /**
@@ -407,9 +408,10 @@ class Router implements BindingRegistrar, RegistrarContract
             $registrar = new ResourceRegistrar($this);
         }
 
-        return new PendingSingletonResourceRegistration(
-            $registrar, $name, $controller, $options
-        );
+//        return new PendingSingletonResourceRegistration(
+//            $registrar, $name, $controller, $options
+//        );
+        return \app(PendingSingletonResourceRegistration::class, [$registrar, $name, $controller, $options]);
     }
 
     /**
@@ -666,9 +668,10 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     public function newRoute($methods, $uri, $action)
     {
-        return (new Route($methods, $uri, $action))
-                    ->setRouter($this)
-                    ->setContainer($this->container);
+//        return (new Route($methods, $uri, $action))
+//                    ->setRouter($this)
+//                    ->setContainer($this->container);
+        return \app(Route::class, [$methods, $uri, $action])->setRouter($this)->setContainer($this->container);
     }
 
     /**
@@ -868,7 +871,8 @@ class Router implements BindingRegistrar, RegistrarContract
      */
     protected function sortMiddleware(Collection $middlewares)
     {
-        return (new SortedMiddleware($this->middlewarePriority, $middlewares))->all();
+//        return (new SortedMiddleware($this->middlewarePriority, $middlewares))->all();
+        return \app(SortedMiddleware::class, [$this->middlewarePriority, $middlewares])->all();
     }
 
     /**
@@ -903,9 +907,11 @@ class Router implements BindingRegistrar, RegistrarContract
         if ($response instanceof PsrResponseInterface) {
             $response = (new HttpFoundationFactory)->createResponse($response);
         } elseif ($response instanceof Model && $response->wasRecentlyCreated) {
-            $response = new JsonResponse($response, 201);
+//            $response = new JsonResponse($response, 201);
+            $response = \app(JsonResponse::class, [$response, 201]);
         } elseif ($response instanceof Stringable) {
-            $response = new Response($response->__toString(), 200, ['Content-Type' => 'text/html']);
+//            $response = new Response($response->__toString(), 200, ['Content-Type' => 'text/html']);
+            $response = \app(Response::class, [$response->__toString(), 200, ['Content-Type' => 'text/html']]);
         } elseif (! $response instanceof SymfonyResponse &&
                    ($response instanceof Arrayable ||
                     $response instanceof Jsonable ||
@@ -913,9 +919,11 @@ class Router implements BindingRegistrar, RegistrarContract
                     $response instanceof JsonSerializable ||
                     $response instanceof stdClass ||
                     is_array($response))) {
-            $response = new JsonResponse($response);
+//            $response = new JsonResponse($response);
+            $response = \app(JsonResponse::class, [$response]);
         } elseif (! $response instanceof SymfonyResponse) {
-            $response = new Response($response, 200, ['Content-Type' => 'text/html']);
+//            $response = new Response($response, 200, ['Content-Type' => 'text/html']);
+            $response = \app(Response::class, [$response, 200, ['Content-Type' => 'text/html']]);
         }
 
         if ($response->getStatusCode() === Response::HTTP_NOT_MODIFIED) {

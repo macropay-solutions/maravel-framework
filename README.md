@@ -1,15 +1,14 @@
-# Lumen Framework (Kernel)
+# Maravel Framework (Kernel)
 
-[![Build Status](https://github.com/laravel/lumen-framework/workflows/tests/badge.svg)](https://github.com/laravel/lumen-framework/actions)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
+[![Total Downloads](https://img.shields.io/packagist/dt/macropay-solutions/maravel-framework)](https://packagist.org/packages/macropay-solutions/maravel-framework)
+[![Latest Stable Version](https://img.shields.io/packagist/v/macropay-solutions/maravel-framework)](https://packagist.org/packages/macropay-solutions/maravel-framework)
+[![License](https://img.shields.io/packagist/l/macropay-solutions/maravel-framework)](https://packagist.org/packages/macropay-solutions/maravel-framework)
 
-> **Note:** This repository contains the core code of the Laravel Lumen framework. If you want to build an application using Laravel Lumen, visit the main [Lumen repository](https://github.com/laravel/lumen).
+> **Note:** This repository contains the core code of the Macropay-Solutions Maravel framework. If you want to build an application using macropay-solutions Maravel, visit the main [Maravel repository](https://github.com/macropay-solutions/maravel).
 
-## Lumen PHP Framework
+## Maravel PHP Framework
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+Macropay-Solutions Maravel is an improvement inspired by Lumen and Laravel packages v10.48.29
 
 ## Official Documentation
 
@@ -17,12 +16,12 @@ Documentation for the framework can be found on the [Lumen website](https://lume
 
 ## Contributing
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+We plan to not change the code that often and allow you to build packages that use the DI container to extend functionality and also allow retroactive bug fixing but, we are open to suggestions.
 
 ## Security Vulnerabilities
 
-Please review [our security policy](https://github.com/laravel/lumen/security/policy) on how to report security vulnerabilities.
+Please review [our security policy](https://github.com/macropay-solutions/maravel-framework/security/policy) on how to report security vulnerabilities.
 
 ## License
 
-Laravel Lumen is open-sourced software licensed under the [MIT license](LICENSE.md).
+Macropay-Solutions Maravel is open-sourced software licensed under the [MIT license](LICENSE.md).

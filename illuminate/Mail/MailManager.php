@@ -118,12 +118,13 @@ class MailManager implements FactoryContract
         // Once we have created the mailer instance we will set a container instance
         // on the mailer. This allows us to resolve mailer classes via containers
         // for maximum testability on said classes instead of passing Closures.
-        $mailer = new Mailer(
+//        $mailer = new Mailer(
+        $mailer = \app(Mailer::class, [
             $name,
             $this->app['view'],
             $this->createSymfonyTransport($config),
             $this->app['events']
-        );
+        ]);
 
         if ($this->app->bound('queue')) {
             $mailer->setQueue($this->app['queue']);

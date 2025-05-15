@@ -15,7 +15,8 @@ if (! function_exists('collect')) {
      */
     function collect($value = [])
     {
-        return new Collection($value);
+//        return new Collection($value);
+        return \app(Collection::class, [$value]);
     }
 }
 

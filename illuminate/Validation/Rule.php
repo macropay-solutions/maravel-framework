@@ -175,7 +175,8 @@ class Rule
      */
     public static function file()
     {
-        return new File;
+//        return new File;
+        return \app(File::class);
     }
 
     /**
@@ -185,7 +186,8 @@ class Rule
      */
     public static function imageFile()
     {
-        return new ImageFile;
+//        return new ImageFile;
+        return \app(ImageFile::class);
     }
 
     /**

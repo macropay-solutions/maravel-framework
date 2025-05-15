@@ -124,11 +124,16 @@ class AuthManager implements FactoryContract
     {
         $provider = $this->createUserProvider($config['provider'] ?? null);
 
-        $guard = new SessionGuard(
+//        $guard = new SessionGuard(
+//            $name,
+//            $provider,
+//            $this->app['session.store'],
+//        );
+        $guard = \app(SessionGuard::class, [
             $name,
             $provider,
-            $this->app['session.store'],
-        );
+            $this->app['session.store']
+        ]);
 
         // When using the remember me functionality of the authentication services we
         // will need to be set the encryption instance of the guard, which allows
@@ -234,7 +239,8 @@ class AuthManager implements FactoryContract
     public function viaRequest($driver, callable $callback)
     {
         return $this->extend($driver, function () use ($callback) {
-            $guard = new RequestGuard($callback, $this->app['request'], $this->createUserProvider());
+            //$guard = new RequestGuard($callback, $this->app['request'], $this->createUserProvider());
+            $guard = \app(RequestGuard::class, [$callback, $this->app['request'], $this->createUserProvider()]);
 
             $this->app->refresh('request', $guard, 'setRequest');
 

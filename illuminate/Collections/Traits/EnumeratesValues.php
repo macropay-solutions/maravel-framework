@@ -219,7 +219,8 @@ trait EnumeratesValues
      */
     public function dump()
     {
-        (new Collection(func_get_args()))
+//        (new Collection(func_get_args()))
+        \app(Collection::class, [func_get_args()])
             ->push($this->all())
             ->each(function ($item) {
                 VarDumper::dump($item);
@@ -906,7 +907,8 @@ trait EnumeratesValues
      */
     public function collect()
     {
-        return new Collection($this->all());
+//        return new Collection($this->all());
+        return \app(Collection::class, [$this->all()]);
     }
 
     /**

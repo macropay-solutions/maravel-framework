@@ -407,7 +407,8 @@ class DocsCommand extends Command
      */
     public function sectionsFor($page)
     {
-        return new Collection($this->pages()[$page]['sections']);
+//        return new Collection($this->pages()[$page]['sections']);
+        return \app(Collection::class, [$this->pages()[$page]['sections']]);
     }
 
     /**
@@ -417,7 +418,8 @@ class DocsCommand extends Command
      */
     public function pages()
     {
-        return new Collection($this->docs()['pages']);
+//        return new Collection($this->docs()['pages']);
+        return \app(Collection::class, [$this->docs()['pages']]);
     }
 
     /**

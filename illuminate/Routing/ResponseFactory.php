@@ -55,7 +55,8 @@ class ResponseFactory implements FactoryContract
      */
     public function make($content = '', $status = 200, array $headers = [])
     {
-        return new Response($content, $status, $headers);
+//        return new Response($content, $status, $headers);
+        return \app(Response::class, [$content, $status, $headers]);
     }
 
     /**
@@ -99,7 +100,8 @@ class ResponseFactory implements FactoryContract
      */
     public function json($data = [], $status = 200, array $headers = [], $options = 0)
     {
-        return new JsonResponse($data, $status, $headers, $options);
+//        return new JsonResponse($data, $status, $headers, $options);
+        return \app(JsonResponse::class, [$data, $status, $headers, $options]);
     }
 
     /**

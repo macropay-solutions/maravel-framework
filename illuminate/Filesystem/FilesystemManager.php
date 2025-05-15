@@ -184,7 +184,8 @@ class FilesystemManager implements FactoryContract
             $config['root'], $visibility, $config['lock'] ?? LOCK_EX, $links
         );
 
-        return new FilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config);
+//        return new FilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config);
+        return \app(FilesystemAdapter::class, [$this->createFlysystem($adapter, $config), $adapter, $config]);
     }
 
     /**
@@ -201,7 +202,8 @@ class FilesystemManager implements FactoryContract
 
         $adapter = new FtpAdapter(FtpConnectionOptions::fromArray($config));
 
-        return new FilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config);
+//        return new FilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config);
+        return \app(FilesystemAdapter::class, [$this->createFlysystem($adapter, $config), $adapter, $config]);
     }
 
     /**
@@ -222,7 +224,8 @@ class FilesystemManager implements FactoryContract
 
         $adapter = new SftpAdapter($provider, $root, $visibility);
 
-        return new FilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config);
+//        return new FilesystemAdapter($this->createFlysystem($adapter, $config), $adapter, $config);
+        return \app(FilesystemAdapter::class, [$this->createFlysystem($adapter, $config), $adapter, $config]);
     }
 
     /**
@@ -247,8 +250,12 @@ class FilesystemManager implements FactoryContract
 
         $adapter = new S3Adapter($client, $s3Config['bucket'], $root, $visibility, null, $config['options'] ?? [], $streamReads);
 
-        return new AwsS3V3Adapter(
-            $this->createFlysystem($adapter, $config), $adapter, $s3Config, $client
+//        return new AwsS3V3Adapter(
+//            $this->createFlysystem($adapter, $config), $adapter, $s3Config, $client
+//        );
+        return \app(
+            AwsS3V3Adapter::class,
+            [$this->createFlysystem($adapter, $config), $adapter, $s3Config, $client]
         );
     }
 

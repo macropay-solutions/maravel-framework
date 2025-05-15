@@ -34,8 +34,10 @@ class DatabaseTransactionsManager
      */
     public function __construct()
     {
-        $this->committedTransactions = new Collection;
-        $this->pendingTransactions = new Collection;
+//        $this->committedTransactions = new Collection;
+        $this->committedTransactions = \app(Collection::class);
+//        $this->pendingTransactions = new Collection;
+        $this->pendingTransactions =\app(Collection::class);
     }
 
     /**

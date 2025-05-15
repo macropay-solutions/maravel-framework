@@ -42,7 +42,8 @@ class AsEnumArrayObject implements Castable
 
                 $enumClass = $this->arguments[0];
 
-                return new ArrayObject((new Collection($data))->map(function ($value) use ($enumClass) {
+//                return new ArrayObject((new Collection($data))->map(function ($value) use ($enumClass) {
+                return new ArrayObject(\app(Collection::class, [$data])->map(function ($value) use ($enumClass) {
                     return is_subclass_of($enumClass, BackedEnum::class)
                         ? $enumClass::from($value)
                         : constant($enumClass.'::'.$value);
@@ -66,7 +67,8 @@ class AsEnumArrayObject implements Castable
 
             public function serialize($model, string $key, $value, array $attributes)
             {
-                return (new Collection($value->getArrayCopy()))->map(function ($enum) {
+//                return (new Collection($value->getArrayCopy()))->map(function ($enum) {
+                return \app(Collection::class, [$value->getArrayCopy()])->map(function ($enum) {
                     return $this->getStorableEnumValue($enum);
                 })->toArray();
             }

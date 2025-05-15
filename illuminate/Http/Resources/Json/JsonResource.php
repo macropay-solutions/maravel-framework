@@ -94,7 +94,8 @@ class JsonResource implements ArrayAccess, JsonSerializable, Responsable, UrlRou
      */
     protected static function newCollection($resource)
     {
-        return new AnonymousResourceCollection($resource, static::class);
+//        return new AnonymousResourceCollection($resource, static::class);
+        return \app(AnonymousResourceCollection::class, [$resource, static::class]);
     }
 
     /**

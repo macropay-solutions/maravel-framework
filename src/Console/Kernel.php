@@ -113,17 +113,26 @@ class Kernel implements KernelContract
     public function rerouteSymfonyCommandEvents()
     {
         if (is_null($this->symfonyDispatcher)) {
-            $this->symfonyDispatcher = new EventDispatcher;
+//            $this->symfonyDispatcher = new EventDispatcher;
+            $this->symfonyDispatcher = \app(EventDispatcher::class);
 
             $this->symfonyDispatcher->addListener(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) {
                 $this->app[Dispatcher::class]->dispatch(
-                    new CommandStarting($event->getCommand()->getName(), $event->getInput(), $event->getOutput())
+//                    new CommandStarting($event->getCommand()->getName(), $event->getInput(), $event->getOutput())
+                    \app(
+                        CommandStarting::class,
+                        [$event->getCommand()->getName(), $event->getInput(), $event->getOutput()]
+                    )
                 );
             });
 
             $this->symfonyDispatcher->addListener(ConsoleEvents::TERMINATE, function (ConsoleTerminateEvent $event) {
                 $this->app[Dispatcher::class]->dispatch(
-                    new CommandFinished($event->getCommand()->getName(), $event->getInput(), $event->getOutput(), $event->getExitCode())
+//                    new CommandFinished($event->getCommand()->getName(), $event->getInput(), $event->getOutput(), $event->getExitCode())
+                    \app(
+                        CommandFinished::class,
+                        [$event->getCommand()->getName(), $event->getInput(), $event->getOutput(), $event->getExitCode()]
+                    )
                 );
             });
         }
@@ -256,7 +265,8 @@ class Kernel implements KernelContract
     protected function getArtisan()
     {
         if (is_null($this->artisan)) {
-            $this->artisan = (new Artisan($this->app, $this->app->make('events'), $this->app->version()))
+//            $this->artisan = (new Artisan($this->app, $this->app->make('events'), $this->app->version()))
+            $this->artisan = \app(Artisan::class, [$this->app, $this->app->make('events'), $this->app->version()])
                                 ->resolveCommands($this->getCommands())
                                 ->setContainerCommandLoader();
 

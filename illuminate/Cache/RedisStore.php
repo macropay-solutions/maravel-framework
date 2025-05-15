@@ -270,9 +270,12 @@ class RedisStore extends TaggableStore implements LockProvider
      */
     public function tags($names)
     {
-        return new RedisTaggedCache(
-            $this, new RedisTagSet($this, is_array($names) ? $names : func_get_args())
-        );
+//        return new RedisTaggedCache(
+//            $this, new RedisTagSet($this, is_array($names) ? $names : func_get_args())
+//        );
+        return \app(RedisTaggedCache::class, [
+            $this, \app(RedisTagSet::class, [$this, is_array($names) ? $names : func_get_args()])
+        ]);
     }
 
     /**

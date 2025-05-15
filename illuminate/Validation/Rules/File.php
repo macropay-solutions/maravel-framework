@@ -121,7 +121,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
      */
     public static function image()
     {
-        return new ImageFile();
+//        return new ImageFile();
+        return \app(ImageFile::class);
     }
 
     /**

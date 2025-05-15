@@ -172,7 +172,8 @@ class Factory
      */
     public function sequence(array $responses = [])
     {
-        return $this->responseSequences[] = new ResponseSequence($responses);
+//        return $this->responseSequences[] = new ResponseSequence($responses);
+        return $this->responseSequences[] = \app(ResponseSequence::class, [$responses]);
     }
 
     /**
@@ -420,7 +421,8 @@ class Factory
      */
     protected function newPendingRequest()
     {
-        return (new PendingRequest($this, $this->globalMiddleware))->withOptions($this->globalOptions);
+//        return (new PendingRequest($this, $this->globalMiddleware))->withOptions($this->globalOptions);
+        return (\app(PendingRequest::class, [$this, $this->globalMiddleware]))->withOptions($this->globalOptions);
     }
 
     /**

@@ -17,6 +17,7 @@
         "ext-ctype": "*",
         "ext-filter": "*",
         "ext-hash": "*",
+        "ext-intl": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",

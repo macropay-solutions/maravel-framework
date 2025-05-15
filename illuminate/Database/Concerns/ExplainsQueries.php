@@ -19,6 +19,7 @@ trait ExplainsQueries
 
         $explanation = $this->getConnection()->select('EXPLAIN '.$sql, $bindings);
 
-        return new Collection($explanation);
+//        return new Collection($explanation);
+        return \app(Collection::class, [$explanation]);
     }
 }

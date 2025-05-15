@@ -43,7 +43,8 @@ class ComponentSlot implements Htmlable
      */
     public function withAttributes(array $attributes)
     {
-        $this->attributes = new ComponentAttributeBag($attributes);
+//        $this->attributes = new ComponentAttributeBag($attributes);
+        $this->attributes = \app(ComponentAttributeBag::class, [$attributes]);
 
         return $this;
     }

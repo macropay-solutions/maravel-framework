@@ -776,17 +776,26 @@ class Handler implements ExceptionHandlerContract
      */
     protected function toIlluminateResponse($response, Throwable $e)
     {
+//        if ($response instanceof SymfonyRedirectResponse) {
+//            $response = new RedirectResponse(
+//                $response->getTargetUrl(), $response->getStatusCode(), $response->headers->all()
+//            );
+//        } else {
+//            $response = new Response(
+//                $response->getContent(), $response->getStatusCode(), $response->headers->all()
+//            );
+//        }
         if ($response instanceof SymfonyRedirectResponse) {
-            $response = new RedirectResponse(
-                $response->getTargetUrl(), $response->getStatusCode(), $response->headers->all()
-            );
-        } else {
-            $response = new Response(
-                $response->getContent(), $response->getStatusCode(), $response->headers->all()
-            );
+            return \app(
+                RedirectResponse::class,
+                [$response->getTargetUrl(), $response->getStatusCode(), $response->headers->all()]
+            )->withException($e);
         }
 
-        return $response->withException($e);
+        return \app(
+            Response::class,
+            [$response->getContent(), $response->getStatusCode(), $response->headers->all()]
+        )->withException($e);
     }
 
     /**
@@ -798,12 +807,13 @@ class Handler implements ExceptionHandlerContract
      */
     protected function prepareJsonResponse($request, Throwable $e)
     {
-        return new JsonResponse(
+//        return new JsonResponse(
+        return \app(JsonResponse::class, [
             $this->convertExceptionToArray($e),
             $this->isHttpException($e) ? $e->getStatusCode() : 500,
             $this->isHttpException($e) ? $e->getHeaders() : [],
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
-        );
+        ]);
     }
 
     /**

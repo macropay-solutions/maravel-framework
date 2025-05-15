@@ -35,7 +35,8 @@ class StreamedResponseException extends RuntimeException
      */
     public function render()
     {
-        return new Response('');
+//        return new Response('');
+        return \app(Response::class, ['']);
     }
 
     /**

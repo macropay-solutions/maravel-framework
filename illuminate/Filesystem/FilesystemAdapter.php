@@ -391,7 +391,8 @@ class FilesystemAdapter implements CloudFilesystemContract
             [$path, $file, $options] = ['', $path, $file ?? []];
         }
 
-        $file = is_string($file) ? new File($file) : $file;
+//        $file = is_string($file) ? new File($file) : $file;
+        $file = is_string($file) ? \app(File::class, [$file]) : $file;
 
         return $this->putFileAs($path, $file, $file->hashName(), $options);
     }

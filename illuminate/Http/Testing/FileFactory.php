@@ -20,7 +20,8 @@ class FileFactory
             return $this->createWithContent($name, $kilobytes);
         }
 
-        return tap(new File($name, tmpfile()), function ($file) use ($kilobytes, $mimeType) {
+//        return tap(new File($name, tmpfile()), function ($file) use ($kilobytes, $mimeType) {
+        return tap(\app(File::class, [$name, tmpfile()]), function ($file) use ($kilobytes, $mimeType) {
             $file->sizeToReport = $kilobytes * 1024;
             $file->mimeTypeToReport = $mimeType;
         });
@@ -39,7 +40,8 @@ class FileFactory
 
         fwrite($tmpfile, $content);
 
-        return tap(new File($name, $tmpfile), function ($file) use ($tmpfile) {
+//        return tap(new File($name, $tmpfile), function ($file) use ($tmpfile) {
+        return tap(\app(File::class, [$name, $tmpfile]), function ($file) use ($tmpfile) {
             $file->sizeToReport = fstat($tmpfile)['size'];
         });
     }
@@ -56,9 +58,11 @@ class FileFactory
      */
     public function image($name, $width = 10, $height = 10)
     {
-        return new File($name, $this->generateImage(
-            $width, $height, pathinfo($name, PATHINFO_EXTENSION)
-        ));
+//        return new File($name, $this->generateImage(
+        return \app(File::class, [
+            $name,
+            $this->generateImage($width, $height, pathinfo($name, PATHINFO_EXTENSION))
+        ]);
     }
 
     /**

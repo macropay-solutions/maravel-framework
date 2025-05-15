@@ -963,15 +963,17 @@ class Container implements ArrayAccess, ContainerContract
     protected function resolveDependencies(array $dependencies)
     {
         $results = [];
+        $lastParameterOverride = $this->getLastParameterOverride();
 
-        foreach ($dependencies as $dependency) {
+        foreach ($dependencies as $indexKey => $dependency) {
             // If the dependency has an override for this particular build we will use
             // that instead as the value. Otherwise, we will continue with this run
             // of resolutions and let reflection attempt to determine the result.
-            if ($this->hasParameterOverride($dependency)) {
-                $results[] = $this->getParameterOverride($dependency);
+            try {
+                $results[] = $this->getParameterOverride($dependency, $indexKey, $lastParameterOverride);
 
                 continue;
+            } catch (\Throwable) {
             }
 
             // If the class is null, it means the dependency is a string or some other
@@ -992,37 +994,27 @@ class Container implements ArrayAccess, ContainerContract
     }
 
     /**
-     * Determine if the given dependency has a parameter override.
-     *
-     * @param  \ReflectionParameter  $dependency
-     * @return bool
+     * Get a parameter override for a dependency or throw.
+     * @throws \Throwable
      */
-    protected function hasParameterOverride($dependency)
-    {
-        return array_key_exists(
-            $dependency->name, $this->getLastParameterOverride()
-        );
-    }
+    protected function getParameterOverride(
+        ReflectionParameter $dependency,
+        int $indexKey,
+        array $lastParameterOverride
+    ): mixed {
+        if (\array_values($lastParameterOverride) === $lastParameterOverride) {
+            return $lastParameterOverride[$indexKey];
+        }
 
-    /**
-     * Get a parameter override for a dependency.
-     *
-     * @param  \ReflectionParameter  $dependency
-     * @return mixed
-     */
-    protected function getParameterOverride($dependency)
-    {
-        return $this->getLastParameterOverride()[$dependency->name];
+        return $lastParameterOverride[$dependency->name];
     }
 
     /**
      * Get the last parameter override.
-     *
-     * @return array
      */
-    protected function getLastParameterOverride()
+    protected function getLastParameterOverride(): array
     {
-        return count($this->with) ? end($this->with) : [];
+        return $this->with !== [] ? (array)\end($this->with) : [];
     }
 
     /**
