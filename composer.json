@@ -99,6 +99,11 @@
         "psr-4": {
             "Laravel\\Lumen\\": "src/",
             "Illuminate\\": "illuminate/",
+            "Illuminate\\Support\\": [
+                "illuminate/Macroable/",
+                "illuminate/Collections/",
+                "illuminate/Conditionable/"
+            ],
             "Laravel\\Prompts\\": "prompts/src/",
             "Laravel\\SerializableClosure\\": "serializable-closure/src/"
         },
