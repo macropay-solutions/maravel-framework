@@ -13,11 +13,15 @@ Macropay-Solutions Maravel is an improvement inspired by Lumen  10.0.4 and Larav
 
 ## Official Documentation
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs/10.x).
 
 ## Contributing
 
-We plan to not change the code that often and allow you to build packages that use the DI container to extend functionality and also allow retroactive bug fixing but, we are open to suggestions.
+We plan to not change the code that often and allow you to build packages that use the DI container to extend functionality and also allow retroactive bug fixing.
+
+We remain open for suggestions in the discussions area: https://github.com/macropay-solutions/maravel-framework/discussions
+
+> **Note:**  Classes that use the Macroable trait are resolved from DI container instead of being instantiated with new. The Illuminate namespace can still be used to keep the compatibility with laravel packages.
 
 ## Security Vulnerabilities
 
@@ -25,4 +29,4 @@ Please review [our security policy](https://github.com/macropay-solutions/marave
 
 ## License
 
-Macropay-Solutions Maravel is open-sourced software licensed under the [MIT license](LICENSE.md).
+Macropay-Solutions Maravel is open-sourced software licensed under the [MIT license](LICENSE).
