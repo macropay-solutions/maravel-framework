@@ -1,5 +1,6 @@
 # Maravel Framework (Kernel)
 
+[![Build Status](https://github.com/macropay-solutions/maravel-framework/workflows/tests/badge.svg)](https://github.com/macropay-solutions/maravel-framework/actions)
 [![Total Downloads](https://img.shields.io/packagist/dt/macropay-solutions/maravel-framework)](https://packagist.org/packages/macropay-solutions/maravel-framework)
 [![Latest Stable Version](https://img.shields.io/packagist/v/macropay-solutions/maravel-framework)](https://packagist.org/packages/macropay-solutions/maravel-framework)
 [![License](https://img.shields.io/packagist/l/macropay-solutions/maravel-framework)](https://packagist.org/packages/macropay-solutions/maravel-framework)
@@ -8,7 +9,7 @@
 
 ## Maravel PHP Framework
 
-Macropay-Solutions Maravel is an improvement inspired by Lumen and Laravel packages v10.48.29
+Macropay-Solutions Maravel is an improvement inspired by Lumen  10.0.4 and Laravel packages v10.48.29
 
 ## Official Documentation
 
