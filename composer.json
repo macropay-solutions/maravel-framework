@@ -1,6 +1,6 @@
 {
     "name": "macropay-solutions/maravel-framework",
-    "description": "The Macropay-Solutions Maravel Framework from Lumen 10.0.4 and Illuminate 10.48.29",
+    "description": "The Macropay-Solutions Maravel Framework from Lumen 10.0.4 and Framework Components 10.48.29",
     "keywords": ["framework", "macropay-solutions", "maravel", "lumen"],
     "license": "MIT",
     "type": "library",
