@@ -121,11 +121,6 @@
             "illuminate/Support/helpers.php"
         ]
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "10.x-dev"
-        }
-    },
     "minimum-stability": "stable",
     "prefer-stable": true
 }
