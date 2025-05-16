@@ -186,9 +186,8 @@ class Application extends Container
      * Get or check the current application environment.
      *
      * @param  mixed
-     * @return string
      */
-    public function environment()
+    public function environment(): mixed
     {
         $env = env('APP_ENV', config('app.env', 'production'));
 

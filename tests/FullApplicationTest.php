@@ -917,9 +917,9 @@ class LumenTestAction
 
 class LumenTestApplication extends Application
 {
-    public function version()
+    public function version(): string
     {
-        return 'Custom Lumen App';
+        return 'Custom Maravel App';
     }
 }
 
