@@ -17,8 +17,8 @@ jobs:
       with:
         php-version: '8.3'
     - name: Install Dependencies
-      working-directory: ./../src
+      working-directory: /../src
       run: composer install --no-cache --no-interaction --prefer-dist --no-progress --optimize-autoloader
     - name: Execute tests
-      working-directory: ./../src
+      working-directory: /../src
       run: vendor/bin/phpunit
