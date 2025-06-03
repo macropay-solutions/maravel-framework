@@ -1,5 +1,6 @@
 # Maravel Framework (Kernel)
 
+[![Build Status](https://github.com/macropay-solutions/maravel-framework/actions/workflows/tests.yml/badge.svg)](https://github.com/macropay-solutions/maravel-framework/actions)
 [![Total Downloads](https://img.shields.io/packagist/dt/macropay-solutions/maravel-framework)](https://packagist.org/packages/macropay-solutions/maravel-framework)
 [![Latest Stable Version](https://img.shields.io/packagist/v/macropay-solutions/maravel-framework)](https://packagist.org/packages/macropay-solutions/maravel-framework)
 [![License](https://img.shields.io/packagist/l/macropay-solutions/maravel-framework)](https://packagist.org/packages/macropay-solutions/maravel-framework)
