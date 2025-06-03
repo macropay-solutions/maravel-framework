@@ -9,16 +9,19 @@ on:
 
 jobs:
   maravel-tests:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
         php-version: '8.3'
+
     - name: Install Dependencies
-      working-directory: ../../
       run: composer install --no-cache --no-interaction --prefer-dist --no-progress --optimize-autoloader
+
     - name: Execute tests
-      working-directory: ../../
       run: vendor/bin/phpunit
