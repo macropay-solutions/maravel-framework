@@ -17,6 +17,6 @@ jobs:
       with:
         php-version: '8.3'
     - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      run: composer install --no-cache --no-interaction --prefer-dist --no-progress --optimize-autoloader
     - name: Execute tests
       run: vendor/bin/phpunit
