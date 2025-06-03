@@ -1,4 +1,4 @@
-name: Maravel
+name: Tests
 
 on:
   push:
