@@ -13,7 +13,7 @@ Macropay-Solutions Maravel is an improvement inspired by Lumen  10.0.4 and Larav
 
 ## Official Documentation
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs/10.x).
+Documentation for the framework can be found in the [Wiki](https://github.com/macropay-solutions/maravel-framework/wiki) section and in [Lumen website](https://lumen.laravel.com/docs/10.x).
 
 ## Contributing
 
