@@ -55,13 +55,13 @@ return [
 
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs/lumen.log'),
+            'path' => storage_path('logs/maravel.log'),
             'level' => 'debug',
         ],
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/lumen.log'),
+            'path' => storage_path('logs/maravel.log'),
             'level' => 'debug',
             'days' => 14,
         ],
@@ -69,7 +69,7 @@ return [
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
-            'username' => 'Lumen Log',
+            'username' => 'Maravel Log',
             'emoji' => ':boom:',
             'level' => 'critical',
         ],
