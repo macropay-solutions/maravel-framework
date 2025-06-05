@@ -1003,10 +1003,18 @@ class Container implements ArrayAccess, ContainerContract
         array $lastParameterOverride
     ): mixed {
         if (!$dependency->isVariadic() && \array_values($lastParameterOverride) === $lastParameterOverride) {
-            return $lastParameterOverride[$indexKey];
+            if (\array_key_exists($indexKey, $lastParameterOverride)) {
+                return $lastParameterOverride[$indexKey];
+            }
+
+            throw new Exception();
         }
 
-        return $lastParameterOverride[$dependency->name];
+        if (\array_key_exists($dependency->name, $lastParameterOverride)) {
+            return $lastParameterOverride[$dependency->name];
+        }
+
+        throw new Exception();
     }
 
     /**
