@@ -5,7 +5,7 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/macropay-solutions/maravel-framework)](https://packagist.org/packages/macropay-solutions/maravel-framework)
 [![License](https://img.shields.io/packagist/l/macropay-solutions/maravel-framework)](https://packagist.org/packages/macropay-solutions/maravel-framework)
 
-> **Note:** This repository contains the core code of the Macropay-Solutions Maravel framework. If you want to build an application using macropay-solutions Maravel, visit the main [Maravel template repository](https://github.com/macropay-solutions/maravel).
+> **Note:** This repository contains the core code of the Macropay-Solutions Maravel framework. If you want to build an application using macropay-solutions Maravel, visit the main [Maravel template repository](https://github.com/macropay-solutions/maravel) or Maravelith, visit the main [Maravelith template repository](https://github.com/macropay-solutions/maravelith).
 
 ## Maravel PHP Framework
 
