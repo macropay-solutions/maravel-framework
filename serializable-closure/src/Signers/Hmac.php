@@ -27,14 +27,14 @@ class Hmac implements Signer
     /**
      * Sign the given serializable.
      *
-     * @param  string  $serialized
+     * @param  string  $serializable
      * @return array
      */
-    public function sign($serialized)
+    public function sign($serializable)
     {
         return [
-            'serializable' => $serialized,
-            'hash' => base64_encode(hash_hmac('sha256', $serialized, $this->secret, true)),
+            'serializable' => $serializable,
+            'hash' => base64_encode(hash_hmac('sha256', $serializable, $this->secret, true)),
         ];
     }
 

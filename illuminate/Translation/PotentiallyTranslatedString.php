@@ -81,10 +81,8 @@ class PotentiallyTranslatedString implements Stringable
 
     /**
      * Get the potentially translated string.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->translation ?? $this->string;
     }
