@@ -940,7 +940,7 @@ class Validator implements ValidatorContract
      */
     public function addFailure($attribute, $rule, $parameters = [])
     {
-        if (! $this->messages) {
+        if (!$this->messages instanceof MessageBag) {
             $this->passes();
         }
 
@@ -949,7 +949,9 @@ class Validator implements ValidatorContract
         $attribute = $this->replacePlaceholderInString($attribute);
 
         if (in_array($rule, $this->excludeRules)) {
-            return $this->excludeAttribute($attribute);
+            $this->excludeAttribute($attribute);
+
+            return;
         }
 
         $this->messages->add($attribute, $this->makeReplacements(

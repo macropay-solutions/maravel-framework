@@ -83,7 +83,9 @@ class NotificationFake implements Fake, NotificationDispatcher, NotificationFact
         }
 
         if (is_numeric($callback)) {
-            return $this->assertSentToTimes($notifiable, $notification, $callback);
+            $this->assertSentToTimes($notifiable, $notification, $callback);
+
+            return;
         }
 
         PHPUnit::assertTrue(
@@ -101,7 +103,7 @@ class NotificationFake implements Fake, NotificationDispatcher, NotificationFact
      */
     public function assertSentOnDemandTimes($notification, $times = 1)
     {
-        return $this->assertSentToTimes(new AnonymousNotifiable, $notification, $times);
+        $this->assertSentToTimes(new AnonymousNotifiable, $notification, $times);
     }
 
     /**

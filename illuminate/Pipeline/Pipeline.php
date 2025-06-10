@@ -55,12 +55,12 @@ class Pipeline implements PipelineContract
     /**
      * Set the object being sent through the pipeline.
      *
-     * @param  mixed  $passable
+     * @param  mixed  $traveler
      * @return $this
      */
-    public function send($passable)
+    public function send($traveler)
     {
-        $this->passable = $passable;
+        $this->passable = $traveler;
 
         return $this;
     }
@@ -68,12 +68,12 @@ class Pipeline implements PipelineContract
     /**
      * Set the array of pipes.
      *
-     * @param  array|mixed  $pipes
+     * @param  array|mixed  $stops
      * @return $this
      */
-    public function through($pipes)
+    public function through($stops)
     {
-        $this->pipes = is_array($pipes) ? $pipes : func_get_args();
+        $this->pipes = is_array($stops) ? $stops : func_get_args();
 
         return $this;
     }

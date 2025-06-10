@@ -573,7 +573,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
      * @param  string  $replace
      * @param  string  $subject
      * @param  int  $offset
-     * @return array
+     * @return array|string
      */
     protected function replaceFirstStatement($search, $replace, $subject, $offset)
     {

@@ -116,9 +116,9 @@ class JsonResponse extends BaseJsonResponse
      *
      * @return static
      */
-    public function setEncodingOptions($options): static
+    public function setEncodingOptions($encodingOptions): static
     {
-        $this->encodingOptions = (int) $options;
+        $this->encodingOptions = (int)$encodingOptions;
 
         return $this->setData($this->getData());
     }

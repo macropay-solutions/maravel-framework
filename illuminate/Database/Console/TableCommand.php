@@ -55,7 +55,9 @@ class TableCommand extends DatabaseInspectionCommand
         );
 
         if (! $schema->tablesExist([$table])) {
-            return $this->components->warn("Table [{$table}] doesn't exist.");
+            $this->components->warn("Table [{$table}] doesn't exist.");
+
+            return 1;
         }
 
         $table = $schema->introspectTable($table);

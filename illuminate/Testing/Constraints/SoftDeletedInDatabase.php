@@ -55,28 +55,28 @@ class SoftDeletedInDatabase extends Constraint
     /**
      * Check if the data is found in the given table.
      *
-     * @param  string  $table
+     * @param  string  $other
      * @return bool
      */
-    public function matches($table): bool
+    public function matches($other): bool
     {
-        return $this->database->table($table)
+        return $this->database->table($other)
                 ->where($this->data)
                 ->whereNotNull($this->deletedAtColumn)
-                ->count() > 0;
+                ->exists();
     }
 
     /**
      * Get the description of the failure.
      *
-     * @param  string  $table
+     * @param  string  $other
      * @return string
      */
-    public function failureDescription($table): string
+    public function failureDescription($other): string
     {
         return sprintf(
             "any soft deleted row in the table [%s] matches the attributes %s.\n\n%s",
-            $table, $this->toString(), $this->getAdditionalInfo($table)
+            $other, $this->toString(), $this->getAdditionalInfo($other)
         );
     }
 

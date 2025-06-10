@@ -122,14 +122,26 @@ class DateFactory
     public static function use($handler)
     {
         if (is_callable($handler) && is_object($handler)) {
-            return static::useCallable($handler);
-        } elseif (is_string($handler)) {
-            return static::useClass($handler);
-        } elseif ($handler instanceof Factory) {
-            return static::useFactory($handler);
+            static::useCallable($handler);
+
+            return;
         }
 
-        throw new InvalidArgumentException('Invalid date creation handler. Please provide a class name, callable, or Carbon factory.');
+        if (is_string($handler)) {
+            static::useClass($handler);
+
+            return;
+        }
+
+        if ($handler instanceof Factory) {
+            static::useFactory($handler);
+
+            return;
+        }
+
+        throw new InvalidArgumentException(
+            'Invalid date creation handler. Please provide a class name, callable, or Carbon factory.'
+        );
     }
 
     /**

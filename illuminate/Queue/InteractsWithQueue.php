@@ -15,7 +15,7 @@ trait InteractsWithQueue
     /**
      * The underlying queue job instance.
      *
-     * @var \Illuminate\Contracts\Queue\Job|null
+     * @var JobContract|null
      */
     public $job;
 
@@ -36,8 +36,8 @@ trait InteractsWithQueue
      */
     public function delete()
     {
-        if ($this->job) {
-            return $this->job->delete();
+        if ($this->job instanceof JobContract) {
+            $this->job->delete();
         }
     }
 
@@ -54,8 +54,8 @@ trait InteractsWithQueue
         }
 
         if ($exception instanceof Throwable || is_null($exception)) {
-            if ($this->job) {
-                return $this->job->fail($exception);
+            if ($this->job instanceof JobContract) {
+                $this->job->fail($exception);
             }
         } else {
             throw new InvalidArgumentException('The fail method requires a string or an instance of Throwable.');
@@ -74,15 +74,15 @@ trait InteractsWithQueue
             ? $this->secondsUntil($delay)
             : $delay;
 
-        if ($this->job) {
-            return $this->job->release($delay);
+        if ($this->job instanceof JobContract) {
+            $this->job->release($delay);
         }
     }
 
     /**
      * Set the base queue job instance.
      *
-     * @param  \Illuminate\Contracts\Queue\Job  $job
+     * @param JobContract $job
      * @return $this
      */
     public function setJob(JobContract $job)

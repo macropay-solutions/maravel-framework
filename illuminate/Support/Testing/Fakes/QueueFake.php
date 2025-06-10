@@ -94,7 +94,9 @@ class QueueFake extends QueueManager implements Fake, Queue
         }
 
         if (is_numeric($callback)) {
-            return $this->assertPushedTimes($job, $callback);
+            $this->assertPushedTimes($job, $callback);
+
+            return;
         }
 
         PHPUnit::assertTrue(
@@ -338,12 +340,12 @@ class QueueFake extends QueueManager implements Fake, Queue
     /**
      * Resolve a queue connection instance.
      *
-     * @param  mixed  $value
+     * @param  mixed  $name
      * @return \Illuminate\Contracts\Queue\Queue
      */
-    public function connection($value = null)
+    public function connection($name = null)
     {
-        return $this;
+        return $name;
     }
 
     /**

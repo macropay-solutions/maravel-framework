@@ -1131,7 +1131,7 @@ class TestResponse implements ArrayAccess
     protected function ensureResponseHasView()
     {
         if (! $this->responseHasView()) {
-            return PHPUnit::fail('The response is not a view.');
+            PHPUnit::fail('The response is not a view.');
         }
 
         return $this;
@@ -1794,15 +1794,15 @@ class TestResponse implements ArrayAccess
      * Handle dynamic calls into macros or pass missing methods to the base response.
      *
      * @param  string  $method
-     * @param  array  $args
+     * @param  array  $parameters
      * @return mixed
      */
-    public function __call($method, $args)
+    public function __call($method, $parameters)
     {
         if (static::hasMacro($method)) {
-            return $this->macroCall($method, $args);
+            return $this->macroCall($method, $parameters);
         }
 
-        return $this->baseResponse->{$method}(...$args);
+        return $this->baseResponse->{$method}(...$parameters);
     }
 }

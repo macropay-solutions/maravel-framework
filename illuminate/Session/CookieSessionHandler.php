@@ -59,7 +59,7 @@ class CookieSessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function open($savePath, $sessionName): bool
+    public function open($path, $name): bool
     {
         return true;
     }
@@ -79,9 +79,9 @@ class CookieSessionHandler implements SessionHandlerInterface
      *
      * @return string|false
      */
-    public function read($sessionId): string|false
+    public function read($id): string|false
     {
-        $value = $this->request->cookies->get($sessionId) ?: '';
+        $value = $this->request->cookies->get($id) ?: '';
 
         if (! is_null($decoded = json_decode($value, true)) && is_array($decoded) &&
             isset($decoded['expires']) && $this->currentTime() <= $decoded['expires']) {
@@ -96,9 +96,9 @@ class CookieSessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function write($sessionId, $data): bool
+    public function write($id, $data): bool
     {
-        $this->cookie->queue($sessionId, json_encode([
+        $this->cookie->queue($id, json_encode([
             'data' => $data,
             'expires' => $this->availableAt($this->minutes * 60),
         ]), $this->expireOnClose ? 0 : $this->minutes);
@@ -111,9 +111,9 @@ class CookieSessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function destroy($sessionId): bool
+    public function destroy($id): bool
     {
-        $this->cookie->queue($this->cookie->forget($sessionId));
+        $this->cookie->queue($this->cookie->forget($id));
 
         return true;
     }
@@ -123,7 +123,7 @@ class CookieSessionHandler implements SessionHandlerInterface
      *
      * @return int
      */
-    public function gc($lifetime): int
+    public function gc($max_lifetime): int
     {
         return 0;
     }

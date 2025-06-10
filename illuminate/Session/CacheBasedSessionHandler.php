@@ -39,7 +39,7 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function open($savePath, $sessionName): bool
+    public function open($path, $name): bool
     {
         return true;
     }
@@ -59,9 +59,9 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
      *
      * @return string
      */
-    public function read($sessionId): string
+    public function read($id): string
     {
-        return $this->cache->get($sessionId, '');
+        return $this->cache->get($id, '');
     }
 
     /**
@@ -69,9 +69,9 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function write($sessionId, $data): bool
+    public function write($id, $data): bool
     {
-        return $this->cache->put($sessionId, $data, $this->minutes * 60);
+        return $this->cache->put($id, $data, $this->minutes * 60);
     }
 
     /**
@@ -79,9 +79,9 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function destroy($sessionId): bool
+    public function destroy($id): bool
     {
-        return $this->cache->forget($sessionId);
+        return $this->cache->forget($id);
     }
 
     /**
@@ -89,7 +89,7 @@ class CacheBasedSessionHandler implements SessionHandlerInterface
      *
      * @return int
      */
-    public function gc($lifetime): int
+    public function gc($max_lifetime): int
     {
         return 0;
     }

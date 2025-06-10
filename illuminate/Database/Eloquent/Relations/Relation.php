@@ -208,7 +208,7 @@ abstract class Relation implements BuilderContract
      *
      * @return void
      */
-    public function touch()
+    public function touch($column = null)
     {
         $model = $this->getRelated();
 

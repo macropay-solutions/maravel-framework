@@ -35,14 +35,14 @@ class SeeInOrder extends Constraint
     /**
      * Determine if the rule passes validation.
      *
-     * @param  array  $values
+     * @param  array  $other
      * @return bool
      */
-    public function matches($values): bool
+    public function matches($other): bool
     {
         $position = 0;
 
-        foreach ($values as $value) {
+        foreach ($other as $value) {
             if (empty($value)) {
                 continue;
             }
@@ -64,10 +64,10 @@ class SeeInOrder extends Constraint
     /**
      * Get the description of the failure.
      *
-     * @param  array  $values
+     * @param  array  $other
      * @return string
      */
-    public function failureDescription($values): string
+    public function failureDescription($other): string
     {
         return sprintf(
             'Failed asserting that \'%s\' contains "%s" in specified order.',

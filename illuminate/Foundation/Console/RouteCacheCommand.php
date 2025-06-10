@@ -57,7 +57,9 @@ class RouteCacheCommand extends Command
         $routes = $this->getFreshApplicationRoutes();
 
         if (count($routes) === 0) {
-            return $this->components->error("Your application doesn't have any routes.");
+            $this->components->error("Your application doesn't have any routes.");
+
+            return;
         }
 
         foreach ($routes as $route) {

@@ -430,7 +430,9 @@ class Worker
             );
 
             if ($job->isDeleted()) {
-                return $this->raiseAfterJobEvent($connectionName, $job);
+                $this->raiseAfterJobEvent($connectionName, $job);
+
+                return;
             }
 
             // Here we will fire off the job and let it process. We will catch any exceptions, so

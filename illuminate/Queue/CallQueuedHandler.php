@@ -60,7 +60,9 @@ class CallQueuedHandler
                 $job, $this->getCommand($data)
             );
         } catch (ModelNotFoundException $e) {
-            return $this->handleModelNotFound($job, $e);
+            $this->handleModelNotFound($job, $e);
+
+            return;
         }
 
         if ($command instanceof ShouldBeUniqueUntilProcessing) {
@@ -225,10 +227,12 @@ class CallQueuedHandler
         }
 
         if ($shouldDelete) {
-            return $job->delete();
+            $job->delete();
+
+            return;
         }
 
-        return $job->fail($e);
+        $job->fail($e);
     }
 
     /**
