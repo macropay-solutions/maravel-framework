@@ -405,7 +405,7 @@ class QueueFake extends QueueManager implements Fake, Queue
         }
 
         return $this->jobsToFake->contains(
-            fn ($jobToFake) => $job instanceof ((string) $jobToFake) || $job === (string) $jobToFake
+            fn ($jobToFake): bool => \is_a($job, (string)$jobToFake, true)
         );
     }
 
@@ -422,7 +422,7 @@ class QueueFake extends QueueManager implements Fake, Queue
         }
 
         return $this->jobsToBeQueued->contains(
-            fn ($jobToQueue) => $job instanceof ((string) $jobToQueue)
+            fn ($jobToQueue): bool => \is_a($job, (string)$jobToQueue)
         );
     }
 
@@ -488,7 +488,7 @@ class QueueFake extends QueueManager implements Fake, Queue
      */
     public function pop($queue = null)
     {
-        //
+        return null;
     }
 
     /**
@@ -547,7 +547,7 @@ class QueueFake extends QueueManager implements Fake, Queue
      */
     public function getConnectionName()
     {
-        //
+        return '';
     }
 
     /**

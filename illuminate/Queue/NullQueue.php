@@ -65,6 +65,6 @@ class NullQueue extends Queue implements QueueContract
      */
     public function pop($queue = null)
     {
-        //
+        return null;
     }
 }

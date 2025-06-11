@@ -68,6 +68,8 @@ trait ManagesTransactions
 
             return $callbackResult;
         }
+
+        return null;
     }
 
     /**
