@@ -179,6 +179,8 @@ class SqsQueue extends Queue implements QueueContract, ClearableQueue
                 $this->connectionName, $queue
             );
         }
+
+        return null;
     }
 
     /**

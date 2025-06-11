@@ -83,7 +83,9 @@ trait SoftDeletes
             });
         }
 
-        return $this->runSoftDelete();
+        $this->runSoftDelete();
+
+        return null;
     }
 
     /**

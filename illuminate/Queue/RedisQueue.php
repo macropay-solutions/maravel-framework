@@ -233,6 +233,8 @@ class RedisQueue extends Queue implements QueueContract, ClearableQueue
                 $reserved, $this->connectionName, $queue ?: $this->default
             );
         }
+
+        return null;
     }
 
     /**

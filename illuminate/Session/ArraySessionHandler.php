@@ -39,7 +39,7 @@ class ArraySessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function open($savePath, $sessionName): bool
+    public function open($path, $name): bool
     {
         return true;
     }
@@ -59,13 +59,13 @@ class ArraySessionHandler implements SessionHandlerInterface
      *
      * @return string|false
      */
-    public function read($sessionId): string|false
+    public function read($id): string|false
     {
-        if (! isset($this->storage[$sessionId])) {
+        if (! isset($this->storage[$id])) {
             return '';
         }
 
-        $session = $this->storage[$sessionId];
+        $session = $this->storage[$id];
 
         $expiration = $this->calculateExpiration($this->minutes * 60);
 
@@ -81,9 +81,9 @@ class ArraySessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function write($sessionId, $data): bool
+    public function write($id, $data): bool
     {
-        $this->storage[$sessionId] = [
+        $this->storage[$id] = [
             'data' => $data,
             'time' => $this->currentTime(),
         ];
@@ -96,10 +96,10 @@ class ArraySessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function destroy($sessionId): bool
+    public function destroy($id): bool
     {
-        if (isset($this->storage[$sessionId])) {
-            unset($this->storage[$sessionId]);
+        if (isset($this->storage[$id])) {
+            unset($this->storage[$id]);
         }
 
         return true;
@@ -110,9 +110,9 @@ class ArraySessionHandler implements SessionHandlerInterface
      *
      * @return int
      */
-    public function gc($lifetime): int
+    public function gc($max_lifetime): int
     {
-        $expiration = $this->calculateExpiration($lifetime);
+        $expiration = $this->calculateExpiration($max_lifetime);
 
         $deletedSessions = 0;
 

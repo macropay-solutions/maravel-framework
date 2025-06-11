@@ -81,7 +81,9 @@ class ShowModelCommand extends DatabaseInspectionCommand
 
             $class = get_class($model);
         } catch (BindingResolutionException $e) {
-            return $this->components->error($e->getMessage());
+            $this->components->error($e->getMessage());
+
+            return 1;
         }
 
         if ($this->option('database')) {

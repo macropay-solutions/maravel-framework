@@ -36,7 +36,6 @@ class ChannelListCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  \Illuminate\Contracts\Broadcasting\Broadcaster
      * @return void
      */
     public function handle(Broadcaster $broadcaster)
@@ -49,7 +48,9 @@ class ChannelListCommand extends Command
         }
 
         if (! $channels->count()) {
-            return $this->components->error("Your application doesn't have any private broadcasting channels.");
+            $this->components->error("Your application doesn't have any private broadcasting channels.");
+
+            return;
         }
 
         $this->displayChannels($channels);

@@ -1264,7 +1264,7 @@ class Builder implements BuilderContract
      *
      * @return mixed
      */
-    public function delete()
+    public function delete($id = null)
     {
         if (isset($this->onDelete)) {
             return call_user_func($this->onDelete, $this);
@@ -2005,7 +2005,9 @@ class Builder implements BuilderContract
         }
 
         if ($method === 'mixin') {
-            return static::registerMixin($parameters[0], $parameters[1] ?? true);
+            static::registerMixin($parameters[0], $parameters[1] ?? true);
+
+            return;
         }
 
         if (! static::hasGlobalMacro($method)) {

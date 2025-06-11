@@ -68,6 +68,8 @@ trait ManagesTransactions
 
             return $callbackResult;
         }
+
+        return null;
     }
 
     /**
@@ -343,7 +345,9 @@ trait ManagesTransactions
     public function afterCommit($callback)
     {
         if ($this->transactionsManager) {
-            return $this->transactionsManager->addCallback($callback);
+            $this->transactionsManager->addCallback($callback);
+
+            return;
         }
 
         throw new RuntimeException('Transactions Manager has not been set.');

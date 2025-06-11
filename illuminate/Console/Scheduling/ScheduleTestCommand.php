@@ -44,7 +44,9 @@ class ScheduleTestCommand extends Command
         }
 
         if (empty($commandNames)) {
-            return $this->components->info('No scheduled commands have been defined.');
+            $this->components->info('No scheduled commands have been defined.');
+
+            return;
         }
 
         if (! empty($name = $this->option('name'))) {

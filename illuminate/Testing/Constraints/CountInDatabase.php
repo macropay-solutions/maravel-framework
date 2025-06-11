@@ -46,12 +46,12 @@ class CountInDatabase extends Constraint
     /**
      * Check if the expected and actual count are equal.
      *
-     * @param  string  $table
+     * @param  string $other
      * @return bool
      */
-    public function matches($table): bool
+    public function matches($other): bool
     {
-        $this->actualCount = $this->database->table($table)->count();
+        $this->actualCount = $this->database->table($other)->count();
 
         return $this->actualCount === $this->expectedCount;
     }
@@ -59,14 +59,14 @@ class CountInDatabase extends Constraint
     /**
      * Get the description of the failure.
      *
-     * @param  string  $table
+     * @param  string $other
      * @return string
      */
-    public function failureDescription($table): string
+    public function failureDescription($other): string
     {
         return sprintf(
             "table [%s] matches expected entries count of %s. Entries found: %s.\n",
-            $table, $this->expectedCount, $this->actualCount
+            $other, $this->expectedCount, $this->actualCount
         );
     }
 

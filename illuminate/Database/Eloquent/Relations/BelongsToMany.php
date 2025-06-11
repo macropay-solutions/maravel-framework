@@ -1247,7 +1247,7 @@ class BelongsToMany extends Relation
      *
      * @return void
      */
-    public function touch()
+    public function touch($column = null)
     {
         if ($this->related->isIgnoringTouch()) {
             return;

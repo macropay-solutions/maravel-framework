@@ -201,7 +201,9 @@ class DatabaseTransactionsManager
     public function addCallback($callback)
     {
         if ($current = $this->callbackApplicableTransactions()->last()) {
-            return $current->addCallback($callback);
+            $current->addCallback($callback);
+
+            return;
         }
 
         $callback();

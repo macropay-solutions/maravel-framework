@@ -236,16 +236,16 @@ class Repository implements ArrayAccess, CacheContract
      * Store multiple items in the cache for a given number of seconds.
      *
      * @param  array  $values
-     * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
+     * @param  \DateTimeInterface|\DateInterval|int|null  $seconds
      * @return bool
      */
-    public function putMany(array $values, $ttl = null)
+    public function putMany(array $values, $seconds = null)
     {
-        if ($ttl === null) {
+        if ($seconds === null) {
             return $this->putManyForever($values);
         }
 
-        $seconds = $this->getSeconds($ttl);
+        $seconds = $this->getSeconds($seconds);
 
         if ($seconds <= 0) {
             return $this->deleteMultiple(array_keys($values));
@@ -634,46 +634,46 @@ class Repository implements ArrayAccess, CacheContract
     /**
      * Determine if a cached value exists.
      *
-     * @param  string  $key
+     * @param  string  $offset
      * @return bool
      */
-    public function offsetExists($key): bool
+    public function offsetExists($offset): bool
     {
-        return $this->has($key);
+        return $this->has($offset);
     }
 
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
+     * @param  string  $offset
      * @return mixed
      */
-    public function offsetGet($key): mixed
+    public function offsetGet($offset): mixed
     {
-        return $this->get($key);
+        return $this->get($offset);
     }
 
     /**
      * Store an item in the cache for the default time.
      *
-     * @param  string  $key
+     * @param  string  $offset
      * @param  mixed  $value
      * @return void
      */
-    public function offsetSet($key, $value): void
+    public function offsetSet($offset, $value): void
     {
-        $this->put($key, $value, $this->default);
+        $this->put($offset, $value, $this->default);
     }
 
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
+     * @param  string  $offset
      * @return void
      */
-    public function offsetUnset($key): void
+    public function offsetUnset($offset): void
     {
-        $this->forget($key);
+        $this->forget($offset);
     }
 
     /**

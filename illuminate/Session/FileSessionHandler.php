@@ -50,7 +50,7 @@ class FileSessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function open($savePath, $sessionName): bool
+    public function open($path, $name): bool
     {
         return true;
     }
@@ -70,9 +70,9 @@ class FileSessionHandler implements SessionHandlerInterface
      *
      * @return string|false
      */
-    public function read($sessionId): string|false
+    public function read($id): string|false
     {
-        if ($this->files->isFile($path = $this->path.'/'.$sessionId) &&
+        if ($this->files->isFile($path = $this->path.'/'.$id) &&
             $this->files->lastModified($path) >= Carbon::now()->subMinutes($this->minutes)->getTimestamp()) {
             return $this->files->sharedGet($path);
         }
@@ -85,9 +85,9 @@ class FileSessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function write($sessionId, $data): bool
+    public function write($id, $data): bool
     {
-        $this->files->put($this->path.'/'.$sessionId, $data, true);
+        $this->files->put($this->path.'/'.$id, $data, true);
 
         return true;
     }
@@ -97,9 +97,9 @@ class FileSessionHandler implements SessionHandlerInterface
      *
      * @return bool
      */
-    public function destroy($sessionId): bool
+    public function destroy($id): bool
     {
-        $this->files->delete($this->path.'/'.$sessionId);
+        $this->files->delete($this->path.'/'.$id);
 
         return true;
     }
@@ -109,13 +109,13 @@ class FileSessionHandler implements SessionHandlerInterface
      *
      * @return int
      */
-    public function gc($lifetime): int
+    public function gc($max_lifetime): int
     {
         $files = Finder::create()
                     ->in($this->path)
                     ->files()
                     ->ignoreDotFiles(true)
-                    ->date('<= now - '.$lifetime.' seconds');
+                    ->date('<= now - '.$max_lifetime.' seconds');
 
         $deletedSessions = 0;
 

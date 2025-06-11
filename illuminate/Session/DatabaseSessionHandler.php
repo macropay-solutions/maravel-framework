@@ -72,7 +72,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
      *
      * @return bool
      */
-    public function open($savePath, $sessionName): bool
+    public function open($path, $name): bool
     {
         return true;
     }
@@ -92,9 +92,9 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
      *
      * @return string|false
      */
-    public function read($sessionId): string|false
+    public function read($id): string|false
     {
-        $session = (object) $this->getQuery()->find($sessionId);
+        $session = (object) $this->getQuery()->find($id);
 
         if ($this->expired($session)) {
             $this->exists = true;
@@ -128,18 +128,18 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
      *
      * @return bool
      */
-    public function write($sessionId, $data): bool
+    public function write($id, $data): bool
     {
         $payload = $this->getDefaultPayload($data);
 
         if (! $this->exists) {
-            $this->read($sessionId);
+            $this->read($id);
         }
 
         if ($this->exists) {
-            $this->performUpdate($sessionId, $payload);
+            $this->performUpdate($id, $payload);
         } else {
-            $this->performInsert($sessionId, $payload);
+            $this->performInsert($id, $payload);
         }
 
         return $this->exists = true;
@@ -264,9 +264,9 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
      *
      * @return bool
      */
-    public function destroy($sessionId): bool
+    public function destroy($id): bool
     {
-        $this->getQuery()->where('id', $sessionId)->delete();
+        $this->getQuery()->where('id', $id)->delete();
 
         return true;
     }
@@ -276,9 +276,9 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
      *
      * @return int
      */
-    public function gc($lifetime): int
+    public function gc($max_lifetime): int
     {
-        return $this->getQuery()->where('last_activity', '<=', $this->currentTime() - $lifetime)->delete();
+        return $this->getQuery()->where('last_activity', '<=', $this->currentTime() - $max_lifetime)->delete();
     }
 
     /**

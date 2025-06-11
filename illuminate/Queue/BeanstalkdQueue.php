@@ -172,6 +172,8 @@ class BeanstalkdQueue extends Queue implements QueueContract
                 $this->container, $this->pheanstalk, $job, $this->connectionName, $queue
             );
         }
+
+        return null;
     }
 
     /**

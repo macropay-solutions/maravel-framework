@@ -189,7 +189,9 @@ class Schedule
         }
 
         if ($job instanceof ShouldBeUnique) {
-            return $this->dispatchUniqueJobToQueue($job, $queue, $connection);
+            $this->dispatchUniqueJobToQueue($job, $queue, $connection);
+
+            return;
         }
 
         $this->getDispatcher()->dispatch(

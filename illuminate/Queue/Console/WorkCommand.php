@@ -95,7 +95,9 @@ class WorkCommand extends Command
     public function handle()
     {
         if ($this->downForMaintenance() && $this->option('once')) {
-            return $this->worker->sleep($this->option('sleep'));
+            $this->worker->sleep($this->option('sleep'));
+
+            return null;
         }
 
         // We'll listen to the processed and failed events so we can write information
@@ -214,7 +216,9 @@ class WorkCommand extends Command
 
             $this->output->write(' '.str_repeat('<fg=gray>.</>', $dots));
 
-            return $this->output->writeln(' <fg=yellow;options=bold>RUNNING</>');
+            $this->output->writeln(' <fg=yellow;options=bold>RUNNING</>');
+
+            return;
         }
 
         $runTime = $this->formatRunTime($this->latestStartedAt);

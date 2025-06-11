@@ -122,7 +122,9 @@ class BusFake implements Fake, QueueingDispatcher
         }
 
         if (is_numeric($callback)) {
-            return $this->assertDispatchedTimes($command, $callback);
+            $this->assertDispatchedTimes($command, $callback);
+
+            return;
         }
 
         PHPUnit::assertTrue(
@@ -203,7 +205,9 @@ class BusFake implements Fake, QueueingDispatcher
         }
 
         if (is_numeric($callback)) {
-            return $this->assertDispatchedSyncTimes($command, $callback);
+            $this->assertDispatchedSyncTimes($command, $callback);
+
+            return;
         }
 
         PHPUnit::assertTrue(
@@ -268,7 +272,9 @@ class BusFake implements Fake, QueueingDispatcher
         }
 
         if (is_numeric($callback)) {
-            return $this->assertDispatchedAfterResponseTimes($command, $callback);
+            $this->assertDispatchedAfterResponseTimes($command, $callback);
+
+            return;
         }
 
         PHPUnit::assertTrue(
