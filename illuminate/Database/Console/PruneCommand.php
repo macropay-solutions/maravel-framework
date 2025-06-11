@@ -38,7 +38,7 @@ class PruneCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
+     * @param \Illuminate\Contracts\Events\Dispatcher $events
      * @return void
      */
     public function handle(Dispatcher $events)
@@ -62,7 +62,7 @@ class PruneCommand extends Command
         $pruning = [];
 
         $events->listen(ModelsPruned::class, function ($event) use (&$pruning) {
-            if (! in_array($event->model, $pruning)) {
+            if (!in_array($event->model, $pruning)) {
                 $pruning[] = $event->model;
 
                 $this->newLine();
@@ -87,12 +87,12 @@ class PruneCommand extends Command
     /**
      * Prune the given model.
      *
-     * @param  string  $model
+     * @param string $model
      * @return void
      */
     protected function pruneModel(string $model)
     {
-        $instance = new $model;
+        $instance = new $model();
 
         $chunkSize = property_exists($instance, 'prunableChunkSize')
             ? $instance->prunableChunkSize
@@ -114,7 +114,7 @@ class PruneCommand extends Command
      */
     protected function models()
     {
-        if (! empty($models = $this->option('model'))) {
+        if (!empty($models = $this->option('model'))) {
             return collect($models)->filter(function ($model) {
                 return class_exists($model);
             })->values();
@@ -122,7 +122,7 @@ class PruneCommand extends Command
 
         $except = $this->option('except');
 
-        if (! empty($models) && ! empty($except)) {
+        if (!empty($models) && !empty($except)) {
             throw new InvalidArgumentException('The --models and --except options cannot be combined.');
         }
 
@@ -130,12 +130,12 @@ class PruneCommand extends Command
             ->map(function ($model) {
                 $namespace = $this->laravel->getNamespace();
 
-                return $namespace.str_replace(
+                return $namespace . str_replace(
                     ['/', '.php'],
                     ['\\', ''],
-                    Str::after($model->getRealPath(), realpath(app_path()).DIRECTORY_SEPARATOR)
+                    Str::after($model->getRealPath(), realpath(app_path()) . DIRECTORY_SEPARATOR)
                 );
-            })->when(! empty($except), function ($models) use ($except) {
+            })->when(!empty($except), function ($models) use ($except) {
                 return $models->reject(function ($model) use ($except) {
                     return in_array($model, $except);
                 });
@@ -153,7 +153,7 @@ class PruneCommand extends Command
      */
     protected function getPath()
     {
-        if (! empty($path = $this->option('path'))) {
+        if (!empty($path = $this->option('path'))) {
             return collect($path)->map(function ($path) {
                 return base_path($path);
             })->all();
@@ -165,7 +165,7 @@ class PruneCommand extends Command
     /**
      * Determine if the given model class is prunable.
      *
-     * @param  string  $model
+     * @param string $model
      * @return bool
      */
     protected function isPrunable($model)
@@ -178,12 +178,12 @@ class PruneCommand extends Command
     /**
      * Display how many models will be pruned.
      *
-     * @param  string  $model
+     * @param string $model
      * @return void
      */
     protected function pretendToPrune($model)
     {
-        $instance = new $model;
+        $instance = new $model();
 
         $count = $instance->prunable()
             ->when(in_array(SoftDeletes::class, class_uses_recursive(get_class($instance))), function ($query) {

@@ -16,10 +16,10 @@ class ArrayLock extends Lock
     /**
      * Create a new lock instance.
      *
-     * @param  \Illuminate\Cache\ArrayStore  $store
-     * @param  string  $name
-     * @param  int  $seconds
-     * @param  string|null  $owner
+     * @param \Illuminate\Cache\ArrayStore $store
+     * @param string $name
+     * @param int $seconds
+     * @param string|null $owner
      * @return void
      */
     public function __construct($store, $name, $seconds, $owner = null)
@@ -67,11 +67,11 @@ class ArrayLock extends Lock
      */
     public function release()
     {
-        if (! $this->exists()) {
+        if (!$this->exists()) {
             return false;
         }
 
-        if (! $this->isOwnedByCurrentProcess()) {
+        if (!$this->isOwnedByCurrentProcess()) {
             return false;
         }
 
@@ -87,7 +87,7 @@ class ArrayLock extends Lock
      */
     protected function getCurrentOwner()
     {
-        if (! $this->exists()) {
+        if (!$this->exists()) {
             return null;
         }
 

@@ -38,7 +38,7 @@ class Pipeline extends BasePipeline
     /**
      * Get the initial slice to begin the stack call.
      *
-     * @param  \Closure  $destination
+     * @param \Closure $destination
      * @return \Closure
      */
     protected function prepareDestination(BaseClosure $destination)
@@ -55,13 +55,13 @@ class Pipeline extends BasePipeline
     /**
      * Handle the given exception.
      *
-     * @param  mixed  $passable
-     * @param  \Throwable  $e
+     * @param mixed $passable
+     * @param \Throwable $e
      * @return mixed
      */
     protected function handleException($passable, Throwable $e)
     {
-        if (! $this->container->bound(ExceptionHandler::class) || ! $passable instanceof Request) {
+        if (!$this->container->bound(ExceptionHandler::class) || !$passable instanceof Request) {
             throw $e;
         }
 

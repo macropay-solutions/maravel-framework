@@ -40,7 +40,7 @@ class EnvironmentEncryptCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param \Illuminate\Filesystem\Filesystem $files
      * @return void
      */
     public function __construct(Filesystem $files)
@@ -64,22 +64,22 @@ class EnvironmentEncryptCommand extends Command
         $keyPassed = $key !== null;
 
         $environmentFile = $this->option('env')
-                            ? base_path('.env').'.'.$this->option('env')
-                            : $this->laravel->environmentFilePath();
+            ? base_path('.env') . '.' . $this->option('env')
+            : $this->laravel->environmentFilePath();
 
-        $encryptedFile = $environmentFile.'.encrypted';
+        $encryptedFile = $environmentFile . '.encrypted';
 
-        if (! $keyPassed) {
+        if (!$keyPassed) {
             $key = Encrypter::generateKey($cipher);
         }
 
-        if (! $this->files->exists($environmentFile)) {
+        if (!$this->files->exists($environmentFile)) {
             $this->components->error('Environment file not found.');
 
             return Command::FAILURE;
         }
 
-        if ($this->files->exists($encryptedFile) && ! $this->option('force')) {
+        if ($this->files->exists($encryptedFile) && !$this->option('force')) {
             $this->components->error('Encrypted environment file already exists.');
 
             return Command::FAILURE;
@@ -100,7 +100,7 @@ class EnvironmentEncryptCommand extends Command
 
         $this->components->info('Environment successfully encrypted.');
 
-        $this->components->twoColumnDetail('Key', $keyPassed ? $key : 'base64:'.base64_encode($key));
+        $this->components->twoColumnDetail('Key', $keyPassed ? $key : 'base64:' . base64_encode($key));
         $this->components->twoColumnDetail('Cipher', $cipher);
         $this->components->twoColumnDetail('Encrypted file', $encryptedFile);
 
@@ -110,7 +110,7 @@ class EnvironmentEncryptCommand extends Command
     /**
      * Parse the encryption key.
      *
-     * @param  string  $key
+     * @param string $key
      * @return string
      */
     protected function parseKey(string $key)

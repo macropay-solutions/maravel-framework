@@ -14,7 +14,7 @@ class JobPopping
     /**
      * Create a new event instance.
      *
-     * @param  string  $connectionName
+     * @param string $connectionName
      * @return void
      */
     public function __construct($connectionName)

@@ -32,7 +32,7 @@ class UpCommand extends Command
     public function handle()
     {
         try {
-            if (! $this->laravel->maintenanceMode()->active()) {
+            if (!$this->laravel->maintenanceMode()->active()) {
                 $this->components->info('Application is already up.');
 
                 return 0;
@@ -48,10 +48,12 @@ class UpCommand extends Command
 
             $this->components->info('Application is now live.');
         } catch (Exception $e) {
-            $this->components->error(sprintf(
-                'Failed to disable maintenance mode: %s.',
-                $e->getMessage(),
-            ));
+            $this->components->error(
+                sprintf(
+                    'Failed to disable maintenance mode: %s.',
+                    $e->getMessage(),
+                )
+            );
 
             return 1;
         }

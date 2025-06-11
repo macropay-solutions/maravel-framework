@@ -10,9 +10,9 @@ class RedisTagSet extends TagSet
     /**
      * Add a reference entry to the tag set's underlying sorted set.
      *
-     * @param  string  $key
-     * @param  int|null  $ttl
-     * @param  string  $updateWhen
+     * @param string $key
+     * @param int|null $ttl
+     * @param string $updateWhen
      * @return void
      */
     public function addEntry(string $key, ?int $ttl = null, $updateWhen = null)
@@ -21,9 +21,9 @@ class RedisTagSet extends TagSet
 
         foreach ($this->tagIds() as $tagKey) {
             if ($updateWhen) {
-                $this->store->connection()->zadd($this->store->getPrefix().$tagKey, $updateWhen, $ttl, $key);
+                $this->store->connection()->zadd($this->store->getPrefix() . $tagKey, $updateWhen, $ttl, $key);
             } else {
-                $this->store->connection()->zadd($this->store->getPrefix().$tagKey, $ttl, $key);
+                $this->store->connection()->zadd($this->store->getPrefix() . $tagKey, $ttl, $key);
             }
         }
     }
@@ -41,12 +41,12 @@ class RedisTagSet extends TagSet
 
                 do {
                     [$cursor, $entries] = $this->store->connection()->zscan(
-                        $this->store->getPrefix().$tagKey,
+                        $this->store->getPrefix() . $tagKey,
                         $cursor,
                         ['match' => '*', 'count' => 1000]
                     );
 
-                    if (! is_array($entries)) {
+                    if (!is_array($entries)) {
                         break;
                     }
 
@@ -59,7 +59,7 @@ class RedisTagSet extends TagSet
                     foreach ($entries as $entry) {
                         yield $entry;
                     }
-                } while (((string) $cursor) !== $defaultCursorValue);
+                } while (((string)$cursor) !== $defaultCursorValue);
             }
         });
     }
@@ -73,7 +73,7 @@ class RedisTagSet extends TagSet
     {
         $this->store->connection()->pipeline(function ($pipe) {
             foreach ($this->tagIds() as $tagKey) {
-                $pipe->zremrangebyscore($this->store->getPrefix().$tagKey, 0, Carbon::now()->getTimestamp());
+                $pipe->zremrangebyscore($this->store->getPrefix() . $tagKey, 0, Carbon::now()->getTimestamp());
             }
         });
     }
@@ -81,7 +81,7 @@ class RedisTagSet extends TagSet
     /**
      * Flush the tag from the cache.
      *
-     * @param  string  $name
+     * @param string $name
      */
     public function flushTag($name)
     {
@@ -91,7 +91,7 @@ class RedisTagSet extends TagSet
     /**
      * Reset the tag and return the new tag identifier.
      *
-     * @param  string  $name
+     * @param string $name
      * @return string
      */
     public function resetTag($name)
@@ -104,7 +104,7 @@ class RedisTagSet extends TagSet
     /**
      * Get the unique tag identifier for a given tag.
      *
-     * @param  string  $name
+     * @param string $name
      * @return string
      */
     public function tagId($name)
@@ -115,7 +115,7 @@ class RedisTagSet extends TagSet
     /**
      * Get the tag identifier key for a given tag.
      *
-     * @param  string  $name
+     * @param string $name
      * @return string
      */
     public function tagKey($name)

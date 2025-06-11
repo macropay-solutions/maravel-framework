@@ -75,8 +75,8 @@ class WorkCommand extends Command
     /**
      * Create a new queue work command.
      *
-     * @param  \Illuminate\Queue\Worker  $worker
-     * @param  \Illuminate\Contracts\Cache\Repository  $cache
+     * @param \Illuminate\Queue\Worker $worker
+     * @param \Illuminate\Contracts\Cache\Repository $cache
      * @return void
      */
     public function __construct(Worker $worker, Cache $cache)
@@ -106,7 +106,7 @@ class WorkCommand extends Command
         $this->listenForEvents();
 
         $connection = $this->argument('connection')
-                        ?: $this->laravel['config']['queue.default'];
+            ?: $this->laravel['config']['queue.default'];
 
         // We need to get the right queue for the connection which is set in the queue
         // configuration file for the application. We will pull it based on the set
@@ -120,15 +120,16 @@ class WorkCommand extends Command
         }
 
         return $this->runWorker(
-            $connection, $queue
+            $connection,
+            $queue
         );
     }
 
     /**
      * Run the worker instance.
      *
-     * @param  string  $connection
-     * @param  string  $queue
+     * @param string $connection
+     * @param string $queue
      * @return int|null
      */
     protected function runWorker($connection, $queue)
@@ -137,7 +138,9 @@ class WorkCommand extends Command
             ->setName($this->option('name'))
             ->setCache($this->cache)
             ->{$this->option('once') ? 'runNextJob' : 'daemon'}(
-                $connection, $queue, $this->gatherWorkerOptions()
+                $connection,
+                $queue,
+                $this->gatherWorkerOptions()
             );
     }
 
@@ -192,29 +195,34 @@ class WorkCommand extends Command
     /**
      * Write the status output for the queue worker.
      *
-     * @param  \Illuminate\Contracts\Queue\Job  $job
-     * @param  string  $status
+     * @param \Illuminate\Contracts\Queue\Job $job
+     * @param string $status
      * @return void
      */
     protected function writeOutput(Job $job, $status)
     {
-        $this->output->write(sprintf(
-            '  <fg=gray>%s</> %s%s',
-            $this->now()->format('Y-m-d H:i:s'),
-            $job->resolveName(),
-            $this->output->isVerbose()
-                ? sprintf(' <fg=gray>%s</>', $job->getJobId())
-                : ''
-        ));
+        $this->output->write(
+            sprintf(
+                '  <fg=gray>%s</> %s%s',
+                $this->now()->format('Y-m-d H:i:s'),
+                $job->resolveName(),
+                $this->output->isVerbose()
+                    ? sprintf(' <fg=gray>%s</>', $job->getJobId())
+                    : ''
+            )
+        );
 
         if ($status == 'starting') {
             $this->latestStartedAt = microtime(true);
 
-            $dots = max(terminal()->width() - mb_strlen($job->resolveName()) - (
+            $dots = max(
+                terminal()->width() - mb_strlen($job->resolveName()) - (
                 $this->output->isVerbose() ? (mb_strlen($job->getJobId()) + 1) : 0
-            ) - 33, 0);
+                ) - 33,
+                0
+            );
 
-            $this->output->write(' '.str_repeat('<fg=gray>.</>', $dots));
+            $this->output->write(' ' . str_repeat('<fg=gray>.</>', $dots));
 
             $this->output->writeln(' <fg=yellow;options=bold>RUNNING</>');
 
@@ -223,18 +231,23 @@ class WorkCommand extends Command
 
         $runTime = $this->formatRunTime($this->latestStartedAt);
 
-        $dots = max(terminal()->width() - mb_strlen($job->resolveName()) - (
+        $dots = max(
+            terminal()->width() - mb_strlen($job->resolveName()) - (
             $this->output->isVerbose() ? (mb_strlen($job->getJobId()) + 1) : 0
-        ) - mb_strlen($runTime) - 31, 0);
+            ) - mb_strlen($runTime) - 31,
+            0
+        );
 
-        $this->output->write(' '.str_repeat('<fg=gray>.</>', $dots));
+        $this->output->write(' ' . str_repeat('<fg=gray>.</>', $dots));
         $this->output->write(" <fg=gray>$runTime</>");
 
-        $this->output->writeln(match ($status) {
-            'success' => ' <fg=green;options=bold>DONE</>',
-            'released_after_exception' => ' <fg=yellow;options=bold>FAIL</>',
-            default => ' <fg=red;options=bold>FAIL</>',
-        });
+        $this->output->writeln(
+            match ($status) {
+                'success' => ' <fg=green;options=bold>DONE</>',
+                'released_after_exception' => ' <fg=yellow;options=bold>FAIL</>',
+                default => ' <fg=red;options=bold>FAIL</>',
+            }
+        );
     }
 
     /**
@@ -246,8 +259,10 @@ class WorkCommand extends Command
     {
         $queueTimezone = $this->laravel['config']->get('queue.output_timezone');
 
-        if ($queueTimezone &&
-            $queueTimezone !== $this->laravel['config']->get('app.timezone')) {
+        if (
+            $queueTimezone &&
+            $queueTimezone !== $this->laravel['config']->get('app.timezone')
+        ) {
             return Carbon::now()->setTimezone($queueTimezone);
         }
 
@@ -257,7 +272,7 @@ class WorkCommand extends Command
     /**
      * Given a start time, format the total run time for human readability.
      *
-     * @param  float  $startTime
+     * @param float $startTime
      * @return string
      */
     protected function formatRunTime($startTime)
@@ -266,13 +281,13 @@ class WorkCommand extends Command
 
         return $runTime > 1000
             ? CarbonInterval::milliseconds($runTime)->cascade()->forHumans(short: true)
-            : number_format($runTime, 2).'ms';
+            : number_format($runTime, 2) . 'ms';
     }
 
     /**
      * Store a failed job event.
      *
-     * @param  \Illuminate\Queue\Events\JobFailed  $event
+     * @param \Illuminate\Queue\Events\JobFailed $event
      * @return void
      */
     protected function logFailedJob(JobFailed $event)
@@ -288,13 +303,14 @@ class WorkCommand extends Command
     /**
      * Get the queue name for the worker.
      *
-     * @param  string  $connection
+     * @param string $connection
      * @return string
      */
     protected function getQueue($connection)
     {
         return $this->option('queue') ?: $this->laravel['config']->get(
-            "queue.connections.{$connection}.queue", 'default'
+            "queue.connections.{$connection}.queue",
+            'default'
         );
     }
 

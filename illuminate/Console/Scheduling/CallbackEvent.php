@@ -42,17 +42,17 @@ class CallbackEvent extends Event
     /**
      * Create a new event instance.
      *
-     * @param  \Illuminate\Console\Scheduling\EventMutex  $mutex
-     * @param  string|callable  $callback
-     * @param  array  $parameters
-     * @param  \DateTimeZone|string|null  $timezone
+     * @param \Illuminate\Console\Scheduling\EventMutex $mutex
+     * @param string|callable $callback
+     * @param array $parameters
+     * @param \DateTimeZone|string|null $timezone
      * @return void
      *
      * @throws \InvalidArgumentException
      */
     public function __construct(EventMutex $mutex, $callback, array $parameters = [], $timezone = null)
     {
-        if (! is_string($callback) && ! Reflector::isCallable($callback)) {
+        if (!is_string($callback) && !Reflector::isCallable($callback)) {
             throw new InvalidArgumentException(
                 'Invalid scheduled callback event. Must be a string or callable.'
             );
@@ -67,7 +67,7 @@ class CallbackEvent extends Event
     /**
      * Run the callback event.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @param \Illuminate\Contracts\Container\Container $container
      * @return mixed
      *
      * @throws \Throwable
@@ -108,7 +108,7 @@ class CallbackEvent extends Event
     /**
      * Run the callback.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @param \Illuminate\Contracts\Container\Container $container
      * @return int
      */
     protected function execute($container)
@@ -131,14 +131,14 @@ class CallbackEvent extends Event
      *
      * The expiration time of the underlying cache lock may be specified in minutes.
      *
-     * @param  int  $expiresAt
+     * @param int $expiresAt
      * @return $this
      *
      * @throws \LogicException
      */
     public function withoutOverlapping($expiresAt = 1440)
     {
-        if (! isset($this->description)) {
+        if (!isset($this->description)) {
             throw new LogicException(
                 "A scheduled event name is required to prevent overlapping. Use the 'name' method before 'withoutOverlapping'."
             );
@@ -156,7 +156,7 @@ class CallbackEvent extends Event
      */
     public function onOneServer()
     {
-        if (! isset($this->description)) {
+        if (!isset($this->description)) {
             throw new LogicException(
                 "A scheduled event name is required to only run on one server. Use the 'name' method before 'onOneServer'."
             );
@@ -186,7 +186,7 @@ class CallbackEvent extends Event
      */
     public function mutexName()
     {
-        return 'framework/schedule-'.sha1($this->description ?? '');
+        return 'framework/schedule-' . sha1($this->description ?? '');
     }
 
     /**

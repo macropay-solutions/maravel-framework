@@ -29,7 +29,7 @@ class CacheCommandMutex implements CommandMutex
     /**
      * Create a new command mutex.
      *
-     * @param  \Illuminate\Contracts\Cache\Factory  $cache
+     * @param \Illuminate\Contracts\Cache\Factory $cache
      */
     public function __construct(Cache $cache)
     {
@@ -39,7 +39,7 @@ class CacheCommandMutex implements CommandMutex
     /**
      * Attempt to obtain a command mutex for the given command.
      *
-     * @param  \Illuminate\Console\Command  $command
+     * @param \Illuminate\Console\Command $command
      * @return bool
      */
     public function create($command)
@@ -63,7 +63,7 @@ class CacheCommandMutex implements CommandMutex
     /**
      * Determine if a command mutex exists for the given command.
      *
-     * @param  \Illuminate\Console\Command  $command
+     * @param \Illuminate\Console\Command $command
      * @return bool
      */
     public function exists($command)
@@ -73,7 +73,7 @@ class CacheCommandMutex implements CommandMutex
         if ($this->shouldUseLocks($store->getStore())) {
             $lock = $store->getStore()->lock($this->commandMutexName($command));
 
-            return tap(! $lock->get(), function ($exists) use ($lock) {
+            return tap(!$lock->get(), function ($exists) use ($lock) {
                 if ($exists) {
                     $lock->release();
                 }
@@ -86,7 +86,7 @@ class CacheCommandMutex implements CommandMutex
     /**
      * Release the mutex for the given command.
      *
-     * @param  \Illuminate\Console\Command  $command
+     * @param \Illuminate\Console\Command $command
      * @return bool
      */
     public function forget($command)
@@ -103,22 +103,22 @@ class CacheCommandMutex implements CommandMutex
     /**
      * Get the isolatable command mutex name.
      *
-     * @param  \Illuminate\Console\Command  $command
+     * @param \Illuminate\Console\Command $command
      * @return string
      */
     protected function commandMutexName($command)
     {
-        $baseName = 'framework'.DIRECTORY_SEPARATOR.'command-'.$command->getName();
+        $baseName = 'framework' . DIRECTORY_SEPARATOR . 'command-' . $command->getName();
 
         return method_exists($command, 'isolatableId')
-            ? $baseName.'-'.$command->isolatableId()
+            ? $baseName . '-' . $command->isolatableId()
             : $baseName;
     }
 
     /**
      * Specify the cache store that should be used.
      *
-     * @param  string|null  $store
+     * @param string|null $store
      * @return $this
      */
     public function useStore($store)
@@ -131,11 +131,11 @@ class CacheCommandMutex implements CommandMutex
     /**
      * Determine if the given store should use locks for command mutexes.
      *
-     * @param  \Illuminate\Contracts\Cache\Store  $store
+     * @param \Illuminate\Contracts\Cache\Store $store
      * @return bool
      */
     protected function shouldUseLocks($store)
     {
-        return $store instanceof LockProvider && ! $store instanceof DynamoDbStore;
+        return $store instanceof LockProvider && !$store instanceof DynamoDbStore;
     }
 }

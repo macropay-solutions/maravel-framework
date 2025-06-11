@@ -16,7 +16,7 @@ class InvokedProcessPool implements Countable
     /**
      * Create a new invoked process pool.
      *
-     * @param  array  $invokedProcesses
+     * @param array $invokedProcesses
      * @return void
      */
     public function __construct(array $invokedProcesses)
@@ -27,7 +27,7 @@ class InvokedProcessPool implements Countable
     /**
      * Send a signal to each running process in the pool, returning the processes that were signalled.
      *
-     * @param  int  $signal
+     * @param int $signal
      * @return \Illuminate\Support\Collection
      */
     public function signal(int $signal)

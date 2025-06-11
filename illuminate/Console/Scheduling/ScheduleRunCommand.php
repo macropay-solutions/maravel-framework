@@ -98,10 +98,10 @@ class ScheduleRunCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
-     * @param  \Illuminate\Contracts\Cache\Repository  $cache
-     * @param  \Illuminate\Contracts\Debug\ExceptionHandler  $handler
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param \Illuminate\Contracts\Events\Dispatcher $dispatcher
+     * @param \Illuminate\Contracts\Cache\Repository $cache
+     * @param \Illuminate\Contracts\Debug\ExceptionHandler $handler
      * @return void
      */
     public function handle(Schedule $schedule, Dispatcher $dispatcher, Cache $cache, ExceptionHandler $handler)
@@ -121,7 +121,7 @@ class ScheduleRunCommand extends Command
         }
 
         foreach ($events as $event) {
-            if (! $event->filtersPass($this->laravel)) {
+            if (!$event->filtersPass($this->laravel)) {
                 $this->dispatcher->dispatch(new ScheduledTaskSkipped($event));
 
                 continue;
@@ -140,7 +140,7 @@ class ScheduleRunCommand extends Command
             $this->repeatEvents($events->filter->isRepeatable());
         }
 
-        if (! $this->eventsRan) {
+        if (!$this->eventsRan) {
             $this->components->info('No scheduled commands are ready to run.');
         } else {
             $this->newLine();
@@ -150,7 +150,7 @@ class ScheduleRunCommand extends Command
     /**
      * Run the given single server event.
      *
-     * @param  \Illuminate\Console\Scheduling\Event  $event
+     * @param \Illuminate\Console\Scheduling\Event $event
      * @return void
      */
     protected function runSingleServerEvent($event)
@@ -158,16 +158,19 @@ class ScheduleRunCommand extends Command
         if ($this->schedule->serverShouldRun($event, $this->startedAt)) {
             $this->runEvent($event);
         } else {
-            $this->components->info(sprintf(
-                'Skipping [%s], as command already run on another server.', $event->getSummaryForDisplay()
-            ));
+            $this->components->info(
+                sprintf(
+                    'Skipping [%s], as command already run on another server.',
+                    $event->getSummaryForDisplay()
+                )
+            );
         }
     }
 
     /**
      * Run the given event.
      *
-     * @param  \Illuminate\Console\Scheduling\Event  $event
+     * @param \Illuminate\Console\Scheduling\Event $event
      * @return void
      */
     protected function runEvent($event)
@@ -193,10 +196,12 @@ class ScheduleRunCommand extends Command
             try {
                 $event->run($this->laravel);
 
-                $this->dispatcher->dispatch(new ScheduledTaskFinished(
-                    $event,
-                    round(microtime(true) - $start, 2)
-                ));
+                $this->dispatcher->dispatch(
+                    new ScheduledTaskFinished(
+                        $event,
+                        round(microtime(true) - $start, 2)
+                    )
+                );
 
                 $this->eventsRan = true;
             } catch (Throwable $e) {
@@ -208,7 +213,7 @@ class ScheduleRunCommand extends Command
             return $event->exitCode == 0;
         });
 
-        if (! $event instanceof CallbackEvent) {
+        if (!$event instanceof CallbackEvent) {
             $this->components->bulletList([
                 $event->getSummaryForDisplay(),
             ]);
@@ -218,7 +223,7 @@ class ScheduleRunCommand extends Command
     /**
      * Run the given repeating events.
      *
-     * @param  \Illuminate\Support\Collection<\Illuminate\Console\Scheduling\Event>  $events
+     * @param \Illuminate\Support\Collection<\Illuminate\Console\Scheduling\Event> $events
      * @return void
      */
     protected function repeatEvents($events)
@@ -231,17 +236,17 @@ class ScheduleRunCommand extends Command
                     return;
                 }
 
-                if (! $event->shouldRepeatNow()) {
+                if (!$event->shouldRepeatNow()) {
                     continue;
                 }
 
                 $hasEnteredMaintenanceMode = $hasEnteredMaintenanceMode || $this->laravel->isDownForMaintenance();
 
-                if ($hasEnteredMaintenanceMode && ! $event->runsInMaintenanceMode()) {
+                if ($hasEnteredMaintenanceMode && !$event->runsInMaintenanceMode()) {
                     continue;
                 }
 
-                if (! $event->filtersPass($this->laravel)) {
+                if (!$event->filtersPass($this->laravel)) {
                     $this->dispatcher->dispatch(new ScheduledTaskSkipped($event));
 
                     continue;

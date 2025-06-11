@@ -38,14 +38,18 @@ class FakeProcessResult implements ProcessResultContract
     /**
      * Create a new process result instance.
      *
-     * @param  string  $command
-     * @param  int  $exitCode
-     * @param  array|string  $output
-     * @param  array|string  $errorOutput
+     * @param string $command
+     * @param int $exitCode
+     * @param array|string $output
+     * @param array|string $errorOutput
      * @return void
      */
-    public function __construct(string $command = '', int $exitCode = 0, array|string $output = '', array|string $errorOutput = '')
-    {
+    public function __construct(
+        string $command = '',
+        int $exitCode = 0,
+        array|string $output = '',
+        array|string $errorOutput = ''
+    ) {
         $this->command = $command;
         $this->exitCode = $exitCode;
         $this->output = $this->normalizeOutput($output);
@@ -55,7 +59,7 @@ class FakeProcessResult implements ProcessResultContract
     /**
      * Normalize the given output into a string with newlines.
      *
-     * @param  array|string  $output
+     * @param array|string $output
      * @return string
      */
     protected function normalizeOutput(array|string $output)
@@ -63,11 +67,11 @@ class FakeProcessResult implements ProcessResultContract
         if (empty($output)) {
             return '';
         } elseif (is_string($output)) {
-            return rtrim($output, "\n")."\n";
+            return rtrim($output, "\n") . "\n";
         } elseif (is_array($output)) {
             return rtrim(
                 collect($output)
-                    ->map(fn ($line) => rtrim($line, "\n")."\n")
+                    ->map(fn($line) => rtrim($line, "\n") . "\n")
                     ->implode(''),
                 "\n"
             );
@@ -87,7 +91,7 @@ class FakeProcessResult implements ProcessResultContract
     /**
      * Create a new fake process result with the given command.
      *
-     * @param  string  $command
+     * @param string $command
      * @return self
      */
     public function withCommand(string $command)
@@ -112,7 +116,7 @@ class FakeProcessResult implements ProcessResultContract
      */
     public function failed()
     {
-        return ! $this->successful();
+        return !$this->successful();
     }
 
     /**
@@ -138,7 +142,7 @@ class FakeProcessResult implements ProcessResultContract
     /**
      * Determine if the output contains the given string.
      *
-     * @param  string  $output
+     * @param string $output
      * @return bool
      */
     public function seeInOutput(string $output)
@@ -159,7 +163,7 @@ class FakeProcessResult implements ProcessResultContract
     /**
      * Determine if the error output contains the given string.
      *
-     * @param  string  $output
+     * @param string $output
      * @return bool
      */
     public function seeInErrorOutput(string $output)
@@ -170,7 +174,7 @@ class FakeProcessResult implements ProcessResultContract
     /**
      * Throw an exception if the process failed.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return $this
      *
      * @throws \Illuminate\Process\Exceptions\ProcessFailedException
@@ -193,8 +197,8 @@ class FakeProcessResult implements ProcessResultContract
     /**
      * Throw an exception if the process failed and the given condition is true.
      *
-     * @param  bool  $condition
-     * @param  callable|null  $callback
+     * @param bool $condition
+     * @param callable|null $callback
      * @return $this
      *
      * @throws \Throwable

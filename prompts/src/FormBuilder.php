@@ -55,8 +55,8 @@ class FormBuilder
 
             $index > 0
                 ? Prompt::revertUsing(function () use (&$wasReverted) {
-                    $wasReverted = true;
-                }) : Prompt::preventReverting();
+                $wasReverted = true;
+            }) : Prompt::preventReverting();
 
             try {
                 $this->responses[$step->name ?? $index] = $step->run(
@@ -78,54 +78,105 @@ class FormBuilder
     /**
      * Prompt the user for text input.
      */
-    public function text(string $label, string $placeholder = '', string $default = '', bool|string $required = false, mixed $validate = null, string $hint = '', ?string $name = null, ?Closure $transform = null): self
-    {
+    public function text(
+        string $label,
+        string $placeholder = '',
+        string $default = '',
+        bool|string $required = false,
+        mixed $validate = null,
+        string $hint = '',
+        ?string $name = null,
+        ?Closure $transform = null
+    ): self {
         return $this->runPrompt(text(...), get_defined_vars());
     }
 
     /**
      * Prompt the user for multiline text input.
      */
-    public function textarea(string $label, string $placeholder = '', string $default = '', bool|string $required = false, ?Closure $validate = null, string $hint = '', int $rows = 5, ?string $name = null, ?Closure $transform = null): self
-    {
+    public function textarea(
+        string $label,
+        string $placeholder = '',
+        string $default = '',
+        bool|string $required = false,
+        ?Closure $validate = null,
+        string $hint = '',
+        int $rows = 5,
+        ?string $name = null,
+        ?Closure $transform = null
+    ): self {
         return $this->runPrompt(textarea(...), get_defined_vars());
     }
 
     /**
      * Prompt the user for input, hiding the value.
      */
-    public function password(string $label, string $placeholder = '', bool|string $required = false, mixed $validate = null, string $hint = '', ?string $name = null, ?Closure $transform = null): self
-    {
+    public function password(
+        string $label,
+        string $placeholder = '',
+        bool|string $required = false,
+        mixed $validate = null,
+        string $hint = '',
+        ?string $name = null,
+        ?Closure $transform = null
+    ): self {
         return $this->runPrompt(password(...), get_defined_vars());
     }
 
     /**
      * Prompt the user to select an option.
      *
-     * @param  array<int|string, string>|Collection<int|string, string>  $options
-     * @param  true|string  $required
+     * @param array<int|string, string>|Collection<int|string, string> $options
+     * @param true|string $required
      */
-    public function select(string $label, array|Collection $options, int|string|null $default = null, int $scroll = 5, mixed $validate = null, string $hint = '', bool|string $required = true, ?string $name = null, ?Closure $transform = null): self
-    {
+    public function select(
+        string $label,
+        array|Collection $options,
+        int|string|null $default = null,
+        int $scroll = 5,
+        mixed $validate = null,
+        string $hint = '',
+        bool|string $required = true,
+        ?string $name = null,
+        ?Closure $transform = null
+    ): self {
         return $this->runPrompt(select(...), get_defined_vars());
     }
 
     /**
      * Prompt the user to select multiple options.
      *
-     * @param  array<int|string, string>|Collection<int|string, string>  $options
-     * @param  array<int|string>|Collection<int, int|string>  $default
+     * @param array<int|string, string>|Collection<int|string, string> $options
+     * @param array<int|string>|Collection<int, int|string> $default
      */
-    public function multiselect(string $label, array|Collection $options, array|Collection $default = [], int $scroll = 5, bool|string $required = false, mixed $validate = null, string $hint = 'Use the space bar to select options.', ?string $name = null, ?Closure $transform = null): self
-    {
+    public function multiselect(
+        string $label,
+        array|Collection $options,
+        array|Collection $default = [],
+        int $scroll = 5,
+        bool|string $required = false,
+        mixed $validate = null,
+        string $hint = 'Use the space bar to select options.',
+        ?string $name = null,
+        ?Closure $transform = null
+    ): self {
         return $this->runPrompt(multiselect(...), get_defined_vars());
     }
 
     /**
      * Prompt the user to confirm an action.
      */
-    public function confirm(string $label, bool $default = true, string $yes = 'Yes', string $no = 'No', bool|string $required = false, mixed $validate = null, string $hint = '', ?string $name = null, ?Closure $transform = null): self
-    {
+    public function confirm(
+        string $label,
+        bool $default = true,
+        string $yes = 'Yes',
+        string $no = 'No',
+        bool|string $required = false,
+        mixed $validate = null,
+        string $hint = '',
+        ?string $name = null,
+        ?Closure $transform = null
+    ): self {
         return $this->runPrompt(confirm(...), get_defined_vars());
     }
 
@@ -140,38 +191,66 @@ class FormBuilder
     /**
      * Prompt the user for text input with auto-completion.
      *
-     * @param  array<string>|Collection<int, string>|Closure(string): array<string>  $options
+     * @param array<string>|Collection<int, string>|Closure(string): array<string> $options
      */
-    public function suggest(string $label, array|Collection|Closure $options, string $placeholder = '', string $default = '', int $scroll = 5, bool|string $required = false, mixed $validate = null, string $hint = '', ?string $name = null, ?Closure $transform = null): self
-    {
+    public function suggest(
+        string $label,
+        array|Collection|Closure $options,
+        string $placeholder = '',
+        string $default = '',
+        int $scroll = 5,
+        bool|string $required = false,
+        mixed $validate = null,
+        string $hint = '',
+        ?string $name = null,
+        ?Closure $transform = null
+    ): self {
         return $this->runPrompt(suggest(...), get_defined_vars());
     }
 
     /**
      * Allow the user to search for an option.
      *
-     * @param  Closure(string): array<int|string, string>  $options
-     * @param  true|string  $required
+     * @param Closure(string): array<int|string, string> $options
+     * @param true|string $required
      */
-    public function search(string $label, Closure $options, string $placeholder = '', int $scroll = 5, mixed $validate = null, string $hint = '', bool|string $required = true, ?string $name = null, ?Closure $transform = null): self
-    {
+    public function search(
+        string $label,
+        Closure $options,
+        string $placeholder = '',
+        int $scroll = 5,
+        mixed $validate = null,
+        string $hint = '',
+        bool|string $required = true,
+        ?string $name = null,
+        ?Closure $transform = null
+    ): self {
         return $this->runPrompt(search(...), get_defined_vars());
     }
 
     /**
      * Allow the user to search for multiple option.
      *
-     * @param  Closure(string): array<int|string, string>  $options
+     * @param Closure(string): array<int|string, string> $options
      */
-    public function multisearch(string $label, Closure $options, string $placeholder = '', int $scroll = 5, bool|string $required = false, mixed $validate = null, string $hint = 'Use the space bar to select options.', ?string $name = null, ?Closure $transform = null): self
-    {
+    public function multisearch(
+        string $label,
+        Closure $options,
+        string $placeholder = '',
+        int $scroll = 5,
+        bool|string $required = false,
+        mixed $validate = null,
+        string $hint = 'Use the space bar to select options.',
+        ?string $name = null,
+        ?Closure $transform = null
+    ): self {
         return $this->runPrompt(multisearch(...), get_defined_vars());
     }
 
     /**
      * Render a spinner while the given callback is executing.
      *
-     * @param  \Closure(): mixed  $callback
+     * @param \Closure(): mixed $callback
      */
     public function spin(Closure $callback, string $message = '', ?string $name = null): self
     {
@@ -237,11 +316,14 @@ class FormBuilder
     /**
      * Display a table.
      *
-     * @param  array<int, string|array<int, string>>|Collection<int, string|array<int, string>>  $headers
-     * @param  array<int, array<int, string>>|Collection<int, array<int, string>>  $rows
+     * @param array<int, string|array<int, string>>|Collection<int, string|array<int, string>> $headers
+     * @param array<int, array<int, string>>|Collection<int, array<int, string>> $rows
      */
-    public function table(array|Collection $headers = [], array|Collection|null $rows = null, ?string $name = null): self
-    {
+    public function table(
+        array|Collection $headers = [],
+        array|Collection|null $rows = null,
+        ?string $name = null
+    ): self {
         return $this->runPrompt(table(...), get_defined_vars(), true);
     }
 
@@ -251,18 +333,23 @@ class FormBuilder
      * @template TSteps of iterable<mixed>|int
      * @template TReturn
      *
-     * @param  TSteps  $steps
-     * @param  ?Closure((TSteps is int ? int : value-of<TSteps>), Progress<TSteps>): TReturn  $callback
+     * @param TSteps $steps
+     * @param  ?Closure((TSteps is int ? int : value-of<TSteps>), Progress<TSteps>): TReturn $callback
      */
-    public function progress(string $label, iterable|int $steps, ?Closure $callback = null, string $hint = '', ?string $name = null): self
-    {
+    public function progress(
+        string $label,
+        iterable|int $steps,
+        ?Closure $callback = null,
+        string $hint = '',
+        ?string $name = null
+    ): self {
         return $this->runPrompt(progress(...), get_defined_vars(), true);
     }
 
     /**
      * Execute the given prompt passing the given arguments.
      *
-     * @param  array<mixed>  $arguments
+     * @param array<mixed> $arguments
      */
     protected function runPrompt(callable $prompt, array $arguments, bool $ignoreWhenReverting = false): self
     {

@@ -15,18 +15,18 @@ class FormStep
         protected readonly bool $ignoreWhenReverting,
     ) {
         $this->condition = is_bool($condition)
-            ? fn () => $condition
+            ? fn() => $condition
             : $condition;
     }
 
     /**
      * Execute this step.
      *
-     * @param  array<mixed>  $responses
+     * @param array<mixed> $responses
      */
     public function run(array $responses, mixed $previousResponse): mixed
     {
-        if (! $this->shouldRun($responses)) {
+        if (!$this->shouldRun($responses)) {
             return null;
         }
 
@@ -36,7 +36,7 @@ class FormStep
     /**
      * Whether the step should run based on the given condition.
      *
-     * @param  array<mixed>  $responses
+     * @param array<mixed> $responses
      */
     protected function shouldRun(array $responses): bool
     {
@@ -46,11 +46,11 @@ class FormStep
     /**
      * Whether this step should be skipped over when a subsequent step is reverted.
      *
-     * @param  array<mixed>  $responses
+     * @param array<mixed> $responses
      */
     public function shouldIgnoreWhenReverting(array $responses): bool
     {
-        if (! $this->shouldRun($responses)) {
+        if (!$this->shouldRun($responses)) {
             return true;
         }
 

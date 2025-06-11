@@ -45,48 +45,48 @@ class TestMakeCommand extends GeneratorCommand
         $suffix = $this->option('unit') ? '.unit.stub' : '.stub';
 
         return $this->option('pest')
-            ? $this->resolveStubPath('/stubs/pest'.$suffix)
-            : $this->resolveStubPath('/stubs/test'.$suffix);
+            ? $this->resolveStubPath('/stubs/pest' . $suffix)
+            : $this->resolveStubPath('/stubs/test' . $suffix);
     }
 
     /**
      * Resolve the fully-qualified path to the stub.
      *
-     * @param  string  $stub
+     * @param string $stub
      * @return string
      */
     protected function resolveStubPath($stub)
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
-                        ? $customPath
-                        : __DIR__.$stub;
+            ? $customPath
+            : __DIR__ . $stub;
     }
 
     /**
      * Get the destination class path.
      *
-     * @param  string  $name
+     * @param string $name
      * @return string
      */
     protected function getPath($name)
     {
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
 
-        return base_path('tests').str_replace('\\', '/', $name).'.php';
+        return base_path('tests') . str_replace('\\', '/', $name) . '.php';
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
     {
         if ($this->option('unit')) {
-            return $rootNamespace.'\Unit';
+            return $rootNamespace . '\Unit';
         } else {
-            return $rootNamespace.'\Feature';
+            return $rootNamespace . '\Feature';
         }
     }
 
@@ -117,8 +117,8 @@ class TestMakeCommand extends GeneratorCommand
     /**
      * Interact further with the user if they were prompted for missing arguments.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return void
      */
     protected function afterPromptingForMissingArguments(InputInterface $input, OutputInterface $output)

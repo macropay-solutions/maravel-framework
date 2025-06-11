@@ -21,7 +21,7 @@ class InvokableComponentVariable implements DeferringDisplayableValue, IteratorA
     /**
      * Create a new variable instance.
      *
-     * @param  \Closure  $callable
+     * @param \Closure $callable
      * @return void
      */
     public function __construct(Closure $callable)
@@ -54,7 +54,7 @@ class InvokableComponentVariable implements DeferringDisplayableValue, IteratorA
     /**
      * Dynamically proxy attribute access to the variable.
      *
-     * @param  string  $key
+     * @param string $key
      * @return mixed
      */
     public function __get($key)
@@ -65,8 +65,8 @@ class InvokableComponentVariable implements DeferringDisplayableValue, IteratorA
     /**
      * Dynamically proxy method access to the variable.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return mixed
      */
     public function __call($method, $parameters)
@@ -91,6 +91,6 @@ class InvokableComponentVariable implements DeferringDisplayableValue, IteratorA
      */
     public function __toString()
     {
-        return (string) $this->__invoke();
+        return (string)$this->__invoke();
     }
 }

@@ -16,7 +16,7 @@ class NestedRules
     /**
      * Create a new nested rule instance.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return void
      */
     public function __construct(callable $callback)
@@ -27,9 +27,9 @@ class NestedRules
     /**
      * Compile the callback into an array of rules.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @param  mixed  $data
+     * @param string $attribute
+     * @param mixed $value
+     * @param mixed $data
      * @return \stdClass
      */
     public function compile($attribute, $value, $data = null)
@@ -40,11 +40,11 @@ class NestedRules
             Arr::undot(Arr::wrap($data))
         );
 
-        if (is_array($rules) && ! array_is_list($rules)) {
+        if (is_array($rules) && !array_is_list($rules)) {
             $nested = [];
 
             foreach ($rules as $key => $rule) {
-                $nested[$attribute.'.'.$key] = $rule;
+                $nested[$attribute . '.' . $key] = $rule;
             }
 
             $rules = $nested;

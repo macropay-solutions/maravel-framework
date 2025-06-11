@@ -30,7 +30,7 @@ class StorageUnlinkCommand extends Command
     public function handle()
     {
         foreach ($this->links() as $link => $target) {
-            if (! file_exists($link) || ! is_link($link)) {
+            if (!file_exists($link) || !is_link($link)) {
                 continue;
             }
 
@@ -48,6 +48,6 @@ class StorageUnlinkCommand extends Command
     protected function links()
     {
         return $this->laravel['config']['filesystems.links'] ??
-               [public_path('storage') => storage_path('app/public')];
+            [public_path('storage') => storage_path('app/public')];
     }
 }

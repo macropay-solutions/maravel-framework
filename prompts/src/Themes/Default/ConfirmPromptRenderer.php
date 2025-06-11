@@ -43,8 +43,8 @@ class ConfirmPromptRenderer extends Renderer
                 )
                 ->when(
                     $prompt->hint,
-                    fn () => $this->hint($prompt->hint),
-                    fn () => $this->newLine() // Space for errors
+                    fn() => $this->hint($prompt->hint),
+                    fn() => $this->newLine() // Space for errors
                 ),
         };
     }
@@ -54,14 +54,16 @@ class ConfirmPromptRenderer extends Renderer
      */
     protected function renderOptions(ConfirmPrompt $prompt): string
     {
-        $length = (int) floor(($prompt->terminal()->cols() - 14) / 2);
+        $length = (int)floor(($prompt->terminal()->cols() - 14) / 2);
         $yes = $this->truncate($prompt->yes, $length);
         $no = $this->truncate($prompt->no, $length);
 
         if ($prompt->state === 'cancel') {
-            return $this->dim($prompt->confirmed
-                ? "● {$this->strikethrough($yes)} / ○ {$this->strikethrough($no)}"
-                : "○ {$this->strikethrough($yes)} / ● {$this->strikethrough($no)}");
+            return $this->dim(
+                $prompt->confirmed
+                    ? "● {$this->strikethrough($yes)} / ○ {$this->strikethrough($no)}"
+                    : "○ {$this->strikethrough($yes)} / ● {$this->strikethrough($no)}"
+            );
         }
 
         return $prompt->confirmed

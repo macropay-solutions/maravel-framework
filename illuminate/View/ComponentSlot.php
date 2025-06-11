@@ -24,8 +24,8 @@ class ComponentSlot implements Htmlable
     /**
      * Create a new slot instance.
      *
-     * @param  string  $contents
-     * @param  array  $attributes
+     * @param string $contents
+     * @param array $attributes
      * @return void
      */
     public function __construct($contents = '', $attributes = [])
@@ -38,7 +38,7 @@ class ComponentSlot implements Htmlable
     /**
      * Set the extra attributes that the slot should make available.
      *
-     * @param  array  $attributes
+     * @param array $attributes
      * @return $this
      */
     public function withAttributes(array $attributes)
@@ -76,25 +76,25 @@ class ComponentSlot implements Htmlable
      */
     public function isNotEmpty()
     {
-        return ! $this->isEmpty();
+        return !$this->isEmpty();
     }
 
     /**
      * Determine if the slot has non-comment content.
      *
-     * @param  callable|string|null  $callable
+     * @param callable|string|null $callable
      * @return bool
      */
     public function hasActualContent(callable|string|null $callable = null)
     {
-        if (is_string($callable) && ! function_exists($callable)) {
+        if (is_string($callable) && !function_exists($callable)) {
             throw new InvalidArgumentException('Callable does not exist.');
         }
 
         return filter_var(
             $this->contents,
             FILTER_CALLBACK,
-            ['options' => $callable ?? fn ($input) => trim(preg_replace("/<!--([\s\S]*?)-->/", '', $input))]
+            ['options' => $callable ?? fn($input) => trim(preg_replace("/<!--([\s\S]*?)-->/", '', $input))]
         ) !== '';
     }
 

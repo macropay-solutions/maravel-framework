@@ -39,6 +39,6 @@ class TableCommand extends MigrationGeneratorCommand
      */
     protected function migrationStubFile()
     {
-        return __DIR__.'/stubs/jobs.stub';
+        return __DIR__ . '/stubs/jobs.stub';
     }
 }

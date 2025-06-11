@@ -7,17 +7,17 @@ use Throwable;
 
 abstract class TestCase extends BaseTestCase
 {
-    use Concerns\InteractsWithContainer,
-        Concerns\MakesHttpRequests,
-        Concerns\InteractsWithAuthentication,
-        Concerns\InteractsWithConsole,
-        Concerns\InteractsWithDatabase,
-        Concerns\InteractsWithDeprecationHandling,
-        Concerns\InteractsWithExceptionHandling,
-        Concerns\InteractsWithSession,
-        Concerns\InteractsWithTime,
-        Concerns\InteractsWithTestCaseLifecycle,
-        Concerns\InteractsWithViews;
+    use Concerns\InteractsWithContainer;
+    use Concerns\MakesHttpRequests;
+    use Concerns\InteractsWithAuthentication;
+    use Concerns\InteractsWithConsole;
+    use Concerns\InteractsWithDatabase;
+    use Concerns\InteractsWithDeprecationHandling;
+    use Concerns\InteractsWithExceptionHandling;
+    use Concerns\InteractsWithSession;
+    use Concerns\InteractsWithTime;
+    use Concerns\InteractsWithTestCaseLifecycle;
+    use Concerns\InteractsWithViews;
 
     /**
      * Creates the application.
@@ -60,7 +60,7 @@ abstract class TestCase extends BaseTestCase
         try {
             $result = parent::runTest();
         } catch (Throwable $e) {
-            if (! is_null(static::$latestResponse)) {
+            if (!is_null(static::$latestResponse)) {
                 static::$latestResponse->transformNotSuccessfulException($e);
             }
 

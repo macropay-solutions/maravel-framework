@@ -12,12 +12,12 @@ class Request extends BaseRequest
     /**
      * Determine if the route name matches a given pattern.
      *
-     * @param  mixed  $patterns
+     * @param mixed $patterns
      * @return bool
      */
     public function routeIs(...$patterns)
     {
-        if (! Arr::exists($route = $this->route()[1], 'as')) {
+        if (!Arr::exists($route = $this->route()[1], 'as')) {
             return false;
         }
 
@@ -33,8 +33,8 @@ class Request extends BaseRequest
     /**
      * Get the route handling the request.
      *
-     * @param  string|null  $param
-     * @param  mixed  $default
+     * @param string|null $param
+     * @param mixed $default
      * @return array|string
      */
     public function route($param = null, $default = null)
@@ -57,19 +57,22 @@ class Request extends BaseRequest
      */
     public function fingerprint()
     {
-        if (! $this->route()) {
+        if (!$this->route()) {
             throw new RuntimeException('Unable to generate fingerprint. Route unavailable.');
         }
 
         return sha1(implode('|', [
-            $this->getMethod(), $this->root(), $this->path(), $this->ip(),
+            $this->getMethod(),
+            $this->root(),
+            $this->path(),
+            $this->ip(),
         ]));
     }
 
     /**
      * Determine if the given offset exists.
      *
-     * @param  string  $offset
+     * @param string $offset
      * @return bool
      */
     public function offsetExists($offset): bool

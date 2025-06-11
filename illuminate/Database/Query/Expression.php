@@ -17,7 +17,7 @@ class Expression implements ExpressionContract
     /**
      * Create a new raw query expression.
      *
-     * @param  string|int|float  $value
+     * @param string|int|float $value
      * @return void
      */
     public function __construct($value)
@@ -28,7 +28,7 @@ class Expression implements ExpressionContract
     /**
      * Get the value of the expression.
      *
-     * @param  \Illuminate\Database\Grammar  $grammar
+     * @param \Illuminate\Database\Grammar $grammar
      * @return string|int|float
      */
     public function getValue(Grammar $grammar)

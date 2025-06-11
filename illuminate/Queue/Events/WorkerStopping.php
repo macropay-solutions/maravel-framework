@@ -21,8 +21,8 @@ class WorkerStopping
     /**
      * Create a new event instance.
      *
-     * @param  int  $status
-     * @param  \Illuminate\Queue\WorkerOptions|null  $workerOptions
+     * @param int $status
+     * @param \Illuminate\Queue\WorkerOptions|null $workerOptions
      * @return void
      */
     public function __construct($status = 0, $workerOptions = null)

@@ -9,8 +9,8 @@ class Secret extends Component
     /**
      * Renders the component using the given arguments.
      *
-     * @param  string  $question
-     * @param  bool  $fallback
+     * @param string $question
+     * @param bool $fallback
      * @return mixed
      */
     public function render($question, $fallback = true)
@@ -19,6 +19,6 @@ class Secret extends Component
 
         $question->setHidden(true)->setHiddenFallback($fallback);
 
-        return $this->usingQuestionHelper(fn () => $this->output->askQuestion($question));
+        return $this->usingQuestionHelper(fn() => $this->output->askQuestion($question));
     }
 }

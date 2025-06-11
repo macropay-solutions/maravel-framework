@@ -42,7 +42,7 @@ class EncryptionServiceProvider extends ServiceProvider
     {
         $config = $this->app->make('config')->get('app');
 
-        if (! class_exists(SerializableClosure::class) || empty($config['key'])) {
+        if (!class_exists(SerializableClosure::class) || empty($config['key'])) {
             return;
         }
 
@@ -52,7 +52,7 @@ class EncryptionServiceProvider extends ServiceProvider
     /**
      * Parse the encryption key.
      *
-     * @param  array  $config
+     * @param array $config
      * @return string
      */
     protected function parseKey(array $config)
@@ -67,7 +67,7 @@ class EncryptionServiceProvider extends ServiceProvider
     /**
      * Extract the encryption key from the given configuration.
      *
-     * @param  array  $config
+     * @param array $config
      * @return string
      *
      * @throws \Illuminate\Encryption\MissingAppKeyException
@@ -76,7 +76,7 @@ class EncryptionServiceProvider extends ServiceProvider
     {
         return tap($config['key'], function ($key) {
             if (empty($key)) {
-                throw new MissingAppKeyException;
+                throw new MissingAppKeyException();
             }
         });
     }

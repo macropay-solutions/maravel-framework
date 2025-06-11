@@ -11,6 +11,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Validation\ValidatesWhenResolvedTrait;
+use Illuminate\Validation\ValidationException;
 
 class FormRequest extends Request implements ValidatesWhenResolved
 {
@@ -96,10 +97,12 @@ class FormRequest extends Request implements ValidatesWhenResolved
         }
 
         if (method_exists($this, 'after')) {
-            $validator->after($this->container->call(
-                $this->after(...),
-                ['validator' => $validator]
-            ));
+            $validator->after(
+                $this->container->call(
+                    $this->after(...),
+                    ['validator' => $validator]
+                )
+            );
         }
 
         $this->setValidator($validator);
@@ -110,7 +113,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
     /**
      * Create the default validator instance.
      *
-     * @param  \Illuminate\Contracts\Validation\Factory  $factory
+     * @param \Illuminate\Contracts\Validation\Factory $factory
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function createDefaultValidator(ValidationFactory $factory)
@@ -156,7 +159,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
     /**
      * Handle a failed validation attempt.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @param \Illuminate\Contracts\Validation\Validator $validator
      * @return void
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -164,10 +167,10 @@ class FormRequest extends Request implements ValidatesWhenResolved
     protected function failedValidation(Validator $validator)
     {
         $exception = $validator->getException();
+        /** @var ValidationException  $ex */
+        $ex = new $exception($validator);
 
-        throw (new $exception($validator))
-                    ->errorBag($this->errorBag)
-                    ->redirectTo($this->getRedirectUrl());
+        throw $ex->errorBag($this->errorBag)->redirectTo($this->getRedirectUrl());
     }
 
     /**
@@ -217,27 +220,27 @@ class FormRequest extends Request implements ValidatesWhenResolved
      */
     protected function failedAuthorization()
     {
-        throw new AuthorizationException;
+        throw new AuthorizationException();
     }
 
     /**
      * Get a validated input container for the validated input.
      *
-     * @param  array|null  $keys
+     * @param array|null $keys
      * @return \Illuminate\Support\ValidatedInput|array
      */
     public function safe(?array $keys = null)
     {
         return is_array($keys)
-                    ? $this->validator->safe()->only($keys)
-                    : $this->validator->safe();
+            ? $this->validator->safe()->only($keys)
+            : $this->validator->safe();
     }
 
     /**
      * Get the validated data from the request.
      *
-     * @param  array|int|string|null  $key
-     * @param  mixed  $default
+     * @param array|int|string|null $key
+     * @param mixed $default
      * @return mixed
      */
     public function validated($key = null, $default = null)
@@ -268,7 +271,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
     /**
      * Set the Validator instance.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @param \Illuminate\Contracts\Validation\Validator $validator
      * @return $this
      */
     public function setValidator(Validator $validator)
@@ -281,7 +284,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
     /**
      * Set the Redirector instance.
      *
-     * @param  \Illuminate\Routing\Redirector  $redirector
+     * @param \Illuminate\Routing\Redirector $redirector
      * @return $this
      */
     public function setRedirector(Redirector $redirector)
@@ -294,7 +297,7 @@ class FormRequest extends Request implements ValidatesWhenResolved
     /**
      * Set the container implementation.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @param \Illuminate\Contracts\Container\Container $container
      * @return $this
      */
     public function setContainer(Container $container)

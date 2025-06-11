@@ -81,14 +81,14 @@ class ServeCommand extends Command
     public function handle()
     {
         $environmentFile = $this->option('env')
-                            ? base_path('.env').'.'.$this->option('env')
-                            : base_path('.env');
+            ? base_path('.env') . '.' . $this->option('env')
+            : base_path('.env');
 
         $hasEnvironment = file_exists($environmentFile);
 
         $environmentLastModified = $hasEnvironment
-                            ? filemtime($environmentFile)
-                            : now()->addDays(30)->getTimestamp();
+            ? filemtime($environmentFile)
+            : now()->addDays(30)->getTimestamp();
 
         $process = $this->startProcess($hasEnvironment);
 
@@ -97,9 +97,11 @@ class ServeCommand extends Command
                 clearstatcache(false, $environmentFile);
             }
 
-            if (! $this->option('no-reload') &&
+            if (
+                !$this->option('no-reload') &&
                 $hasEnvironment &&
-                filemtime($environmentFile) > $environmentLastModified) {
+                filemtime($environmentFile) > $environmentLastModified
+            ) {
                 $environmentLastModified = filemtime($environmentFile);
 
                 $this->newLine();
@@ -130,20 +132,24 @@ class ServeCommand extends Command
     /**
      * Start a new server process.
      *
-     * @param  bool  $hasEnvironment
+     * @param bool $hasEnvironment
      * @return \Symfony\Component\Process\Process
      */
     protected function startProcess($hasEnvironment)
     {
-        $process = new Process($this->serverCommand(), public_path(), collect($_ENV)->mapWithKeys(function ($value, $key) use ($hasEnvironment) {
-            if ($this->option('no-reload') || ! $hasEnvironment) {
-                return [$key => $value];
-            }
+        $process = new Process(
+            $this->serverCommand(),
+            public_path(),
+            collect($_ENV)->mapWithKeys(function ($value, $key) use ($hasEnvironment) {
+                if ($this->option('no-reload') || !$hasEnvironment) {
+                    return [$key => $value];
+                }
 
-            return in_array($key, static::$passthroughVariables) ? [$key => $value] : [$key => false];
-        })->all());
+                return in_array($key, static::$passthroughVariables) ? [$key => $value] : [$key => false];
+            })->all()
+        );
 
-        $this->trap(fn () => [SIGTERM, SIGINT, SIGHUP, SIGUSR1, SIGUSR2, SIGQUIT], function ($signal) use ($process) {
+        $this->trap(fn() => [SIGTERM, SIGINT, SIGHUP, SIGUSR1, SIGUSR2, SIGQUIT], function ($signal) use ($process) {
             if ($process->isRunning()) {
                 $process->stop(10, $signal);
             }
@@ -165,12 +171,12 @@ class ServeCommand extends Command
     {
         $server = file_exists(base_path('server.php'))
             ? base_path('server.php')
-            : __DIR__.'/../resources/server.php';
+            : __DIR__ . '/../resources/server.php';
 
         return [
-            (new PhpExecutableFinder)->find(false),
+            (new PhpExecutableFinder())->find(false),
             '-S',
-            $this->host().':'.$this->port(),
+            $this->host() . ':' . $this->port(),
             $server,
         ];
     }
@@ -235,7 +241,7 @@ class ServeCommand extends Command
     protected function canTryAnotherPort()
     {
         return is_null($this->input->getOption('port')) &&
-               ($this->input->getOption('tries') > $this->portOffset);
+            ($this->input->getOption('tries') > $this->portOffset);
     }
 
     /**
@@ -245,7 +251,7 @@ class ServeCommand extends Command
      */
     protected function handleProcessOutput()
     {
-        return fn ($type, $buffer) => str($buffer)->explode("\n")->each(function ($line) {
+        return fn($type, $buffer) => str($buffer)->explode("\n")->each(function ($line) {
             if (str($line)->contains('Development Server (http')) {
                 if ($this->serverRunningHasBeenDisplayed) {
                     return;
@@ -291,13 +297,16 @@ class ServeCommand extends Command
                     $this->output->write($file = " $file");
                 }
 
-                $dots = max(terminal()->width() - mb_strlen($formattedStartedAt) - mb_strlen($file) - mb_strlen($runTime) - 9, 0);
+                $dots = max(
+                    terminal()->width() - mb_strlen($formattedStartedAt) - mb_strlen($file) - mb_strlen($runTime) - 9,
+                    0
+                );
 
-                $this->output->write(' '.str_repeat('<fg=gray>.</>', $dots));
+                $this->output->write(' ' . str_repeat('<fg=gray>.</>', $dots));
                 $this->output->writeln(" <fg=gray>~ {$runTime}s</>");
             } elseif (str($line)->contains(['Closed without sending a request', 'Failed to poll event'])) {
                 // ...
-            } elseif (! empty($line)) {
+            } elseif (!empty($line)) {
                 $position = strpos($line, '] ');
 
                 if ($position !== false) {
@@ -312,7 +321,7 @@ class ServeCommand extends Command
     /**
      * Get the date from the given PHP server output.
      *
-     * @param  string  $line
+     * @param string $line
      * @return \Illuminate\Support\Carbon
      */
     protected function getDateFromLine($line)
@@ -331,14 +340,14 @@ class ServeCommand extends Command
     /**
      * Get the request port from the given PHP server output.
      *
-     * @param  string  $line
+     * @param string $line
      * @return int
      */
     protected function getRequestPortFromLine($line)
     {
         preg_match('/:(\d+)\s(?:(?:\w+$)|(?:\[.*))/', $line, $matches);
 
-        return (int) $matches[1];
+        return (int)$matches[1];
     }
 
     /**
@@ -349,8 +358,20 @@ class ServeCommand extends Command
     protected function getOptions()
     {
         return [
-            ['host', null, InputOption::VALUE_OPTIONAL, 'The host address to serve the application on', Env::get('SERVER_HOST', '127.0.0.1')],
-            ['port', null, InputOption::VALUE_OPTIONAL, 'The port to serve the application on', Env::get('SERVER_PORT')],
+            [
+                'host',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The host address to serve the application on',
+                Env::get('SERVER_HOST', '127.0.0.1'),
+            ],
+            [
+                'port',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The port to serve the application on',
+                Env::get('SERVER_PORT'),
+            ],
             ['tries', null, InputOption::VALUE_OPTIONAL, 'The max number of ports to attempt to serve from', 10],
             ['no-reload', null, InputOption::VALUE_NONE, 'Do not reload the development server on .env file changes'],
         ];

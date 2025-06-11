@@ -24,7 +24,7 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
     /**
      * Create a new database presence verifier.
      *
-     * @param  \Illuminate\Database\ConnectionResolverInterface  $db
+     * @param \Illuminate\Database\ConnectionResolverInterface $db
      * @return void
      */
     public function __construct(ConnectionResolverInterface $db)
@@ -35,19 +35,19 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
     /**
      * Count the number of objects in a collection having the given value.
      *
-     * @param  string  $collection
-     * @param  string  $column
-     * @param  string  $value
-     * @param  int|null  $excludeId
-     * @param  string|null  $idColumn
-     * @param  array  $extra
+     * @param string $collection
+     * @param string $column
+     * @param string $value
+     * @param int|null $excludeId
+     * @param string|null $idColumn
+     * @param array $extra
      * @return int
      */
     public function getCount($collection, $column, $value, $excludeId = null, $idColumn = null, array $extra = [])
     {
         $query = $this->table($collection)->where($column, '=', $value);
 
-        if (! is_null($excludeId) && $excludeId !== 'NULL') {
+        if (!is_null($excludeId) && $excludeId !== 'NULL') {
             $query->where($idColumn ?: 'id', '<>', $excludeId);
         }
 
@@ -57,10 +57,10 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
     /**
      * Count the number of objects in a collection with the given values.
      *
-     * @param  string  $collection
-     * @param  string  $column
-     * @param  array  $values
-     * @param  array  $extra
+     * @param string $collection
+     * @param string $column
+     * @param array $values
+     * @param array $extra
      * @return int
      */
     public function getMultiCount($collection, $column, array $values, array $extra = [])
@@ -73,8 +73,8 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
     /**
      * Add the given conditions to the query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $conditions
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param array $conditions
      * @return \Illuminate\Database\Query\Builder
      */
     protected function addConditions($query, $conditions)
@@ -95,9 +95,9 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
     /**
      * Add a "where" clause to the given query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  string  $key
-     * @param  string  $extraValue
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param string $key
+     * @param string $extraValue
      * @return void
      */
     protected function addWhere($query, $key, $extraValue)
@@ -116,7 +116,7 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
     /**
      * Get a query builder for the given table.
      *
-     * @param  string  $table
+     * @param string $table
      * @return \Illuminate\Database\Query\Builder
      */
     protected function table($table)
@@ -127,7 +127,7 @@ class DatabasePresenceVerifier implements DatabasePresenceVerifierInterface
     /**
      * Set the connection to be used.
      *
-     * @param  string  $connection
+     * @param string $connection
      * @return void
      */
     public function setConnection($connection)

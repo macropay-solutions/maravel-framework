@@ -33,7 +33,7 @@ class RefreshCommand extends Command
      */
     public function handle()
     {
-        if (! $this->confirmToProceed()) {
+        if (!$this->confirmToProceed()) {
             return 1;
         }
 
@@ -81,9 +81,9 @@ class RefreshCommand extends Command
     /**
      * Run the rollback command.
      *
-     * @param  string  $database
-     * @param  string  $path
-     * @param  int  $step
+     * @param string $database
+     * @param string $path
+     * @param int $step
      * @return void
      */
     protected function runRollback($database, $path, $step)
@@ -100,8 +100,8 @@ class RefreshCommand extends Command
     /**
      * Run the reset command.
      *
-     * @param  string  $database
-     * @param  string  $path
+     * @param string $database
+     * @param string $path
      * @return void
      */
     protected function runReset($database, $path)
@@ -127,7 +127,7 @@ class RefreshCommand extends Command
     /**
      * Run the database seeder command.
      *
-     * @param  string  $database
+     * @param string $database
      * @return void
      */
     protected function runSeeder($database)
@@ -149,8 +149,18 @@ class RefreshCommand extends Command
         return [
             ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to use'],
             ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production'],
-            ['path', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The path(s) to the migrations files to be executed'],
-            ['realpath', null, InputOption::VALUE_NONE, 'Indicate any provided migration file paths are pre-resolved absolute paths'],
+            [
+                'path',
+                null,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'The path(s) to the migrations files to be executed',
+            ],
+            [
+                'realpath',
+                null,
+                InputOption::VALUE_NONE,
+                'Indicate any provided migration file paths are pre-resolved absolute paths',
+            ],
             ['seed', null, InputOption::VALUE_NONE, 'Indicates if the seed task should be re-run'],
             ['seeder', null, InputOption::VALUE_OPTIONAL, 'The class name of the root seeder'],
             ['step', null, InputOption::VALUE_OPTIONAL, 'The number of migrations to be reverted & re-run'],

@@ -34,8 +34,8 @@ class Pipe
     /**
      * Create a new series of piped processes.
      *
-     * @param  \Illuminate\Process\Factory  $factory
-     * @param  callable  $callback
+     * @param \Illuminate\Process\Factory $factory
+     * @param callable $callback
      * @return void
      */
     public function __construct(Factory $factory, callable $callback)
@@ -47,7 +47,7 @@ class Pipe
     /**
      * Add a process to the pipe with a key.
      *
-     * @param  string  $key
+     * @param string $key
      * @return \Illuminate\Process\PendingProcess
      */
     public function as(string $key)
@@ -60,7 +60,7 @@ class Pipe
     /**
      * Runs the processes in the pipe.
      *
-     * @param  callable|null  $output
+     * @param callable|null $output
      * @return \Illuminate\Contracts\Process\ProcessResult
      */
     public function run(?callable $output = null)
@@ -68,29 +68,31 @@ class Pipe
         call_user_func($this->callback, $this);
 
         return collect($this->pendingProcesses)
-                ->reduce(function ($previousProcessResult, $pendingProcess, $key) use ($output) {
-                    if (! $pendingProcess instanceof PendingProcess) {
-                        throw new InvalidArgumentException('Process pipe must only contain pending processes.');
-                    }
+            ->reduce(function ($previousProcessResult, $pendingProcess, $key) use ($output) {
+                if (!$pendingProcess instanceof PendingProcess) {
+                    throw new InvalidArgumentException('Process pipe must only contain pending processes.');
+                }
 
-                    if ($previousProcessResult && $previousProcessResult->failed()) {
-                        return $previousProcessResult;
-                    }
+                if ($previousProcessResult && $previousProcessResult->failed()) {
+                    return $previousProcessResult;
+                }
 
-                    return $pendingProcess->when(
-                        $previousProcessResult,
-                        fn () => $pendingProcess->input($previousProcessResult->output())
-                    )->run(output: $output ? function ($type, $buffer) use ($key, $output) {
+                return $pendingProcess->when(
+                    $previousProcessResult,
+                    fn() => $pendingProcess->input($previousProcessResult->output())
+                )->run(
+                    output: $output ? function ($type, $buffer) use ($key, $output) {
                         $output($type, $buffer, $key);
-                    } : null);
-                });
+                    } : null
+                );
+            });
     }
 
     /**
      * Dynamically proxy methods calls to a new pending process.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return \Illuminate\Process\PendingProcess
      */
     public function __call($method, $parameters)

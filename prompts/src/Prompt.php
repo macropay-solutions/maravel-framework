@@ -109,7 +109,7 @@ abstract class Prompt
 
             static::$interactive ??= stream_isatty(STDIN);
 
-            if (! static::$interactive) {
+            if (!static::$interactive) {
                 return $this->default();
             }
 
@@ -142,7 +142,7 @@ abstract class Prompt
                     }
 
                     if ($key === Key::CTRL_U && self::$revertUsing) {
-                        throw new FormRevertedException;
+                        throw new FormRevertedException();
                     }
 
                     return $this->transformedValue();
@@ -192,7 +192,7 @@ abstract class Prompt
      */
     protected static function output(): OutputInterface
     {
-        return self::$output ??= new ConsoleOutput;
+        return self::$output ??= new ConsoleOutput();
     }
 
     /**
@@ -212,7 +212,7 @@ abstract class Prompt
      */
     public static function terminal(): Terminal
     {
-        return static::$terminal ??= new Terminal;
+        return static::$terminal ??= new Terminal();
     }
 
     /**
@@ -305,7 +305,7 @@ abstract class Prompt
         }
 
         if ($key === Key::CTRL_U) {
-            if (! self::$revertUsing) {
+            if (!self::$revertUsing) {
                 $this->state = 'error';
                 $this->error = 'This cannot be reverted.';
 
@@ -367,7 +367,7 @@ abstract class Prompt
             return;
         }
 
-        if (! isset($this->validate) && ! isset(static::$validateUsing)) {
+        if (!isset($this->validate) && !isset(static::$validateUsing)) {
             return;
         }
 
@@ -377,7 +377,7 @@ abstract class Prompt
             default => throw new RuntimeException('The validation logic is missing.'),
         };
 
-        if (! is_string($error) && ! is_null($error)) {
+        if (!is_string($error) && !is_null($error)) {
             throw new RuntimeException('The validator must return a string or null.');
         }
 
@@ -401,7 +401,9 @@ abstract class Prompt
     private function checkEnvironment(): void
     {
         if (PHP_OS_FAMILY === 'Windows') {
-            throw new RuntimeException('Prompts is not currently supported on Windows. Please use WSL or configure a fallback.');
+            throw new RuntimeException(
+                'Prompts is not currently supported on Windows. Please use WSL or configure a fallback.'
+            );
         }
     }
 

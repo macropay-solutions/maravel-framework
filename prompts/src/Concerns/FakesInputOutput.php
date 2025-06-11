@@ -12,7 +12,7 @@ trait FakesInputOutput
     /**
      * Fake the terminal and queue key presses to be simulated.
      *
-     * @param  array<string>  $keys
+     * @param array<string> $keys
      */
     public static function fake(array $keys = []): void
     {
@@ -35,7 +35,7 @@ trait FakesInputOutput
 
         static::$terminal = $mock;
 
-        self::setOutput(new BufferedConsoleOutput);
+        self::setOutput(new BufferedConsoleOutput());
     }
 
     /**
@@ -75,7 +75,7 @@ trait FakesInputOutput
      */
     public static function content(): string
     {
-        if (! static::output() instanceof BufferedConsoleOutput) {
+        if (!static::output() instanceof BufferedConsoleOutput) {
             throw new RuntimeException('Prompt must be faked before accessing content.');
         }
 

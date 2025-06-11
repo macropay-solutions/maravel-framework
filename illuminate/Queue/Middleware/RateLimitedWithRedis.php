@@ -28,7 +28,7 @@ class RateLimitedWithRedis extends RateLimited
     /**
      * Create a new middleware instance.
      *
-     * @param  string  $limiterName
+     * @param string $limiterName
      * @return void
      */
     public function __construct($limiterName)
@@ -41,9 +41,9 @@ class RateLimitedWithRedis extends RateLimited
     /**
      * Handle a rate limited job.
      *
-     * @param  mixed  $job
-     * @param  callable  $next
-     * @param  array  $limits
+     * @param mixed $job
+     * @param callable $next
+     * @param array $limits
      * @return mixed
      */
     protected function handleJob($job, $next, array $limits)
@@ -62,18 +62,21 @@ class RateLimitedWithRedis extends RateLimited
     /**
      * Determine if the given key has been "accessed" too many times.
      *
-     * @param  string  $key
-     * @param  int  $maxAttempts
-     * @param  int  $decayMinutes
+     * @param string $key
+     * @param int $maxAttempts
+     * @param int $decayMinutes
      * @return bool
      */
     protected function tooManyAttempts($key, $maxAttempts, $decayMinutes)
     {
         $limiter = new DurationLimiter(
-            $this->redis, $key, $maxAttempts, $decayMinutes * 60
+            $this->redis,
+            $key,
+            $maxAttempts,
+            $decayMinutes * 60
         );
 
-        return tap(! $limiter->acquire(), function () use ($key, $limiter) {
+        return tap(!$limiter->acquire(), function () use ($key, $limiter) {
             $this->decaysAt[$key] = $limiter->decaysAt;
         });
     }
@@ -81,7 +84,7 @@ class RateLimitedWithRedis extends RateLimited
     /**
      * Get the number of seconds that should elapse before the job is retried.
      *
-     * @param  string  $key
+     * @param string $key
      * @return int
      */
     protected function getTimeUntilNextRetry($key)

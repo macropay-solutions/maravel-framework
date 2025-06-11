@@ -23,7 +23,7 @@ class Terminal
      */
     public function __construct()
     {
-        $this->terminal = new SymfonyTerminal;
+        $this->terminal = new SymfonyTerminal();
     }
 
     /**
@@ -102,7 +102,7 @@ class Terminal
             2 => ['pipe', 'w'],
         ], $pipes);
 
-        if (! $process) {
+        if (!$process) {
             throw new RuntimeException('Failed to create process.');
         }
 

@@ -21,8 +21,8 @@ class PreparingResponse
     /**
      * Create a new event instance.
      *
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
-     * @param  mixed  $response
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param mixed $response
      * @return void
      */
     public function __construct($request, $response)

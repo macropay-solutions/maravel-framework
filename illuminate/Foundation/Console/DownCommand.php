@@ -54,7 +54,7 @@ class DownCommand extends Command
 
             file_put_contents(
                 storage_path('framework/maintenance.php'),
-                file_get_contents(__DIR__.'/stubs/maintenance-mode.stub')
+                file_get_contents(__DIR__ . '/stubs/maintenance-mode.stub')
             );
 
             $this->laravel->get('events')->dispatch(new MaintenanceModeEnabled());
@@ -62,13 +62,17 @@ class DownCommand extends Command
             $this->components->info('Application is now in maintenance mode.');
 
             if ($downFilePayload['secret'] !== null) {
-                $this->components->info('You may bypass maintenance mode via ['.config('app.url')."/{$downFilePayload['secret']}].");
+                $this->components->info(
+                    'You may bypass maintenance mode via [' . config('app.url') . "/{$downFilePayload['secret']}]."
+                );
             }
         } catch (Exception $e) {
-            $this->components->error(sprintf(
-                'Failed to enter maintenance mode: %s.',
-                $e->getMessage(),
-            ));
+            $this->components->error(
+                sprintf(
+                    'Failed to enter maintenance mode: %s.',
+                    $e->getMessage(),
+                )
+            );
 
             return 1;
         }
@@ -87,7 +91,7 @@ class DownCommand extends Command
             'retry' => $this->getRetryTime(),
             'refresh' => $this->option('refresh'),
             'secret' => $this->getSecret(),
-            'status' => (int) $this->option('status', 503),
+            'status' => (int)($this->option('status') ?? 503),
             'template' => $this->option('render') ? $this->prerenderView() : null,
         ];
     }
@@ -114,7 +118,7 @@ class DownCommand extends Command
     protected function redirectPath()
     {
         if ($this->option('redirect') && $this->option('redirect') !== '/') {
-            return '/'.trim($this->option('redirect'), '/');
+            return '/' . trim($this->option('redirect'), '/');
         }
 
         return $this->option('redirect');
@@ -127,7 +131,7 @@ class DownCommand extends Command
      */
     protected function prerenderView()
     {
-        (new RegisterErrorViewPaths)();
+        (new RegisterErrorViewPaths())();
 
         return view($this->option('render'), [
             'retryAfter' => $this->option('retry'),
@@ -143,7 +147,7 @@ class DownCommand extends Command
     {
         $retry = $this->option('retry');
 
-        return is_numeric($retry) && $retry > 0 ? (int) $retry : null;
+        return is_numeric($retry) && $retry > 0 ? (int)$retry : null;
     }
 
     /**
@@ -154,7 +158,7 @@ class DownCommand extends Command
     protected function getSecret()
     {
         return match (true) {
-            ! is_null($this->option('secret')) => $this->option('secret'),
+            !is_null($this->option('secret')) => $this->option('secret'),
             $this->option('with-secret') => Str::random(),
             default => null,
         };

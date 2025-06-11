@@ -2,12 +2,12 @@
 
 namespace Illuminate\Filesystem;
 
-if (! function_exists('Illuminate\Filesystem\join_paths')) {
+if (!function_exists('Illuminate\Filesystem\join_paths')) {
     /**
      * Join the given paths together.
      *
-     * @param  string|null  $basePath
-     * @param  string  ...$paths
+     * @param string|null $basePath
+     * @param string ...$paths
      * @return string
      */
     function join_paths($basePath, ...$paths)
@@ -16,10 +16,10 @@ if (! function_exists('Illuminate\Filesystem\join_paths')) {
             if (empty($path)) {
                 unset($paths[$index]);
             } else {
-                $paths[$index] = DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR);
+                $paths[$index] = DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
             }
         }
 
-        return $basePath.implode('', $paths);
+        return $basePath . implode('', $paths);
     }
 }

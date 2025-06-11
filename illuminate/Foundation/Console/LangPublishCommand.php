@@ -32,23 +32,25 @@ class LangPublishCommand extends Command
      */
     public function handle()
     {
-        if (! is_dir($langPath = $this->laravel->basePath('lang/en'))) {
+        if (!is_dir($langPath = $this->laravel->basePath('lang/en'))) {
 //            (new Filesystem)->makeDirectory($langPath, recursive: true);
             \app(Filesystem::class)->makeDirectory($langPath, recursive: true);
         }
 
         $stubs = [
-            realpath(__DIR__.'/../../Translation/lang/en/auth.php') => 'auth.php',
-            realpath(__DIR__.'/../../Translation/lang/en/pagination.php') => 'pagination.php',
-            realpath(__DIR__.'/../../Translation/lang/en/passwords.php') => 'passwords.php',
-            realpath(__DIR__.'/../../Translation/lang/en/validation.php') => 'validation.php',
+            realpath(__DIR__ . '/../../Translation/lang/en/auth.php') => 'auth.php',
+            realpath(__DIR__ . '/../../Translation/lang/en/pagination.php') => 'pagination.php',
+            realpath(__DIR__ . '/../../Translation/lang/en/passwords.php') => 'passwords.php',
+            realpath(__DIR__ . '/../../Translation/lang/en/validation.php') => 'validation.php',
         ];
 
         foreach ($stubs as $from => $to) {
-            $to = $langPath.DIRECTORY_SEPARATOR.ltrim($to, DIRECTORY_SEPARATOR);
+            $to = $langPath . DIRECTORY_SEPARATOR . ltrim($to, DIRECTORY_SEPARATOR);
 
-            if ((! $this->option('existing') && (! file_exists($to) || $this->option('force')))
-                || ($this->option('existing') && file_exists($to))) {
+            if (
+                (!$this->option('existing') && (!file_exists($to) || $this->option('force')))
+                || ($this->option('existing') && file_exists($to))
+            ) {
                 file_put_contents($to, file_get_contents($from));
             }
         }

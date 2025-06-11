@@ -17,14 +17,14 @@ trait Interaction
     /**
      * Marks the property as interacted.
      *
-     * @param  string  $key
+     * @param string $key
      * @return void
      */
     protected function interactsWith(string $key): void
     {
         $prop = Str::before($key, '.');
 
-        if (! in_array($prop, $this->interacted, true)) {
+        if (!in_array($prop, $this->interacted, true)) {
             $this->interacted[] = $prop;
         }
     }
@@ -60,7 +60,7 @@ trait Interaction
     /**
      * Retrieve a prop within the current scope using "dot" notation.
      *
-     * @param  string|null  $key
+     * @param string|null $key
      * @return mixed
      */
     abstract protected function prop(?string $key = null);

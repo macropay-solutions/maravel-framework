@@ -61,7 +61,7 @@ trait InteractsWithIO
     /**
      * Determine if the given argument is present.
      *
-     * @param  string|int  $name
+     * @param string|int $name
      * @return bool
      */
     public function hasArgument($name)
@@ -72,7 +72,7 @@ trait InteractsWithIO
     /**
      * Get the value of a command argument.
      *
-     * @param  string|null  $key
+     * @param string|null $key
      * @return array|string|bool|null
      */
     public function argument($key = null)
@@ -97,7 +97,7 @@ trait InteractsWithIO
     /**
      * Determine if the given option is present.
      *
-     * @param  string  $name
+     * @param string $name
      * @return bool
      */
     public function hasOption($name)
@@ -108,7 +108,7 @@ trait InteractsWithIO
     /**
      * Get the value of a command option.
      *
-     * @param  string|null  $key
+     * @param string|null $key
      * @return string|array|bool|null
      */
     public function option($key = null)
@@ -133,8 +133,8 @@ trait InteractsWithIO
     /**
      * Confirm a question with the user.
      *
-     * @param  string  $question
-     * @param  bool  $default
+     * @param string $question
+     * @param bool $default
      * @return bool
      */
     public function confirm($question, $default = false)
@@ -145,8 +145,8 @@ trait InteractsWithIO
     /**
      * Prompt the user for input.
      *
-     * @param  string  $question
-     * @param  string|null  $default
+     * @param string $question
+     * @param string|null $default
      * @return mixed
      */
     public function ask($question, $default = null)
@@ -157,9 +157,9 @@ trait InteractsWithIO
     /**
      * Prompt the user for input with auto completion.
      *
-     * @param  string  $question
-     * @param  array|callable  $choices
-     * @param  string|null  $default
+     * @param string $question
+     * @param array|callable $choices
+     * @param string|null $default
      * @return mixed
      */
     public function anticipate($question, $choices, $default = null)
@@ -170,9 +170,9 @@ trait InteractsWithIO
     /**
      * Prompt the user for input with auto completion.
      *
-     * @param  string  $question
-     * @param  array|callable  $choices
-     * @param  string|null  $default
+     * @param string $question
+     * @param array|callable $choices
+     * @param string|null $default
      * @return mixed
      */
     public function askWithCompletion($question, $choices, $default = null)
@@ -189,8 +189,8 @@ trait InteractsWithIO
     /**
      * Prompt the user for input but hide the answer from the console.
      *
-     * @param  string  $question
-     * @param  bool  $fallback
+     * @param string $question
+     * @param bool $fallback
      * @return mixed
      */
     public function secret($question, $fallback = true)
@@ -205,11 +205,11 @@ trait InteractsWithIO
     /**
      * Give the user a single choice from an array of answers.
      *
-     * @param  string  $question
-     * @param  array  $choices
-     * @param  string|int|null  $default
-     * @param  mixed|null  $attempts
-     * @param  bool  $multiple
+     * @param string $question
+     * @param array $choices
+     * @param string|int|null $default
+     * @param mixed|null $attempts
+     * @param bool $multiple
      * @return string|array
      */
     public function choice($question, array $choices, $default = null, $attempts = null, $multiple = false)
@@ -224,10 +224,10 @@ trait InteractsWithIO
     /**
      * Format input to textual table.
      *
-     * @param  array  $headers
-     * @param  \Illuminate\Contracts\Support\Arrayable|array  $rows
-     * @param  \Symfony\Component\Console\Helper\TableStyle|string  $tableStyle
-     * @param  array  $columnStyles
+     * @param array $headers
+     * @param \Illuminate\Contracts\Support\Arrayable|array $rows
+     * @param \Symfony\Component\Console\Helper\TableStyle|string $tableStyle
+     * @param array $columnStyles
      * @return void
      */
     public function table($headers, $rows, $tableStyle = 'default', array $columnStyles = [])
@@ -238,7 +238,7 @@ trait InteractsWithIO
             $rows = $rows->toArray();
         }
 
-        $table->setHeaders((array) $headers)->setRows($rows)->setStyle($tableStyle);
+        $table->setHeaders((array)$headers)->setRows($rows)->setStyle($tableStyle);
 
         foreach ($columnStyles as $columnIndex => $columnStyle) {
             $table->setColumnStyle($columnIndex, $columnStyle);
@@ -250,8 +250,8 @@ trait InteractsWithIO
     /**
      * Execute a given callback while advancing a progress bar.
      *
-     * @param  iterable|int  $totalSteps
-     * @param  \Closure  $callback
+     * @param iterable|int $totalSteps
+     * @param \Closure $callback
      * @return mixed|void
      */
     public function withProgressBar($totalSteps, Closure $callback)
@@ -282,8 +282,8 @@ trait InteractsWithIO
     /**
      * Write a string as information output.
      *
-     * @param  string  $string
-     * @param  int|string|null  $verbosity
+     * @param string $string
+     * @param int|string|null $verbosity
      * @return void
      */
     public function info($string, $verbosity = null)
@@ -294,9 +294,9 @@ trait InteractsWithIO
     /**
      * Write a string as standard output.
      *
-     * @param  string  $string
-     * @param  string|null  $style
-     * @param  int|string|null  $verbosity
+     * @param string $string
+     * @param string|null $style
+     * @param int|string|null $verbosity
      * @return void
      */
     public function line($string, $style = null, $verbosity = null)
@@ -309,8 +309,8 @@ trait InteractsWithIO
     /**
      * Write a string as comment output.
      *
-     * @param  string  $string
-     * @param  int|string|null  $verbosity
+     * @param string $string
+     * @param int|string|null $verbosity
      * @return void
      */
     public function comment($string, $verbosity = null)
@@ -321,8 +321,8 @@ trait InteractsWithIO
     /**
      * Write a string as question output.
      *
-     * @param  string  $string
-     * @param  int|string|null  $verbosity
+     * @param string $string
+     * @param int|string|null $verbosity
      * @return void
      */
     public function question($string, $verbosity = null)
@@ -333,8 +333,8 @@ trait InteractsWithIO
     /**
      * Write a string as error output.
      *
-     * @param  string  $string
-     * @param  int|string|null  $verbosity
+     * @param string $string
+     * @param int|string|null $verbosity
      * @return void
      */
     public function error($string, $verbosity = null)
@@ -345,13 +345,13 @@ trait InteractsWithIO
     /**
      * Write a string as warning output.
      *
-     * @param  string  $string
-     * @param  int|string|null  $verbosity
+     * @param string $string
+     * @param int|string|null $verbosity
      * @return void
      */
     public function warn($string, $verbosity = null)
     {
-        if (! $this->output->getFormatter()->hasStyle('warning')) {
+        if (!$this->output->getFormatter()->hasStyle('warning')) {
             $style = new OutputFormatterStyle('yellow');
 
             $this->output->getFormatter()->setStyle('warning', $style);
@@ -363,8 +363,8 @@ trait InteractsWithIO
     /**
      * Write a string in an alert box.
      *
-     * @param  string  $string
-     * @param  int|string|null  $verbosity
+     * @param string $string
+     * @param int|string|null $verbosity
      * @return void
      */
     public function alert($string, $verbosity = null)
@@ -372,7 +372,7 @@ trait InteractsWithIO
         $length = Str::length(strip_tags($string)) + 12;
 
         $this->comment(str_repeat('*', $length), $verbosity);
-        $this->comment('*     '.$string.'     *', $verbosity);
+        $this->comment('*     ' . $string . '     *', $verbosity);
         $this->comment(str_repeat('*', $length), $verbosity);
 
         $this->comment('', $verbosity);
@@ -381,7 +381,7 @@ trait InteractsWithIO
     /**
      * Write a blank line.
      *
-     * @param  int  $count
+     * @param int $count
      * @return $this
      */
     public function newLine($count = 1)
@@ -394,7 +394,7 @@ trait InteractsWithIO
     /**
      * Set the input interface implementation.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
+     * @param \Symfony\Component\Console\Input\InputInterface $input
      * @return void
      */
     public function setInput(InputInterface $input)
@@ -405,7 +405,7 @@ trait InteractsWithIO
     /**
      * Set the output interface implementation.
      *
-     * @param  \Illuminate\Console\OutputStyle  $output
+     * @param \Illuminate\Console\OutputStyle $output
      * @return void
      */
     public function setOutput(OutputStyle $output)
@@ -416,7 +416,7 @@ trait InteractsWithIO
     /**
      * Set the verbosity level.
      *
-     * @param  string|int  $level
+     * @param string|int $level
      * @return void
      */
     protected function setVerbosity($level)
@@ -427,14 +427,14 @@ trait InteractsWithIO
     /**
      * Get the verbosity level in terms of Symfony's OutputInterface level.
      *
-     * @param  string|int|null  $level
+     * @param string|int|null $level
      * @return int
      */
     protected function parseVerbosity($level = null)
     {
         if (isset($this->verbosityMap[$level])) {
             $level = $this->verbosityMap[$level];
-        } elseif (! is_int($level)) {
+        } elseif (!is_int($level)) {
             $level = $this->verbosity;
         }
 

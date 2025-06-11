@@ -44,7 +44,7 @@ trait InteractsWithQueue
     /**
      * Fail the job from the queue.
      *
-     * @param  \Throwable|string|null  $exception
+     * @param \Throwable|string|null $exception
      * @return void
      */
     public function fail($exception = null)
@@ -65,7 +65,7 @@ trait InteractsWithQueue
     /**
      * Release the job back into the queue after (n) seconds.
      *
-     * @param  \DateTimeInterface|\DateInterval|int  $delay
+     * @param \DateTimeInterface|\DateInterval|int $delay
      * @return void
      */
     public function release($delay = 0)

@@ -38,7 +38,7 @@ class ViewCacheCommand extends Command
         $this->paths()->each(function ($path) {
             $prefix = $this->output->isVeryVerbose() ? '<fg=yellow;options=bold>DIR</> ' : '';
 
-            $this->components->task($prefix.$path, null, OutputInterface::VERBOSITY_VERBOSE);
+            $this->components->task($prefix . $path, null, OutputInterface::VERBOSITY_VERBOSE);
 
             $this->compileViews($this->bladeFilesIn([$path]));
         });
@@ -51,7 +51,7 @@ class ViewCacheCommand extends Command
     /**
      * Compile the given view files.
      *
-     * @param  \Illuminate\Support\Collection  $views
+     * @param \Illuminate\Support\Collection $views
      * @return void
      */
     protected function compileViews(Collection $views)
@@ -59,7 +59,11 @@ class ViewCacheCommand extends Command
         $compiler = $this->laravel['view']->getEngineResolver()->resolve('blade')->getCompiler();
 
         $views->map(function (SplFileInfo $file) use ($compiler) {
-            $this->components->task('    '.$file->getRelativePathname(), null, OutputInterface::VERBOSITY_VERY_VERBOSE);
+            $this->components->task(
+                '    ' . $file->getRelativePathname(),
+                null,
+                OutputInterface::VERBOSITY_VERY_VERBOSE
+            );
 
             $compiler->compile($file->getRealPath());
         });
@@ -72,15 +76,15 @@ class ViewCacheCommand extends Command
     /**
      * Get the Blade files in the given path.
      *
-     * @param  array  $paths
+     * @param array $paths
      * @return \Illuminate\Support\Collection
      */
     protected function bladeFilesIn(array $paths)
     {
         $extensions = collect($this->laravel['view']->getExtensions())
-            ->filter(fn ($value) => $value === 'blade')
+            ->filter(fn($value) => $value === 'blade')
             ->keys()
-            ->map(fn ($extension) => "*.{$extension}")
+            ->map(fn($extension) => "*.{$extension}")
             ->all();
 
         return collect(

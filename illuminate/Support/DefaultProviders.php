@@ -47,7 +47,7 @@ class DefaultProviders
     /**
      * Merge the given providers into the provider collection.
      *
-     * @param  array  $providers
+     * @param array $providers
      * @return static
      */
     public function merge(array $providers)
@@ -60,7 +60,7 @@ class DefaultProviders
     /**
      * Replace the given providers with other providers.
      *
-     * @param  array  $items
+     * @param array $items
      * @return static
      */
     public function replace(array $replacements)
@@ -79,15 +79,17 @@ class DefaultProviders
     /**
      * Disable the given providers.
      *
-     * @param  array  $providers
+     * @param array $providers
      * @return static
      */
     public function except(array $providers)
     {
-        return new static(collect($this->providers)
-                ->reject(fn ($p) => in_array($p, $providers))
+        return new static(
+            collect($this->providers)
+                ->reject(fn($p) => in_array($p, $providers))
                 ->values()
-                ->toArray());
+                ->toArray()
+        );
     }
 
     /**

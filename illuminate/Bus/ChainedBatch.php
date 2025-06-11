@@ -12,7 +12,10 @@ use Throwable;
 
 class ChainedBatch implements ShouldQueue
 {
-    use Batchable, Dispatchable, InteractsWithQueue, Queueable;
+    use Batchable;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
 
     /**
      * The collection of batched jobs.
@@ -38,7 +41,7 @@ class ChainedBatch implements ShouldQueue
     /**
      * Create a new chained batch instance.
      *
-     * @param  \Illuminate\Bus\PendingBatch  $batch
+     * @param \Illuminate\Bus\PendingBatch $batch
      * @return void
      */
     public function __construct(PendingBatch $batch)
@@ -52,12 +55,12 @@ class ChainedBatch implements ShouldQueue
     /**
      * Prepare any nested batches within the given collection of jobs.
      *
-     * @param  \Illuminate\Support\Collection  $jobs
+     * @param \Illuminate\Support\Collection $jobs
      * @return \Illuminate\Support\Collection
      */
     public static function prepareNestedBatches(Collection $jobs): Collection
     {
-        return $jobs->map(fn ($job) => match (true) {
+        return $jobs->map(fn($job) => match (true) {
             is_array($job) => static::prepareNestedBatches(collect($job))->all(),
             $job instanceof Collection => static::prepareNestedBatches($job),
             $job instanceof PendingBatch => new ChainedBatch($job),
@@ -99,7 +102,7 @@ class ChainedBatch implements ShouldQueue
 
         foreach ($this->chainCatchCallbacks ?? [] as $callback) {
             $batch->catch(function (Batch $batch, ?Throwable $exception) use ($callback) {
-                if (! $batch->allowsFailures()) {
+                if (!$batch->allowsFailures()) {
                     $callback($exception);
                 }
             });
@@ -111,12 +114,12 @@ class ChainedBatch implements ShouldQueue
     /**
      * Move the remainder of the chain to a "finally" batch callback.
      *
-     * @param  \Illuminate\Bus\PendingBatch  $batch
+     * @param \Illuminate\Bus\PendingBatch $batch
      * @return \Illuminate\Bus\PendingBatch
      */
     protected function attachRemainderOfChainToEndOfBatch(PendingBatch $batch)
     {
-        if (! empty($this->chained)) {
+        if (!empty($this->chained)) {
             $next = unserialize(array_shift($this->chained));
 
             $next->chained = $this->chained;
@@ -129,7 +132,7 @@ class ChainedBatch implements ShouldQueue
             $next->chainCatchCallbacks = $this->chainCatchCallbacks;
 
             $batch->finally(function (Batch $batch) use ($next) {
-                if (! $batch->cancelled()) {
+                if (!$batch->cancelled()) {
                     Container::getInstance()->make(Dispatcher::class)->dispatch($next);
                 }
             });

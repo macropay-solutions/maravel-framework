@@ -11,7 +11,7 @@ class Parser
     /**
      * Parse the given console command definition into an array.
      *
-     * @param  string  $expression
+     * @param string $expression
      * @return array
      *
      * @throws \InvalidArgumentException
@@ -30,14 +30,14 @@ class Parser
     /**
      * Extract the name of the command from the expression.
      *
-     * @param  string  $expression
+     * @param string $expression
      * @return string
      *
      * @throws \InvalidArgumentException
      */
     protected static function name(string $expression)
     {
-        if (! preg_match('/[^\s]+/', $expression, $matches)) {
+        if (!preg_match('/[^\s]+/', $expression, $matches)) {
             throw new InvalidArgumentException('Unable to determine command name from signature.');
         }
 
@@ -47,7 +47,7 @@ class Parser
     /**
      * Extract all parameters from the tokens.
      *
-     * @param  array  $tokens
+     * @param array $tokens
      * @return array
      */
     protected static function parameters(array $tokens)
@@ -70,7 +70,7 @@ class Parser
     /**
      * Parse an argument expression.
      *
-     * @param  string  $token
+     * @param string $token
      * @return \Symfony\Component\Console\Input\InputArgument
      */
     protected static function parseArgument(string $token)
@@ -81,11 +81,20 @@ class Parser
             case str_ends_with($token, '?*'):
                 return new InputArgument(trim($token, '?*'), InputArgument::IS_ARRAY, $description);
             case str_ends_with($token, '*'):
-                return new InputArgument(trim($token, '*'), InputArgument::IS_ARRAY | InputArgument::REQUIRED, $description);
+                return new InputArgument(
+                    trim($token, '*'),
+                    InputArgument::IS_ARRAY | InputArgument::REQUIRED,
+                    $description
+                );
             case str_ends_with($token, '?'):
                 return new InputArgument(trim($token, '?'), InputArgument::OPTIONAL, $description);
             case preg_match('/(.+)\=\*(.+)/', $token, $matches):
-                return new InputArgument($matches[1], InputArgument::IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
+                return new InputArgument(
+                    $matches[1],
+                    InputArgument::IS_ARRAY,
+                    $description,
+                    preg_split('/,\s?/', $matches[2])
+                );
             case preg_match('/(.+)\=(.+)/', $token, $matches):
                 return new InputArgument($matches[1], InputArgument::OPTIONAL, $description, $matches[2]);
             default:
@@ -96,7 +105,7 @@ class Parser
     /**
      * Parse an option expression.
      *
-     * @param  string  $token
+     * @param string $token
      * @return \Symfony\Component\Console\Input\InputOption
      */
     protected static function parseOption(string $token)
@@ -116,9 +125,20 @@ class Parser
             case str_ends_with($token, '='):
                 return new InputOption(trim($token, '='), $shortcut, InputOption::VALUE_OPTIONAL, $description);
             case str_ends_with($token, '=*'):
-                return new InputOption(trim($token, '=*'), $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description);
+                return new InputOption(
+                    trim($token, '=*'),
+                    $shortcut,
+                    InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                    $description
+                );
             case preg_match('/(.+)\=\*(.+)/', $token, $matches):
-                return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, $description, preg_split('/,\s?/', $matches[2]));
+                return new InputOption(
+                    $matches[1],
+                    $shortcut,
+                    InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                    $description,
+                    preg_split('/,\s?/', $matches[2])
+                );
             case preg_match('/(.+)\=(.+)/', $token, $matches):
                 return new InputOption($matches[1], $shortcut, InputOption::VALUE_OPTIONAL, $description, $matches[2]);
             default:
@@ -129,7 +149,7 @@ class Parser
     /**
      * Parse the token into its token and description segments.
      *
-     * @param  string  $token
+     * @param string $token
      * @return array
      */
     protected static function extractDescription(string $token)

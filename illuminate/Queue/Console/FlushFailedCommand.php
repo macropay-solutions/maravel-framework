@@ -32,7 +32,9 @@ class FlushFailedCommand extends Command
         $this->laravel['queue.failer']->flush($this->option('hours'));
 
         if ($this->option('hours')) {
-            $this->components->info("All jobs that failed more than {$this->option('hours')} hours ago have been deleted successfully.");
+            $this->components->info(
+                "All jobs that failed more than {$this->option('hours')} hours ago have been deleted successfully."
+            );
 
             return;
         }

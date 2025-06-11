@@ -20,7 +20,7 @@ class Authenticate implements AuthenticatesRequests
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Factory  $auth
+     * @param \Illuminate\Contracts\Auth\Factory $auth
      * @return void
      */
     public function __construct(Auth $auth)
@@ -31,21 +31,21 @@ class Authenticate implements AuthenticatesRequests
     /**
      * Specify the guards for the middleware.
      *
-     * @param  string  $guard
-     * @param  string  $others
+     * @param string $guard
+     * @param string $others
      * @return string
      */
     public static function using($guard, ...$others)
     {
-        return static::class.':'.implode(',', [$guard, ...$others]);
+        return static::class . ':' . implode(',', [$guard, ...$others]);
     }
 
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string[]  ...$guards
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param string[] ...$guards
      * @return mixed
      *
      * @throws \Illuminate\Auth\AuthenticationException
@@ -60,8 +60,8 @@ class Authenticate implements AuthenticatesRequests
     /**
      * Determine if the user is logged in to any of the given guards.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $guards
+     * @param \Illuminate\Http\Request $request
+     * @param array $guards
      * @return void
      *
      * @throws \Illuminate\Auth\AuthenticationException
@@ -86,8 +86,8 @@ class Authenticate implements AuthenticatesRequests
     /**
      * Handle an unauthenticated user.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $guards
+     * @param \Illuminate\Http\Request $request
+     * @param array $guards
      * @return void
      *
      * @throws \Illuminate\Auth\AuthenticationException
@@ -95,14 +95,16 @@ class Authenticate implements AuthenticatesRequests
     protected function unauthenticated($request, array $guards)
     {
         throw new AuthenticationException(
-            'Unauthenticated.', $guards, $this->redirectTo($request)
+            'Unauthenticated.',
+            $guards,
+            $this->redirectTo($request)
         );
     }
 
     /**
      * Get the path the user should be redirected to when they are not authenticated.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return string|null
      */
     protected function redirectTo(Request $request)

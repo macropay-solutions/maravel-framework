@@ -44,16 +44,21 @@ trait DrawsBoxes
         });
 
         if ($footerLines->isNotEmpty()) {
-            $this->line($this->{$color}(' ├'.str_repeat('─', $width + 2).'┤'));
+            $this->line($this->{$color}(' ├' . str_repeat('─', $width + 2) . '┤'));
 
             $footerLines->each(function ($line) use ($width, $color) {
                 $this->line("{$this->{$color}(' │')} {$this->pad($line, $width)} {$this->{$color}('│')}");
             });
         }
 
-        $this->line($this->{$color}(' └'.str_repeat(
-            '─', $info ? ($width - mb_strwidth($this->stripEscapeSequences($info))) : ($width + 2)
-        ).($info ? " {$info} " : '').'┘'));
+        $this->line(
+            $this->{$color}(
+                ' └' . str_repeat(
+                    '─',
+                    $info ? ($width - mb_strwidth($this->stripEscapeSequences($info))) : ($width + 2)
+                ) . ($info ? " {$info} " : '') . '┘'
+            )
+        );
 
         return $this;
     }

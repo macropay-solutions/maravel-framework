@@ -34,7 +34,7 @@ class ViewClearCommand extends Command
     /**
      * Create a new config clear command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param \Illuminate\Filesystem\Filesystem $files
      * @return void
      */
     public function __construct(Filesystem $files)
@@ -55,7 +55,7 @@ class ViewClearCommand extends Command
     {
         $path = $this->laravel['config']['view.compiled'];
 
-        if (! $path) {
+        if (!$path) {
             throw new RuntimeException('View path not found.');
         }
 

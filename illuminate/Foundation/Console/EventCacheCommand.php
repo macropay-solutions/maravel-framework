@@ -34,7 +34,7 @@ class EventCacheCommand extends Command
 
         file_put_contents(
             $this->laravel->getCachedEventsPath(),
-            '<?php return '.var_export($this->getEvents(), true).';'
+            '<?php return ' . var_export($this->getEvents(), true) . ';'
         );
 
         $this->components->info('Events cached successfully.');
@@ -50,7 +50,10 @@ class EventCacheCommand extends Command
         $events = [];
 
         foreach ($this->laravel->getProviders(EventServiceProvider::class) as $provider) {
-            $providerEvents = array_merge_recursive($provider->shouldDiscoverEvents() ? $provider->discoverEvents() : [], $provider->listens());
+            $providerEvents = array_merge_recursive(
+                $provider->shouldDiscoverEvents() ? $provider->discoverEvents() : [],
+                $provider->listens()
+            );
 
             $events[get_class($provider)] = $providerEvents;
         }

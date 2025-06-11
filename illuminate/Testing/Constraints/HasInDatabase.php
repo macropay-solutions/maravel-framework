@@ -32,8 +32,8 @@ class HasInDatabase extends Constraint
     /**
      * Create a new constraint instance.
      *
-     * @param  \Illuminate\Database\Connection  $database
-     * @param  array  $data
+     * @param \Illuminate\Database\Connection $database
+     * @param array $data
      * @return void
      */
     public function __construct(Connection $database, array $data)
@@ -46,7 +46,7 @@ class HasInDatabase extends Constraint
     /**
      * Check if the data is found in the given table.
      *
-     * @param  string  $other
+     * @param string $other
      * @return bool
      */
     public function matches($other): bool
@@ -57,21 +57,23 @@ class HasInDatabase extends Constraint
     /**
      * Get the description of the failure.
      *
-     * @param  string  $other
+     * @param string $other
      * @return string
      */
     public function failureDescription($other): string
     {
         return sprintf(
             "a row in the table [%s] matches the attributes %s.\n\n%s",
-            $other, $this->toString(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), $this->getAdditionalInfo($other)
+            $other,
+            $this->toString(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
+            $this->getAdditionalInfo($other)
         );
     }
 
     /**
      * Get additional info about the records found in the database table.
      *
-     * @param  string  $table
+     * @param string $table
      * @return string
      */
     protected function getAdditionalInfo($table)
@@ -84,7 +86,10 @@ class HasInDatabase extends Constraint
         )->select(array_keys($this->data))->limit($this->show)->get();
 
         if ($similarResults->isNotEmpty()) {
-            $description = 'Found similar results: '.json_encode($similarResults, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $description = 'Found similar results: ' . json_encode(
+                $similarResults,
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+            );
         } else {
             $query = $this->database->table($table);
 
@@ -94,7 +99,7 @@ class HasInDatabase extends Constraint
                 return 'The table is empty';
             }
 
-            $description = 'Found: '.json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $description = 'Found: ' . json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         }
 
         if ($query->count() > $this->show) {
@@ -107,7 +112,7 @@ class HasInDatabase extends Constraint
     /**
      * Get a string representation of the object.
      *
-     * @param  int  $options
+     * @param int $options
      * @return string
      */
     public function toString($options = 0): string

@@ -56,7 +56,7 @@ class Inspiring
     public static function quote()
     {
         return static::quotes()
-            ->map(fn ($quote) => static::formatForConsole($quote))
+            ->map(fn($quote) => static::formatForConsole($quote))
             ->random();
     }
 
@@ -68,7 +68,8 @@ class Inspiring
     public static function quotes()
     {
         return Collection::make([
-            'Act only according to that maxim whereby you can, at the same time, will that it should become a universal law. - Immanuel Kant',
+            'Act only according to that maxim whereby you can, at the same time, will that it should become a ' .
+                'universal law. - Immanuel Kant',
             'An unexamined life is not worth living. - Socrates',
             'Be present above all else. - Naval Ravikant',
             'Do what you can, with what you have, where you are. - Theodore Roosevelt',
@@ -103,7 +104,8 @@ class Inspiring
             'Breathing in, I calm body and mind. Breathing out, I smile. - Thich Nhat Hanh',
             'Life is available only in the present moment. - Thich Nhat Hanh',
             'The best way to take care of the future is to take care of the present moment. - Thich Nhat Hanh',
-            'Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less. - Marie Curie',
+            'Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, ' .
+                'so that we may fear less. - Marie Curie',
             'The biggest battle is the war against ignorance. - Mustafa Kemal Atatürk',
             'Always remember that you are absolutely unique. Just like everyone else. - Margaret Mead',
             'You must be the change you wish to see in the world. - Mahatma Gandhi',
@@ -113,7 +115,7 @@ class Inspiring
     /**
      * Formats the given quote for a pretty console output.
      *
-     * @param  string  $quote
+     * @param string $quote
      * @return string
      */
     protected static function formatForConsole($quote)

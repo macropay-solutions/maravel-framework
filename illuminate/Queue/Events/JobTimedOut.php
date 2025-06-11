@@ -21,8 +21,8 @@ class JobTimedOut
     /**
      * Create a new event instance.
      *
-     * @param  string  $connectionName
-     * @param  \Illuminate\Contracts\Queue\Job  $job
+     * @param string $connectionName
+     * @param \Illuminate\Contracts\Queue\Job $job
      * @return void
      */
     public function __construct($connectionName, $job)

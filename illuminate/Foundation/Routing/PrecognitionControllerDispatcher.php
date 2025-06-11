@@ -11,9 +11,9 @@ class PrecognitionControllerDispatcher extends ControllerDispatcher
     /**
      * Dispatch a request to a given controller and method.
      *
-     * @param  \Illuminate\Routing\Route  $route
-     * @param  mixed  $controller
-     * @param  string  $method
+     * @param \Illuminate\Routing\Route $route
+     * @param mixed $controller
+     * @param string $method
      * @return void
      */
     public function dispatch(Route $route, $controller, $method)
@@ -28,8 +28,8 @@ class PrecognitionControllerDispatcher extends ControllerDispatcher
     /**
      * Ensure that the given method exists on the controller.
      *
-     * @param  object  $controller
-     * @param  string  $method
+     * @param object $controller
+     * @param string $method
      * @return $this
      */
     protected function ensureMethodExists($controller, $method)
@@ -40,6 +40,8 @@ class PrecognitionControllerDispatcher extends ControllerDispatcher
 
         $class = $controller::class;
 
-        throw new RuntimeException("Attempting to predict the outcome of the [{$class}::{$method}()] method but the method is not defined.");
+        throw new RuntimeException(
+            "Attempting to predict the outcome of the [{$class}::{$method}()] method but the method is not defined."
+        );
     }
 }

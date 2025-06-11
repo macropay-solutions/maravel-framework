@@ -34,8 +34,8 @@ class DumpCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  \Illuminate\Database\ConnectionResolverInterface  $connections
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
+     * @param \Illuminate\Database\ConnectionResolverInterface $connections
+     * @param \Illuminate\Contracts\Events\Dispatcher $dispatcher
      * @return void
      */
     public function handle(ConnectionResolverInterface $connections, Dispatcher $dispatcher)
@@ -43,7 +43,8 @@ class DumpCommand extends Command
         $connection = $connections->connection($database = $this->input->getOption('database'));
 
         $this->schemaState($connection)->dump(
-            $connection, $path = $this->path($connection)
+            $connection,
+            $path = $this->path($connection)
         );
 
         $dispatcher->dispatch(new SchemaDumped($connection, $path));
@@ -53,40 +54,44 @@ class DumpCommand extends Command
         if ($this->option('prune')) {
 //            (new Filesystem)->deleteDirectory(
             \app(Filesystem::class)->deleteDirectory(
-                database_path('migrations'), $preserve = false
+                database_path('migrations'),
+                $preserve = false
             );
 
             $info .= ' and pruned';
         }
 
-        $this->components->info($info.' successfully.');
+        $this->components->info($info . ' successfully.');
     }
 
     /**
      * Create a schema state instance for the given connection.
      *
-     * @param  \Illuminate\Database\Connection  $connection
+     * @param \Illuminate\Database\Connection $connection
      * @return mixed
      */
     protected function schemaState(Connection $connection)
     {
         return $connection->getSchemaState()
-                ->withMigrationTable($connection->getTablePrefix().Config::get('database.migrations', 'migrations'))
-                ->handleOutputUsing(function ($type, $buffer) {
-                    $this->output->write($buffer);
-                });
+            ->withMigrationTable($connection->getTablePrefix() . Config::get('database.migrations', 'migrations'))
+            ->handleOutputUsing(function ($type, $buffer) {
+                $this->output->write($buffer);
+            });
     }
 
     /**
      * Get the path that the dump should be written to.
      *
-     * @param  \Illuminate\Database\Connection  $connection
+     * @param \Illuminate\Database\Connection $connection
      */
     protected function path(Connection $connection)
     {
-        return tap($this->option('path') ?: database_path('schema/'.$connection->getName().'-schema.sql'), function ($path) {
-//            (new Filesystem)->ensureDirectoryExists(dirname($path));
-            \app(Filesystem::class)->ensureDirectoryExists(dirname($path));
-        });
+        return tap(
+            $this->option('path') ?: database_path('schema/' . $connection->getName() . '-schema.sql'),
+            function ($path) {
+                 //(new Filesystem)->ensureDirectoryExists(dirname($path));
+                \app(Filesystem::class)->ensureDirectoryExists(dirname($path));
+            }
+        );
     }
 }

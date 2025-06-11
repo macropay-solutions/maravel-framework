@@ -27,7 +27,9 @@ class SearchPromptRenderer extends Renderer implements Scrolling
             'cancel' => $this
                 ->box(
                     $this->dim($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)),
-                    $this->strikethrough($this->dim($this->truncate($prompt->searchValue() ?: $prompt->placeholder, $maxWidth))),
+                    $this->strikethrough(
+                        $this->dim($this->truncate($prompt->searchValue() ?: $prompt->placeholder, $maxWidth))
+                    ),
                     color: 'red',
                 )
                 ->error($prompt->cancelMessage),
@@ -57,8 +59,8 @@ class SearchPromptRenderer extends Renderer implements Scrolling
                 )
                 ->when(
                     $prompt->hint,
-                    fn () => $this->hint($prompt->hint),
-                    fn () => $this->newLine() // Space for errors
+                    fn() => $this->hint($prompt->hint),
+                    fn() => $this->newLine() // Space for errors
                 )
                 ->spaceForDropdown($prompt)
         };
@@ -72,7 +74,10 @@ class SearchPromptRenderer extends Renderer implements Scrolling
         return preg_replace(
             '/\s$/',
             $this->cyan('…'),
-            $this->pad($prompt->valueWithCursor($maxWidth - 1).'  ', min($this->longest($prompt->matches(), padding: 2), $maxWidth))
+            $this->pad(
+                $prompt->valueWithCursor($maxWidth - 1) . '  ',
+                min($this->longest($prompt->matches(), padding: 2), $maxWidth)
+            )
         );
     }
 
@@ -85,10 +90,12 @@ class SearchPromptRenderer extends Renderer implements Scrolling
             return $this;
         }
 
-        $this->newLine(max(
-            0,
-            min($prompt->scroll, $prompt->terminal()->lines() - 7) - count($prompt->matches()),
-        ));
+        $this->newLine(
+            max(
+                0,
+                min($prompt->scroll, $prompt->terminal()->lines() - 7) - count($prompt->matches()),
+            )
+        );
 
         if ($prompt->matches() === []) {
             $this->newLine();
@@ -103,12 +110,12 @@ class SearchPromptRenderer extends Renderer implements Scrolling
     protected function renderOptions(SearchPrompt $prompt): string
     {
         if ($prompt->searchValue() !== '' && empty($prompt->matches())) {
-            return $this->gray('  '.($prompt->state === 'searching' ? 'Searching...' : 'No results.'));
+            return $this->gray('  ' . ($prompt->state === 'searching' ? 'Searching...' : 'No results.'));
         }
 
         return $this->scrollbar(
             collect($prompt->visible())
-                ->map(fn ($label) => $this->truncate($label, $prompt->terminal()->cols() - 10))
+                ->map(fn($label) => $this->truncate($label, $prompt->terminal()->cols() - 10))
                 ->map(function ($label, $key) use ($prompt) {
                     $index = array_search($key, array_keys($prompt->matches()));
 

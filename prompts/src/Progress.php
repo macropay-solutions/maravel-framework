@@ -30,7 +30,7 @@ class Progress extends Prompt
     /**
      * Create a new ProgressBar instance.
      *
-     * @param  TSteps  $steps
+     * @param TSteps $steps
      */
     public function __construct(public string $label, public iterable|int $steps, public string $hint = '')
     {
@@ -51,7 +51,7 @@ class Progress extends Prompt
      *
      * @template TReturn
      *
-     * @param  Closure((TSteps is int ? int : value-of<TSteps>), $this): TReturn  $callback
+     * @param Closure((TSteps is int ? int : value-of<TSteps>), $this): TReturn $callback
      * @return array<TReturn>
      */
     public function map(Closure $callback): array

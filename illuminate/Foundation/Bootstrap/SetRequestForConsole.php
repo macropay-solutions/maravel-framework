@@ -10,7 +10,7 @@ class SetRequestForConsole
     /**
      * Bootstrap the given application.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param \Illuminate\Contracts\Foundation\Application $app
      * @return void
      */
     public function bootstrap(Application $app)
@@ -28,8 +28,16 @@ class SetRequestForConsole
             ]);
         }
 
-        $app->instance('request', Request::create(
-            $uri, 'GET', [], [], [], $server
-        ));
+        $app->instance(
+            'request',
+            Request::create(
+                $uri,
+                'GET',
+                [],
+                [],
+                [],
+                $server
+            )
+        );
     }
 }

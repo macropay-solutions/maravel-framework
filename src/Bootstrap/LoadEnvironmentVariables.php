@@ -26,8 +26,8 @@ class LoadEnvironmentVariables
     /**
      * Create a new loads environment variables instance.
      *
-     * @param  string  $path
-     * @param  string|null  $name
+     * @param string $path
+     * @param string|null $name
      * @return void
      */
     public function __construct($path, $name = null)
@@ -72,12 +72,12 @@ class LoadEnvironmentVariables
     /**
      * Write the error information to the screen and exit.
      *
-     * @param  string[]  $errors
+     * @param string[] $errors
      * @return void
      */
     protected function writeErrorAndDie(array $errors)
     {
-        $output = (new ConsoleOutput)->getErrorOutput();
+        $output = (new ConsoleOutput())->getErrorOutput();
 
         foreach ($errors as $error) {
             $output->writeln($error);

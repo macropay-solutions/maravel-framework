@@ -45,8 +45,8 @@ class MonitorCommand extends Command
     /**
      * Create a new queue monitor command.
      *
-     * @param  \Illuminate\Contracts\Queue\Factory  $manager
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
+     * @param \Illuminate\Contracts\Queue\Factory $manager
+     * @param \Illuminate\Contracts\Events\Dispatcher $events
      * @return void
      */
     public function __construct(Factory $manager, Dispatcher $events)
@@ -74,7 +74,7 @@ class MonitorCommand extends Command
     /**
      * Parse the queues into an array of the connections and queues.
      *
-     * @param  string  $queues
+     * @param string $queues
      * @return \Illuminate\Support\Collection
      */
     protected function parseQueues($queues)
@@ -82,7 +82,7 @@ class MonitorCommand extends Command
         return collect(explode(',', $queues))->map(function ($queue) {
             [$connection, $queue] = array_pad(explode(':', $queue, 2), 2, null);
 
-            if (! isset($queue)) {
+            if (!isset($queue)) {
                 $queue = $connection;
                 $connection = $this->laravel['config']['queue.default'];
             }
@@ -91,7 +91,9 @@ class MonitorCommand extends Command
                 'connection' => $connection,
                 'queue' => $queue,
                 'size' => $size = $this->manager->connection($connection)->size($queue),
-                'status' => $size >= $this->option('max') ? '<fg=yellow;options=bold>ALERT</>' : '<fg=green;options=bold>OK</>',
+                'status' => $size >= $this->option(
+                    'max'
+                ) ? '<fg=yellow;options=bold>ALERT</>' : '<fg=green;options=bold>OK</>',
             ];
         });
     }
@@ -99,7 +101,7 @@ class MonitorCommand extends Command
     /**
      * Display the queue sizes in the console.
      *
-     * @param  \Illuminate\Support\Collection  $queues
+     * @param \Illuminate\Support\Collection $queues
      * @return void
      */
     protected function displaySizes(Collection $queues)
@@ -109,8 +111,8 @@ class MonitorCommand extends Command
         $this->components->twoColumnDetail('<fg=gray>Queue name</>', '<fg=gray>Size / Status</>');
 
         $queues->each(function ($queue) {
-            $name = '['.$queue['connection'].'] '.$queue['queue'];
-            $status = '['.$queue['size'].'] '.$queue['status'];
+            $name = '[' . $queue['connection'] . '] ' . $queue['queue'];
+            $status = '[' . $queue['size'] . '] ' . $queue['status'];
 
             $this->components->twoColumnDetail($name, $status);
         });
@@ -121,7 +123,7 @@ class MonitorCommand extends Command
     /**
      * Fire the monitoring events.
      *
-     * @param  \Illuminate\Support\Collection  $queues
+     * @param \Illuminate\Support\Collection $queues
      * @return void
      */
     protected function dispatchEvents(Collection $queues)

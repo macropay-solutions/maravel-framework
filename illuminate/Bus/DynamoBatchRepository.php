@@ -76,14 +76,14 @@ class DynamoBatchRepository implements BatchRepository
         $this->table = $table;
         $this->ttl = $ttl;
         $this->ttlAttribute = $ttlAttribute;
-        $this->marshaler = new Marshaler;
+        $this->marshaler = new Marshaler();
     }
 
     /**
      * Retrieve a list of batches.
      *
-     * @param  int  $limit
-     * @param  mixed  $before
+     * @param int $limit
+     * @param mixed $before
      * @return \Illuminate\Bus\Batch[]
      */
     public function get($limit = 50, $before = null)
@@ -106,7 +106,7 @@ class DynamoBatchRepository implements BatchRepository
         ]);
 
         return array_map(
-            fn ($b) => $this->toBatch($this->marshaler->unmarshalItem($b, mapAsObject: true)),
+            fn($b) => $this->toBatch($this->marshaler->unmarshalItem($b, mapAsObject: true)),
             $result['Items']
         );
     }
@@ -114,7 +114,7 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Retrieve information about an existing batch.
      *
-     * @param  string  $batchId
+     * @param string $batchId
      * @return \Illuminate\Bus\Batch|null
      */
     public function find(string $batchId)
@@ -131,7 +131,7 @@ class DynamoBatchRepository implements BatchRepository
             ],
         ]);
 
-        if (! isset($b['Item'])) {
+        if (!isset($b['Item'])) {
             // If we didn't find it via a standard read, attempt consistent read...
             $b = $this->dynamoDbClient->getItem([
                 'TableName' => $this->table,
@@ -142,7 +142,7 @@ class DynamoBatchRepository implements BatchRepository
                 'ConsistentRead' => true,
             ]);
 
-            if (! isset($b['Item'])) {
+            if (!isset($b['Item'])) {
                 return null;
             }
         }
@@ -157,12 +157,12 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Store a new pending batch.
      *
-     * @param  \Illuminate\Bus\PendingBatch  $batch
+     * @param \Illuminate\Bus\PendingBatch $batch
      * @return \Illuminate\Bus\Batch
      */
     public function store(PendingBatch $batch)
     {
-        $id = (string) Str::orderedUuid();
+        $id = (string)Str::orderedUuid();
 
         $batch = [
             'id' => $id,
@@ -177,7 +177,7 @@ class DynamoBatchRepository implements BatchRepository
             'finished_at' => null,
         ];
 
-        if (! is_null($this->ttl)) {
+        if (!is_null($this->ttl)) {
             $batch[$this->ttlAttribute] = time() + $this->ttl;
         }
 
@@ -194,8 +194,8 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Increment the total number of jobs within the batch.
      *
-     * @param  string  $batchId
-     * @param  int  $amount
+     * @param string $batchId
+     * @param int $amount
      * @return void
      */
     public function incrementTotalJobs(string $batchId, int $amount)
@@ -203,7 +203,8 @@ class DynamoBatchRepository implements BatchRepository
         $update = 'SET total_jobs = total_jobs + :val, pending_jobs = pending_jobs + :val';
 
         if ($this->ttl) {
-            $update = "SET total_jobs = total_jobs + :val, pending_jobs = pending_jobs + :val, #{$this->ttlAttribute} = :ttl";
+            $update =
+                "SET total_jobs = total_jobs + :val, pending_jobs = pending_jobs + :val, #{$this->ttlAttribute} = :ttl";
         }
 
         $this->dynamoDbClient->updateItem(array_filter([
@@ -225,8 +226,8 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Decrement the total number of pending jobs for the batch.
      *
-     * @param  string  $batchId
-     * @param  string  $jobId
+     * @param string $batchId
+     * @param string $jobId
      * @return \Illuminate\Bus\UpdatedBatchJobCounts
      */
     public function decrementPendingJobs(string $batchId, string $jobId)
@@ -263,8 +264,8 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Increment the total number of failed jobs for the batch.
      *
-     * @param  string  $batchId
-     * @param  string  $jobId
+     * @param string $batchId
+     * @param string $jobId
      * @return \Illuminate\Bus\UpdatedBatchJobCounts
      */
     public function incrementFailedJobs(string $batchId, string $jobId)
@@ -272,7 +273,8 @@ class DynamoBatchRepository implements BatchRepository
         $update = 'SET failed_jobs = failed_jobs + :inc, failed_job_ids = list_append(failed_job_ids, :jobId)';
 
         if ($this->ttl !== null) {
-            $update = "SET failed_jobs = failed_jobs + :inc, failed_job_ids = list_append(failed_job_ids, :jobId), #{$this->ttlAttribute} = :ttl";
+            $update = "SET failed_jobs = failed_jobs + :inc, failed_job_ids = " .
+                "list_append(failed_job_ids, :jobId), #{$this->ttlAttribute} = :ttl";
         }
 
         $batch = $this->dynamoDbClient->updateItem(array_filter([
@@ -302,7 +304,7 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Mark the batch that has the given ID as finished.
      *
-     * @param  string  $batchId
+     * @param string $batchId
      * @return void
      */
     public function markAsFinished(string $batchId)
@@ -321,7 +323,7 @@ class DynamoBatchRepository implements BatchRepository
             ],
             'UpdateExpression' => $update,
             'ExpressionAttributeValues' => array_filter([
-                ':timestamp' => ['N' => (string) time()],
+                ':timestamp' => ['N' => (string)time()],
                 ':ttl' => array_filter(['N' => $this->getExpiryTime()]),
             ]),
             'ExpressionAttributeNames' => $this->ttlExpressionAttributeName(),
@@ -331,7 +333,7 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Cancel the batch that has the given ID.
      *
-     * @param  string  $batchId
+     * @param string $batchId
      * @return void
      */
     public function cancel(string $batchId)
@@ -350,7 +352,7 @@ class DynamoBatchRepository implements BatchRepository
             ],
             'UpdateExpression' => $update,
             'ExpressionAttributeValues' => array_filter([
-                ':timestamp' => ['N' => (string) time()],
+                ':timestamp' => ['N' => (string)time()],
                 ':ttl' => array_filter(['N' => $this->getExpiryTime()]),
             ]),
             'ExpressionAttributeNames' => $this->ttlExpressionAttributeName(),
@@ -360,7 +362,7 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Delete the batch that has the given ID.
      *
-     * @param  string  $batchId
+     * @param string $batchId
      * @return void
      */
     public function delete(string $batchId)
@@ -377,7 +379,7 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Execute the given Closure within a storage specific transaction.
      *
-     * @param  \Closure  $callback
+     * @param \Closure $callback
      * @return mixed
      */
     public function transaction(Closure $callback)
@@ -397,7 +399,7 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Convert the given raw batch to a Batch object.
      *
-     * @param  object  $batch
+     * @param object $batch
      * @return \Illuminate\Bus\Batch
      */
     protected function toBatch($batch)
@@ -406,9 +408,9 @@ class DynamoBatchRepository implements BatchRepository
             $this,
             $batch->id,
             $batch->name,
-            (int) $batch->total_jobs,
-            (int) $batch->pending_jobs,
-            (int) $batch->failed_jobs,
+            (int)$batch->total_jobs,
+            (int)$batch->pending_jobs,
+            (int)$batch->failed_jobs,
             $batch->failed_job_ids,
             $this->unserialize($batch->options) ?? [],
             CarbonImmutable::createFromTimestamp($batch->created_at),
@@ -451,7 +453,7 @@ class DynamoBatchRepository implements BatchRepository
 
         $this->dynamoDbClient->createTable($definition);
 
-        if (! is_null($this->ttl)) {
+        if (!is_null($this->ttl)) {
             $this->dynamoDbClient->updateTimeToLive([
                 'TableName' => $this->table,
                 'TimeToLiveSpecification' => [
@@ -479,7 +481,7 @@ class DynamoBatchRepository implements BatchRepository
      */
     protected function getExpiryTime(): ?string
     {
-        return is_null($this->ttl) ? null : (string) (time() + $this->ttl);
+        return is_null($this->ttl) ? null : (string)(time() + $this->ttl);
     }
 
     /**
@@ -495,7 +497,7 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Serialize the given value.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      * @return string
      */
     protected function serialize($value)
@@ -506,7 +508,7 @@ class DynamoBatchRepository implements BatchRepository
     /**
      * Unserialize the given value.
      *
-     * @param  string  $serialized
+     * @param string $serialized
      * @return mixed
      */
     protected function unserialize($serialized)

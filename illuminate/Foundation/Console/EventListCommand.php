@@ -105,12 +105,12 @@ class EventListCommand extends Command
     /**
      * Add the event implemented interfaces to the output.
      *
-     * @param  string  $event
+     * @param string $event
      * @return string
      */
     protected function appendEventInterfaces($event)
     {
-        if (! class_exists($event)) {
+        if (!class_exists($event)) {
             return $event;
         }
 
@@ -126,7 +126,7 @@ class EventListCommand extends Command
     /**
      * Add the listener implemented interfaces to the output.
      *
-     * @param  string  $listener
+     * @param string $listener
      * @return string
      */
     protected function appendListenerInterfaces($listener)
@@ -147,7 +147,7 @@ class EventListCommand extends Command
     /**
      * Get a displayable string representation of a Closure listener.
      *
-     * @param  \Closure  $rawListener
+     * @param \Closure $rawListener
      * @return string
      */
     protected function stringifyClosure(Closure $rawListener)
@@ -156,23 +156,23 @@ class EventListCommand extends Command
 
         $path = str_replace([base_path(), DIRECTORY_SEPARATOR], ['', '/'], $reflection->getFileName() ?: '');
 
-        return 'Closure at: '.$path.':'.$reflection->getStartLine();
+        return 'Closure at: ' . $path . ':' . $reflection->getStartLine();
     }
 
     /**
      * Filter the given events using the provided event name filter.
      *
-     * @param  \Illuminate\Support\Collection  $events
+     * @param \Illuminate\Support\Collection $events
      * @return \Illuminate\Support\Collection
      */
     protected function filterEvents($events)
     {
-        if (! $eventName = $this->option('event')) {
+        if (!$eventName = $this->option('event')) {
             return $events;
         }
 
         return $events->filter(
-            fn ($listeners, $event) => str_contains($event, $eventName)
+            fn($listeners, $event) => str_contains($event, $eventName)
         );
     }
 
@@ -183,7 +183,7 @@ class EventListCommand extends Command
      */
     protected function filteringByEvent()
     {
-        return ! empty($this->option('event'));
+        return !empty($this->option('event'));
     }
 
     /**
@@ -211,7 +211,7 @@ class EventListCommand extends Command
     /**
      * Set a callback that should be used when resolving the events dispatcher.
      *
-     * @param  \Closure|null  $resolver
+     * @param \Closure|null $resolver
      * @return void
      */
     public static function resolveEventsUsing($resolver)

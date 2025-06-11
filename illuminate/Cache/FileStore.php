@@ -12,7 +12,8 @@ use Illuminate\Support\InteractsWithTime;
 
 class FileStore implements Store, LockProvider
 {
-    use InteractsWithTime, RetrievesMultipleKeys;
+    use InteractsWithTime;
+    use RetrievesMultipleKeys;
 
     /**
      * The Illuminate Filesystem instance.
@@ -45,9 +46,9 @@ class FileStore implements Store, LockProvider
     /**
      * Create a new file cache store instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @param  string  $directory
-     * @param  int|null  $filePermission
+     * @param \Illuminate\Filesystem\Filesystem $files
+     * @param string $directory
+     * @param int|null $filePermission
      * @return void
      */
     public function __construct(Filesystem $files, $directory, $filePermission = null)
@@ -60,7 +61,7 @@ class FileStore implements Store, LockProvider
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string|array  $key
+     * @param string|array $key
      * @return mixed
      */
     public function get($key)
@@ -71,9 +72,9 @@ class FileStore implements Store, LockProvider
     /**
      * Store an item in the cache for a given number of seconds.
      *
-     * @param  string  $key
-     * @param  mixed  $value
-     * @param  int  $seconds
+     * @param string $key
+     * @param mixed $value
+     * @param int $seconds
      * @return bool
      */
     public function put($key, $value, $seconds)
@@ -81,7 +82,9 @@ class FileStore implements Store, LockProvider
         $this->ensureCacheDirectoryExists($path = $this->path($key));
 
         $result = $this->files->put(
-            $path, $this->expiration($seconds).serialize($value), true
+            $path,
+            $this->expiration($seconds) . serialize($value),
+            true
         );
 
         if ($result !== false && $result > 0) {
@@ -96,9 +99,9 @@ class FileStore implements Store, LockProvider
     /**
      * Store an item in the cache if the key doesn't exist.
      *
-     * @param  string  $key
-     * @param  mixed  $value
-     * @param  int  $seconds
+     * @param string $key
+     * @param mixed $value
+     * @param int $seconds
      * @return bool
      */
     public function add($key, $value, $seconds)
@@ -119,7 +122,7 @@ class FileStore implements Store, LockProvider
 
         if (empty($expire) || $this->currentTime() >= $expire) {
             $file->truncate()
-                ->write($this->expiration($seconds).serialize($value))
+                ->write($this->expiration($seconds) . serialize($value))
                 ->close();
 
             $this->ensurePermissionsAreCorrect($path);
@@ -135,14 +138,14 @@ class FileStore implements Store, LockProvider
     /**
      * Create the file cache directory if necessary.
      *
-     * @param  string  $path
+     * @param string $path
      * @return void
      */
     protected function ensureCacheDirectoryExists($path)
     {
         $directory = dirname($path);
 
-        if (! $this->files->exists($directory)) {
+        if (!$this->files->exists($directory)) {
             $this->files->makeDirectory($directory, 0777, true, true);
 
             // We're creating two levels of directories (e.g. 7e/24), so we check them both...
@@ -154,13 +157,15 @@ class FileStore implements Store, LockProvider
     /**
      * Ensure the created node has the correct permissions.
      *
-     * @param  string  $path
+     * @param string $path
      * @return void
      */
     protected function ensurePermissionsAreCorrect($path)
     {
-        if (is_null($this->filePermission) ||
-            intval($this->files->chmod($path), 8) == $this->filePermission) {
+        if (
+            is_null($this->filePermission) ||
+            intval($this->files->chmod($path), 8) == $this->filePermission
+        ) {
             return;
         }
 
@@ -170,15 +175,15 @@ class FileStore implements Store, LockProvider
     /**
      * Increment the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed $value
      * @return int
      */
     public function increment($key, $value = 1)
     {
         $raw = $this->getPayload($key);
 
-        return tap(((int) $raw['data']) + $value, function ($newValue) use ($key, $raw) {
+        return tap(((int)$raw['data']) + $value, function ($newValue) use ($key, $raw) {
             $this->put($key, $newValue, $raw['time'] ?? 0);
         });
     }
@@ -186,8 +191,8 @@ class FileStore implements Store, LockProvider
     /**
      * Decrement the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed $value
      * @return int
      */
     public function decrement($key, $value = 1)
@@ -198,8 +203,8 @@ class FileStore implements Store, LockProvider
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed $value
      * @return bool
      */
     public function forever($key, $value)
@@ -210,9 +215,9 @@ class FileStore implements Store, LockProvider
     /**
      * Get a lock instance.
      *
-     * @param  string  $name
-     * @param  int  $seconds
-     * @param  string|null  $owner
+     * @param string $name
+     * @param int $seconds
+     * @param string|null $owner
      * @return \Illuminate\Contracts\Cache\Lock
      */
     public function lock($name, $seconds = 0, $owner = null)
@@ -230,8 +235,8 @@ class FileStore implements Store, LockProvider
     /**
      * Restore a lock instance using the owner identifier.
      *
-     * @param  string  $name
-     * @param  string  $owner
+     * @param string $name
+     * @param string $owner
      * @return \Illuminate\Contracts\Cache\Lock
      */
     public function restoreLock($name, $owner)
@@ -242,7 +247,7 @@ class FileStore implements Store, LockProvider
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
+     * @param string $key
      * @return bool
      */
     public function forget($key)
@@ -261,14 +266,14 @@ class FileStore implements Store, LockProvider
      */
     public function flush()
     {
-        if (! $this->files->isDirectory($this->directory)) {
+        if (!$this->files->isDirectory($this->directory)) {
             return false;
         }
 
         foreach ($this->files->directories($this->directory) as $directory) {
             $deleted = $this->files->deleteDirectory($directory);
 
-            if (! $deleted || $this->files->exists($directory)) {
+            if (!$deleted || $this->files->exists($directory)) {
                 return false;
             }
         }
@@ -279,7 +284,7 @@ class FileStore implements Store, LockProvider
     /**
      * Retrieve an item and expiry time from the cache by key.
      *
-     * @param  string  $key
+     * @param string $key
      * @return array
      */
     protected function getPayload($key)
@@ -337,20 +342,20 @@ class FileStore implements Store, LockProvider
     /**
      * Get the full path for the given cache key.
      *
-     * @param  string  $key
+     * @param string $key
      * @return string
      */
     public function path($key)
     {
         $parts = array_slice(str_split($hash = sha1($key), 2), 0, 2);
 
-        return $this->directory.'/'.implode('/', $parts).'/'.$hash;
+        return $this->directory . '/' . implode('/', $parts) . '/' . $hash;
     }
 
     /**
      * Get the expiration time based on the given seconds.
      *
-     * @param  int  $seconds
+     * @param int $seconds
      * @return int
      */
     protected function expiration($seconds)
@@ -383,7 +388,7 @@ class FileStore implements Store, LockProvider
     /**
      * Set the cache directory where locks should be stored.
      *
-     * @param  string|null  $lockDirectory
+     * @param string|null $lockDirectory
      * @return $this
      */
     public function setLockDirectory($lockDirectory)

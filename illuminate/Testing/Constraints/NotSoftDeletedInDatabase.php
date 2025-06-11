@@ -38,9 +38,9 @@ class NotSoftDeletedInDatabase extends Constraint
     /**
      * Create a new constraint instance.
      *
-     * @param  \Illuminate\Database\Connection  $database
-     * @param  array  $data
-     * @param  string  $deletedAtColumn
+     * @param \Illuminate\Database\Connection $database
+     * @param array $data
+     * @param string $deletedAtColumn
      * @return void
      */
     public function __construct(Connection $database, array $data, string $deletedAtColumn)
@@ -53,7 +53,7 @@ class NotSoftDeletedInDatabase extends Constraint
     /**
      * Check if the data is found in the given table.
      *
-     * @param  string  $other
+     * @param string $other
      * @return bool
      */
     public function matches($other): bool
@@ -67,21 +67,23 @@ class NotSoftDeletedInDatabase extends Constraint
     /**
      * Get the description of the failure.
      *
-     * @param  string  $other
+     * @param string $other
      * @return string
      */
     public function failureDescription($other): string
     {
         return sprintf(
             "any existing row in the table [%s] matches the attributes %s.\n\n%s",
-            $other, $this->toString(), $this->getAdditionalInfo($other)
+            $other,
+            $this->toString(),
+            $this->getAdditionalInfo($other)
         );
     }
 
     /**
      * Get additional info about the records found in the database table.
      *
-     * @param  string  $table
+     * @param string $table
      * @return string
      */
     protected function getAdditionalInfo($table)
@@ -94,7 +96,7 @@ class NotSoftDeletedInDatabase extends Constraint
             return 'The table is empty';
         }
 
-        $description = 'Found: '.json_encode($results, JSON_PRETTY_PRINT);
+        $description = 'Found: ' . json_encode($results, JSON_PRETTY_PRINT);
 
         if ($query->count() > $this->show) {
             $description .= sprintf(' and %s others', $query->count() - $this->show);

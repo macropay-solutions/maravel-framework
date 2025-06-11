@@ -10,7 +10,7 @@ class SQLiteBuilder extends Builder
     /**
      * Create a database in the schema.
      *
-     * @param  string  $name
+     * @param string $name
      * @return bool
      */
     public function createDatabase($name)
@@ -21,7 +21,7 @@ class SQLiteBuilder extends Builder
     /**
      * Drop a database from the schema if the database exists.
      *
-     * @param  string  $name
+     * @param string $name
      * @return bool
      */
     public function dropDatabaseIfExists($name)
@@ -34,7 +34,7 @@ class SQLiteBuilder extends Builder
     /**
      * Get the tables for the database.
      *
-     * @param  bool  $withSize
+     * @param bool $withSize
      * @return array
      */
     public function getTables($withSize = true)
@@ -55,9 +55,9 @@ class SQLiteBuilder extends Builder
     /**
      * Get all of the table names for the database.
      *
+     * @return array
      * @deprecated Will be removed in a future Laravel version.
      *
-     * @return array
      */
     public function getAllTables()
     {
@@ -69,9 +69,9 @@ class SQLiteBuilder extends Builder
     /**
      * Get all of the view names for the database.
      *
+     * @return array
      * @deprecated Will be removed in a future Laravel version.
      *
-     * @return array
      */
     public function getAllViews()
     {

@@ -11,10 +11,10 @@ class SqlServerProcessor extends Processor
     /**
      * Process an "insert get ID" query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  string  $sql
-     * @param  array  $values
-     * @param  string|null  $sequence
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param string $sql
+     * @param array $values
+     * @param string|null $sequence
      * @return int
      */
     public function processInsertGetId(Builder $query, $sql, $values, $sequence = null)
@@ -29,13 +29,13 @@ class SqlServerProcessor extends Processor
             $id = $connection->getPdo()->lastInsertId();
         }
 
-        return is_numeric($id) ? (int) $id : $id;
+        return is_numeric($id) ? (int)$id : $id;
     }
 
     /**
      * Process an "insert get ID" query for ODBC.
      *
-     * @param  \Illuminate\Database\Connection  $connection
+     * @param \Illuminate\Database\Connection $connection
      * @return int
      *
      * @throws \Exception
@@ -46,7 +46,7 @@ class SqlServerProcessor extends Processor
             'SELECT CAST(COALESCE(SCOPE_IDENTITY(), @@IDENTITY) AS int) AS insertid'
         );
 
-        if (! $result) {
+        if (!$result) {
             throw new Exception('Unable to retrieve lastInsertID for ODBC.');
         }
 
@@ -58,33 +58,33 @@ class SqlServerProcessor extends Processor
     /**
      * Process the results of a column listing query.
      *
+     * @param array $results
+     * @return array
      * @deprecated Will be removed in a future Laravel version.
      *
-     * @param  array  $results
-     * @return array
      */
     public function processColumnListing($results)
     {
         return array_map(function ($result) {
-            return ((object) $result)->name;
+            return ((object)$result)->name;
         }, $results);
     }
 
     /**
      * Process the results of a columns query.
      *
-     * @param  array  $results
+     * @param array $results
      * @return array
      */
     public function processColumns($results)
     {
         return array_map(function ($result) {
-            $result = (object) $result;
+            $result = (object)$result;
 
             $type = match ($typeName = $result->type_name) {
-                'binary', 'varbinary', 'char', 'varchar', 'nchar', 'nvarchar' => $result->length == -1 ? $typeName.'(max)' : $typeName."($result->length)",
-                'decimal', 'numeric' => $typeName."($result->precision,$result->places)",
-                'float', 'datetime2', 'datetimeoffset', 'time' => $typeName."($result->precision)",
+                'binary', 'varbinary', 'char', 'varchar', 'nchar', 'nvarchar' => $result->length == -1 ? $typeName . '(max)' : $typeName . "($result->length)",
+                'decimal', 'numeric' => $typeName . "($result->precision,$result->places)",
+                'float', 'datetime2', 'datetimeoffset', 'time' => $typeName . "($result->precision)",
                 default => $typeName,
             };
 
@@ -93,9 +93,9 @@ class SqlServerProcessor extends Processor
                 'type_name' => $result->type_name,
                 'type' => $type,
                 'collation' => $result->collation,
-                'nullable' => (bool) $result->nullable,
+                'nullable' => (bool)$result->nullable,
                 'default' => $result->default,
-                'auto_increment' => (bool) $result->autoincrement,
+                'auto_increment' => (bool)$result->autoincrement,
                 'comment' => $result->comment,
             ];
         }, $results);
@@ -104,20 +104,20 @@ class SqlServerProcessor extends Processor
     /**
      * Process the results of an indexes query.
      *
-     * @param  array  $results
+     * @param array $results
      * @return array
      */
     public function processIndexes($results)
     {
         return array_map(function ($result) {
-            $result = (object) $result;
+            $result = (object)$result;
 
             return [
                 'name' => strtolower($result->name),
                 'columns' => explode(',', $result->columns),
                 'type' => strtolower($result->type),
-                'unique' => (bool) $result->unique,
-                'primary' => (bool) $result->primary,
+                'unique' => (bool)$result->unique,
+                'primary' => (bool)$result->primary,
             ];
         }, $results);
     }
@@ -125,13 +125,13 @@ class SqlServerProcessor extends Processor
     /**
      * Process the results of a foreign keys query.
      *
-     * @param  array  $results
+     * @param array $results
      * @return array
      */
     public function processForeignKeys($results)
     {
         return array_map(function ($result) {
-            $result = (object) $result;
+            $result = (object)$result;
 
             return [
                 'name' => $result->name,

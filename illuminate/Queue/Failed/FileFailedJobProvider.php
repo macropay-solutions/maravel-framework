@@ -32,9 +32,9 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Create a new database failed job provider.
      *
-     * @param  string  $path
-     * @param  int  $limit
-     * @param  \Closure|null  $lockProviderResolver
+     * @param string $path
+     * @param int $limit
+     * @param \Closure|null $lockProviderResolver
      * @return void
      */
     public function __construct($path, $limit = 100, ?Closure $lockProviderResolver = null)
@@ -47,10 +47,10 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Log a failed job into storage.
      *
-     * @param  string  $connection
-     * @param  string  $queue
-     * @param  string  $payload
-     * @param  \Throwable  $exception
+     * @param string $connection
+     * @param string $queue
+     * @param string $payload
+     * @param \Throwable $exception
      * @return int|null
      */
     public function log($connection, $queue, $payload, $exception)
@@ -67,7 +67,7 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
                 'connection' => $connection,
                 'queue' => $queue,
                 'payload' => $payload,
-                'exception' => (string) mb_convert_encoding($exception, 'UTF-8'),
+                'exception' => (string)mb_convert_encoding($exception, 'UTF-8'),
                 'failed_at' => $failedAt->format('Y-m-d H:i:s'),
                 'failed_at_timestamp' => $failedAt->getTimestamp(),
             ]);
@@ -81,13 +81,13 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Get the IDs of all of the failed jobs.
      *
-     * @param  string|null  $queue
+     * @param string|null $queue
      * @return array
      */
     public function ids($queue = null)
     {
         return collect($this->all())
-            ->when(! is_null($queue), fn ($collect) => $collect->where('queue', $queue))
+            ->when(!is_null($queue), fn($collect) => $collect->where('queue', $queue))
             ->pluck('id')
             ->all();
     }
@@ -105,28 +105,30 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Get a single failed job.
      *
-     * @param  mixed  $id
+     * @param mixed $id
      * @return object|null
      */
     public function find($id)
     {
         return collect($this->read())
-            ->first(fn ($job) => $job->id === $id);
+            ->first(fn($job) => $job->id === $id);
     }
 
     /**
      * Delete a single failed job from storage.
      *
-     * @param  mixed  $id
+     * @param mixed $id
      * @return bool
      */
     public function forget($id)
     {
         return $this->lock(function () use ($id) {
-            $this->write($pruned = collect($jobs = $this->read())
-                ->reject(fn ($job) => $job->id === $id)
-                ->values()
-                ->all());
+            $this->write(
+                $pruned = collect($jobs = $this->read())
+                    ->reject(fn($job) => $job->id === $id)
+                    ->values()
+                    ->all()
+            );
 
             return count($jobs) !== count($pruned);
         });
@@ -135,7 +137,7 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Flush all of the failed jobs from storage.
      *
-     * @param  int|null  $hours
+     * @param int|null $hours
      * @return void
      */
     public function flush($hours = null)
@@ -146,7 +148,7 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Prune all of the entries older than the given date.
      *
-     * @param  \DateTimeInterface  $before
+     * @param \DateTimeInterface $before
      * @return int
      */
     public function prune(DateTimeInterface $before)
@@ -154,9 +156,11 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
         return $this->lock(function () use ($before) {
             $jobs = $this->read();
 
-            $this->write($prunedJobs = collect($jobs)->reject(function ($job) use ($before) {
-                return $job->failed_at_timestamp <= $before->getTimestamp();
-            })->values()->all());
+            $this->write(
+                $prunedJobs = collect($jobs)->reject(function ($job) use ($before) {
+                    return $job->failed_at_timestamp <= $before->getTimestamp();
+                })->values()->all()
+            );
 
             return count($jobs) - count($prunedJobs);
         });
@@ -165,12 +169,12 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Execute the given callback while holding a lock.
      *
-     * @param  \Closure  $callback
+     * @param \Closure $callback
      * @return mixed
      */
     protected function lock(Closure $callback)
     {
-        if (! $this->lockProviderResolver) {
+        if (!$this->lockProviderResolver) {
             return $callback();
         }
 
@@ -188,7 +192,7 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
      */
     protected function read()
     {
-        if (! file_exists($this->path)) {
+        if (!file_exists($this->path)) {
             return [];
         }
 
@@ -206,7 +210,7 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Write the given array of jobs to the failed jobs file.
      *
-     * @param  array  $jobs
+     * @param array $jobs
      * @return void
      */
     protected function write(array $jobs)
@@ -220,8 +224,8 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Count the failed jobs.
      *
-     * @param  string|null  $connection
-     * @param  string|null  $queue
+     * @param string|null $connection
+     * @param string|null $queue
      * @return int
      */
     public function count($connection = null, $queue = null)
@@ -231,7 +235,10 @@ class FileFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
         }
 
         return collect($this->read())
-            ->filter(fn ($job) => $job->connection === ($connection ?? $job->connection) && $job->queue === ($queue ?? $job->queue))
+            ->filter(
+                fn($job
+                ) => $job->connection === ($connection ?? $job->connection) && $job->queue === ($queue ?? $job->queue)
+            )
             ->count();
     }
 }

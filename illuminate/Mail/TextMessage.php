@@ -21,7 +21,7 @@ class TextMessage
     /**
      * Create a new text message instance.
      *
-     * @param  \Illuminate\Mail\Message  $message
+     * @param \Illuminate\Mail\Message $message
      * @return void
      */
     public function __construct($message)
@@ -32,7 +32,7 @@ class TextMessage
     /**
      * Embed a file in the message and get the CID.
      *
-     * @param  string|\Illuminate\Contracts\Mail\Attachable|\Illuminate\Mail\Attachment  $file
+     * @param string|\Illuminate\Contracts\Mail\Attachable|\Illuminate\Mail\Attachment $file
      * @return string
      */
     public function embed($file)
@@ -43,9 +43,9 @@ class TextMessage
     /**
      * Embed in-memory data in the message and get the CID.
      *
-     * @param  string|resource  $data
-     * @param  string  $name
-     * @param  string|null  $contentType
+     * @param string|resource $data
+     * @param string $name
+     * @param string|null $contentType
      * @return string
      */
     public function embedData($data, $name, $contentType = null)
@@ -56,8 +56,8 @@ class TextMessage
     /**
      * Dynamically pass missing methods to the underlying message instance.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return mixed
      */
     public function __call($method, $parameters)

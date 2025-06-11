@@ -30,9 +30,9 @@ class JobQueueing
     /**
      * Create a new event instance.
      *
-     * @param  string  $connectionName
-     * @param  \Closure|string|object  $job
-     * @param  string|null  $payload
+     * @param string $connectionName
+     * @param \Closure|string|object $job
+     * @param string|null $payload
      * @return void
      */
     public function __construct($connectionName, $job, $payload = null)

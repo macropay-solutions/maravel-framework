@@ -7,7 +7,7 @@ class SqlServerBuilder extends Builder
     /**
      * Create a database in the schema.
      *
-     * @param  string  $name
+     * @param string $name
      * @return bool
      */
     public function createDatabase($name)
@@ -20,7 +20,7 @@ class SqlServerBuilder extends Builder
     /**
      * Drop a database from the schema if the database exists.
      *
-     * @param  string  $name
+     * @param string $name
      * @return bool
      */
     public function dropDatabaseIfExists($name)
@@ -55,9 +55,9 @@ class SqlServerBuilder extends Builder
     /**
      * Drop all tables from the database.
      *
+     * @return array
      * @deprecated Will be removed in a future Laravel version.
      *
-     * @return array
      */
     public function getAllTables()
     {
@@ -69,9 +69,9 @@ class SqlServerBuilder extends Builder
     /**
      * Get all of the view names for the database.
      *
+     * @return array
      * @deprecated Will be removed in a future Laravel version.
      *
-     * @return array
      */
     public function getAllViews()
     {

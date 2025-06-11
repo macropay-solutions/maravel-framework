@@ -21,8 +21,8 @@ class IndexHint
     /**
      * Create a new index hint instance.
      *
-     * @param  string  $type
-     * @param  string  $index
+     * @param string $type
+     * @param string $index
      * @return void
      */
     public function __construct($type, $index)

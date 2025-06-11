@@ -37,10 +37,10 @@ class JobQueued
     /**
      * Create a new event instance.
      *
-     * @param  string  $connectionName
-     * @param  string|int|null  $id
-     * @param  \Closure|string|object  $job
-     * @param  string|null  $payload
+     * @param string $connectionName
+     * @param string|int|null $id
+     * @param \Closure|string|object $job
+     * @param string|null $payload
      * @return void
      */
     public function __construct($connectionName, $id, $job, $payload = null)

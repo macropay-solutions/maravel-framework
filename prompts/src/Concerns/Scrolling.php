@@ -36,7 +36,8 @@ trait Scrolling
      */
     protected function reduceScrollingToFitTerminal(): void
     {
-        $reservedLines = ($renderer = $this->getRenderer()) instanceof ScrollingRenderer ? $renderer->reservedLines() : 0;
+        $reservedLines = ($renderer = $this->getRenderer()) instanceof ScrollingRenderer ? $renderer->reservedLines(
+        ) : 0;
 
         $this->scroll = max(1, min($this->scroll, $this->terminal()->lines() - $reservedLines));
     }
@@ -103,7 +104,7 @@ trait Scrolling
         }
 
         $remaining = $total - $this->highlighted - 1;
-        $halfScroll = (int) floor($this->scroll / 2);
+        $halfScroll = (int)floor($this->scroll / 2);
         $endOffset = max(0, $halfScroll - $remaining);
 
         if ($this->scroll % 2 === 0) {

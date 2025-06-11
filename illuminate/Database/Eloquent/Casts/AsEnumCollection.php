@@ -14,13 +14,12 @@ class AsEnumCollection implements Castable
      *
      * @template TEnum of \UnitEnum|\BackedEnum
      *
-     * @param  array{class-string<TEnum>}  $arguments
+     * @param array{class-string<TEnum>} $arguments
      * @return \Illuminate\Contracts\Database\Eloquent\CastsAttributes<\Illuminate\Support\Collection<array-key, TEnum>, iterable<TEnum>>
      */
     public static function castUsing(array $arguments)
     {
-        return new class($arguments) implements CastsAttributes
-        {
+        return new class ($arguments) implements CastsAttributes {
             protected $arguments;
 
             public function __construct(array $arguments)
@@ -30,13 +29,13 @@ class AsEnumCollection implements Castable
 
             public function get($model, $key, $value, $attributes)
             {
-                if (! isset($attributes[$key])) {
+                if (!isset($attributes[$key])) {
                     return;
                 }
 
                 $data = Json::decode($attributes[$key]);
 
-                if (! is_array($data)) {
+                if (!is_array($data)) {
                     return;
                 }
 
@@ -45,7 +44,7 @@ class AsEnumCollection implements Castable
                 return \app(Collection::class, [$data])->map(function ($value) use ($enumClass) {
                     return is_subclass_of($enumClass, BackedEnum::class)
                         ? $enumClass::from($value)
-                        : constant($enumClass.'::'.$value);
+                        : constant($enumClass . '::' . $value);
                 });
             }
 
@@ -53,9 +52,11 @@ class AsEnumCollection implements Castable
             {
                 $value = $value !== null
 //                    ? Json::encode((new Collection($value))->map(function ($enum) {
-                    ? Json::encode(\app(Collection::class, [$value])->map(function ($enum) {
-                        return $this->getStorableEnumValue($enum);
-                    })->jsonSerialize())
+                    ? Json::encode(
+                        \app(Collection::class, [$value])->map(function ($enum) {
+                            return $this->getStorableEnumValue($enum);
+                        })->jsonSerialize()
+                    )
                     : null;
 
                 return [$key => $value];

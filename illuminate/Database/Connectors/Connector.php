@@ -27,9 +27,9 @@ class Connector
     /**
      * Create a new PDO connection.
      *
-     * @param  string  $dsn
-     * @param  array  $config
-     * @param  array  $options
+     * @param string $dsn
+     * @param array $config
+     * @param array $options
      * @return \PDO
      *
      * @throws \Exception
@@ -37,16 +37,24 @@ class Connector
     public function createConnection($dsn, array $config, array $options)
     {
         [$username, $password] = [
-            $config['username'] ?? null, $config['password'] ?? null,
+            $config['username'] ?? null,
+            $config['password'] ?? null,
         ];
 
         try {
             return $this->createPdoConnection(
-                $dsn, $username, $password, $options
+                $dsn,
+                $username,
+                $password,
+                $options
             );
         } catch (Exception $e) {
             return $this->tryAgainIfCausedByLostConnection(
-                $e, $dsn, $username, $password, $options
+                $e,
+                $dsn,
+                $username,
+                $password,
+                $options
             );
         }
     }
@@ -54,10 +62,10 @@ class Connector
     /**
      * Create a new PDO connection instance.
      *
-     * @param  string  $dsn
-     * @param  string  $username
-     * @param  string  $password
-     * @param  array  $options
+     * @param string $dsn
+     * @param string $username
+     * @param string $password
+     * @param array $options
      * @return \PDO
      */
     protected function createPdoConnection($dsn, $username, $password, $options)
@@ -68,11 +76,11 @@ class Connector
     /**
      * Handle an exception that occurred during connect execution.
      *
-     * @param  \Throwable  $e
-     * @param  string  $dsn
-     * @param  string  $username
-     * @param  string  $password
-     * @param  array  $options
+     * @param \Throwable $e
+     * @param string $dsn
+     * @param string $username
+     * @param string $password
+     * @param array $options
      * @return \PDO
      *
      * @throws \Exception
@@ -89,7 +97,7 @@ class Connector
     /**
      * Get the PDO options based on the configuration.
      *
-     * @param  array  $config
+     * @param array $config
      * @return array
      */
     public function getOptions(array $config)
@@ -112,7 +120,7 @@ class Connector
     /**
      * Set the default PDO connection options.
      *
-     * @param  array  $options
+     * @param array $options
      * @return void
      */
     public function setDefaultOptions(array $options)

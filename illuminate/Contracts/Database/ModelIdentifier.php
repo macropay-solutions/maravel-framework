@@ -44,10 +44,10 @@ class ModelIdentifier
     /**
      * Create a new model identifier.
      *
-     * @param  string  $class
-     * @param  mixed  $id
-     * @param  array  $relations
-     * @param  mixed  $connection
+     * @param string $class
+     * @param mixed $id
+     * @param array $relations
+     * @param mixed $connection
      * @return void
      */
     public function __construct($class, $id, array $relations, $connection)
@@ -61,7 +61,7 @@ class ModelIdentifier
     /**
      * Specify the collection class that should be used when serializing / restoring collections.
      *
-     * @param  string|null  $collectionClass
+     * @param string|null $collectionClass
      * @return $this
      */
     public function useCollectionClass(?string $collectionClass)

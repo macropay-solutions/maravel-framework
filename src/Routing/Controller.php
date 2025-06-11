@@ -16,8 +16,8 @@ class Controller
     /**
      * Define a middleware on the controller.
      *
-     * @param  string  $middleware
-     * @param  array  $options
+     * @param string $middleware
+     * @param array $options
      * @return void
      */
     public function middleware($middleware, array $options = [])
@@ -28,7 +28,7 @@ class Controller
     /**
      * Get the middleware for a given method.
      *
-     * @param  string  $method
+     * @param string $method
      * @return array
      */
     public function getMiddlewareForMethod($method)
@@ -36,11 +36,11 @@ class Controller
         $middleware = [];
 
         foreach ($this->middleware as $name => $options) {
-            if (isset($options['only']) && ! in_array($method, (array) $options['only'])) {
+            if (isset($options['only']) && !in_array($method, (array)$options['only'])) {
                 continue;
             }
 
-            if (isset($options['except']) && in_array($method, (array) $options['except'])) {
+            if (isset($options['except']) && in_array($method, (array)$options['except'])) {
                 continue;
             }
 

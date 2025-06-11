@@ -24,8 +24,8 @@ class Cursor implements Arrayable
     /**
      * Create a new cursor instance.
      *
-     * @param  array  $parameters
-     * @param  bool  $pointsToNextItems
+     * @param array $parameters
+     * @param bool $pointsToNextItems
      */
     public function __construct(array $parameters, $pointsToNextItems = true)
     {
@@ -36,14 +36,14 @@ class Cursor implements Arrayable
     /**
      * Get the given parameter from the cursor.
      *
-     * @param  string  $parameterName
+     * @param string $parameterName
      * @return string|null
      *
      * @throws \UnexpectedValueException
      */
     public function parameter(string $parameterName)
     {
-        if (! array_key_exists($parameterName, $this->parameters)) {
+        if (!array_key_exists($parameterName, $this->parameters)) {
             throw new UnexpectedValueException("Unable to find parameter [{$parameterName}] in pagination item.");
         }
 
@@ -53,7 +53,7 @@ class Cursor implements Arrayable
     /**
      * Get the given parameters from the cursor.
      *
-     * @param  array  $parameterNames
+     * @param array $parameterNames
      * @return array
      */
     public function parameters(array $parameterNames)
@@ -80,7 +80,7 @@ class Cursor implements Arrayable
      */
     public function pointsToPreviousItems()
     {
-        return ! $this->pointsToNextItems;
+        return !$this->pointsToNextItems;
     }
 
     /**
@@ -108,12 +108,12 @@ class Cursor implements Arrayable
     /**
      * Get a cursor instance from the encoded string representation.
      *
-     * @param  string|null  $encodedString
+     * @param string|null $encodedString
      * @return static|null
      */
     public static function fromEncoded($encodedString)
     {
-        if (! is_string($encodedString)) {
+        if (!is_string($encodedString)) {
             return null;
         }
 

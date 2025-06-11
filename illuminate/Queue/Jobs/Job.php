@@ -125,7 +125,7 @@ abstract class Job
     /**
      * Release the job back into the queue after (n) seconds.
      *
-     * @param  int  $delay
+     * @param int $delay
      * @return void
      */
     public function release($delay = 0)
@@ -176,7 +176,7 @@ abstract class Job
     /**
      * Delete the job, call the "failed" method, and raise the failed job event.
      *
-     * @param  \Throwable|null  $e
+     * @param \Throwable|null $e
      * @return void
      */
     public function fail($e = null)
@@ -192,9 +192,11 @@ abstract class Job
         // If the exception is due to a job timing out, we need to rollback the current
         // database transaction so that the failed job count can be incremented with
         // the proper value. Otherwise, the current transaction will never commit.
-        if ($e instanceof TimeoutExceededException &&
+        if (
+            $e instanceof TimeoutExceededException &&
             $commandName &&
-            in_array(Batchable::class, class_uses_recursive($commandName))) {
+            in_array(Batchable::class, class_uses_recursive($commandName))
+        ) {
             $batchRepository = $this->resolve(BatchRepository::class);
 
             if (method_exists($batchRepository, 'rollBack')) {
@@ -214,16 +216,20 @@ abstract class Job
 
             $this->failed($e);
         } finally {
-            $this->resolve(Dispatcher::class)->dispatch(new JobFailed(
-                $this->connectionName, $this, $e ?: new ManuallyFailedException
-            ));
+            $this->resolve(Dispatcher::class)->dispatch(
+                new JobFailed(
+                    $this->connectionName,
+                    $this,
+                    $e ?: new ManuallyFailedException()
+                )
+            );
         }
     }
 
     /**
      * Process an exception that caused the job to fail.
      *
-     * @param  \Throwable|null  $e
+     * @param \Throwable|null $e
      * @return void
      */
     protected function failed($e)
@@ -240,7 +246,7 @@ abstract class Job
     /**
      * Resolve the given class.
      *
-     * @param  string  $class
+     * @param string $class
      * @return mixed
      */
     protected function resolve($class)

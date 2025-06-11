@@ -11,7 +11,7 @@ trait Termwind
 {
     protected function termwind(string $html)
     {
-        renderUsing($output = new BufferedConsoleOutput);
+        renderUsing($output = new BufferedConsoleOutput());
 
         render($html);
 
@@ -20,6 +20,6 @@ trait Termwind
 
     protected function restoreEscapeSequences(string $string)
     {
-        return preg_replace('/\[(\d+)m/', "\e[".'\1m', $string);
+        return preg_replace('/\[(\d+)m/', "\e[" . '\1m', $string);
     }
 }

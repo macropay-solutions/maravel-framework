@@ -44,17 +44,17 @@ class ComponentMakeCommand extends GeneratorCommand
     {
         if ($this->option('view')) {
             $this->writeView(function () {
-                $this->components->info($this->type.' created successfully.');
+                $this->components->info($this->type . ' created successfully.');
             });
 
             return;
         }
 
-        if (parent::handle() === false && ! $this->option('force')) {
+        if (parent::handle() === false && !$this->option('force')) {
             return false;
         }
 
-        if (! $this->option('inline')) {
+        if (!$this->option('inline')) {
             $this->writeView();
         }
     }
@@ -62,20 +62,20 @@ class ComponentMakeCommand extends GeneratorCommand
     /**
      * Write the view for the component.
      *
-     * @param  callable|null  $onSuccess
+     * @param callable|null $onSuccess
      * @return void
      */
     protected function writeView($onSuccess = null)
     {
         $path = $this->viewPath(
-            str_replace('.', '/', 'components.'.$this->getView()).'.blade.php'
+            str_replace('.', '/', 'components.' . $this->getView()) . '.blade.php'
         );
 
-        if (! $this->files->isDirectory(dirname($path))) {
+        if (!$this->files->isDirectory(dirname($path))) {
             $this->files->makeDirectory(dirname($path), 0777, true, true);
         }
 
-        if ($this->files->exists($path) && ! $this->option('force')) {
+        if ($this->files->exists($path) && !$this->option('force')) {
             $this->components->error('View already exists.');
 
             return;
@@ -84,7 +84,7 @@ class ComponentMakeCommand extends GeneratorCommand
         file_put_contents(
             $path,
             '<div>
-    <!-- '.Inspiring::quotes()->random().' -->
+    <!-- ' . Inspiring::quotes()->random() . ' -->
 </div>'
         );
 
@@ -96,7 +96,7 @@ class ComponentMakeCommand extends GeneratorCommand
     /**
      * Build the class with the given name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return string
      */
     protected function buildClass($name)
@@ -104,14 +104,14 @@ class ComponentMakeCommand extends GeneratorCommand
         if ($this->option('inline')) {
             return str_replace(
                 ['DummyView', '{{ view }}'],
-                "<<<'blade'\n<div>\n    <!-- ".Inspiring::quotes()->random()." -->\n</div>\nblade",
+                "<<<'blade'\n<div>\n    <!-- " . Inspiring::quotes()->random() . " -->\n</div>\nblade",
                 parent::buildClass($name)
             );
         }
 
         return str_replace(
             ['DummyView', '{{ view }}'],
-            'view(\'components.'.$this->getView().'\')',
+            'view(\'components.' . $this->getView() . '\')',
             parent::buildClass($name)
         );
     }
@@ -145,25 +145,25 @@ class ComponentMakeCommand extends GeneratorCommand
     /**
      * Resolve the fully-qualified path to the stub.
      *
-     * @param  string  $stub
+     * @param string $stub
      * @return string
      */
     protected function resolveStubPath($stub)
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
-                        ? $customPath
-                        : __DIR__.$stub;
+            ? $customPath
+            : __DIR__ . $stub;
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\View\Components';
+        return $rootNamespace . '\View\Components';
     }
 
     /**

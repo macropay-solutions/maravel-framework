@@ -9,25 +9,25 @@ class MySqlProcessor extends Processor
     /**
      * Process the results of a column listing query.
      *
+     * @param array $results
+     * @return array
      * @deprecated Will be removed in a future Laravel version.
      *
-     * @param  array  $results
-     * @return array
      */
     public function processColumnListing($results)
     {
         return array_map(function ($result) {
-            return ((object) $result)->column_name;
+            return ((object)$result)->column_name;
         }, $results);
     }
 
     /**
      * Process an  "insert get ID" query.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  string  $sql
-     * @param  array  $values
-     * @param  string|null  $sequence
+     * @param \Illuminate\Database\Query\Builder $query
+     * @param string $sql
+     * @param array $values
+     * @param string|null $sequence
      * @return int
      */
     public function processInsertGetId(Builder $query, $sql, $values, $sequence = null)
@@ -36,19 +36,19 @@ class MySqlProcessor extends Processor
 
         $id = $query->getConnection()->getLastInsertId();
 
-        return is_numeric($id) ? (int) $id : $id;
+        return is_numeric($id) ? (int)$id : $id;
     }
 
     /**
      * Process the results of a columns query.
      *
-     * @param  array  $results
+     * @param array $results
      * @return array
      */
     public function processColumns($results)
     {
         return array_map(function ($result) {
-            $result = (object) $result;
+            $result = (object)$result;
 
             return [
                 'name' => $result->name,
@@ -66,19 +66,19 @@ class MySqlProcessor extends Processor
     /**
      * Process the results of an indexes query.
      *
-     * @param  array  $results
+     * @param array $results
      * @return array
      */
     public function processIndexes($results)
     {
         return array_map(function ($result) {
-            $result = (object) $result;
+            $result = (object)$result;
 
             return [
                 'name' => $name = strtolower($result->name),
                 'columns' => explode(',', $result->columns),
                 'type' => strtolower($result->type),
-                'unique' => (bool) $result->unique,
+                'unique' => (bool)$result->unique,
                 'primary' => $name === 'primary',
             ];
         }, $results);
@@ -87,13 +87,13 @@ class MySqlProcessor extends Processor
     /**
      * Process the results of a foreign keys query.
      *
-     * @param  array  $results
+     * @param array $results
      * @return array
      */
     public function processForeignKeys($results)
     {
         return array_map(function ($result) {
-            $result = (object) $result;
+            $result = (object)$result;
 
             return [
                 'name' => $result->name,

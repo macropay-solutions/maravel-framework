@@ -43,14 +43,14 @@ class Event extends Facade
     /**
      * Replace the bound instance with a fake.
      *
-     * @param  array|string  $eventsToFake
+     * @param array|string $eventsToFake
      * @return \Illuminate\Support\Testing\Fakes\EventFake
      */
     public static function fake($eventsToFake = [])
     {
         $actualDispatcher = static::isFake()
-                ? static::getFacadeRoot()->dispatcher
-                : static::getFacadeRoot();
+            ? static::getFacadeRoot()->dispatcher
+            : static::getFacadeRoot();
 
         return tap(new EventFake($actualDispatcher, $eventsToFake), function ($fake) {
             static::swap($fake);
@@ -63,14 +63,14 @@ class Event extends Facade
     /**
      * Replace the bound instance with a fake that fakes all events except the given events.
      *
-     * @param  string[]|string  $eventsToAllow
+     * @param string[]|string $eventsToAllow
      * @return \Illuminate\Support\Testing\Fakes\EventFake
      */
     public static function fakeExcept($eventsToAllow)
     {
         return static::fake([
             function ($eventName) use ($eventsToAllow) {
-                return ! in_array($eventName, (array) $eventsToAllow);
+                return !in_array($eventName, (array)$eventsToAllow);
             },
         ]);
     }
@@ -78,8 +78,8 @@ class Event extends Facade
     /**
      * Replace the bound instance with a fake during the given callable's execution.
      *
-     * @param  callable  $callable
-     * @param  array  $eventsToFake
+     * @param callable $callable
+     * @param array $eventsToFake
      * @return mixed
      */
     public static function fakeFor(callable $callable, array $eventsToFake = [])
@@ -99,8 +99,8 @@ class Event extends Facade
     /**
      * Replace the bound instance with a fake during the given callable's execution.
      *
-     * @param  callable  $callable
-     * @param  array  $eventsToAllow
+     * @param callable $callable
+     * @param array $eventsToAllow
      * @return mixed
      */
     public static function fakeExceptFor(callable $callable, array $eventsToAllow = [])

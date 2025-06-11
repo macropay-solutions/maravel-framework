@@ -4,12 +4,12 @@ namespace Illuminate\Database\Console\Migrations;
 
 class TableGuesser
 {
-    const CREATE_PATTERNS = [
+    public const CREATE_PATTERNS = [
         '/^create_(\w+)_table$/',
         '/^create_(\w+)$/',
     ];
 
-    const CHANGE_PATTERNS = [
+    public const CHANGE_PATTERNS = [
         '/.+_(to|from|in)_(\w+)_table$/',
         '/.+_(to|from|in)_(\w+)$/',
     ];
@@ -17,7 +17,7 @@ class TableGuesser
     /**
      * Attempt to guess the table name and "creation" status of the given migration.
      *
-     * @param  string  $migration
+     * @param string $migration
      * @return array
      */
     public static function guess($migration)

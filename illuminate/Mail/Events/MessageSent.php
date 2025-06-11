@@ -27,8 +27,8 @@ class MessageSent
     /**
      * Create a new event instance.
      *
-     * @param  \Illuminate\Mail\SentMessage  $message
-     * @param  array  $data
+     * @param \Illuminate\Mail\SentMessage $message
+     * @param array $data
      * @return void
      */
     public function __construct(SentMessage $message, array $data = [])
@@ -56,7 +56,7 @@ class MessageSent
     /**
      * Marshal the object from its serialized data.
      *
-     * @param  array  $data
+     * @param array $data
      * @return void
      */
     public function __unserialize(array $data)
@@ -71,7 +71,7 @@ class MessageSent
     /**
      * Dynamically get the original message.
      *
-     * @param  string  $key
+     * @param string $key
      * @return mixed
      *
      * @throws \Exception
@@ -82,6 +82,6 @@ class MessageSent
             return $this->sent->getOriginalMessage();
         }
 
-        throw new Exception('Unable to access undefined property on '.__CLASS__.': '.$key);
+        throw new Exception('Unable to access undefined property on ' . __CLASS__ . ': ' . $key);
     }
 }

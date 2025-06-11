@@ -33,12 +33,12 @@ class ShowCommand extends DatabaseInspectionCommand
     /**
      * Execute the console command.
      *
-     * @param  \Illuminate\Database\ConnectionResolverInterface  $connections
+     * @param \Illuminate\Database\ConnectionResolverInterface $connections
      * @return int
      */
     public function handle(ConnectionResolverInterface $connections)
     {
-        if (! $this->ensureDependenciesExist()) {
+        if (!$this->ensureDependenciesExist()) {
             return 1;
         }
 
@@ -70,17 +70,17 @@ class ShowCommand extends DatabaseInspectionCommand
     /**
      * Get information regarding the tables within the database.
      *
-     * @param  \Illuminate\Database\ConnectionInterface  $connection
-     * @param  \Doctrine\DBAL\Schema\AbstractSchemaManager  $schema
+     * @param \Illuminate\Database\ConnectionInterface $connection
+     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
      * @return \Illuminate\Support\Collection
      */
     protected function tables(ConnectionInterface $connection, AbstractSchemaManager $schema)
     {
-        return collect($schema->listTables())->map(fn (Table $table, $index) => [
+        return collect($schema->listTables())->map(fn(Table $table, $index) => [
             'table' => $table->getName(),
             'size' => $this->getTableSize($connection, $table->getName()),
             'rows' => $this->option('counts') ? $connection->table($table->getName())->count() : null,
-            'engine' => rescue(fn () => $table->getOption('engine'), null, false),
+            'engine' => rescue(fn() => $table->getOption('engine'), null, false),
             'comment' => $table->getComment(),
         ]);
     }
@@ -88,16 +88,16 @@ class ShowCommand extends DatabaseInspectionCommand
     /**
      * Get information regarding the views within the database.
      *
-     * @param  \Illuminate\Database\ConnectionInterface  $connection
-     * @param  \Doctrine\DBAL\Schema\AbstractSchemaManager  $schema
+     * @param \Illuminate\Database\ConnectionInterface $connection
+     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schema
      * @return \Illuminate\Support\Collection
      */
     protected function collectViews(ConnectionInterface $connection, AbstractSchemaManager $schema)
     {
         return collect($schema->listViews())
-            ->reject(fn (View $view) => str($view->getName())
+            ->reject(fn(View $view) => str($view->getName())
                 ->startsWith(['pg_catalog', 'information_schema', 'spt_']))
-            ->map(fn (View $view) => [
+            ->map(fn(View $view) => [
                 'view' => $view->getName(),
                 'rows' => $connection->table($view->getName())->count(),
             ]);
@@ -106,7 +106,7 @@ class ShowCommand extends DatabaseInspectionCommand
     /**
      * Render the database information.
      *
-     * @param  array  $data
+     * @param array $data
      * @return void
      */
     protected function display(array $data)
@@ -117,7 +117,7 @@ class ShowCommand extends DatabaseInspectionCommand
     /**
      * Render the database information as JSON.
      *
-     * @param  array  $data
+     * @param array $data
      * @return void
      */
     protected function displayJson(array $data)
@@ -128,7 +128,7 @@ class ShowCommand extends DatabaseInspectionCommand
     /**
      * Render the database information formatted for the CLI.
      *
-     * @param  array  $data
+     * @param array $data
      * @return void
      */
     protected function displayForCli(array $data)
@@ -139,7 +139,7 @@ class ShowCommand extends DatabaseInspectionCommand
 
         $this->newLine();
 
-        $this->components->twoColumnDetail('<fg=green;options=bold>'.$platform['name'].'</>');
+        $this->components->twoColumnDetail('<fg=green;options=bold>' . $platform['name'] . '</>');
         $this->components->twoColumnDetail('Database', Arr::get($platform['config'], 'database'));
         $this->components->twoColumnDetail('Host', Arr::get($platform['config'], 'host'));
         $this->components->twoColumnDetail('Port', Arr::get($platform['config'], 'port'));
@@ -149,13 +149,18 @@ class ShowCommand extends DatabaseInspectionCommand
         $this->components->twoColumnDetail('Tables', $tables->count());
 
         if ($tableSizeSum = $tables->sum('size')) {
-            $this->components->twoColumnDetail('Total Size', number_format($tableSizeSum / 1024 / 1024, 2).'MiB');
+            $this->components->twoColumnDetail('Total Size', number_format($tableSizeSum / 1024 / 1024, 2) . 'MiB');
         }
 
         $this->newLine();
 
         if ($tables->isNotEmpty()) {
-            $this->components->twoColumnDetail('<fg=green;options=bold>Table</>', 'Size (MiB)'.($this->option('counts') ? ' <fg=gray;options=bold>/</> <fg=yellow;options=bold>Rows</>' : ''));
+            $this->components->twoColumnDetail(
+                '<fg=green;options=bold>Table</>',
+                'Size (MiB)' . ($this->option(
+                    'counts'
+                ) ? ' <fg=gray;options=bold>/</> <fg=yellow;options=bold>Rows</>' : '')
+            );
 
             $tables->each(function ($table) {
                 if ($tableSize = $table['size']) {
@@ -163,8 +168,12 @@ class ShowCommand extends DatabaseInspectionCommand
                 }
 
                 $this->components->twoColumnDetail(
-                    $table['table'].($this->output->isVerbose() ? ' <fg=gray>'.$table['engine'].'</>' : null),
-                    ($tableSize ? $tableSize : '—').($this->option('counts') ? ' <fg=gray;options=bold>/</> <fg=yellow;options=bold>'.number_format($table['rows']).'</>' : '')
+                    $table['table'] . ($this->output->isVerbose() ? ' <fg=gray>' . $table['engine'] . '</>' : null),
+                    ($tableSize ? $tableSize : '—') . ($this->option(
+                        'counts'
+                    ) ? ' <fg=gray;options=bold>/</> <fg=yellow;options=bold>' . number_format(
+                            $table['rows']
+                        ) . '</>' : '')
                 );
 
                 if ($this->output->isVerbose()) {
@@ -182,7 +191,7 @@ class ShowCommand extends DatabaseInspectionCommand
         if ($views && $views->isNotEmpty()) {
             $this->components->twoColumnDetail('<fg=green;options=bold>View</>', '<fg=green;options=bold>Rows</>');
 
-            $views->each(fn ($view) => $this->components->twoColumnDetail($view['view'], number_format($view['rows'])));
+            $views->each(fn($view) => $this->components->twoColumnDetail($view['view'], number_format($view['rows'])));
 
             $this->newLine();
         }

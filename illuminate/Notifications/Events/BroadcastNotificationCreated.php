@@ -11,7 +11,8 @@ use Illuminate\Support\Arr;
 
 class BroadcastNotificationCreated implements ShouldBroadcast
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * The notifiable entity who received the notification.
@@ -37,9 +38,9 @@ class BroadcastNotificationCreated implements ShouldBroadcast
     /**
      * Create a new event instance.
      *
-     * @param  mixed  $notifiable
-     * @param  \Illuminate\Notifications\Notification  $notification
-     * @param  array  $data
+     * @param mixed $notifiable
+     * @param \Illuminate\Notifications\Notification $notification
+     * @param array $data
      * @return void
      */
     public function __construct($notifiable, $notification, $data)
@@ -56,14 +57,16 @@ class BroadcastNotificationCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        if ($this->notifiable instanceof AnonymousNotifiable &&
-            $this->notifiable->routeNotificationFor('broadcast')) {
+        if (
+            $this->notifiable instanceof AnonymousNotifiable &&
+            $this->notifiable->routeNotificationFor('broadcast')
+        ) {
             $channels = Arr::wrap($this->notifiable->routeNotificationFor('broadcast'));
         } else {
             $channels = $this->notification->broadcastOn();
         }
 
-        if (! empty($channels)) {
+        if (!empty($channels)) {
             return $channels;
         }
 
@@ -89,7 +92,7 @@ class BroadcastNotificationCreated implements ShouldBroadcast
 
         $class = str_replace('\\', '.', get_class($this->notifiable));
 
-        return $class.'.'.$this->notifiable->getKey();
+        return $class . '.' . $this->notifiable->getKey();
     }
 
     /**
@@ -117,8 +120,8 @@ class BroadcastNotificationCreated implements ShouldBroadcast
     public function broadcastType()
     {
         return method_exists($this->notification, 'broadcastType')
-                    ? $this->notification->broadcastType()
-                    : get_class($this->notification);
+            ? $this->notification->broadcastType()
+            : get_class($this->notification);
     }
 
     /**
@@ -129,7 +132,7 @@ class BroadcastNotificationCreated implements ShouldBroadcast
     public function broadcastAs()
     {
         return method_exists($this->notification, 'broadcastAs')
-                ? $this->notification->broadcastAs()
-                : __CLASS__;
+            ? $this->notification->broadcastAs()
+            : __CLASS__;
     }
 }

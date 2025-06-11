@@ -24,14 +24,14 @@ class FakeProcessSequence
     /**
      * The response that should be returned when the sequence is empty.
      *
-     * @var \Illuminate\Contracts\Process\ProcessResult|\Illuminate\Process\FakeProcessDescription
+     * @var \Illuminate\Contracts\Process\ProcessResult|FakeProcessDescription
      */
     protected $emptyProcess;
 
     /**
      * Create a new fake process sequence instance.
      *
-     * @param  array  $processes
+     * @param array $processes
      * @return void
      */
     public function __construct(array $processes = [])
@@ -42,7 +42,7 @@ class FakeProcessSequence
     /**
      * Push a new process result or description onto the sequence.
      *
-     * @param  \Illuminate\Contracts\Process\ProcessResult|\Illuminate\Process\FakeProcessDescription|array|string  $process
+     * @param \Illuminate\Contracts\Process\ProcessResult|FakeProcessDescription|array|string $process
      * @return $this
      */
     public function push(ProcessResultContract|FakeProcessDescription|array|string $process)
@@ -55,7 +55,7 @@ class FakeProcessSequence
     /**
      * Make the sequence return a default result when it is empty.
      *
-     * @param  \Illuminate\Contracts\Process\ProcessResult|\Illuminate\Process\FakeProcessDescription|array|string  $process
+     * @param \Illuminate\Contracts\Process\ProcessResult|FakeProcessDescription|array|string $process
      * @return $this
      */
     public function whenEmpty(ProcessResultContract|FakeProcessDescription|array|string $process)
@@ -69,14 +69,14 @@ class FakeProcessSequence
     /**
      * Convert the given result into an actual process result or description.
      *
-     * @param  \Illuminate\Contracts\Process\ProcessResult|\Illuminate\Process\FakeProcessDescription|array|string  $process
-     * @return \Illuminate\Contracts\Process\ProcessResult|\Illuminate\Process\FakeProcessDescription
+     * @param \Illuminate\Contracts\Process\ProcessResult|FakeProcessDescription|array|string $process
+     * @return \Illuminate\Contracts\Process\ProcessResult|FakeProcessDescription
      */
     protected function toProcessResult(ProcessResultContract|FakeProcessDescription|array|string $process)
     {
         return is_array($process) || is_string($process)
-                ? new FakeProcessResult(output: $process)
-                : $process;
+            ? new FakeProcessResult(output: $process)
+            : $process;
     }
 
     /**
@@ -86,7 +86,7 @@ class FakeProcessSequence
      */
     public function dontFailWhenEmpty()
     {
-        return $this->whenEmpty(new FakeProcessResult);
+        return $this->whenEmpty(new FakeProcessResult());
     }
 
     /**
@@ -102,7 +102,7 @@ class FakeProcessSequence
     /**
      * Get the next process in the sequence.
      *
-     * @return \Illuminate\Contracts\Process\ProcessResult|\Illuminate\Process\FakeProcessDescription
+     * @return \Illuminate\Contracts\Process\ProcessResult|FakeProcessDescription
      *
      * @throws \OutOfBoundsException
      */
@@ -112,8 +112,8 @@ class FakeProcessSequence
             throw new OutOfBoundsException('A process was invoked, but the process result sequence is empty.');
         }
 
-        if (! $this->failWhenEmpty && count($this->processes) === 0) {
-            return value($this->emptyProcess ?? new FakeProcessResult);
+        if (!$this->failWhenEmpty && count($this->processes) === 0) {
+            return value($this->emptyProcess ?? new FakeProcessResult());
         }
 
         return array_shift($this->processes);

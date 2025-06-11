@@ -40,20 +40,20 @@ class Spinner extends Prompt
      *
      * @template TReturn of mixed
      *
-     * @param  \Closure(): TReturn  $callback
+     * @param \Closure(): TReturn $callback
      * @return TReturn
      */
     public function spin(Closure $callback): mixed
     {
         $this->capturePreviousNewLines();
 
-        if (! function_exists('pcntl_fork')) {
+        if (!function_exists('pcntl_fork')) {
             return $this->renderStatically($callback);
         }
 
         $originalAsync = pcntl_async_signals(true);
 
-        pcntl_signal(SIGINT, fn () => exit());
+        pcntl_signal(SIGINT, fn() => exit());
 
         try {
             $this->hideCursor();
@@ -99,7 +99,7 @@ class Spinner extends Prompt
      *
      * @template TReturn of mixed
      *
-     * @param  \Closure(): TReturn  $callback
+     * @param \Closure(): TReturn $callback
      * @return TReturn
      */
     protected function renderStatically(Closure $callback): mixed
@@ -151,7 +151,7 @@ class Spinner extends Prompt
      */
     public function __destruct()
     {
-        if (! empty($this->pid)) {
+        if (!empty($this->pid)) {
             posix_kill($this->pid, SIGHUP);
         }
 
