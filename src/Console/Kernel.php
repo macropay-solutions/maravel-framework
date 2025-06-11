@@ -60,7 +60,7 @@ class Kernel implements KernelContract
     /**
      * Create a new console kernel instance.
      *
-     * @param  \Laravel\Lumen\Application  $app
+     * @param \Laravel\Lumen\Application $app
      * @return void
      */
     public function __construct(Application $app)
@@ -80,7 +80,7 @@ class Kernel implements KernelContract
     /**
      * Set the request instance for URL generation.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param \Illuminate\Contracts\Foundation\Application $app
      * @return void
      */
     protected function setRequestForConsole(Application $app)
@@ -98,17 +98,25 @@ class Kernel implements KernelContract
             ]);
         }
 
-        $app->instance('request', Request::create(
-            $uri, 'GET', [], [], [], $server
-        ));
+        $app->instance(
+            'request',
+            Request::create(
+                $uri,
+                'GET',
+                [],
+                [],
+                [],
+                $server
+            )
+        );
     }
 
     /**
      * Re-route the Symfony command events to their Laravel counterparts.
      *
+     * @return $this
      * @internal
      *
-     * @return $this
      */
     public function rerouteSymfonyCommandEvents()
     {
@@ -128,10 +136,20 @@ class Kernel implements KernelContract
 
             $this->symfonyDispatcher->addListener(ConsoleEvents::TERMINATE, function (ConsoleTerminateEvent $event) {
                 $this->app[Dispatcher::class]->dispatch(
-//                    new CommandFinished($event->getCommand()->getName(), $event->getInput(), $event->getOutput(), $event->getExitCode())
+                    //new CommandFinished(
+                    //$event->getCommand()->getName(),
+                    // $event->getInput(),
+                    // $event->getOutput(),
+                    // $event->getExitCode()
+                    //)
                     \app(
                         CommandFinished::class,
-                        [$event->getCommand()->getName(), $event->getInput(), $event->getOutput(), $event->getExitCode()]
+                        [
+                            $event->getCommand()->getName(),
+                            $event->getInput(),
+                            $event->getOutput(),
+                            $event->getExitCode(),
+                        ]
                     )
                 );
             });
@@ -148,7 +166,8 @@ class Kernel implements KernelContract
     protected function defineConsoleSchedule()
     {
         $this->app->instance(
-            Schedule::class, $schedule = new Schedule
+            Schedule::class,
+            $schedule = new Schedule()
         );
 
         $this->schedule($schedule);
@@ -157,8 +176,8 @@ class Kernel implements KernelContract
     /**
      * Run the console application.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return int
      */
     public function handle($input, $output = null)
@@ -193,8 +212,8 @@ class Kernel implements KernelContract
     /**
      * Terminate the application.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  int  $status
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param int $status
      * @return void
      */
     public function terminate($input, $status)
@@ -205,7 +224,7 @@ class Kernel implements KernelContract
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -216,8 +235,8 @@ class Kernel implements KernelContract
     /**
      * Run an Artisan console command by name.
      *
-     * @param  string  $command
-     * @param  array  $parameters
+     * @param string $command
+     * @param array $parameters
      * @return int
      */
     public function call($command, array $parameters = [], $outputBuffer = null)
@@ -228,8 +247,8 @@ class Kernel implements KernelContract
     /**
      * Queue the given console command.
      *
-     * @param  string  $command
-     * @param  array  $parameters
+     * @param string $command
+     * @param array $parameters
      * @return void
      */
     public function queue($command, array $parameters = [])
@@ -267,8 +286,8 @@ class Kernel implements KernelContract
         if (is_null($this->artisan)) {
 //            $this->artisan = (new Artisan($this->app, $this->app->make('events'), $this->app->version()))
             $this->artisan = \app(Artisan::class, [$this->app, $this->app->make('events'), $this->app->version()])
-                                ->resolveCommands($this->getCommands())
-                                ->setContainerCommandLoader();
+                ->resolveCommands($this->getCommands())
+                ->setContainerCommandLoader();
 
             if ($this->symfonyDispatcher instanceof EventDispatcher) {
                 $this->artisan->setDispatcher($this->symfonyDispatcher);
@@ -294,7 +313,7 @@ class Kernel implements KernelContract
     /**
      * Report the exception to the exception handler.
      *
-     * @param  \Throwable  $e
+     * @param \Throwable $e
      * @return void
      */
     protected function reportException(Throwable $e)
@@ -305,8 +324,8 @@ class Kernel implements KernelContract
     /**
      * Report the exception to the exception handler.
      *
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @param  \Throwable  $e
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Throwable $e
      * @return void
      */
     protected function renderException($output, Throwable $e)

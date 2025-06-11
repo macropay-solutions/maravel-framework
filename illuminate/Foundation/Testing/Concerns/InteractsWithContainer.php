@@ -28,8 +28,8 @@ trait InteractsWithContainer
     /**
      * Register an instance of an object in the container.
      *
-     * @param  string  $abstract
-     * @param  object  $instance
+     * @param string $abstract
+     * @param object $instance
      * @return object
      */
     protected function swap($abstract, $instance)
@@ -40,8 +40,8 @@ trait InteractsWithContainer
     /**
      * Register an instance of an object in the container.
      *
-     * @param  string  $abstract
-     * @param  object  $instance
+     * @param string $abstract
+     * @param object $instance
      * @return object
      */
     protected function instance($abstract, $instance)
@@ -54,8 +54,8 @@ trait InteractsWithContainer
     /**
      * Mock an instance of an object in the container.
      *
-     * @param  string  $abstract
-     * @param  \Closure|null  $mock
+     * @param string $abstract
+     * @param \Closure|null $mock
      * @return \Mockery\MockInterface
      */
     protected function mock($abstract, ?Closure $mock = null)
@@ -66,8 +66,8 @@ trait InteractsWithContainer
     /**
      * Mock a partial instance of an object in the container.
      *
-     * @param  string  $abstract
-     * @param  \Closure|null  $mock
+     * @param string $abstract
+     * @param \Closure|null $mock
      * @return \Mockery\MockInterface
      */
     protected function partialMock($abstract, ?Closure $mock = null)
@@ -78,8 +78,8 @@ trait InteractsWithContainer
     /**
      * Spy an instance of an object in the container.
      *
-     * @param  string  $abstract
-     * @param  \Closure|null  $mock
+     * @param string $abstract
+     * @param \Closure|null $mock
      * @return \Mockery\MockInterface
      */
     protected function spy($abstract, ?Closure $mock = null)
@@ -90,7 +90,7 @@ trait InteractsWithContainer
     /**
      * Instruct the container to forget a previously mocked / spied instance of an object.
      *
-     * @param  string  $abstract
+     * @param string $abstract
      * @return $this
      */
     protected function forgetMock($abstract)
@@ -113,78 +113,80 @@ trait InteractsWithContainer
 
         Facade::clearResolvedInstance(Vite::class);
 
-        $this->swap(Vite::class, new class extends Vite
-        {
-            public function __invoke($entrypoints, $buildDirectory = null)
-            {
-                return new HtmlString('');
-            }
+        $this->swap(
+            Vite::class,
+            new class extends Vite {
+                public function __invoke($entrypoints, $buildDirectory = null)
+                {
+                    return new HtmlString('');
+                }
 
-            public function __call($method, $parameters)
-            {
-                return '';
-            }
+                public function __call($method, $parameters)
+                {
+                    return '';
+                }
 
-            public function __toString()
-            {
-                return '';
-            }
+                public function __toString()
+                {
+                    return '';
+                }
 
-            public function useIntegrityKey($key)
-            {
-                return $this;
-            }
+                public function useIntegrityKey($key)
+                {
+                    return $this;
+                }
 
-            public function useBuildDirectory($path)
-            {
-                return $this;
-            }
+                public function useBuildDirectory($path)
+                {
+                    return $this;
+                }
 
-            public function useHotFile($path)
-            {
-                return $this;
-            }
+                public function useHotFile($path)
+                {
+                    return $this;
+                }
 
-            public function withEntryPoints($entryPoints)
-            {
-                return $this;
-            }
+                public function withEntryPoints($entryPoints)
+                {
+                    return $this;
+                }
 
-            public function useScriptTagAttributes($attributes)
-            {
-                return $this;
-            }
+                public function useScriptTagAttributes($attributes)
+                {
+                    return $this;
+                }
 
-            public function useStyleTagAttributes($attributes)
-            {
-                return $this;
-            }
+                public function useStyleTagAttributes($attributes)
+                {
+                    return $this;
+                }
 
-            public function usePreloadTagAttributes($attributes)
-            {
-                return $this;
-            }
+                public function usePreloadTagAttributes($attributes)
+                {
+                    return $this;
+                }
 
-            public function preloadedAssets()
-            {
-                return [];
-            }
+                public function preloadedAssets()
+                {
+                    return [];
+                }
 
-            public function reactRefresh()
-            {
-                return '';
-            }
+                public function reactRefresh()
+                {
+                    return '';
+                }
 
-            public function content($asset, $buildDirectory = null)
-            {
-                return '';
-            }
+                public function content($asset, $buildDirectory = null)
+                {
+                    return '';
+                }
 
-            public function asset($asset, $buildDirectory = null)
-            {
-                return '';
+                public function asset($asset, $buildDirectory = null)
+                {
+                    return '';
+                }
             }
-        });
+        );
 
         return $this;
     }

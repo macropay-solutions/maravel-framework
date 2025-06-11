@@ -7,14 +7,14 @@ trait InteractsWithStrings
     /**
      * Get the length of the longest line.
      *
-     * @param  array<string>  $lines
+     * @param array<string> $lines
      */
     protected function longest(array $lines, int $padding = 0): int
     {
         return max(
             $this->minWidth,
             collect($lines)
-                ->map(fn ($line) => mb_strwidth($this->stripEscapeSequences($line)) + $padding)
+                ->map(fn($line) => mb_strwidth($this->stripEscapeSequences($line)) + $padding)
                 ->max()
         );
     }

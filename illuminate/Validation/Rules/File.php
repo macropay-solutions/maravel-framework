@@ -14,7 +14,8 @@ use InvalidArgumentException;
 
 class File implements Rule, DataAwareRule, ValidatorAwareRule
 {
-    use Conditionable, Macroable;
+    use Conditionable;
+    use Macroable;
 
     /**
      * The MIME types that the given file should match. This array may also contain file extensions.
@@ -84,7 +85,7 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
      *
      * If no arguments are passed, the default file rule configuration will be returned.
      *
-     * @param  static|callable|null  $callback
+     * @param static|callable|null $callback
      * @return static|null
      */
     public static function defaults($callback = null)
@@ -93,8 +94,10 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
             return static::default();
         }
 
-        if (! is_callable($callback) && ! $callback instanceof static) {
-            throw new InvalidArgumentException('The given callback should be callable or an instance of '.static::class);
+        if (!is_callable($callback) && !$callback instanceof static) {
+            throw new InvalidArgumentException(
+                'The given callback should be callable or an instance of ' . static::class
+            );
         }
 
         static::$defaultCallback = $callback;
@@ -128,23 +131,23 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     /**
      * Limit the uploaded file to the given MIME types or file extensions.
      *
-     * @param  string|array<int, string>  $mimetypes
+     * @param string|array<int, string> $mimetypes
      * @return static
      */
     public static function types($mimetypes)
     {
-        return tap(new static(), fn ($file) => $file->allowedMimetypes = (array) $mimetypes);
+        return tap(new static(), fn($file) => $file->allowedMimetypes = (array)$mimetypes);
     }
 
     /**
      * Limit the uploaded file to the given file extensions.
      *
-     * @param  string|array<int, string>  $extensions
+     * @param string|array<int, string> $extensions
      * @return $this
      */
     public function extensions($extensions)
     {
-        $this->allowedExtensions = (array) $extensions;
+        $this->allowedExtensions = (array)$extensions;
 
         return $this;
     }
@@ -152,7 +155,7 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     /**
      * Indicate that the uploaded file should be exactly a certain size in kilobytes.
      *
-     * @param  string|int  $size
+     * @param string|int $size
      * @return $this
      */
     public function size($size)
@@ -166,8 +169,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     /**
      * Indicate that the uploaded file should be between a minimum and maximum size in kilobytes.
      *
-     * @param  string|int  $minSize
-     * @param  string|int  $maxSize
+     * @param string|int $minSize
+     * @param string|int $maxSize
      * @return $this
      */
     public function between($minSize, $maxSize)
@@ -181,7 +184,7 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     /**
      * Indicate that the uploaded file should be no less than the given number of kilobytes.
      *
-     * @param  string|int  $size
+     * @param string|int $size
      * @return $this
      */
     public function min($size)
@@ -194,7 +197,7 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     /**
      * Indicate that the uploaded file should be no more than the given number of kilobytes.
      *
-     * @param  string|int  $size
+     * @param string|int $size
      * @return $this
      */
     public function max($size)
@@ -207,30 +210,32 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     /**
      * Convert a potentially human-friendly file size to kilobytes.
      *
-     * @param  string|int  $size
+     * @param string|int $size
      * @return mixed
      */
     protected function toKilobytes($size)
     {
-        if (! is_string($size)) {
+        if (!is_string($size)) {
             return $size;
         }
 
         $value = floatval($size);
 
-        return round(match (true) {
-            Str::endsWith($size, 'kb') => $value * 1,
-            Str::endsWith($size, 'mb') => $value * 1000,
-            Str::endsWith($size, 'gb') => $value * 1000000,
-            Str::endsWith($size, 'tb') => $value * 1000000000,
-            default => throw new InvalidArgumentException('Invalid file size suffix.'),
-        });
+        return round(
+            match (true) {
+                Str::endsWith($size, 'kb') => $value * 1,
+                Str::endsWith($size, 'mb') => $value * 1000,
+                Str::endsWith($size, 'gb') => $value * 1000000,
+                Str::endsWith($size, 'tb') => $value * 1000000000,
+                default => throw new InvalidArgumentException('Invalid file size suffix.'),
+            }
+        );
     }
 
     /**
      * Specify additional validation rules that should be merged with the default rules during validation.
      *
-     * @param  string|array  $rules
+     * @param string|array $rules
      * @return $this
      */
     public function rules($rules)
@@ -243,8 +248,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
@@ -276,8 +281,8 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
 
         $rules = array_merge($rules, $this->buildMimetypes());
 
-        if (! empty($this->allowedExtensions)) {
-            $rules[] = 'extensions:'.implode(',', array_map('strtolower', $this->allowedExtensions));
+        if (!empty($this->allowedExtensions)) {
+            $rules[] = 'extensions:' . implode(',', array_map('strtolower', $this->allowedExtensions));
         }
 
         $rules[] = match (true) {
@@ -306,17 +311,17 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
 
         $mimetypes = array_filter(
             $this->allowedMimetypes,
-            fn ($type) => str_contains($type, '/')
+            fn($type) => str_contains($type, '/')
         );
 
         $mimes = array_diff($this->allowedMimetypes, $mimetypes);
 
         if (count($mimetypes) > 0) {
-            $rules[] = 'mimetypes:'.implode(',', $mimetypes);
+            $rules[] = 'mimetypes:' . implode(',', $mimetypes);
         }
 
         if (count($mimes) > 0) {
-            $rules[] = 'mimes:'.implode(',', $mimes);
+            $rules[] = 'mimes:' . implode(',', $mimes);
         }
 
         return $rules;
@@ -325,7 +330,7 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     /**
      * Adds the given failures, and return false.
      *
-     * @param  array|string  $messages
+     * @param array|string $messages
      * @return bool
      */
     protected function fail($messages)
@@ -352,7 +357,7 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     /**
      * Set the current validator.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @param \Illuminate\Contracts\Validation\Validator $validator
      * @return $this
      */
     public function setValidator($validator)
@@ -365,7 +370,7 @@ class File implements Rule, DataAwareRule, ValidatorAwareRule
     /**
      * Set the current data under validation.
      *
-     * @param  array  $data
+     * @param array $data
      * @return $this
      */
     public function setData($data)

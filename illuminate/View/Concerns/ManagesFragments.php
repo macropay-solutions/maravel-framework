@@ -23,7 +23,7 @@ trait ManagesFragments
     /**
      * Start injecting content into a fragment.
      *
-     * @param  string  $fragment
+     * @param string $fragment
      * @return void
      */
     public function startFragment($fragment)
@@ -56,8 +56,8 @@ trait ManagesFragments
     /**
      * Get the contents of a fragment.
      *
-     * @param  string  $name
-     * @param  string|null  $default
+     * @param string $name
+     * @param string|null $default
      * @return mixed
      */
     public function getFragment($name, $default = null)

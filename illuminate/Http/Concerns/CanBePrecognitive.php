@@ -9,12 +9,12 @@ trait CanBePrecognitive
     /**
      * Filter the given array of rules into an array of rules that are included in precognitive headers.
      *
-     * @param  array  $rules
+     * @param array $rules
      * @return array
      */
     public function filterPrecognitiveRules($rules)
     {
-        if (! $this->headers->has('Precognition-Validate-Only')) {
+        if (!$this->headers->has('Precognition-Validate-Only')) {
             return $rules;
         }
 

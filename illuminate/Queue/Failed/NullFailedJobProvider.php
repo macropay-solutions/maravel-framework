@@ -7,10 +7,10 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Log a failed job into storage.
      *
-     * @param  string  $connection
-     * @param  string  $queue
-     * @param  string  $payload
-     * @param  \Throwable  $exception
+     * @param string $connection
+     * @param string $queue
+     * @param string $payload
+     * @param \Throwable $exception
      * @return int|null
      */
     public function log($connection, $queue, $payload, $exception)
@@ -21,7 +21,7 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Get the IDs of all of the failed jobs.
      *
-     * @param  string|null  $queue
+     * @param string|null $queue
      * @return array
      */
     public function ids($queue = null)
@@ -42,7 +42,7 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Get a single failed job.
      *
-     * @param  mixed  $id
+     * @param mixed $id
      * @return object|null
      */
     public function find($id)
@@ -53,7 +53,7 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Delete a single failed job from storage.
      *
-     * @param  mixed  $id
+     * @param mixed $id
      * @return bool
      */
     public function forget($id)
@@ -64,7 +64,7 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Flush all of the failed jobs from storage.
      *
-     * @param  int|null  $hours
+     * @param int|null $hours
      * @return void
      */
     public function flush($hours = null)
@@ -75,8 +75,8 @@ class NullFailedJobProvider implements CountableFailedJobProvider, FailedJobProv
     /**
      * Count the failed jobs.
      *
-     * @param  string|null  $connection
-     * @param  string|null  $queue
+     * @param string|null $connection
+     * @param string|null $queue
      * @return int
      */
     public function count($connection = null, $queue = null)

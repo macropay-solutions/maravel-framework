@@ -39,6 +39,6 @@ class SessionTableCommand extends MigrationGeneratorCommand
      */
     protected function migrationStubFile()
     {
-        return __DIR__.'/stubs/database.stub';
+        return __DIR__ . '/stubs/database.stub';
     }
 }

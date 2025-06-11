@@ -10,7 +10,7 @@ class BelongsToManyRelationship
     /**
      * The related factory instance.
      *
-     * @var \Illuminate\Database\Eloquent\Factories\Factory|\Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|array
+     * @var Factory|\Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|array
      */
     protected $factory;
 
@@ -31,9 +31,9 @@ class BelongsToManyRelationship
     /**
      * Create a new attached relationship definition.
      *
-     * @param  \Illuminate\Database\Eloquent\Factories\Factory|\Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|array  $factory
-     * @param  callable|array  $pivot
-     * @param  string  $relationship
+     * @param Factory|\Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Model|array $factory
+     * @param callable|array $pivot
+     * @param string $relationship
      * @return void
      */
     public function __construct($factory, $pivot, $relationship)
@@ -46,23 +46,25 @@ class BelongsToManyRelationship
     /**
      * Create the attached relationship for the given model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return void
      */
     public function createFor(Model $model)
     {
-        Collection::wrap($this->factory instanceof Factory ? $this->factory->create([], $model) : $this->factory)->each(function ($attachable) use ($model) {
-            $model->{$this->relationship}()->attach(
-                $attachable,
-                is_callable($this->pivot) ? call_user_func($this->pivot, $model) : $this->pivot
-            );
-        });
+        Collection::wrap($this->factory instanceof Factory ? $this->factory->create([], $model) : $this->factory)->each(
+            function ($attachable) use ($model) {
+                $model->{$this->relationship}()->attach(
+                    $attachable,
+                    is_callable($this->pivot) ? call_user_func($this->pivot, $model) : $this->pivot
+                );
+            }
+        );
     }
 
     /**
      * Specify the model instances to always use when creating relationships.
      *
-     * @param  \Illuminate\Support\Collection  $recycle
+     * @param \Illuminate\Support\Collection $recycle
      * @return $this
      */
     public function recycle($recycle)

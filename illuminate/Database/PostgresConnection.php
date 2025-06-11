@@ -16,7 +16,7 @@ class PostgresConnection extends Connection
     /**
      * Escape a binary value for safe SQL embedding.
      *
-     * @param  string  $value
+     * @param string $value
      * @return string
      */
     protected function escapeBinary($value)
@@ -29,7 +29,7 @@ class PostgresConnection extends Connection
     /**
      * Escape a bool value for safe SQL embedding.
      *
-     * @param  bool  $value
+     * @param bool $value
      * @return string
      */
     protected function escapeBool($value)
@@ -40,7 +40,7 @@ class PostgresConnection extends Connection
     /**
      * Determine if the given database exception was caused by a unique constraint violation.
      *
-     * @param  \Exception  $exception
+     * @param \Exception $exception
      * @return bool
      */
     protected function isUniqueConstraintError(Exception $exception)
@@ -55,7 +55,7 @@ class PostgresConnection extends Connection
      */
     protected function getDefaultQueryGrammar()
     {
-        ($grammar = new QueryGrammar)->setConnection($this);
+        ($grammar = new QueryGrammar())->setConnection($this);
 
         return $this->withTablePrefix($grammar);
     }
@@ -82,7 +82,7 @@ class PostgresConnection extends Connection
      */
     protected function getDefaultSchemaGrammar()
     {
-        ($grammar = new SchemaGrammar)->setConnection($this);
+        ($grammar = new SchemaGrammar())->setConnection($this);
 
         return $this->withTablePrefix($grammar);
     }
@@ -90,8 +90,8 @@ class PostgresConnection extends Connection
     /**
      * Get the schema state for the connection.
      *
-     * @param  \Illuminate\Filesystem\Filesystem|null  $files
-     * @param  callable|null  $processFactory
+     * @param \Illuminate\Filesystem\Filesystem|null $files
+     * @param callable|null $processFactory
      * @return \Illuminate\Database\Schema\PostgresSchemaState
      */
     public function getSchemaState(?Filesystem $files = null, ?callable $processFactory = null)
@@ -106,7 +106,7 @@ class PostgresConnection extends Connection
      */
     protected function getDefaultPostProcessor()
     {
-        return new PostgresProcessor;
+        return new PostgresProcessor();
     }
 
     /**
@@ -116,6 +116,6 @@ class PostgresConnection extends Connection
      */
     protected function getDoctrineDriver()
     {
-        return new PostgresDriver;
+        return new PostgresDriver();
     }
 }

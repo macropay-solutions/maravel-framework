@@ -37,7 +37,7 @@ class Router
     /**
      * Router constructor.
      *
-     * @param  \Laravel\Lumen\Application  $app
+     * @param \Laravel\Lumen\Application $app
      */
     public function __construct($app)
     {
@@ -47,8 +47,8 @@ class Router
     /**
      * Register a set of routes with a set of shared attributes.
      *
-     * @param  array  $attributes
-     * @param  \Closure  $callback
+     * @param array $attributes
+     * @param \Closure $callback
      * @return void
      */
     public function group(array $attributes, \Closure $callback)
@@ -67,12 +67,12 @@ class Router
     /**
      * Update the group stack with the given attributes.
      *
-     * @param  array  $attributes
+     * @param array $attributes
      * @return void
      */
     protected function updateGroupStack(array $attributes)
     {
-        if (! empty($this->groupStack)) {
+        if (!empty($this->groupStack)) {
             $attributes = $this->mergeWithLastGroup($attributes);
         }
 
@@ -82,8 +82,8 @@ class Router
     /**
      * Merge the given group attributes.
      *
-     * @param  array  $new
-     * @param  array  $old
+     * @param array $new
+     * @param array $old
      * @return array
      */
     public function mergeGroup($new, $old)
@@ -97,10 +97,10 @@ class Router
         }
 
         if (isset($old['as'])) {
-            $new['as'] = $old['as'].(isset($new['as']) ? '.'.$new['as'] : '');
+            $new['as'] = $old['as'] . (isset($new['as']) ? '.' . $new['as'] : '');
         }
 
-        if (isset($old['suffix']) && ! isset($new['suffix'])) {
+        if (isset($old['suffix']) && !isset($new['suffix'])) {
             $new['suffix'] = $old['suffix'];
         }
 
@@ -110,7 +110,7 @@ class Router
     /**
      * Merge the given group attributes with the last added group.
      *
-     * @param  array  $new
+     * @param array $new
      * @return array
      */
     protected function mergeWithLastGroup($new)
@@ -121,15 +121,15 @@ class Router
     /**
      * Format the uses prefix for the new group attributes.
      *
-     * @param  array  $new
-     * @param  array  $old
+     * @param array $new
+     * @param array $old
      * @return string|null
      */
     protected static function formatUsesPrefix($new, $old)
     {
         if (isset($new['namespace'])) {
             return isset($old['namespace']) && strpos($new['namespace'], '\\') !== 0
-                ? trim($old['namespace'], '\\').'\\'.trim($new['namespace'], '\\')
+                ? trim($old['namespace'], '\\') . '\\' . trim($new['namespace'], '\\')
                 : trim($new['namespace'], '\\');
         }
 
@@ -139,8 +139,8 @@ class Router
     /**
      * Format the prefix for the new group attributes.
      *
-     * @param  array  $new
-     * @param  array  $old
+     * @param array $new
+     * @param array $old
      * @return string|null
      */
     protected static function formatGroupPrefix($new, $old)
@@ -148,7 +148,7 @@ class Router
         $oldPrefix = $old['prefix'] ?? null;
 
         if (isset($new['prefix'])) {
-            return trim($oldPrefix ?? '', '/').'/'.trim($new['prefix'], '/');
+            return trim($oldPrefix ?? '', '/') . '/' . trim($new['prefix'], '/');
         }
 
         return $oldPrefix;
@@ -157,9 +157,9 @@ class Router
     /**
      * Add a route to the collection.
      *
-     * @param  array|string  $method
-     * @param  string  $uri
-     * @param  mixed  $action
+     * @param array|string $method
+     * @param string $uri
+     * @param mixed $action
      * @return void
      */
     public function addRoute($method, $uri, $action)
@@ -174,17 +174,17 @@ class Router
 
         if (isset($attributes) && is_array($attributes)) {
             if (isset($attributes['prefix'])) {
-                $uri = trim($attributes['prefix'], '/').'/'.trim($uri, '/');
+                $uri = trim($attributes['prefix'], '/') . '/' . trim($uri, '/');
             }
 
             if (isset($attributes['suffix'])) {
-                $uri = trim($uri, '/').rtrim($attributes['suffix'], '/');
+                $uri = trim($uri, '/') . rtrim($attributes['suffix'], '/');
             }
 
             $action = $this->mergeGroupAttributes($action, $attributes);
         }
 
-        $uri = '/'.trim($uri, '/');
+        $uri = '/' . trim($uri, '/');
 
         if (isset($action['as'])) {
             $this->namedRoutes[$action['as']] = $uri;
@@ -192,24 +192,24 @@ class Router
 
         if (is_array($method)) {
             foreach ($method as $verb) {
-                $this->routes[$verb.$uri] = ['method' => $verb, 'uri' => $uri, 'action' => $action];
+                $this->routes[$verb . $uri] = ['method' => $verb, 'uri' => $uri, 'action' => $action];
             }
         } else {
-            $this->routes[$method.$uri] = ['method' => $method, 'uri' => $uri, 'action' => $action];
+            $this->routes[$method . $uri] = ['method' => $method, 'uri' => $uri, 'action' => $action];
         }
     }
 
     /**
      * Parse the action into an array format.
      *
-     * @param  mixed  $action
+     * @param mixed $action
      * @return array
      */
     protected function parseAction($action)
     {
         if (is_string($action)) {
             return ['uses' => $action];
-        } elseif (! is_array($action)) {
+        } elseif (!is_array($action)) {
             return [$action];
         }
 
@@ -227,14 +227,14 @@ class Router
      */
     public function hasGroupStack()
     {
-        return ! empty($this->groupStack);
+        return !empty($this->groupStack);
     }
 
     /**
      * Merge the group attributes into the action.
      *
-     * @param  array  $action
-     * @param  array  $attributes
+     * @param array $action
+     * @param array $attributes
      * @return array
      */
     protected function mergeGroupAttributes(array $action, array $attributes)
@@ -246,7 +246,8 @@ class Router
         return $this->mergeNamespaceGroup(
             $this->mergeMiddlewareGroup(
                 $this->mergeAsGroup($action, $as),
-                $middleware),
+                $middleware
+            ),
             $namespace
         );
     }
@@ -254,8 +255,8 @@ class Router
     /**
      * Merge the namespace group into the action.
      *
-     * @param  array  $action
-     * @param  string  $namespace
+     * @param array $action
+     * @param string $namespace
      * @return array
      */
     protected function mergeNamespaceGroup(array $action, $namespace = null)
@@ -270,21 +271,21 @@ class Router
     /**
      * Prepend the namespace onto the use clause.
      *
-     * @param  string  $class
-     * @param  string  $namespace
+     * @param string $class
+     * @param string $namespace
      * @return string
      */
     protected function prependGroupNamespace($class, $namespace = null)
     {
         return $namespace !== null && strpos($class, '\\') !== 0
-            ? $namespace.'\\'.$class : $class;
+            ? $namespace . '\\' . $class : $class;
     }
 
     /**
      * Merge the middleware group into the action.
      *
-     * @param  array  $action
-     * @param  array  $middleware
+     * @param array $action
+     * @param array $middleware
      * @return array
      */
     protected function mergeMiddlewareGroup(array $action, $middleware = null)
@@ -303,15 +304,15 @@ class Router
     /**
      * Merge the as group into the action.
      *
-     * @param  array  $action
-     * @param  string  $as
+     * @param array $action
+     * @param string $as
      * @return array
      */
     protected function mergeAsGroup(array $action, $as = null)
     {
-        if (isset($as) && ! empty($as)) {
+        if (isset($as) && !empty($as)) {
             if (isset($action['as'])) {
-                $action['as'] = $as.'.'.$action['as'];
+                $action['as'] = $as . '.' . $action['as'];
             } else {
                 $action['as'] = $as;
             }
@@ -323,8 +324,8 @@ class Router
     /**
      * Register a route with the application.
      *
-     * @param  string  $uri
-     * @param  mixed  $action
+     * @param string $uri
+     * @param mixed $action
      * @return $this
      */
     public function head($uri, $action)
@@ -337,8 +338,8 @@ class Router
     /**
      * Register a route with the application.
      *
-     * @param  string  $uri
-     * @param  mixed  $action
+     * @param string $uri
+     * @param mixed $action
      * @return $this
      */
     public function get($uri, $action)
@@ -351,8 +352,8 @@ class Router
     /**
      * Register a route with the application.
      *
-     * @param  string  $uri
-     * @param  mixed  $action
+     * @param string $uri
+     * @param mixed $action
      * @return $this
      */
     public function post($uri, $action)
@@ -365,8 +366,8 @@ class Router
     /**
      * Register a route with the application.
      *
-     * @param  string  $uri
-     * @param  mixed  $action
+     * @param string $uri
+     * @param mixed $action
      * @return $this
      */
     public function put($uri, $action)
@@ -379,8 +380,8 @@ class Router
     /**
      * Register a route with the application.
      *
-     * @param  string  $uri
-     * @param  mixed  $action
+     * @param string $uri
+     * @param mixed $action
      * @return $this
      */
     public function patch($uri, $action)
@@ -393,8 +394,8 @@ class Router
     /**
      * Register a route with the application.
      *
-     * @param  string  $uri
-     * @param  mixed  $action
+     * @param string $uri
+     * @param mixed $action
      * @return $this
      */
     public function delete($uri, $action)
@@ -407,8 +408,8 @@ class Router
     /**
      * Register a route with the application.
      *
-     * @param  string  $uri
-     * @param  mixed  $action
+     * @param string $uri
+     * @param mixed $action
      * @return $this
      */
     public function options($uri, $action)

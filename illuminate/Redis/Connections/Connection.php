@@ -39,9 +39,9 @@ abstract class Connection
     /**
      * Subscribe to a set of given channels for messages.
      *
-     * @param  array|string  $channels
-     * @param  \Closure  $callback
-     * @param  string  $method
+     * @param array|string $channels
+     * @param \Closure $callback
+     * @param string $method
      * @return void
      */
     abstract public function createSubscription($channels, Closure $callback, $method = 'subscribe');
@@ -49,7 +49,7 @@ abstract class Connection
     /**
      * Funnel a callback for a maximum number of simultaneous executions.
      *
-     * @param  string  $name
+     * @param string $name
      * @return \Illuminate\Redis\Limiters\ConcurrencyLimiterBuilder
      */
     public function funnel($name)
@@ -60,7 +60,7 @@ abstract class Connection
     /**
      * Throttle a callback for a maximum number of executions over a given duration.
      *
-     * @param  string  $name
+     * @param string $name
      * @return \Illuminate\Redis\Limiters\DurationLimiterBuilder
      */
     public function throttle($name)
@@ -81,8 +81,8 @@ abstract class Connection
     /**
      * Subscribe to a set of given channels for messages.
      *
-     * @param  array|string  $channels
-     * @param  \Closure  $callback
+     * @param array|string $channels
+     * @param \Closure $callback
      * @return void
      */
     public function subscribe($channels, Closure $callback)
@@ -93,8 +93,8 @@ abstract class Connection
     /**
      * Subscribe to a set of given channels with wildcards.
      *
-     * @param  array|string  $channels
-     * @param  \Closure  $callback
+     * @param array|string $channels
+     * @param \Closure $callback
      * @return void
      */
     public function psubscribe($channels, Closure $callback)
@@ -105,8 +105,8 @@ abstract class Connection
     /**
      * Run a command against the Redis database.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return mixed
      */
     public function command($method, array $parameters = [])
@@ -118,9 +118,14 @@ abstract class Connection
         $time = round((microtime(true) - $start) * 1000, 2);
 
         if (isset($this->events)) {
-            $this->event(new CommandExecuted(
-                $method, $this->parseParametersForEvent($parameters), $time, $this
-            ));
+            $this->event(
+                new CommandExecuted(
+                    $method,
+                    $this->parseParametersForEvent($parameters),
+                    $time,
+                    $this
+                )
+            );
         }
 
         return $result;
@@ -129,7 +134,7 @@ abstract class Connection
     /**
      * Parse the command's parameters for event dispatching.
      *
-     * @param  array  $parameters
+     * @param array $parameters
      * @return array
      */
     protected function parseParametersForEvent(array $parameters)
@@ -140,7 +145,7 @@ abstract class Connection
     /**
      * Fire the given event if possible.
      *
-     * @param  mixed  $event
+     * @param mixed $event
      * @return void
      */
     protected function event($event)
@@ -151,7 +156,7 @@ abstract class Connection
     /**
      * Register a Redis command listener with the connection.
      *
-     * @param  \Closure  $callback
+     * @param \Closure $callback
      * @return void
      */
     public function listen(Closure $callback)
@@ -172,7 +177,7 @@ abstract class Connection
     /**
      * Set the connections name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return $this
      */
     public function setName($name)
@@ -195,7 +200,7 @@ abstract class Connection
     /**
      * Set the event dispatcher instance on the connection.
      *
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
+     * @param \Illuminate\Contracts\Events\Dispatcher $events
      * @return void
      */
     public function setEventDispatcher(Dispatcher $events)
@@ -216,8 +221,8 @@ abstract class Connection
     /**
      * Pass other method calls down to the underlying client.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return mixed
      */
     public function __call($method, $parameters)

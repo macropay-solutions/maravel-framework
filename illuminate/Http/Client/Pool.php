@@ -33,7 +33,7 @@ class Pool
     /**
      * Create a new requests pool.
      *
-     * @param  \Illuminate\Http\Client\Factory|null  $factory
+     * @param \Illuminate\Http\Client\Factory|null $factory
      * @return void
      */
     public function __construct(?Factory $factory = null)
@@ -46,7 +46,7 @@ class Pool
     /**
      * Add a request to the pool with a key.
      *
-     * @param  string  $key
+     * @param string $key
      * @return \Illuminate\Http\Client\PendingRequest
      */
     public function as(string $key)
@@ -77,8 +77,8 @@ class Pool
     /**
      * Add a request to the pool with a numeric index.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return \Illuminate\Http\Client\PendingRequest|\GuzzleHttp\Promise\Promise
      */
     public function __call($method, $parameters)

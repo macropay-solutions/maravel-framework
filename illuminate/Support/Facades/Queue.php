@@ -2,6 +2,8 @@
 
 namespace Illuminate\Support\Facades;
 
+use DateInterval;
+use DateTimeInterface;
 use Illuminate\Queue\Worker;
 use Illuminate\Support\Testing\Fakes\QueueFake;
 
@@ -25,8 +27,8 @@ use Illuminate\Support\Testing\Fakes\QueueFake;
  * @method static mixed push(string|object $job, mixed $data = '', string|null $queue = null)
  * @method static mixed pushOn(string $queue, string|object $job, mixed $data = '')
  * @method static mixed pushRaw(string $payload, string|null $queue = null, array $options = [])
- * @method static mixed later(\DateTimeInterface|\DateInterval|int $delay, string|object $job, mixed $data = '', string|null $queue = null)
- * @method static mixed laterOn(string $queue, \DateTimeInterface|\DateInterval|int $delay, string|object $job, mixed $data = '')
+ * @method static later(DateTimeInterface|DateInterval|int$delay,string|object$job,mixed$data='',string|null$queue=null)
+ * @method static mixed laterOn(string $queue, DateTimeInterface|DateInterval|int$delay,string|object$job,mixed$data='')
  * @method static mixed bulk(array $jobs, mixed $data = '', string|null $queue = null)
  * @method static \Illuminate\Contracts\Queue\Job|null pop(string|null $queue = null)
  * @method static string getConnectionName()
@@ -62,8 +64,8 @@ class Queue extends Facade
     /**
      * Register a callback to be executed to pick jobs.
      *
-     * @param  string  $workerName
-     * @param  callable  $callback
+     * @param string $workerName
+     * @param callable $callback
      * @return void
      */
     public static function popUsing($workerName, $callback)
@@ -74,14 +76,14 @@ class Queue extends Facade
     /**
      * Replace the bound instance with a fake.
      *
-     * @param  array|string  $jobsToFake
+     * @param array|string $jobsToFake
      * @return \Illuminate\Support\Testing\Fakes\QueueFake
      */
     public static function fake($jobsToFake = [])
     {
         $actualQueueManager = static::isFake()
-                ? static::getFacadeRoot()->queue
-                : static::getFacadeRoot();
+            ? static::getFacadeRoot()->queue
+            : static::getFacadeRoot();
 
         return tap(new QueueFake(static::getFacadeApplication(), $jobsToFake, $actualQueueManager), function ($fake) {
             static::swap($fake);

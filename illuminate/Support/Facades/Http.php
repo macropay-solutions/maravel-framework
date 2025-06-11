@@ -2,17 +2,22 @@
 
 namespace Illuminate\Support\Facades;
 
+use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Psr7\RequestInterface;
 use Illuminate\Http\Client\Factory;
+use Illuminate\Http\Client\PendingRequest as PR;
+use Illuminate\Http\Client\Response as ResponseAlias;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * @method static \Illuminate\Http\Client\Factory globalMiddleware(callable $middleware)
  * @method static \Illuminate\Http\Client\Factory globalRequestMiddleware(callable $middleware)
  * @method static \Illuminate\Http\Client\Factory globalResponseMiddleware(callable $middleware)
  * @method static \Illuminate\Http\Client\Factory globalOptions(array $options)
- * @method static \GuzzleHttp\Promise\PromiseInterface response(array|string|null $body = null, int $status = 200, array $headers = [])
+ * @method static PromiseInterface response(array|string|null $body = null, int $status = 200, array $headers = [])
  * @method static \Illuminate\Http\Client\ResponseSequence sequence(array $responses = [])
  * @method static \Illuminate\Http\Client\Factory allowStrayRequests()
- * @method static void recordRequestResponsePair(\Illuminate\Http\Client\Request $request, \Illuminate\Http\Client\Response $response)
+ * @method static void recordRequestResponsePair(\Illuminate\Http\Client\Request $request, ResponseAlias $response)
  * @method static void assertSent(callable $callback)
  * @method static void assertSentInOrder(array $callbacks)
  * @method static void assertNotSent(callable $callback)
@@ -27,51 +32,51 @@ use Illuminate\Http\Client\Factory;
  * @method static bool hasMacro(string $name)
  * @method static void flushMacros()
  * @method static mixed macroCall(string $method, array $parameters)
- * @method static \Illuminate\Http\Client\PendingRequest baseUrl(string $url)
- * @method static \Illuminate\Http\Client\PendingRequest withBody(\Psr\Http\Message\StreamInterface|string $content, string $contentType = 'application/json')
- * @method static \Illuminate\Http\Client\PendingRequest asJson()
- * @method static \Illuminate\Http\Client\PendingRequest asForm()
- * @method static \Illuminate\Http\Client\PendingRequest attach(string|array $name, string|resource $contents = '', string|null $filename = null, array $headers = [])
- * @method static \Illuminate\Http\Client\PendingRequest asMultipart()
- * @method static \Illuminate\Http\Client\PendingRequest bodyFormat(string $format)
- * @method static \Illuminate\Http\Client\PendingRequest withQueryParameters(array $parameters)
- * @method static \Illuminate\Http\Client\PendingRequest contentType(string $contentType)
- * @method static \Illuminate\Http\Client\PendingRequest acceptJson()
- * @method static \Illuminate\Http\Client\PendingRequest accept(string $contentType)
- * @method static \Illuminate\Http\Client\PendingRequest withHeaders(array $headers)
- * @method static \Illuminate\Http\Client\PendingRequest withHeader(string $name, mixed $value)
- * @method static \Illuminate\Http\Client\PendingRequest replaceHeaders(array $headers)
- * @method static \Illuminate\Http\Client\PendingRequest withBasicAuth(string $username, string $password)
- * @method static \Illuminate\Http\Client\PendingRequest withDigestAuth(string $username, string $password)
- * @method static \Illuminate\Http\Client\PendingRequest withToken(string $token, string $type = 'Bearer')
- * @method static \Illuminate\Http\Client\PendingRequest withUserAgent(string|bool $userAgent)
- * @method static \Illuminate\Http\Client\PendingRequest withUrlParameters(array $parameters = [])
- * @method static \Illuminate\Http\Client\PendingRequest withCookies(array $cookies, string $domain)
- * @method static \Illuminate\Http\Client\PendingRequest maxRedirects(int $max)
- * @method static \Illuminate\Http\Client\PendingRequest withoutRedirecting()
- * @method static \Illuminate\Http\Client\PendingRequest withoutVerifying()
- * @method static \Illuminate\Http\Client\PendingRequest sink(string|resource $to)
- * @method static \Illuminate\Http\Client\PendingRequest timeout(int $seconds)
- * @method static \Illuminate\Http\Client\PendingRequest connectTimeout(int $seconds)
- * @method static \Illuminate\Http\Client\PendingRequest retry(array|int $times, \Closure|int $sleepMilliseconds = 0, callable|null $when = null, bool $throw = true)
- * @method static \Illuminate\Http\Client\PendingRequest withOptions(array $options)
- * @method static \Illuminate\Http\Client\PendingRequest withMiddleware(callable $middleware)
- * @method static \Illuminate\Http\Client\PendingRequest withRequestMiddleware(callable $middleware)
- * @method static \Illuminate\Http\Client\PendingRequest withResponseMiddleware(callable $middleware)
- * @method static \Illuminate\Http\Client\PendingRequest beforeSending(callable $callback)
- * @method static \Illuminate\Http\Client\PendingRequest throw(callable|null $callback = null)
- * @method static \Illuminate\Http\Client\PendingRequest throwIf(callable|bool $condition, callable|null $throwCallback = null)
- * @method static \Illuminate\Http\Client\PendingRequest throwUnless(bool $condition)
- * @method static \Illuminate\Http\Client\PendingRequest dump()
- * @method static \Illuminate\Http\Client\PendingRequest dd()
- * @method static \Illuminate\Http\Client\Response get(string $url, array|string|null $query = null)
- * @method static \Illuminate\Http\Client\Response head(string $url, array|string|null $query = null)
- * @method static \Illuminate\Http\Client\Response post(string $url, array $data = [])
- * @method static \Illuminate\Http\Client\Response patch(string $url, array $data = [])
- * @method static \Illuminate\Http\Client\Response put(string $url, array $data = [])
- * @method static \Illuminate\Http\Client\Response delete(string $url, array $data = [])
+ * @method static PR baseUrl(string $url)
+ * @method static PR withBody(StreamInterface|string $content, string $contentType = 'application/json')
+ * @method static PR asJson()
+ * @method static PR asForm()
+ * @method static PR attach(string|array$name,string|resource$contents='',string|null$filename=null,array$headers=[])
+ * @method static PR asMultipart()
+ * @method static PR bodyFormat(string $format)
+ * @method static PR withQueryParameters(array $parameters)
+ * @method static PR contentType(string $contentType)
+ * @method static PR acceptJson()
+ * @method static PR accept(string $contentType)
+ * @method static PR withHeaders(array $headers)
+ * @method static PR withHeader(string $name, mixed $value)
+ * @method static PR replaceHeaders(array $headers)
+ * @method static PR withBasicAuth(string $username, string $password)
+ * @method static PR withDigestAuth(string $username, string $password)
+ * @method static PR withToken(string $token, string $type = 'Bearer')
+ * @method static PR withUserAgent(string|bool $userAgent)
+ * @method static PR withUrlParameters(array $parameters = [])
+ * @method static PR withCookies(array $cookies, string $domain)
+ * @method static PR maxRedirects(int $max)
+ * @method static PR withoutRedirecting()
+ * @method static PR withoutVerifying()
+ * @method static PR sink(string|resource $to)
+ * @method static PR timeout(int $seconds)
+ * @method static PR connectTimeout(int $seconds)
+ * @method static PR retry(array|int$times,\Closure|int$sleepMilliseconds=0,callable|null$when=null,bool$throw=true)
+ * @method static PR withOptions(array $options)
+ * @method static PR withMiddleware(callable $middleware)
+ * @method static PR withRequestMiddleware(callable $middleware)
+ * @method static PR withResponseMiddleware(callable $middleware)
+ * @method static PR beforeSending(callable $callback)
+ * @method static PR throw(callable|null $callback = null)
+ * @method static PR throwIf(callable|bool $condition, callable|null $throwCallback = null)
+ * @method static PR throwUnless(bool $condition)
+ * @method static PR dump()
+ * @method static PR dd()
+ * @method static ResponseAlias get(string $url, array|string|null $query = null)
+ * @method static ResponseAlias head(string $url, array|string|null $query = null)
+ * @method static ResponseAlias post(string $url, array $data = [])
+ * @method static ResponseAlias patch(string $url, array $data = [])
+ * @method static ResponseAlias put(string $url, array $data = [])
+ * @method static ResponseAlias delete(string $url, array $data = [])
  * @method static array pool(callable $callback)
- * @method static \Illuminate\Http\Client\Response send(string $method, string $url, array $options = [])
+ * @method static ResponseAlias send(string $method, string $url, array $options = [])
  * @method static \GuzzleHttp\Client buildClient()
  * @method static \GuzzleHttp\Client createClient(\GuzzleHttp\HandlerStack $handlerStack)
  * @method static \GuzzleHttp\HandlerStack buildHandlerStack()
@@ -79,16 +84,16 @@ use Illuminate\Http\Client\Factory;
  * @method static \Closure buildBeforeSendingHandler()
  * @method static \Closure buildRecorderHandler()
  * @method static \Closure buildStubHandler()
- * @method static \GuzzleHttp\Psr7\RequestInterface runBeforeSendingCallbacks(\GuzzleHttp\Psr7\RequestInterface $request, array $options)
+ * @method static RequestInterface runBeforeSendingCallbacks(RequestInterface $request, array $options)
  * @method static array mergeOptions(array ...$options)
- * @method static \Illuminate\Http\Client\PendingRequest stub(callable $callback)
- * @method static \Illuminate\Http\Client\PendingRequest async(bool $async = true)
- * @method static \GuzzleHttp\Promise\PromiseInterface|null getPromise()
- * @method static \Illuminate\Http\Client\PendingRequest setClient(\GuzzleHttp\Client $client)
- * @method static \Illuminate\Http\Client\PendingRequest setHandler(callable $handler)
+ * @method static PR stub(callable $callback)
+ * @method static PR async(bool $async = true)
+ * @method static PromiseInterface|null getPromise()
+ * @method static PR setClient(\GuzzleHttp\Client $client)
+ * @method static PR setHandler(callable $handler)
  * @method static array getOptions()
- * @method static \Illuminate\Http\Client\PendingRequest|mixed when(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
- * @method static \Illuminate\Http\Client\PendingRequest|mixed unless(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
+ * @method static PR|mixed when(\Closure|mixed|null$value=null,callable|null$callback=null,callable|null$default=null)
+ * @method static PR|mixed unless(\Closure|mixed|null$value=null,callable|null$callback=null,callable|null$default=null)
  *
  * @see \Illuminate\Http\Client\Factory
  */
@@ -107,7 +112,7 @@ class Http extends Facade
     /**
      * Register a stub callable that will intercept requests and be able to return stub responses.
      *
-     * @param  \Closure|array  $callback
+     * @param \Closure|array $callback
      * @return \Illuminate\Http\Client\Factory
      */
     public static function fake($callback = null)
@@ -120,7 +125,7 @@ class Http extends Facade
     /**
      * Register a response sequence for the given URL pattern.
      *
-     * @param  string  $urlPattern
+     * @param string $urlPattern
      * @return \Illuminate\Http\Client\ResponseSequence
      */
     public static function fakeSequence(string $urlPattern = '*')
@@ -147,8 +152,8 @@ class Http extends Facade
     /**
      * Stub the given URL using the given callback.
      *
-     * @param  string  $url
-     * @param  \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface|callable  $callback
+     * @param string $url
+     * @param ResponseAlias|PromiseInterface|callable $callback
      * @return \Illuminate\Http\Client\Factory
      */
     public static function stubUrl($url, $callback)

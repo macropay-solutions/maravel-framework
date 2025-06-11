@@ -24,7 +24,7 @@ class Carbon extends BaseCarbon
     /**
      * Create a Carbon instance from a given ordered UUID or ULID.
      *
-     * @param  \Ramsey\Uuid\Uuid|\Symfony\Component\Uid\Ulid|string  $id
+     * @param \Ramsey\Uuid\Uuid|\Symfony\Component\Uid\Ulid|string $id
      * @return \Illuminate\Support\Carbon
      */
     public static function createFromId($id)
@@ -39,7 +39,7 @@ class Carbon extends BaseCarbon
     /**
      * Dump the instance and end the script.
      *
-     * @param  mixed  ...$args
+     * @param mixed ...$args
      * @return never
      */
     public function dd(...$args)

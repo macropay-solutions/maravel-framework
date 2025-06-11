@@ -43,7 +43,7 @@ class Enum implements Rule, ValidatorAwareRule
     /**
      * Create a new rule instance.
      *
-     * @param  string  $type
+     * @param string $type
      * @return void
      */
     public function __construct($type)
@@ -54,8 +54,8 @@ class Enum implements Rule, ValidatorAwareRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
@@ -64,14 +64,14 @@ class Enum implements Rule, ValidatorAwareRule
             return $this->isDesirable($value);
         }
 
-        if (is_null($value) || ! enum_exists($this->type) || ! method_exists($this->type, 'tryFrom')) {
+        if (is_null($value) || !enum_exists($this->type) || !method_exists($this->type, 'tryFrom')) {
             return false;
         }
 
         try {
             $value = $this->type::tryFrom($value);
 
-            return ! is_null($value) && $this->isDesirable($value);
+            return !is_null($value) && $this->isDesirable($value);
         } catch (TypeError) {
             return false;
         }
@@ -80,7 +80,7 @@ class Enum implements Rule, ValidatorAwareRule
     /**
      * Specify the cases that should be considered valid.
      *
-     * @param  \UnitEnum[]|\UnitEnum  $values
+     * @param \UnitEnum[]|\UnitEnum $values
      * @return $this
      */
     public function only($values)
@@ -93,7 +93,7 @@ class Enum implements Rule, ValidatorAwareRule
     /**
      * Specify the cases that should be considered invalid.
      *
-     * @param  \UnitEnum[]|\UnitEnum  $values
+     * @param \UnitEnum[]|\UnitEnum $values
      * @return $this
      */
     public function except($values)
@@ -106,14 +106,14 @@ class Enum implements Rule, ValidatorAwareRule
     /**
      * Determine if the given case is a valid case based on the only / except values.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      * @return bool
      */
     protected function isDesirable($value)
     {
         return match (true) {
-            ! empty($this->only) => in_array(needle: $value, haystack: $this->only, strict: true),
-            ! empty($this->except) => ! in_array(needle: $value, haystack: $this->except, strict: true),
+            !empty($this->only) => in_array(needle: $value, haystack: $this->only, strict: true),
+            !empty($this->except) => !in_array(needle: $value, haystack: $this->except, strict: true),
             default => true,
         };
     }
@@ -135,7 +135,7 @@ class Enum implements Rule, ValidatorAwareRule
     /**
      * Set the current validator.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param \Illuminate\Validation\Validator $validator
      * @return $this
      */
     public function setValidator($validator)

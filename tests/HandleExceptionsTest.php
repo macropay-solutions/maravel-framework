@@ -17,7 +17,7 @@ class HandleExceptionsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->container = new Container;
+        $this->container = new Container();
 
         $this->config = new Config();
 
@@ -38,11 +38,14 @@ class HandleExceptionsTest extends TestCase
         $logger = m::mock(LogManager::class);
         $this->container->instance('log', $logger);
         $logger->shouldReceive('channel')->with('deprecations')->andReturnSelf();
-        $logger->shouldReceive('warning')->with(sprintf('%s in %s on line %s',
-            'str_contains(): Passing null to parameter #2 ($needle) of type string is deprecated',
-            '/home/user/laravel/routes/web.php',
-            17
-        ));
+        $logger->shouldReceive('warning')->with(
+            sprintf(
+                '%s in %s on line %s',
+                'str_contains(): Passing null to parameter #2 ($needle) of type string is deprecated',
+                '/home/user/laravel/routes/web.php',
+                17
+            )
+        );
 
         $this->handleError(
             E_DEPRECATED,
@@ -57,11 +60,14 @@ class HandleExceptionsTest extends TestCase
         $logger = m::mock(LogManager::class);
         $this->container->instance('log', $logger);
         $logger->shouldReceive('channel')->with('deprecations')->andReturnSelf();
-        $logger->shouldReceive('warning')->with(sprintf('%s in %s on line %s',
-            'str_contains(): Passing null to parameter #2 ($needle) of type string is deprecated',
-            '/home/user/laravel/routes/web.php',
-            17
-        ));
+        $logger->shouldReceive('warning')->with(
+            sprintf(
+                '%s in %s on line %s',
+                'str_contains(): Passing null to parameter #2 ($needle) of type string is deprecated',
+                '/home/user/laravel/routes/web.php',
+                17
+            )
+        );
 
         $this->handleError(
             E_USER_DEPRECATED,

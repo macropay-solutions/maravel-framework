@@ -19,8 +19,12 @@ trait TypedValue
     /**
      * Track the value as the user types.
      */
-    protected function trackTypedValue(string $default = '', bool $submit = true, ?callable $ignore = null, bool $allowNewLine = false): void
-    {
+    protected function trackTypedValue(
+        string $default = '',
+        bool $submit = true,
+        ?callable $ignore = null,
+        bool $allowNewLine = false
+    ): void {
         $this->typedValue = $default;
 
         if ($this->typedValue) {
@@ -34,11 +38,21 @@ trait TypedValue
                 }
 
                 match ($key) {
-                    Key::LEFT, Key::LEFT_ARROW, Key::CTRL_B => $this->cursorPosition = max(0, $this->cursorPosition - 1),
-                    Key::RIGHT, Key::RIGHT_ARROW, Key::CTRL_F => $this->cursorPosition = min(mb_strlen($this->typedValue), $this->cursorPosition + 1),
+                    Key::LEFT, Key::LEFT_ARROW, Key::CTRL_B => $this->cursorPosition = max(
+                        0,
+                        $this->cursorPosition - 1
+                    ),
+                    Key::RIGHT, Key::RIGHT_ARROW, Key::CTRL_F => $this->cursorPosition = min(
+                        mb_strlen($this->typedValue),
+                        $this->cursorPosition + 1
+                    ),
                     Key::oneOf([Key::HOME, Key::CTRL_A], $key) => $this->cursorPosition = 0,
                     Key::oneOf([Key::END, Key::CTRL_E], $key) => $this->cursorPosition = mb_strlen($this->typedValue),
-                    Key::DELETE => $this->typedValue = mb_substr($this->typedValue, 0, $this->cursorPosition).mb_substr($this->typedValue, $this->cursorPosition + 1),
+                    Key::DELETE => $this->typedValue = mb_substr(
+                            $this->typedValue,
+                            0,
+                            $this->cursorPosition
+                        ) . mb_substr($this->typedValue, $this->cursorPosition + 1),
                     default => null,
                 };
 
@@ -59,7 +73,11 @@ trait TypedValue
                     }
 
                     if ($allowNewLine) {
-                        $this->typedValue = mb_substr($this->typedValue, 0, $this->cursorPosition).PHP_EOL.mb_substr($this->typedValue, $this->cursorPosition);
+                        $this->typedValue = mb_substr(
+                                $this->typedValue,
+                                0,
+                                $this->cursorPosition
+                            ) . PHP_EOL . mb_substr($this->typedValue, $this->cursorPosition);
                         $this->cursorPosition++;
                     }
                 } elseif ($key === Key::BACKSPACE || $key === Key::CTRL_H) {
@@ -67,10 +85,16 @@ trait TypedValue
                         return;
                     }
 
-                    $this->typedValue = mb_substr($this->typedValue, 0, $this->cursorPosition - 1).mb_substr($this->typedValue, $this->cursorPosition);
+                    $this->typedValue = mb_substr($this->typedValue, 0, $this->cursorPosition - 1) . mb_substr(
+                            $this->typedValue,
+                            $this->cursorPosition
+                        );
                     $this->cursorPosition--;
                 } elseif (ord($key) >= 32) {
-                    $this->typedValue = mb_substr($this->typedValue, 0, $this->cursorPosition).$key.mb_substr($this->typedValue, $this->cursorPosition);
+                    $this->typedValue = mb_substr($this->typedValue, 0, $this->cursorPosition) . $key . mb_substr(
+                            $this->typedValue,
+                            $this->cursorPosition
+                        );
                     $this->cursorPosition++;
                 }
             }
@@ -96,22 +120,26 @@ trait TypedValue
 
         $cursor = mb_strlen($current) && $current !== PHP_EOL ? $current : ' ';
 
-        $spaceBefore = $maxWidth < 0 || $maxWidth === null ? mb_strwidth($before) : $maxWidth - mb_strwidth($cursor) - (mb_strwidth($after) > 0 ? 1 : 0);
+        $spaceBefore = $maxWidth < 0 || $maxWidth === null ? mb_strwidth($before) : $maxWidth - mb_strwidth(
+                $cursor
+            ) - (mb_strwidth($after) > 0 ? 1 : 0);
         [$truncatedBefore, $wasTruncatedBefore] = mb_strwidth($before) > $spaceBefore
             ? [$this->trimWidthBackwards($before, 0, $spaceBefore - 1), true]
             : [$before, false];
 
-        $spaceAfter = $maxWidth < 0 || $maxWidth === null ? mb_strwidth($after) : $maxWidth - ($wasTruncatedBefore ? 1 : 0) - mb_strwidth($truncatedBefore) - mb_strwidth($cursor);
+        $spaceAfter = $maxWidth < 0 || $maxWidth === null ? mb_strwidth(
+            $after
+        ) : $maxWidth - ($wasTruncatedBefore ? 1 : 0) - mb_strwidth($truncatedBefore) - mb_strwidth($cursor);
         [$truncatedAfter, $wasTruncatedAfter] = mb_strwidth($after) > $spaceAfter
             ? [mb_strimwidth($after, 0, $spaceAfter - 1), true]
             : [$after, false];
 
         return ($wasTruncatedBefore ? $this->dim('…') : '')
-            .$truncatedBefore
-            .$this->inverse($cursor)
-            .($current === PHP_EOL ? PHP_EOL : '')
-            .$truncatedAfter
-            .($wasTruncatedAfter ? $this->dim('…') : '');
+            . $truncatedBefore
+            . $this->inverse($cursor)
+            . ($current === PHP_EOL ? PHP_EOL : '')
+            . $truncatedAfter
+            . ($wasTruncatedAfter ? $this->dim('…') : '');
     }
 
     /**

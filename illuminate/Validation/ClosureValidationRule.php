@@ -41,7 +41,7 @@ class ClosureValidationRule implements RuleContract, ValidatorAwareRule
     /**
      * Create a new Closure based validation rule.
      *
-     * @param  \Closure  $callback
+     * @param \Closure $callback
      * @return void
      */
     public function __construct($callback)
@@ -52,8 +52,8 @@ class ClosureValidationRule implements RuleContract, ValidatorAwareRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
@@ -66,7 +66,7 @@ class ClosureValidationRule implements RuleContract, ValidatorAwareRule
             return $this->pendingPotentiallyTranslatedString($attribute, $message);
         }, $this->validator);
 
-        return ! $this->failed;
+        return !$this->failed;
     }
 
     /**
@@ -82,7 +82,7 @@ class ClosureValidationRule implements RuleContract, ValidatorAwareRule
     /**
      * Set the current validator.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param \Illuminate\Validation\Validator $validator
      * @return $this
      */
     public function setValidator($validator)

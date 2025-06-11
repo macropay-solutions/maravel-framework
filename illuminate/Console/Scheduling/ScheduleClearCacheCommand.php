@@ -23,7 +23,7 @@ class ScheduleClearCacheCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     public function handle(Schedule $schedule)
@@ -40,7 +40,7 @@ class ScheduleClearCacheCommand extends Command
             }
         }
 
-        if (! $mutexCleared) {
+        if (!$mutexCleared) {
             $this->components->info('No mutex files were found.');
         }
     }

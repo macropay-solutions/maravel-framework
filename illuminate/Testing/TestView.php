@@ -32,7 +32,7 @@ class TestView
     /**
      * Create a new test view instance.
      *
-     * @param  \Illuminate\View\View  $view
+     * @param \Illuminate\View\View $view
      * @return void
      */
     public function __construct(View $view)
@@ -44,8 +44,8 @@ class TestView
     /**
      * Assert that the response view has a given piece of bound data.
      *
-     * @param  string|array  $key
-     * @param  mixed  $value
+     * @param string|array $key
+     * @param mixed $value
      * @return $this
      */
     public function assertViewHas($key, $value = null)
@@ -66,7 +66,7 @@ class TestView
             PHPUnit::assertInstanceOf(Collection::class, $actual);
             PHPUnit::assertSameSize($value, $actual);
 
-            $value->each(fn ($item, $index) => PHPUnit::assertTrue($actual->get($index)->is($item)));
+            $value->each(fn($item, $index) => PHPUnit::assertTrue($actual->get($index)->is($item)));
         } else {
             PHPUnit::assertEquals($value, Arr::get($this->view->gatherData(), $key));
         }
@@ -77,7 +77,7 @@ class TestView
     /**
      * Assert that the response view has a given list of bound data.
      *
-     * @param  array  $bindings
+     * @param array $bindings
      * @return $this
      */
     public function assertViewHasAll(array $bindings)
@@ -96,7 +96,7 @@ class TestView
     /**
      * Assert that the response view is missing a piece of bound data.
      *
-     * @param  string  $key
+     * @param string $key
      * @return $this
      */
     public function assertViewMissing($key)
@@ -121,15 +121,15 @@ class TestView
     /**
      * Assert that the given string is contained within the view.
      *
-     * @param  string  $value
-     * @param  bool  $escape
+     * @param string $value
+     * @param bool $escape
      * @return $this
      */
     public function assertSee($value, $escape = true)
     {
         $value = $escape ? e($value) : $value;
 
-        PHPUnit::assertStringContainsString((string) $value, $this->rendered);
+        PHPUnit::assertStringContainsString((string)$value, $this->rendered);
 
         return $this;
     }
@@ -137,8 +137,8 @@ class TestView
     /**
      * Assert that the given strings are contained in order within the view.
      *
-     * @param  array  $values
-     * @param  bool  $escape
+     * @param array $values
+     * @param bool $escape
      * @return $this
      */
     public function assertSeeInOrder(array $values, $escape = true)
@@ -153,15 +153,15 @@ class TestView
     /**
      * Assert that the given string is contained within the view text.
      *
-     * @param  string  $value
-     * @param  bool  $escape
+     * @param string $value
+     * @param bool $escape
      * @return $this
      */
     public function assertSeeText($value, $escape = true)
     {
         $value = $escape ? e($value) : $value;
 
-        PHPUnit::assertStringContainsString((string) $value, strip_tags($this->rendered));
+        PHPUnit::assertStringContainsString((string)$value, strip_tags($this->rendered));
 
         return $this;
     }
@@ -169,8 +169,8 @@ class TestView
     /**
      * Assert that the given strings are contained in order within the view text.
      *
-     * @param  array  $values
-     * @param  bool  $escape
+     * @param array $values
+     * @param bool $escape
      * @return $this
      */
     public function assertSeeTextInOrder(array $values, $escape = true)
@@ -185,15 +185,15 @@ class TestView
     /**
      * Assert that the given string is not contained within the view.
      *
-     * @param  string  $value
-     * @param  bool  $escape
+     * @param string $value
+     * @param bool $escape
      * @return $this
      */
     public function assertDontSee($value, $escape = true)
     {
         $value = $escape ? e($value) : $value;
 
-        PHPUnit::assertStringNotContainsString((string) $value, $this->rendered);
+        PHPUnit::assertStringNotContainsString((string)$value, $this->rendered);
 
         return $this;
     }
@@ -201,15 +201,15 @@ class TestView
     /**
      * Assert that the given string is not contained within the view text.
      *
-     * @param  string  $value
-     * @param  bool  $escape
+     * @param string $value
+     * @param bool $escape
      * @return $this
      */
     public function assertDontSeeText($value, $escape = true)
     {
         $value = $escape ? e($value) : $value;
 
-        PHPUnit::assertStringNotContainsString((string) $value, strip_tags($this->rendered));
+        PHPUnit::assertStringNotContainsString((string)$value, strip_tags($this->rendered));
 
         return $this;
     }

@@ -15,12 +15,12 @@ class MorphMany extends MorphOneOrMany
     public function one()
     {
 //        return MorphOne::noConstraints(fn () => new MorphOne(
-        return MorphOne::noConstraints(fn () => \app(MorphOne::class, [
+        return MorphOne::noConstraints(fn() => \app(MorphOne::class, [
             $this->getQuery(),
             $this->getParent(),
             $this->morphType,
             $this->foreignKey,
-            $this->localKey
+            $this->localKey,
         ]));
     }
 
@@ -31,16 +31,16 @@ class MorphMany extends MorphOneOrMany
      */
     public function getResults()
     {
-        return ! is_null($this->getParentKey())
-                ? $this->query->get()
-                : $this->related->newCollection();
+        return !is_null($this->getParentKey())
+            ? $this->query->get()
+            : $this->related->newCollection();
     }
 
     /**
      * Initialize the relation on a set of models.
      *
-     * @param  array  $models
-     * @param  string  $relation
+     * @param array $models
+     * @param string $relation
      * @return array
      */
     public function initRelation(array $models, $relation)
@@ -55,9 +55,9 @@ class MorphMany extends MorphOneOrMany
     /**
      * Match the eagerly loaded results to their parents.
      *
-     * @param  array  $models
-     * @param  \Illuminate\Database\Eloquent\Collection  $results
-     * @param  string  $relation
+     * @param array $models
+     * @param \Illuminate\Database\Eloquent\Collection $results
+     * @param string $relation
      * @return array
      */
     public function match(array $models, Collection $results, $relation)
@@ -68,7 +68,7 @@ class MorphMany extends MorphOneOrMany
     /**
      * Create a new instance of the related model. Allow mass-assignment.
      *
-     * @param  array  $attributes
+     * @param array $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function forceCreate(array $attributes = [])
@@ -81,11 +81,11 @@ class MorphMany extends MorphOneOrMany
     /**
      * Create a new instance of the related model with mass assignment without raising model events.
      *
-     * @param  array  $attributes
+     * @param array $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function forceCreateQuietly(array $attributes = [])
     {
-        return Model::withoutEvents(fn () => $this->forceCreate($attributes));
+        return Model::withoutEvents(fn() => $this->forceCreate($attributes));
     }
 }

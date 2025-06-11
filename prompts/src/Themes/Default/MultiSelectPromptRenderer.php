@@ -35,7 +35,7 @@ class MultiSelectPromptRenderer extends Renderer implements Scrolling
                     $this->truncate($prompt->label, $prompt->terminal()->cols() - 6),
                     $this->renderOptions($prompt),
                     color: 'yellow',
-                    info: count($prompt->options) > $prompt->scroll ? (count($prompt->value()).' selected') : '',
+                    info: count($prompt->options) > $prompt->scroll ? (count($prompt->value()) . ' selected') : '',
                 )
                 ->warning($this->truncate($prompt->error, $prompt->terminal()->cols() - 5)),
 
@@ -43,12 +43,12 @@ class MultiSelectPromptRenderer extends Renderer implements Scrolling
                 ->box(
                     $this->cyan($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)),
                     $this->renderOptions($prompt),
-                    info: count($prompt->options) > $prompt->scroll ? (count($prompt->value()).' selected') : '',
+                    info: count($prompt->options) > $prompt->scroll ? (count($prompt->value()) . ' selected') : '',
                 )
                 ->when(
                     $prompt->hint,
-                    fn () => $this->hint($prompt->hint),
-                    fn () => $this->newLine() // Space for errors
+                    fn() => $this->hint($prompt->hint),
+                    fn() => $this->newLine() // Space for errors
                 ),
         };
     }
@@ -60,7 +60,7 @@ class MultiSelectPromptRenderer extends Renderer implements Scrolling
     {
         return $this->scrollbar(
             collect($prompt->visible())
-                ->map(fn ($label) => $this->truncate($label, $prompt->terminal()->cols() - 12))
+                ->map(fn($label) => $this->truncate($label, $prompt->terminal()->cols() - 12))
                 ->map(function ($label, $key) use ($prompt) {
                     $index = array_search($key, array_keys($prompt->options));
                     $active = $index === $prompt->highlighted;
@@ -72,12 +72,14 @@ class MultiSelectPromptRenderer extends Renderer implements Scrolling
                     $selected = in_array($value, $prompt->value());
 
                     if ($prompt->state === 'cancel') {
-                        return $this->dim(match (true) {
-                            $active && $selected => "› ◼ {$this->strikethrough($label)}  ",
-                            $active => "› ◻ {$this->strikethrough($label)}  ",
-                            $selected => "  ◼ {$this->strikethrough($label)}  ",
-                            default => "  ◻ {$this->strikethrough($label)}  ",
-                        });
+                        return $this->dim(
+                            match (true) {
+                                $active && $selected => "› ◼ {$this->strikethrough($label)}  ",
+                                $active => "› ◻ {$this->strikethrough($label)}  ",
+                                $selected => "  ◼ {$this->strikethrough($label)}  ",
+                                default => "  ◻ {$this->strikethrough($label)}  ",
+                            }
+                        );
                     }
 
                     return match (true) {
@@ -105,10 +107,13 @@ class MultiSelectPromptRenderer extends Renderer implements Scrolling
             return $this->gray('None');
         }
 
-        return implode("\n", array_map(
-            fn ($label) => $this->truncate($label, $prompt->terminal()->cols() - 6),
-            $prompt->labels()
-        ));
+        return implode(
+            "\n",
+            array_map(
+                fn($label) => $this->truncate($label, $prompt->terminal()->cols() - 6),
+                $prompt->labels()
+            )
+        );
     }
 
     /**

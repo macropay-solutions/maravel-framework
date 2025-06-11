@@ -37,7 +37,7 @@ trait DeterminesStatusCode
     /**
      * Determine if the response code was the given status code and the body has no content.
      *
-     * @param  int  $status
+     * @param int $status
      * @return bool
      */
     public function noContent($status = 204)

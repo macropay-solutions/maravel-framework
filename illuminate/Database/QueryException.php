@@ -32,10 +32,10 @@ class QueryException extends PDOException
     /**
      * Create a new query exception instance.
      *
-     * @param  string  $connectionName
-     * @param  string  $sql
-     * @param  array  $bindings
-     * @param  \Throwable  $previous
+     * @param string $connectionName
+     * @param string $sql
+     * @param array $bindings
+     * @param \Throwable $previous
      * @return void
      */
     public function __construct($connectionName, $sql, array $bindings, Throwable $previous)
@@ -56,15 +56,19 @@ class QueryException extends PDOException
     /**
      * Format the SQL error message.
      *
-     * @param  string  $connectionName
-     * @param  string  $sql
-     * @param  array  $bindings
-     * @param  \Throwable  $previous
+     * @param string $connectionName
+     * @param string $sql
+     * @param array $bindings
+     * @param \Throwable $previous
      * @return string
      */
     protected function formatMessage($connectionName, $sql, $bindings, Throwable $previous)
     {
-        return $previous->getMessage().' (Connection: '.$connectionName.', SQL: '.Str::replaceArray('?', $bindings, $sql).')';
+        return $previous->getMessage() . ' (Connection: ' . $connectionName . ', SQL: ' . Str::replaceArray(
+            '?',
+            $bindings,
+            $sql
+        ) . ')';
     }
 
     /**

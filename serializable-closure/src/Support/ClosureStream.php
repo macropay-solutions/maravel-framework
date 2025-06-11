@@ -8,7 +8,7 @@ class ClosureStream
     /**
      * The stream protocol.
      */
-    const STREAM_PROTO = 'laravel-serializable-closure';
+    public const STREAM_PROTO = 'laravel-serializable-closure';
 
     /**
      * Checks if this stream is registered.
@@ -41,15 +41,15 @@ class ClosureStream
     /**
      * Opens file or URL.
      *
-     * @param  string  $path
-     * @param  string  $mode
-     * @param  string  $options
-     * @param  string|null  $opened_path
+     * @param string $path
+     * @param string $mode
+     * @param string $options
+     * @param string|null $opened_path
      * @return bool
      */
     public function stream_open($path, $mode, $options, &$opened_path)
     {
-        $this->content = "<?php\nreturn ".substr($path, strlen(static::STREAM_PROTO.'://')).';';
+        $this->content = "<?php\nreturn " . substr($path, strlen(static::STREAM_PROTO . '://')) . ';';
         $this->length = strlen($this->content);
 
         return true;
@@ -58,7 +58,7 @@ class ClosureStream
     /**
      * Read from stream.
      *
-     * @param  int  $count
+     * @param int $count
      * @return string
      */
     public function stream_read($count)
@@ -83,9 +83,9 @@ class ClosureStream
     /**
      * Change stream options.
      *
-     * @param  int  $option
-     * @param  int  $arg1
-     * @param  int  $arg2
+     * @param int $option
+     * @param int $arg1
+     * @param int $arg2
      * @return bool
      */
     public function stream_set_option($option, $arg1, $arg2)
@@ -110,8 +110,8 @@ class ClosureStream
     /**
      * Retrieve information about a file.
      *
-     * @param  string  $path
-     * @param  int  $flags
+     * @param string $path
+     * @param int $flags
      * @return array|bool
      */
     public function url_stat($path, $flags)
@@ -126,8 +126,8 @@ class ClosureStream
     /**
      * Seeks to specific location in a stream.
      *
-     * @param  int  $offset
-     * @param  int  $whence
+     * @param int $offset
+     * @param int $whence
      * @return bool
      */
     public function stream_seek($offset, $whence = SEEK_SET)
@@ -172,7 +172,7 @@ class ClosureStream
      */
     public static function register()
     {
-        if (! static::$isRegistered) {
+        if (!static::$isRegistered) {
             static::$isRegistered = stream_wrapper_register(static::STREAM_PROTO, __CLASS__);
         }
     }

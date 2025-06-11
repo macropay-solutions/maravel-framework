@@ -26,7 +26,7 @@ class PackageDiscoverCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  \Illuminate\Foundation\PackageManifest  $manifest
+     * @param \Illuminate\Foundation\PackageManifest $manifest
      * @return void
      */
     public function handle(PackageManifest $manifest)
@@ -37,7 +37,7 @@ class PackageDiscoverCommand extends Command
 
         collect($manifest->manifest)
             ->keys()
-            ->each(fn ($description) => $this->components->task($description))
-            ->whenNotEmpty(fn () => $this->newLine());
+            ->each(fn($description) => $this->components->task($description))
+            ->whenNotEmpty(fn() => $this->newLine());
     }
 }

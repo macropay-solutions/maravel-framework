@@ -32,7 +32,7 @@ class StatusCommand extends BaseCommand
     /**
      * Create a new migration rollback command instance.
      *
-     * @param  \Illuminate\Database\Migrations\Migrator  $migrator
+     * @param \Illuminate\Database\Migrations\Migrator $migrator
      * @return void
      */
     public function __construct(Migrator $migrator)
@@ -50,7 +50,7 @@ class StatusCommand extends BaseCommand
     public function handle()
     {
         return $this->migrator->usingConnection($this->option('database'), function () {
-            if (! $this->migrator->repositoryExists()) {
+            if (!$this->migrator->repositoryExists()) {
                 $this->components->error('Migration table not found.');
 
                 return 1;
@@ -61,7 +61,7 @@ class StatusCommand extends BaseCommand
             $batches = $this->migrator->getRepository()->getMigrationBatches();
 
             $migrations = $this->getStatusFor($ran, $batches)
-                ->when($this->option('pending'), fn ($collection) => $collection->filter(function ($migration) {
+                ->when($this->option('pending'), fn($collection) => $collection->filter(function ($migration) {
                     return str($migration[1])->contains('Pending');
                 }));
 
@@ -72,7 +72,7 @@ class StatusCommand extends BaseCommand
 
                 $migrations
                     ->each(
-                        fn ($migration) => $this->components->twoColumnDetail($migration[0], $migration[1])
+                        fn($migration) => $this->components->twoColumnDetail($migration[0], $migration[1])
                     );
 
                 $this->newLine();
@@ -87,26 +87,26 @@ class StatusCommand extends BaseCommand
     /**
      * Get the status for the given run migrations.
      *
-     * @param  array  $ran
-     * @param  array  $batches
+     * @param array $ran
+     * @param array $batches
      * @return \Illuminate\Support\Collection
      */
     protected function getStatusFor(array $ran, array $batches)
     {
         return Collection::make($this->getAllMigrationFiles())
-                    ->map(function ($migration) use ($ran, $batches) {
-                        $migrationName = $this->migrator->getMigrationName($migration);
+            ->map(function ($migration) use ($ran, $batches) {
+                $migrationName = $this->migrator->getMigrationName($migration);
 
-                        $status = in_array($migrationName, $ran)
-                            ? '<fg=green;options=bold>Ran</>'
-                            : '<fg=yellow;options=bold>Pending</>';
+                $status = in_array($migrationName, $ran)
+                    ? '<fg=green;options=bold>Ran</>'
+                    : '<fg=yellow;options=bold>Pending</>';
 
-                        if (in_array($migrationName, $ran)) {
-                            $status = '['.$batches[$migrationName].'] '.$status;
-                        }
+                if (in_array($migrationName, $ran)) {
+                    $status = '[' . $batches[$migrationName] . '] ' . $status;
+                }
 
-                        return [$migrationName, $status];
-                    });
+                return [$migrationName, $status];
+            });
     }
 
     /**
@@ -129,8 +129,18 @@ class StatusCommand extends BaseCommand
         return [
             ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to use'],
             ['pending', null, InputOption::VALUE_NONE, 'Only list pending migrations'],
-            ['path', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The path(s) to the migrations files to use'],
-            ['realpath', null, InputOption::VALUE_NONE, 'Indicate any provided migration file paths are pre-resolved absolute paths'],
+            [
+                'path',
+                null,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'The path(s) to the migrations files to use',
+            ],
+            [
+                'realpath',
+                null,
+                InputOption::VALUE_NONE,
+                'Indicate any provided migration file paths are pre-resolved absolute paths',
+            ],
         ];
     }
 }

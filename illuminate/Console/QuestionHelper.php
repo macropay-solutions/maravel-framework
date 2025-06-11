@@ -28,9 +28,12 @@ class QuestionHelper extends SymfonyQuestionHelper
         $default = $question->getDefault();
 
         if ($question->isMultiline()) {
-            $text .= sprintf(' (press %s to continue)', 'Windows' == PHP_OS_FAMILY
-                ? '<comment>Ctrl+Z</comment> then <comment>Enter</comment>'
-                : '<comment>Ctrl+D</comment>');
+            $text .= sprintf(
+                ' (press %s to continue)',
+                'Windows' == PHP_OS_FAMILY
+                    ? '<comment>Ctrl+Z</comment> then <comment>Enter</comment>'
+                    : '<comment>Ctrl+D</comment>'
+            );
         }
 
         switch (true) {
@@ -46,7 +49,11 @@ class QuestionHelper extends SymfonyQuestionHelper
 
             case $question instanceof ChoiceQuestion:
                 $choices = $question->getChoices();
-                $text = sprintf('<info>%s</info> [<comment>%s</comment>]', $text, OutputFormatter::escape($choices[$default] ?? $default));
+                $text = sprintf(
+                    '<info>%s</info> [<comment>%s</comment>]',
+                    $text,
+                    OutputFormatter::escape($choices[$default] ?? $default)
+                );
 
                 break;
 
@@ -70,12 +77,12 @@ class QuestionHelper extends SymfonyQuestionHelper
     /**
      * Ensures the given string ends with punctuation.
      *
-     * @param  string  $string
+     * @param string $string
      * @return string
      */
     protected function ensureEndsWithPunctuation($string)
     {
-        if (! str($string)->endsWith(['?', ':', '!', '.'])) {
+        if (!str($string)->endsWith(['?', ':', '!', '.'])) {
             return "$string:";
         }
 

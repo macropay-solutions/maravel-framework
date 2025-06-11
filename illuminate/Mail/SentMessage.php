@@ -22,7 +22,7 @@ class SentMessage
     /**
      * Create a new SentMessage instance.
      *
-     * @param  \Symfony\Component\Mailer\SentMessage  $sentMessage
+     * @param \Symfony\Component\Mailer\SentMessage $sentMessage
      * @return void
      */
     public function __construct(SymfonySentMessage $sentMessage)
@@ -43,8 +43,8 @@ class SentMessage
     /**
      * Dynamically pass missing methods to the Symfony instance.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return mixed
      */
     public function __call($method, $parameters)
@@ -70,7 +70,7 @@ class SentMessage
     /**
      * Marshal the object from its serialized data.
      *
-     * @param  array  $data
+     * @param array $data
      * @return void
      */
     public function __unserialize(array $data)

@@ -70,7 +70,7 @@ class ShowModelCommand extends DatabaseInspectionCommand
      */
     public function handle()
     {
-        if (! $this->ensureDependenciesExist()) {
+        if (!$this->ensureDependenciesExist()) {
             return 1;
         }
 
@@ -93,7 +93,7 @@ class ShowModelCommand extends DatabaseInspectionCommand
         $this->display(
             $class,
             $model->getConnection()->getName(),
-            $model->getConnection()->getTablePrefix().$model->getTable(),
+            $model->getConnection()->getTablePrefix() . $model->getTable(),
             $this->getPolicy($model),
             $this->getAttributes($model),
             $this->getRelations($model),
@@ -104,7 +104,7 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Get the first policy associated with this model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return string
      */
     protected function getPolicy($model)
@@ -117,7 +117,7 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Get the column attributes for the given model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return \Illuminate\Support\Collection
      */
     protected function getAttributes($model)
@@ -125,17 +125,17 @@ class ShowModelCommand extends DatabaseInspectionCommand
         $connection = $model->getConnection();
         $schema = $connection->getDoctrineSchemaManager();
         $this->registerTypeMappings($connection->getDoctrineConnection()->getDatabasePlatform());
-        $table = $model->getConnection()->getTablePrefix().$model->getTable();
+        $table = $model->getConnection()->getTablePrefix() . $model->getTable();
         $columns = $schema->listTableColumns($table);
         $indexes = $schema->listTableIndexes($table);
 
         return collect($columns)
             ->values()
-            ->map(fn (Column $column) => [
+            ->map(fn(Column $column) => [
                 'name' => $column->getName(),
                 'type' => $this->getColumnType($column),
                 'increments' => $column->getAutoincrement(),
-                'nullable' => ! $column->getNotnull(),
+                'nullable' => !$column->getNotnull(),
                 'default' => $this->getColumnDefault($column, $model),
                 'unique' => $this->columnIsUnique($column->getName(), $indexes),
                 'fillable' => $model->isFillable($column->getName()),
@@ -149,8 +149,8 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Get the virtual (non-column) attributes for the given model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @param  \Doctrine\DBAL\Schema\Column[]  $columns
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param \Doctrine\DBAL\Schema\Column[] $columns
      * @return \Illuminate\Support\Collection
      */
     protected function getVirtualAttributes($model, $columns)
@@ -159,7 +159,7 @@ class ShowModelCommand extends DatabaseInspectionCommand
 
         return collect($class->getMethods())
             ->reject(
-                fn (ReflectionMethod $method) => $method->isStatic()
+                fn(ReflectionMethod $method) => $method->isStatic()
                     || $method->isAbstract()
                     || $method->getDeclaringClass()->getName() === Model::class
             )
@@ -172,8 +172,8 @@ class ShowModelCommand extends DatabaseInspectionCommand
                     return [];
                 }
             })
-            ->reject(fn ($cast, $name) => collect($columns)->has($name))
-            ->map(fn ($cast, $name) => [
+            ->reject(fn($cast, $name) => collect($columns)->has($name))
+            ->map(fn($cast, $name) => [
                 'name' => $name,
                 'type' => null,
                 'increments' => false,
@@ -191,15 +191,15 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Get the relations from the given model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return \Illuminate\Support\Collection
      */
     protected function getRelations($model)
     {
         return collect(get_class_methods($model))
-            ->map(fn ($method) => new ReflectionMethod($model, $method))
+            ->map(fn($method) => new ReflectionMethod($model, $method))
             ->reject(
-                fn (ReflectionMethod $method) => $method->isStatic()
+                fn(ReflectionMethod $method) => $method->isStatic()
                     || $method->isAbstract()
                     || $method->getDeclaringClass()->getName() === Model::class
             )
@@ -213,12 +213,12 @@ class ShowModelCommand extends DatabaseInspectionCommand
                 }
 
                 return collect($this->relationMethods)
-                    ->contains(fn ($relationMethod) => str_contains($code, '$this->'.$relationMethod.'('));
+                    ->contains(fn($relationMethod) => str_contains($code, '$this->' . $relationMethod . '('));
             })
             ->map(function (ReflectionMethod $method) use ($model) {
                 $relation = $method->invoke($model);
 
-                if (! $relation instanceof Relation) {
+                if (!$relation instanceof Relation) {
                     return null;
                 }
 
@@ -235,7 +235,7 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Get the Observers watching this model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return \Illuminate\Support\Collection
      */
     protected function getObservers($model)
@@ -259,7 +259,7 @@ class ShowModelCommand extends DatabaseInspectionCommand
         foreach ($listeners as $key => $observerMethods) {
             $formatted[] = [
                 'event' => $extractVerb($key),
-                'observer' => array_map(fn ($obs) => is_string($obs) ? $obs : 'Closure', $observerMethods),
+                'observer' => array_map(fn($obs) => is_string($obs) ? $obs : 'Closure', $observerMethods),
             ];
         }
 
@@ -269,13 +269,13 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Render the model information.
      *
-     * @param  string  $class
-     * @param  string  $database
-     * @param  string  $table
-     * @param  string  $policy
-     * @param  \Illuminate\Support\Collection  $attributes
-     * @param  \Illuminate\Support\Collection  $relations
-     * @param  \Illuminate\Support\Collection  $observers
+     * @param string $class
+     * @param string $database
+     * @param string $table
+     * @param string $policy
+     * @param \Illuminate\Support\Collection $attributes
+     * @param \Illuminate\Support\Collection $relations
+     * @param \Illuminate\Support\Collection $observers
      * @return void
      */
     protected function display($class, $database, $table, $policy, $attributes, $relations, $observers)
@@ -288,13 +288,13 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Render the model information as JSON.
      *
-     * @param  string  $class
-     * @param  string  $database
-     * @param  string  $table
-     * @param  string  $policy
-     * @param  \Illuminate\Support\Collection  $attributes
-     * @param  \Illuminate\Support\Collection  $relations
-     * @param  \Illuminate\Support\Collection  $observers
+     * @param string $class
+     * @param string $database
+     * @param string $table
+     * @param string $policy
+     * @param \Illuminate\Support\Collection $attributes
+     * @param \Illuminate\Support\Collection $relations
+     * @param \Illuminate\Support\Collection $observers
      * @return void
      */
     protected function displayJson($class, $database, $table, $policy, $attributes, $relations, $observers)
@@ -315,20 +315,20 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Render the model information for the CLI.
      *
-     * @param  string  $class
-     * @param  string  $database
-     * @param  string  $table
-     * @param  string  $policy
-     * @param  \Illuminate\Support\Collection  $attributes
-     * @param  \Illuminate\Support\Collection  $relations
-     * @param  \Illuminate\Support\Collection  $observers
+     * @param string $class
+     * @param string $database
+     * @param string $table
+     * @param string $policy
+     * @param \Illuminate\Support\Collection $attributes
+     * @param \Illuminate\Support\Collection $relations
+     * @param \Illuminate\Support\Collection $observers
      * @return void
      */
     protected function displayCli($class, $database, $table, $policy, $attributes, $relations, $observers)
     {
         $this->newLine();
 
-        $this->components->twoColumnDetail('<fg=green;options=bold>'.$class.'</>');
+        $this->components->twoColumnDetail('<fg=green;options=bold>' . $class . '</>');
         $this->components->twoColumnDetail('Database', $database);
         $this->components->twoColumnDetail('Table', $table);
 
@@ -344,18 +344,20 @@ class ShowModelCommand extends DatabaseInspectionCommand
         );
 
         foreach ($attributes as $attribute) {
-            $first = trim(sprintf(
-                '%s %s',
-                $attribute['name'],
-                collect(['increments', 'unique', 'nullable', 'fillable', 'hidden', 'appended'])
-                    ->filter(fn ($property) => $attribute[$property])
-                    ->map(fn ($property) => sprintf('<fg=gray>%s</>', $property))
-                    ->implode('<fg=gray>,</> ')
-            ));
+            $first = trim(
+                sprintf(
+                    '%s %s',
+                    $attribute['name'],
+                    collect(['increments', 'unique', 'nullable', 'fillable', 'hidden', 'appended'])
+                        ->filter(fn($property) => $attribute[$property])
+                        ->map(fn($property) => sprintf('<fg=gray>%s</>', $property))
+                        ->implode('<fg=gray>,</> ')
+                )
+            );
 
             $second = collect([
                 $attribute['type'],
-                $attribute['cast'] ? '<fg=yellow;options=bold>'.$attribute['cast'].'</>' : null,
+                $attribute['cast'] ? '<fg=yellow;options=bold>' . $attribute['cast'] . '</>' : null,
             ])->filter()->implode(' <fg=gray>/</> ');
 
             $this->components->twoColumnDetail($first, $second);
@@ -398,8 +400,8 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Get the cast type for the given column.
      *
-     * @param  string  $column
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param string $column
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return string|null
      */
     protected function getCastType($column, $model)
@@ -418,7 +420,7 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Get the model casts, including any date casts.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return \Illuminate\Support\Collection
      */
     protected function getCastsWithDates($model)
@@ -426,14 +428,14 @@ class ShowModelCommand extends DatabaseInspectionCommand
         return collect($model->getDates())
             ->filter()
             ->flip()
-            ->map(fn () => 'datetime')
+            ->map(fn() => 'datetime')
             ->merge($model->getCasts());
     }
 
     /**
      * Get the type of the given column.
      *
-     * @param  \Doctrine\DBAL\Schema\Column  $column
+     * @param \Doctrine\DBAL\Schema\Column $column
      * @return string
      */
     protected function getColumnType($column)
@@ -443,7 +445,7 @@ class ShowModelCommand extends DatabaseInspectionCommand
         $unsigned = $column->getUnsigned() ? ' unsigned' : '';
 
         $details = match (get_class($column->getType())) {
-            DecimalType::class => $column->getPrecision().','.$column->getScale(),
+            DecimalType::class => $column->getPrecision() . ',' . $column->getScale(),
             default => $column->getLength(),
         };
 
@@ -457,8 +459,8 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Get the default value for the given column.
      *
-     * @param  \Doctrine\DBAL\Schema\Column  $column
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Doctrine\DBAL\Schema\Column $column
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return mixed|null
      */
     protected function getColumnDefault($column, $model)
@@ -475,8 +477,8 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Determine if the given attribute is hidden.
      *
-     * @param  string  $attribute
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param string $attribute
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return bool
      */
     protected function attributeIsHidden($attribute, $model)
@@ -486,7 +488,7 @@ class ShowModelCommand extends DatabaseInspectionCommand
         }
 
         if (count($model->getVisible()) > 0) {
-            return ! in_array($attribute, $model->getVisible());
+            return !in_array($attribute, $model->getVisible());
         }
 
         return false;
@@ -495,21 +497,21 @@ class ShowModelCommand extends DatabaseInspectionCommand
     /**
      * Determine if the given attribute is unique.
      *
-     * @param  string  $column
-     * @param  \Doctrine\DBAL\Schema\Index[]  $indexes
+     * @param string $column
+     * @param \Doctrine\DBAL\Schema\Index[] $indexes
      * @return bool
      */
     protected function columnIsUnique($column, $indexes)
     {
         return collect($indexes)
-            ->filter(fn (Index $index) => count($index->getColumns()) === 1 && $index->getColumns()[0] === $column)
-            ->contains(fn (Index $index) => $index->isUnique());
+            ->filter(fn(Index $index) => count($index->getColumns()) === 1 && $index->getColumns()[0] === $column)
+            ->contains(fn(Index $index) => $index->isUnique());
     }
 
     /**
      * Qualify the given model class base name.
      *
-     * @param  string  $model
+     * @param string $model
      * @return string
      *
      * @see \Illuminate\Console\GeneratorCommand
@@ -531,7 +533,7 @@ class ShowModelCommand extends DatabaseInspectionCommand
         }
 
         return is_dir(app_path('Models'))
-            ? $rootNamespace.'Models\\'.$model
-            : $rootNamespace.$model;
+            ? $rootNamespace . 'Models\\' . $model
+            : $rootNamespace . $model;
     }
 }

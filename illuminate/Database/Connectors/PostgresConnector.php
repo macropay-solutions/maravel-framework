@@ -24,7 +24,7 @@ class PostgresConnector extends Connector implements ConnectorInterface
     /**
      * Establish a database connection.
      *
-     * @param  array  $config
+     * @param array $config
      * @return \PDO
      */
     public function connect(array $config)
@@ -33,7 +33,9 @@ class PostgresConnector extends Connector implements ConnectorInterface
         // using the configuration option specified by the developer. We will also
         // set the default character set on the connections to UTF-8 by default.
         $connection = $this->createConnection(
-            $this->getDsn($config), $config, $this->getOptions($config)
+            $this->getDsn($config),
+            $config,
+            $this->getOptions($config)
         );
 
         $this->configureIsolationLevel($connection, $config);
@@ -53,22 +55,24 @@ class PostgresConnector extends Connector implements ConnectorInterface
     /**
      * Set the connection transaction isolation level.
      *
-     * @param  \PDO  $connection
-     * @param  array  $config
+     * @param \PDO $connection
+     * @param array $config
      * @return void
      */
     protected function configureIsolationLevel($connection, array $config)
     {
         if (isset($config['isolation_level'])) {
-            $connection->prepare("set session characteristics as transaction isolation level {$config['isolation_level']}")->execute();
+            $connection->prepare(
+                "set session characteristics as transaction isolation level {$config['isolation_level']}"
+            )->execute();
         }
     }
 
     /**
      * Set the timezone on the connection.
      *
-     * @param  \PDO  $connection
-     * @param  array  $config
+     * @param \PDO $connection
+     * @param array $config
      * @return void
      */
     protected function configureTimezone($connection, array $config)
@@ -83,8 +87,8 @@ class PostgresConnector extends Connector implements ConnectorInterface
     /**
      * Set the "search_path" on the database connection.
      *
-     * @param  \PDO  $connection
-     * @param  array  $config
+     * @param \PDO $connection
+     * @param array $config
      * @return void
      */
     protected function configureSearchPath($connection, $config)
@@ -101,18 +105,18 @@ class PostgresConnector extends Connector implements ConnectorInterface
     /**
      * Format the search path for the DSN.
      *
-     * @param  array  $searchPath
+     * @param array $searchPath
      * @return string
      */
     protected function quoteSearchPath($searchPath)
     {
-        return count($searchPath) === 1 ? '"'.$searchPath[0].'"' : '"'.implode('", "', $searchPath).'"';
+        return count($searchPath) === 1 ? '"' . $searchPath[0] . '"' : '"' . implode('", "', $searchPath) . '"';
     }
 
     /**
      * Create a DSN string from a configuration.
      *
-     * @param  array  $config
+     * @param array $config
      * @return string
      */
     protected function getDsn(array $config)
@@ -135,7 +139,7 @@ class PostgresConnector extends Connector implements ConnectorInterface
         // If a port was specified, we will add it to this Postgres DSN connections
         // format. Once we have done that we are ready to return this connection
         // string back out for usage, as this has been fully constructed here.
-        if (! is_null($port)) {
+        if (!is_null($port)) {
             $dsn .= ";port={$port}";
         }
 
@@ -147,7 +151,7 @@ class PostgresConnector extends Connector implements ConnectorInterface
         // used to when monitoring the application with pg_stat_activity. So we'll
         // determine if the option has been specified and run a statement if so.
         if (isset($application_name)) {
-            $dsn .= ";application_name='".str_replace("'", "\'", $application_name)."'";
+            $dsn .= ";application_name='" . str_replace("'", "\'", $application_name) . "'";
         }
 
         return $this->addSslOptions($dsn, $config);
@@ -156,8 +160,8 @@ class PostgresConnector extends Connector implements ConnectorInterface
     /**
      * Add the SSL options to the DSN.
      *
-     * @param  string  $dsn
-     * @param  array  $config
+     * @param string $dsn
+     * @param array $config
      * @return string
      */
     protected function addSslOptions($dsn, array $config)
@@ -174,13 +178,13 @@ class PostgresConnector extends Connector implements ConnectorInterface
     /**
      * Configure the synchronous_commit setting.
      *
-     * @param  \PDO  $connection
-     * @param  array  $config
+     * @param \PDO $connection
+     * @param array $config
      * @return void
      */
     protected function configureSynchronousCommit($connection, array $config)
     {
-        if (! isset($config['synchronous_commit'])) {
+        if (!isset($config['synchronous_commit'])) {
             return;
         }
 

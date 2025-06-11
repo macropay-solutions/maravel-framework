@@ -52,10 +52,10 @@ class DurationLimiter
     /**
      * Create a new duration limiter instance.
      *
-     * @param  \Illuminate\Redis\Connections\Connection  $redis
-     * @param  string  $name
-     * @param  int  $maxLocks
-     * @param  int  $decay
+     * @param \Illuminate\Redis\Connections\Connection $redis
+     * @param string $name
+     * @param int $maxLocks
+     * @param int $decay
      * @return void
      */
     public function __construct($redis, $name, $maxLocks, $decay)
@@ -69,9 +69,9 @@ class DurationLimiter
     /**
      * Attempt to acquire the lock for the given number of seconds.
      *
-     * @param  int  $timeout
-     * @param  callable|null  $callback
-     * @param  int  $sleep
+     * @param int $timeout
+     * @param callable|null $callback
+     * @param int $sleep
      * @return mixed
      *
      * @throws \Illuminate\Contracts\Redis\LimiterTimeoutException
@@ -80,9 +80,9 @@ class DurationLimiter
     {
         $starting = time();
 
-        while (! $this->acquire()) {
+        while (!$this->acquire()) {
             if (time() - $timeout >= $starting) {
-                throw new LimiterTimeoutException;
+                throw new LimiterTimeoutException();
             }
 
             Sleep::usleep($sleep * 1000);
@@ -103,14 +103,20 @@ class DurationLimiter
     public function acquire()
     {
         $results = $this->redis->eval(
-            $this->luaScript(), 1, $this->name, microtime(true), time(), $this->decay, $this->maxLocks
+            $this->luaScript(),
+            1,
+            $this->name,
+            microtime(true),
+            time(),
+            $this->decay,
+            $this->maxLocks
         );
 
         $this->decaysAt = $results[1];
 
         $this->remaining = max(0, $results[2]);
 
-        return (bool) $results[0];
+        return (bool)$results[0];
     }
 
     /**
@@ -121,7 +127,13 @@ class DurationLimiter
     public function tooManyAttempts()
     {
         [$this->decaysAt, $this->remaining] = $this->redis->eval(
-            $this->tooManyAttemptsLuaScript(), 1, $this->name, microtime(true), time(), $this->decay, $this->maxLocks
+            $this->tooManyAttemptsLuaScript(),
+            1,
+            $this->name,
+            microtime(true),
+            time(),
+            $this->decay,
+            $this->maxLocks
         );
 
         return $this->remaining <= 0;

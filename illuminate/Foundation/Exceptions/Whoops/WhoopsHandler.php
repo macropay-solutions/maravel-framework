@@ -15,7 +15,7 @@ class WhoopsHandler
      */
     public function forDebug()
     {
-        return tap(new PrettyPageHandler, function ($handler) {
+        return tap(new PrettyPageHandler(), function ($handler) {
             $handler->handleUnconditionally(true);
 
             $this->registerApplicationPaths($handler)
@@ -27,7 +27,7 @@ class WhoopsHandler
     /**
      * Register the application paths with the handler.
      *
-     * @param  \Whoops\Handler\PrettyPageHandler  $handler
+     * @param \Whoops\Handler\PrettyPageHandler $handler
      * @return $this
      */
     protected function registerApplicationPaths($handler)
@@ -56,7 +56,7 @@ class WhoopsHandler
     /**
      * Register the blacklist with the handler.
      *
-     * @param  \Whoops\Handler\PrettyPageHandler  $handler
+     * @param \Whoops\Handler\PrettyPageHandler $handler
      * @return $this
      */
     protected function registerBlacklist($handler)
@@ -73,7 +73,7 @@ class WhoopsHandler
     /**
      * Register the editor with the handler.
      *
-     * @param  \Whoops\Handler\PrettyPageHandler  $handler
+     * @param \Whoops\Handler\PrettyPageHandler $handler
      * @return $this
      */
     protected function registerEditor($handler)

@@ -33,7 +33,7 @@ trait GuardHelpers
      */
     public function authenticate()
     {
-        return $this->user() ?? throw new AuthenticationException;
+        return $this->user() ?? throw new AuthenticationException();
     }
 
     /**
@@ -43,7 +43,7 @@ trait GuardHelpers
      */
     public function hasUser()
     {
-        return ! is_null($this->user);
+        return !is_null($this->user);
     }
 
     /**
@@ -53,7 +53,7 @@ trait GuardHelpers
      */
     public function check()
     {
-        return ! is_null($this->user());
+        return !is_null($this->user());
     }
 
     /**
@@ -63,7 +63,7 @@ trait GuardHelpers
      */
     public function guest()
     {
-        return ! $this->check();
+        return !$this->check();
     }
 
     /**
@@ -81,7 +81,7 @@ trait GuardHelpers
     /**
      * Set the current user.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param \Illuminate\Contracts\Auth\Authenticatable $user
      * @return $this
      */
     public function setUser(AuthenticatableContract $user)
@@ -116,7 +116,7 @@ trait GuardHelpers
     /**
      * Set the user provider used by the guard.
      *
-     * @param  \Illuminate\Contracts\Auth\UserProvider  $provider
+     * @param \Illuminate\Contracts\Auth\UserProvider $provider
      * @return void
      */
     public function setProvider(UserProvider $provider)

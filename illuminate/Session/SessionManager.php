@@ -12,7 +12,7 @@ class SessionManager extends Manager
     /**
      * Call a custom driver creator.
      *
-     * @param  string  $driver
+     * @param string $driver
      * @return \Illuminate\Session\Store
      */
     protected function callCustomCreator($driver)
@@ -27,7 +27,7 @@ class SessionManager extends Manager
      */
     protected function createNullDriver()
     {
-        return $this->buildSession(new NullSessionHandler);
+        return $this->buildSession(new NullSessionHandler());
     }
 
     /**
@@ -37,9 +37,11 @@ class SessionManager extends Manager
      */
     protected function createArrayDriver()
     {
-        return $this->buildSession(new ArraySessionHandler(
-            $this->config->get('session.lifetime')
-        ));
+        return $this->buildSession(
+            new ArraySessionHandler(
+                $this->config->get('session.lifetime')
+            )
+        );
     }
 
     /**
@@ -49,11 +51,13 @@ class SessionManager extends Manager
      */
     protected function createCookieDriver()
     {
-        return $this->buildSession(new CookieSessionHandler(
-            $this->container->make('cookie'),
-            $this->config->get('session.lifetime'),
-            $this->config->get('session.expire_on_close')
-        ));
+        return $this->buildSession(
+            new CookieSessionHandler(
+                $this->container->make('cookie'),
+                $this->config->get('session.lifetime'),
+                $this->config->get('session.expire_on_close')
+            )
+        );
     }
 
     /**
@@ -75,9 +79,13 @@ class SessionManager extends Manager
     {
         $lifetime = $this->config->get('session.lifetime');
 
-        return $this->buildSession(new FileSessionHandler(
-            $this->container->make('files'), $this->config->get('session.files'), $lifetime
-        ));
+        return $this->buildSession(
+            new FileSessionHandler(
+                $this->container->make('files'),
+                $this->config->get('session.files'),
+                $lifetime
+            )
+        );
     }
 
     /**
@@ -91,9 +99,14 @@ class SessionManager extends Manager
 
         $lifetime = $this->config->get('session.lifetime');
 
-        return $this->buildSession(new DatabaseSessionHandler(
-            $this->getDatabaseConnection(), $table, $lifetime, $this->container
-        ));
+        return $this->buildSession(
+            new DatabaseSessionHandler(
+                $this->getDatabaseConnection(),
+                $table,
+                $lifetime,
+                $this->container
+            )
+        );
     }
 
     /**
@@ -157,7 +170,7 @@ class SessionManager extends Manager
     /**
      * Create an instance of a cache driven driver.
      *
-     * @param  string  $driver
+     * @param string $driver
      * @return \Illuminate\Session\Store
      */
     protected function createCacheBased($driver)
@@ -168,7 +181,7 @@ class SessionManager extends Manager
     /**
      * Create the cache based session handler instance.
      *
-     * @param  string  $driver
+     * @param string $driver
      * @return \Illuminate\Session\CacheBasedSessionHandler
      */
     protected function createCacheHandler($driver)
@@ -184,25 +197,25 @@ class SessionManager extends Manager
     /**
      * Build the session instance.
      *
-     * @param  \SessionHandlerInterface  $handler
+     * @param \SessionHandlerInterface $handler
      * @return \Illuminate\Session\Store
      */
     protected function buildSession($handler)
     {
         return $this->config->get('session.encrypt')
-                ? $this->buildEncryptedSession($handler)
-                : new Store(
-                    $this->config->get('session.cookie'),
-                    $handler,
-                    $id = null,
-                    $this->config->get('session.serialization', 'php')
+            ? $this->buildEncryptedSession($handler)
+            : new Store(
+                $this->config->get('session.cookie'),
+                $handler,
+                $id = null,
+                $this->config->get('session.serialization', 'php')
             );
     }
 
     /**
      * Build the encrypted session instance.
      *
-     * @param  \SessionHandlerInterface  $handler
+     * @param \SessionHandlerInterface $handler
      * @return \Illuminate\Session\EncryptedStore
      */
     protected function buildEncryptedSession($handler)
@@ -279,7 +292,7 @@ class SessionManager extends Manager
     /**
      * Set the default session driver name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return void
      */
     public function setDefaultDriver($name)

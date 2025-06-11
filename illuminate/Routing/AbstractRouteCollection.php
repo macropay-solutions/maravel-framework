@@ -20,15 +20,15 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
     /**
      * Handle the matched route.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Routing\Route|null  $route
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Routing\Route|null $route
      * @return \Illuminate\Routing\Route
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     protected function handleMatchedRoute(Request $request, $route)
     {
-        if (! is_null($route)) {
+        if (!is_null($route)) {
             return $route->bind($request);
         }
 
@@ -41,16 +41,18 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
             return $this->getRouteForMethods($request, $others);
         }
 
-        throw new NotFoundHttpException(sprintf(
-            'The route %s could not be found.',
-            $request->path()
-        ));
+        throw new NotFoundHttpException(
+            sprintf(
+                'The route %s could not be found.',
+                $request->path()
+            )
+        );
     }
 
     /**
      * Determine if any routes match on another HTTP verb.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     protected function checkForAlternateVerbs($request)
@@ -60,20 +62,22 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
         // Here we will spin through all verbs except for the current request verb and
         // check to see if any routes respond to them. If they do, we will return a
         // proper error response with the correct headers on the response string.
-        return array_values(array_filter(
-            $methods,
-            function ($method) use ($request) {
-                return ! is_null($this->matchAgainstRoutes($this->get($method), $request, false));
-            }
-        ));
+        return array_values(
+            array_filter(
+                $methods,
+                function ($method) use ($request) {
+                    return !is_null($this->matchAgainstRoutes($this->get($method), $request, false));
+                }
+            )
+        );
     }
 
     /**
      * Determine if a route in the array matches the request.
      *
-     * @param  \Illuminate\Routing\Route[]  $routes
-     * @param  \Illuminate\Http\Request  $request
-     * @param  bool  $includingMethod
+     * @param \Illuminate\Routing\Route[] $routes
+     * @param \Illuminate\Http\Request $request
+     * @param bool $includingMethod
      * @return \Illuminate\Routing\Route|null
      */
     protected function matchAgainstRoutes(array $routes, $request, $includingMethod = true)
@@ -83,15 +87,15 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
         });
 
         return $routes->merge($fallbacks)->first(
-            fn (Route $route) => $route->matches($request, $includingMethod)
+            fn(Route $route) => $route->matches($request, $includingMethod)
         );
     }
 
     /**
      * Get a route (if necessary) that responds when other available methods are present.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string[]  $methods
+     * @param \Illuminate\Http\Request $request
+     * @param string[] $methods
      * @return \Illuminate\Routing\Route
      *
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
@@ -100,10 +104,14 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
     {
         if ($request->isMethod('OPTIONS')) {
 //            return (new Route('OPTIONS', $request->path(), function () use ($methods) {
-            return \app(Route::class, ['OPTIONS', $request->path(), function () use ($methods) {
+            return \app(Route::class, [
+                'OPTIONS',
+                $request->path(),
+                function () use ($methods) {
 //                return new Response('', 200, ['Allow' => implode(',', $methods)]);
-                return \app(Response::class, ['', 200, ['Allow' => implode(',', $methods)]]);
-            }])->bind($request);
+                    return \app(Response::class, ['', 200, ['Allow' => implode(',', $methods)]]);
+                },
+            ])->bind($request);
         }
 
         $this->requestMethodNotAllowed($request, $methods, $request->method());
@@ -112,9 +120,9 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
     /**
      * Throw a method not allowed HTTP exception.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $others
-     * @param  string  $method
+     * @param \Illuminate\Http\Request $request
+     * @param array $others
+     * @param string $method
      * @return void
      *
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
@@ -135,13 +143,13 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
     /**
      * Throw a method not allowed HTTP exception.
      *
-     * @param  array  $others
-     * @param  string  $method
+     * @param array $others
+     * @param string $method
      * @return void
      *
+     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      * @deprecated use requestMethodNotAllowed
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     protected function methodNotAllowed(array $others, $method)
     {
@@ -201,12 +209,12 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
      */
     public function toSymfonyRouteCollection()
     {
-        $symfonyRoutes = new SymfonyRouteCollection;
+        $symfonyRoutes = new SymfonyRouteCollection();
 
         $routes = $this->getRoutes();
 
         foreach ($routes as $route) {
-            if (! $route->isFallback) {
+            if (!$route->isFallback) {
                 $symfonyRoutes = $this->addToSymfonyRoutesCollection($symfonyRoutes, $route);
             }
         }
@@ -223,8 +231,8 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
     /**
      * Add a route to the SymfonyRouteCollection instance.
      *
-     * @param  \Symfony\Component\Routing\RouteCollection  $symfonyRoutes
-     * @param  \Illuminate\Routing\Route  $route
+     * @param \Symfony\Component\Routing\RouteCollection $symfonyRoutes
+     * @param \Illuminate\Routing\Route $route
      * @return \Symfony\Component\Routing\RouteCollection
      *
      * @throws \LogicException
@@ -234,19 +242,22 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
         $name = $route->getName();
 
         if (
-            ! is_null($name)
+            !is_null($name)
             && str_ends_with($name, '.')
-            && ! is_null($symfonyRoutes->get($name))
+            && !is_null($symfonyRoutes->get($name))
         ) {
             $name = null;
         }
 
-        if (! $name) {
+        if (!$name) {
             $route->name($this->generateRouteName());
 
             $this->add($route);
-        } elseif (! is_null($symfonyRoutes->get($name))) {
-            throw new LogicException("Unable to prepare route [{$route->uri}] for serialization. Another route has already been assigned name [{$name}].");
+        } elseif (!is_null($symfonyRoutes->get($name))) {
+            throw new LogicException(
+                "Unable to prepare route [{$route->uri}] for serialization." .
+                    " Another route has already been assigned name [{$name}]."
+            );
         }
 
         $symfonyRoutes->add($route->getName(), $route->toSymfonyRoute());
@@ -261,7 +272,7 @@ abstract class AbstractRouteCollection implements Countable, IteratorAggregate, 
      */
     protected function generateRouteName()
     {
-        return 'generated::'.Str::random();
+        return 'generated::' . Str::random();
     }
 
     /**

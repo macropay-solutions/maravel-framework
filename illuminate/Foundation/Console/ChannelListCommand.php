@@ -42,12 +42,16 @@ class ChannelListCommand extends Command
     {
         $channels = $broadcaster->getChannels();
 
-        if (! $this->laravel->providerIsLoaded('App\Providers\BroadcastServiceProvider') &&
-            file_exists($this->laravel->path('Providers/BroadcastServiceProvider.php'))) {
-            $this->components->warn('The [App\Providers\BroadcastServiceProvider] has not been loaded. Your private channels may not be loaded.');
+        if (
+            !$this->laravel->providerIsLoaded('App\Providers\BroadcastServiceProvider') &&
+            file_exists($this->laravel->path('Providers/BroadcastServiceProvider.php'))
+        ) {
+            $this->components->warn(
+                'The [App\Providers\BroadcastServiceProvider] has not been loaded. Your private channels may not be loaded.'
+            );
         }
 
-        if (! $channels->count()) {
+        if (!$channels->count()) {
             $this->components->error("Your application doesn't have any private broadcasting channels.");
 
             return;
@@ -59,7 +63,7 @@ class ChannelListCommand extends Command
     /**
      * Display the channel information on the console.
      *
-     * @param  Collection  $channels
+     * @param Collection $channels
      * @return void
      */
     protected function displayChannels($channels)
@@ -70,7 +74,7 @@ class ChannelListCommand extends Command
     /**
      * Convert the given channels to regular CLI output.
      *
-     * @param  \Illuminate\Support\Collection  $channels
+     * @param \Illuminate\Support\Collection $channels
      * @return array
      */
     protected function forCli($channels)
@@ -88,9 +92,13 @@ class ChannelListCommand extends Command
 
             $spaces = str_repeat(' ', max($maxChannelName + 6 - mb_strlen($channelName), 0));
 
-            $dots = str_repeat('.', max(
-                $terminalWidth - mb_strlen($channelName.$spaces.$resolver) - 6, 0
-            ));
+            $dots = str_repeat(
+                '.',
+                max(
+                    $terminalWidth - mb_strlen($channelName . $spaces . $resolver) - 6,
+                    0
+                )
+            );
 
             $dots = empty($dots) ? $dots : " $dots";
 
@@ -112,19 +120,19 @@ class ChannelListCommand extends Command
     /**
      * Determine and return the output for displaying the number of registered channels in the CLI output.
      *
-     * @param  \Illuminate\Support\Collection  $channels
-     * @param  int  $terminalWidth
+     * @param \Illuminate\Support\Collection $channels
+     * @param int $terminalWidth
      * @return string
      */
     protected function determineChannelCountOutput($channels, $terminalWidth)
     {
-        $channelCountText = 'Showing ['.$channels->count().'] private channels';
+        $channelCountText = 'Showing [' . $channels->count() . '] private channels';
 
         $offset = $terminalWidth - mb_strlen($channelCountText) - 2;
 
         $spaces = str_repeat(' ', $offset);
 
-        return $spaces.'<fg=blue;options=bold>Showing ['.$channels->count().'] private channels</>';
+        return $spaces . '<fg=blue;options=bold>Showing [' . $channels->count() . '] private channels</>';
     }
 
     /**
@@ -135,14 +143,14 @@ class ChannelListCommand extends Command
     public static function getTerminalWidth()
     {
         return is_null(static::$terminalWidthResolver)
-            ? (new Terminal)->getWidth()
+            ? (new Terminal())->getWidth()
             : call_user_func(static::$terminalWidthResolver);
     }
 
     /**
      * Set a callback that should be used when resolving the terminal width.
      *
-     * @param  \Closure|null  $resolver
+     * @param \Closure|null $resolver
      * @return void
      */
     public static function resolveTerminalWidthUsing($resolver)

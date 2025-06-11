@@ -31,7 +31,7 @@ class Signals
     /**
      * Create a new signal registrar instance.
      *
-     * @param  \Symfony\Component\Console\SignalRegistry\SignalRegistry  $registry
+     * @param \Symfony\Component\Console\SignalRegistry\SignalRegistry $registry
      * @return void
      */
     public function __construct($registry)
@@ -44,8 +44,8 @@ class Signals
     /**
      * Register a new signal handler.
      *
-     * @param  int  $signal
-     * @param  callable(int $signal): void  $callback
+     * @param int $signal
+     * @param callable(int $signal): void $callback
      * @return void
      */
     public function register($signal, $callback)
@@ -104,7 +104,7 @@ class Signals
     /**
      * Execute the given callback if "signals" should be used and are available.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return void
      */
     public static function whenAvailable($callback)
@@ -123,26 +123,26 @@ class Signals
      */
     protected function getHandlers()
     {
-        return (fn () => $this->signalHandlers)
+        return (fn() => $this->signalHandlers)
             ->call($this->registry);
     }
 
     /**
      * Set the registry's handlers.
      *
-     * @param  array<int, array<int, callable(int $signal):void>>  $handlers
+     * @param array<int, array<int, callable(int $signal):void>> $handlers
      * @return void
      */
     protected function setHandlers($handlers)
     {
-        (fn () => $this->signalHandlers = $handlers)
+        (fn() => $this->signalHandlers = $handlers)
             ->call($this->registry);
     }
 
     /**
      * Set the availability resolver.
      *
-     * @param  callable(): bool
+     * @param callable(): bool
      * @return void
      */
     public static function resolveAvailabilityUsing($resolver)

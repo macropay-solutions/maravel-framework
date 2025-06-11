@@ -59,12 +59,12 @@ class Notification extends Facade
     /**
      * Begin sending a notification to an anonymous notifiable on the given channels.
      *
-     * @param  array  $channels
+     * @param array $channels
      * @return \Illuminate\Notifications\AnonymousNotifiable
      */
     public static function routes(array $channels)
     {
-        $notifiable = new AnonymousNotifiable;
+        $notifiable = new AnonymousNotifiable();
 
         foreach ($channels as $channel => $route) {
             $notifiable->route($channel, $route);
@@ -76,13 +76,13 @@ class Notification extends Facade
     /**
      * Begin sending a notification to an anonymous notifiable.
      *
-     * @param  string  $channel
-     * @param  mixed  $route
+     * @param string $channel
+     * @param mixed $route
      * @return \Illuminate\Notifications\AnonymousNotifiable
      */
     public static function route($channel, $route)
     {
-        return (new AnonymousNotifiable)->route($channel, $route);
+        return (new AnonymousNotifiable())->route($channel, $route);
     }
 
     /**

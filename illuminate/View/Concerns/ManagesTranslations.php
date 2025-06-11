@@ -14,7 +14,7 @@ trait ManagesTranslations
     /**
      * Start a translation block.
      *
-     * @param  array  $replacements
+     * @param array $replacements
      * @return void
      */
     public function startTranslation($replacements = [])
@@ -32,7 +32,8 @@ trait ManagesTranslations
     public function renderTranslation()
     {
         return $this->container->make('translator')->get(
-            trim(ob_get_clean()), $this->translationReplacements
+            trim(ob_get_clean()),
+            $this->translationReplacements
         );
     }
 }

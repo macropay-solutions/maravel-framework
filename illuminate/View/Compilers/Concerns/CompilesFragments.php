@@ -14,7 +14,7 @@ trait CompilesFragments
     /**
      * Compile the fragment statements into valid PHP.
      *
-     * @param  string  $expression
+     * @param string $expression
      * @return string
      */
     protected function compileFragment($expression)

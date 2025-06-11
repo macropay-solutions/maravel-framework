@@ -45,7 +45,7 @@ class QueuedClosure
     /**
      * Create a new queued closure event listener resolver.
      *
-     * @param  \Closure  $closure
+     * @param \Closure $closure
      * @return void
      */
     public function __construct(Closure $closure)
@@ -56,7 +56,7 @@ class QueuedClosure
     /**
      * Set the desired connection for the job.
      *
-     * @param  string|null  $connection
+     * @param string|null $connection
      * @return $this
      */
     public function onConnection($connection)
@@ -69,7 +69,7 @@ class QueuedClosure
     /**
      * Set the desired queue for the job.
      *
-     * @param  string|null  $queue
+     * @param string|null $queue
      * @return $this
      */
     public function onQueue($queue)
@@ -82,7 +82,7 @@ class QueuedClosure
     /**
      * Set the desired delay in seconds for the job.
      *
-     * @param  \DateTimeInterface|\DateInterval|int|null  $delay
+     * @param \DateTimeInterface|\DateInterval|int|null $delay
      * @return $this
      */
     public function delay($delay)
@@ -95,7 +95,7 @@ class QueuedClosure
     /**
      * Specify a callback that should be invoked if the queued listener job fails.
      *
-     * @param  \Closure  $closure
+     * @param \Closure $closure
      * @return $this
      */
     public function catch(Closure $closure)

@@ -11,7 +11,8 @@ use Illuminate\Queue\InteractsWithQueue;
 
 class SendQueuedMailable
 {
-    use Queueable, InteractsWithQueue;
+    use Queueable;
+    use InteractsWithQueue;
 
     /**
      * The mailable message instance.
@@ -51,7 +52,7 @@ class SendQueuedMailable
     /**
      * Create a new job instance.
      *
-     * @param  \Illuminate\Contracts\Mail\Mailable  $mailable
+     * @param \Illuminate\Contracts\Mail\Mailable $mailable
      * @return void
      */
     public function __construct(MailableContract $mailable)
@@ -75,7 +76,7 @@ class SendQueuedMailable
     /**
      * Handle the queued job.
      *
-     * @param  \Illuminate\Contracts\Mail\Factory  $factory
+     * @param \Illuminate\Contracts\Mail\Factory $factory
      * @return void
      */
     public function handle(MailFactory $factory)
@@ -90,7 +91,7 @@ class SendQueuedMailable
      */
     public function backoff()
     {
-        if (! method_exists($this->mailable, 'backoff') && ! isset($this->mailable->backoff)) {
+        if (!method_exists($this->mailable, 'backoff') && !isset($this->mailable->backoff)) {
             return;
         }
 
@@ -104,7 +105,7 @@ class SendQueuedMailable
      */
     public function retryUntil()
     {
-        if (! method_exists($this->mailable, 'retryUntil') && ! isset($this->mailable->retryUntil)) {
+        if (!method_exists($this->mailable, 'retryUntil') && !isset($this->mailable->retryUntil)) {
             return;
         }
 
@@ -114,7 +115,7 @@ class SendQueuedMailable
     /**
      * Call the failed method on the mailable instance.
      *
-     * @param  \Throwable  $e
+     * @param \Throwable $e
      * @return void
      */
     public function failed($e)

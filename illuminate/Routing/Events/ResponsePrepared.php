@@ -21,8 +21,8 @@ class ResponsePrepared
     /**
      * Create a new event instance.
      *
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
-     * @param  \Symfony\Component\HttpFoundation\Response  $response
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Response $response
      * @return void
      */
     public function __construct($request, $response)

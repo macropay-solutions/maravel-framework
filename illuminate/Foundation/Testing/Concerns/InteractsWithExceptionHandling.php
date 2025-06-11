@@ -36,7 +36,7 @@ trait InteractsWithExceptionHandling
     /**
      * Only handle the given exceptions via the exception handler.
      *
-     * @param  array  $exceptions
+     * @param array $exceptions
      * @return $this
      */
     protected function handleExceptions(array $exceptions)
@@ -57,7 +57,7 @@ trait InteractsWithExceptionHandling
     /**
      * Disable exception handling for the test.
      *
-     * @param  array  $except
+     * @param array $except
      * @return $this
      */
     protected function withoutExceptionHandling(array $except = [])
@@ -66,86 +66,90 @@ trait InteractsWithExceptionHandling
             $this->originalExceptionHandler = app(ExceptionHandler::class);
         }
 
-        $this->app->instance(ExceptionHandler::class, new class($this->originalExceptionHandler, $except) implements ExceptionHandler
-        {
-            protected $except;
-            protected $originalHandler;
+        $this->app->instance(
+            ExceptionHandler::class,
+            new class ($this->originalExceptionHandler, $except) implements ExceptionHandler {
+                protected $except;
+                protected $originalHandler;
 
-            /**
-             * Create a new class instance.
-             *
-             * @param  \Illuminate\Contracts\Debug\ExceptionHandler  $originalHandler
-             * @param  array  $except
-             * @return void
-             */
-            public function __construct($originalHandler, $except = [])
-            {
-                $this->except = $except;
-                $this->originalHandler = $originalHandler;
-            }
+                /**
+                 * Create a new class instance.
+                 *
+                 * @param \Illuminate\Contracts\Debug\ExceptionHandler $originalHandler
+                 * @param array $except
+                 * @return void
+                 */
+                public function __construct($originalHandler, $except = [])
+                {
+                    $this->except = $except;
+                    $this->originalHandler = $originalHandler;
+                }
 
-            /**
-             * Report or log an exception.
-             *
-             * @param  \Throwable  $e
-             * @return void
-             *
-             * @throws \Exception
-             */
-            public function report(Throwable $e)
-            {
-                //
-            }
+                /**
+                 * Report or log an exception.
+                 *
+                 * @param \Throwable $e
+                 * @return void
+                 *
+                 * @throws \Exception
+                 */
+                public function report(Throwable $e)
+                {
+                    //
+                }
 
-            /**
-             * Determine if the exception should be reported.
-             *
-             * @param  \Throwable  $e
-             * @return bool
-             */
-            public function shouldReport(Throwable $e)
-            {
-                return false;
-            }
+                /**
+                 * Determine if the exception should be reported.
+                 *
+                 * @param \Throwable $e
+                 * @return bool
+                 */
+                public function shouldReport(Throwable $e)
+                {
+                    return false;
+                }
 
-            /**
-             * Render an exception into an HTTP response.
-             *
-             * @param  \Illuminate\Http\Request  $request
-             * @param  \Throwable  $e
-             * @return \Symfony\Component\HttpFoundation\Response
-             *
-             * @throws \Throwable
-             */
-            public function render($request, Throwable $e)
-            {
-                foreach ($this->except as $class) {
-                    if ($e instanceof $class) {
-                        return $this->originalHandler->render($request, $e);
+                /**
+                 * Render an exception into an HTTP response.
+                 *
+                 * @param \Illuminate\Http\Request $request
+                 * @param \Throwable $e
+                 * @return \Symfony\Component\HttpFoundation\Response
+                 *
+                 * @throws \Throwable
+                 */
+                public function render($request, Throwable $e)
+                {
+                    foreach ($this->except as $class) {
+                        if ($e instanceof $class) {
+                            return $this->originalHandler->render($request, $e);
+                        }
                     }
+
+                    if ($e instanceof NotFoundHttpException) {
+                        throw new NotFoundHttpException(
+                            "{$request->method()} {$request->url()}",
+                            $e,
+                            is_int($e->getCode()) ? $e->getCode() : 0
+                        );
+                    }
+
+                    throw $e;
                 }
 
-                if ($e instanceof NotFoundHttpException) {
-                    throw new NotFoundHttpException(
-                        "{$request->method()} {$request->url()}", $e, is_int($e->getCode()) ? $e->getCode() : 0
-                    );
+                /**
+                 * Render an exception to the console.
+                 *
+                 * @param \Symfony\Component\Console\Output\OutputInterface $output
+                 * @param \Throwable $e
+                 * @return void
+                 */
+                public function renderForConsole($output, Throwable $e)
+                {
+                    (new ConsoleApplication())->renderThrowable($e, $output);
                 }
-
-                throw $e;
             }
-
-            /**
-             * Render an exception to the console.
-             *
-             * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-             * @param  \Throwable  $e
-             * @return void
-             */
-            public function renderForConsole($output, Throwable $e)
-            {
-                (new ConsoleApplication)->renderThrowable($e, $output);
-            }
-        });
+        );
 
         return $this;
     }
@@ -153,13 +157,16 @@ trait InteractsWithExceptionHandling
     /**
      * Assert that the given callback throws an exception with the given message when invoked.
      *
-     * @param  \Closure  $test
-     * @param  class-string<\Throwable>  $expectedClass
-     * @param  string|null  $expectedMessage
+     * @param \Closure $test
+     * @param class-string<\Throwable> $expectedClass
+     * @param string|null $expectedMessage
      * @return $this
      */
-    protected function assertThrows(Closure $test, string $expectedClass = Throwable::class, ?string $expectedMessage = null)
-    {
+    protected function assertThrows(
+        Closure $test,
+        string $expectedClass = Throwable::class,
+        ?string $expectedMessage = null
+    ) {
         try {
             $test();
 
@@ -176,7 +183,7 @@ trait InteractsWithExceptionHandling
         );
 
         if (isset($expectedMessage)) {
-            if (! isset($actualMessage)) {
+            if (!isset($actualMessage)) {
                 Assert::fail(
                     sprintf(
                         'Failed asserting that exception of type "%s" with message "%s" was thrown.',

@@ -9,11 +9,17 @@ trait DrawsScrollbars
     /**
      * Render a scrollbar beside the visible items.
      *
-     * @param  \Illuminate\Support\Collection<int, string>  $visible
+     * @param \Illuminate\Support\Collection<int, string> $visible
      * @return \Illuminate\Support\Collection<int, string>
      */
-    protected function scrollbar(Collection $visible, int $firstVisible, int $height, int $total, int $width, string $color = 'cyan'): Collection
-    {
+    protected function scrollbar(
+        Collection $visible,
+        int $firstVisible,
+        int $height,
+        int $total,
+        int $width,
+        string $color = 'cyan'
+    ): Collection {
         if ($height >= $total) {
             return $visible;
         }
@@ -21,9 +27,9 @@ trait DrawsScrollbars
         $scrollPosition = $this->scrollPosition($firstVisible, $height, $total);
 
         return $visible // @phpstan-ignore return.type
-            ->values()
-            ->map(fn ($line) => $this->pad($line, $width))
-            ->map(fn ($line, $index) => match ($index) {
+        ->values()
+            ->map(fn($line) => $this->pad($line, $width))
+            ->map(fn($line, $index) => match ($index) {
                 $scrollPosition => preg_replace('/.$/', $this->{$color}('┃'), $line),
                 default => preg_replace('/.$/', $this->gray('│'), $line),
             });
@@ -50,6 +56,6 @@ trait DrawsScrollbars
 
         $percent = $firstVisible / $maxPosition;
 
-        return (int) round($percent * ($height - 3)) + 1;
+        return (int)round($percent * ($height - 3)) + 1;
     }
 }

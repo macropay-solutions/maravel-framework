@@ -45,7 +45,7 @@ class ModelMakeCommand extends GeneratorCommand
      */
     public function handle()
     {
-        if (parent::handle() === false && ! $this->option('force')) {
+        if (parent::handle() === false && !$this->option('force')) {
             return false;
         }
 
@@ -184,25 +184,25 @@ class ModelMakeCommand extends GeneratorCommand
     /**
      * Resolve the fully-qualified path to the stub.
      *
-     * @param  string  $stub
+     * @param string $stub
      * @return string
      */
     protected function resolveStubPath($stub)
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
-                        ? $customPath
-                        : __DIR__.$stub;
+            ? $customPath
+            : __DIR__ . $stub;
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return is_dir(app_path('Models')) ? $rootNamespace.'\\Models' : $rootNamespace;
+        return is_dir(app_path('Models')) ? $rootNamespace . '\\Models' : $rootNamespace;
     }
 
     /**
@@ -213,26 +213,56 @@ class ModelMakeCommand extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['all', 'a', InputOption::VALUE_NONE, 'Generate a migration, seeder, factory, policy, resource controller, and form request classes for the model'],
+            [
+                'all',
+                'a',
+                InputOption::VALUE_NONE,
+                'Generate a migration, seeder, factory, policy, resource controller, and form request classes for the model',
+            ],
             ['controller', 'c', InputOption::VALUE_NONE, 'Create a new controller for the model'],
             ['factory', 'f', InputOption::VALUE_NONE, 'Create a new factory for the model'],
             ['force', null, InputOption::VALUE_NONE, 'Create the class even if the model already exists'],
             ['migration', 'm', InputOption::VALUE_NONE, 'Create a new migration file for the model'],
-            ['morph-pivot', null, InputOption::VALUE_NONE, 'Indicates if the generated model should be a custom polymorphic intermediate table model'],
+            [
+                'morph-pivot',
+                null,
+                InputOption::VALUE_NONE,
+                'Indicates if the generated model should be a custom polymorphic intermediate table model',
+            ],
             ['policy', null, InputOption::VALUE_NONE, 'Create a new policy for the model'],
             ['seed', 's', InputOption::VALUE_NONE, 'Create a new seeder for the model'],
-            ['pivot', 'p', InputOption::VALUE_NONE, 'Indicates if the generated model should be a custom intermediate table model'],
-            ['resource', 'r', InputOption::VALUE_NONE, 'Indicates if the generated controller should be a resource controller'],
-            ['api', null, InputOption::VALUE_NONE, 'Indicates if the generated controller should be an API resource controller'],
-            ['requests', 'R', InputOption::VALUE_NONE, 'Create new form request classes and use them in the resource controller'],
+            [
+                'pivot',
+                'p',
+                InputOption::VALUE_NONE,
+                'Indicates if the generated model should be a custom intermediate table model',
+            ],
+            [
+                'resource',
+                'r',
+                InputOption::VALUE_NONE,
+                'Indicates if the generated controller should be a resource controller',
+            ],
+            [
+                'api',
+                null,
+                InputOption::VALUE_NONE,
+                'Indicates if the generated controller should be an API resource controller',
+            ],
+            [
+                'requests',
+                'R',
+                InputOption::VALUE_NONE,
+                'Create new form request classes and use them in the resource controller',
+            ],
         ];
     }
 
     /**
      * Interact further with the user if they were prompted for missing arguments.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return void
      */
     protected function afterPromptingForMissingArguments(InputInterface $input, OutputInterface $output)
@@ -248,6 +278,6 @@ class ModelMakeCommand extends GeneratorCommand
             'migration' => 'Migration',
             'policy' => 'Policy',
             'resource' => 'Resource Controller',
-        ]))->each(fn ($option) => $input->setOption($option, true));
+        ]))->each(fn($option) => $input->setOption($option, true));
     }
 }

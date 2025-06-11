@@ -39,6 +39,6 @@ class CacheTableCommand extends MigrationGeneratorCommand
      */
     protected function migrationStubFile()
     {
-        return __DIR__.'/stubs/cache.stub';
+        return __DIR__ . '/stubs/cache.stub';
     }
 }

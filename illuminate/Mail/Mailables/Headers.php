@@ -33,9 +33,9 @@ class Headers
     /**
      * Create a new instance of headers for a message.
      *
-     * @param  string|null  $messageId
-     * @param  array  $references
-     * @param  array  $text
+     * @param string|null $messageId
+     * @param array $references
+     * @param array $text
      * @return void
      *
      * @named-arguments-supported
@@ -50,7 +50,7 @@ class Headers
     /**
      * Set the message ID.
      *
-     * @param  string  $messageId
+     * @param string $messageId
      * @return $this
      */
     public function messageId(string $messageId)
@@ -63,7 +63,7 @@ class Headers
     /**
      * Set the message IDs referenced by this message.
      *
-     * @param  array  $references
+     * @param array $references
      * @return $this
      */
     public function references(array $references)
@@ -76,7 +76,7 @@ class Headers
     /**
      * Set the headers for this message.
      *
-     * @param  array  $references
+     * @param array $references
      * @return $this
      */
     public function text(array $text)

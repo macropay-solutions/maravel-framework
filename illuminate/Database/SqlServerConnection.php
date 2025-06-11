@@ -18,8 +18,8 @@ class SqlServerConnection extends Connection
     /**
      * Execute a Closure within a transaction.
      *
-     * @param  \Closure  $callback
-     * @param  int  $attempts
+     * @param \Closure $callback
+     * @param int $attempts
      * @return mixed
      *
      * @throws \Throwable
@@ -42,9 +42,9 @@ class SqlServerConnection extends Connection
                 $this->getPdo()->exec('COMMIT TRAN');
             }
 
-            // If we catch an exception, we will rollback so nothing gets messed
-            // up in the database. Then we'll re-throw the exception so it can
-            // be handled how the developer sees fit for their applications.
+                // If we catch an exception, we will rollback so nothing gets messed
+                // up in the database. Then we'll re-throw the exception so it can
+                // be handled how the developer sees fit for their applications.
             catch (Throwable $e) {
                 $this->getPdo()->exec('ROLLBACK TRAN');
 
@@ -58,7 +58,7 @@ class SqlServerConnection extends Connection
     /**
      * Escape a binary value for safe SQL embedding.
      *
-     * @param  string  $value
+     * @param string $value
      * @return string
      */
     protected function escapeBinary($value)
@@ -71,7 +71,7 @@ class SqlServerConnection extends Connection
     /**
      * Determine if the given database exception was caused by a unique constraint violation.
      *
-     * @param  \Exception  $exception
+     * @param \Exception $exception
      * @return bool
      */
     protected function isUniqueConstraintError(Exception $exception)
@@ -86,7 +86,7 @@ class SqlServerConnection extends Connection
      */
     protected function getDefaultQueryGrammar()
     {
-        ($grammar = new QueryGrammar)->setConnection($this);
+        ($grammar = new QueryGrammar())->setConnection($this);
 
         return $this->withTablePrefix($grammar);
     }
@@ -113,7 +113,7 @@ class SqlServerConnection extends Connection
      */
     protected function getDefaultSchemaGrammar()
     {
-        ($grammar = new SchemaGrammar)->setConnection($this);
+        ($grammar = new SchemaGrammar())->setConnection($this);
 
         return $this->withTablePrefix($grammar);
     }
@@ -121,8 +121,8 @@ class SqlServerConnection extends Connection
     /**
      * Get the schema state for the connection.
      *
-     * @param  \Illuminate\Filesystem\Filesystem|null  $files
-     * @param  callable|null  $processFactory
+     * @param \Illuminate\Filesystem\Filesystem|null $files
+     * @param callable|null $processFactory
      *
      * @throws \RuntimeException
      */
@@ -138,7 +138,7 @@ class SqlServerConnection extends Connection
      */
     protected function getDefaultPostProcessor()
     {
-        return new SqlServerProcessor;
+        return new SqlServerProcessor();
     }
 
     /**
@@ -148,6 +148,6 @@ class SqlServerConnection extends Connection
      */
     protected function getDoctrineDriver()
     {
-        return new SqlServerDriver;
+        return new SqlServerDriver();
     }
 }

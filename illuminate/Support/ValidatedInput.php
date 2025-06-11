@@ -21,7 +21,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Create a new validated input container.
      *
-     * @param  array  $input
+     * @param array $input
      * @return void
      */
     public function __construct(array $input)
@@ -32,7 +32,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Determine if the validated input has one or more keys.
      *
-     * @param  mixed  $keys
+     * @param mixed $keys
      * @return bool
      */
     public function has($keys)
@@ -40,7 +40,7 @@ class ValidatedInput implements ValidatedData
         $keys = is_array($keys) ? $keys : func_get_args();
 
         foreach ($keys as $key) {
-            if (! Arr::has($this->all(), $key)) {
+            if (!Arr::has($this->all(), $key)) {
                 return false;
             }
         }
@@ -51,18 +51,18 @@ class ValidatedInput implements ValidatedData
     /**
      * Determine if the validated input is missing one or more keys.
      *
-     * @param  mixed  $keys
+     * @param mixed $keys
      * @return bool
      */
     public function missing($keys)
     {
-        return ! $this->has($keys);
+        return !$this->has($keys);
     }
 
     /**
      * Get a subset containing the provided keys with values from the input data.
      *
-     * @param  mixed  $keys
+     * @param mixed $keys
      * @return array
      */
     public function only($keys)
@@ -71,7 +71,7 @@ class ValidatedInput implements ValidatedData
 
         $input = $this->all();
 
-        $placeholder = new stdClass;
+        $placeholder = new stdClass();
 
         foreach (is_array($keys) ? $keys : func_get_args() as $key) {
             $value = data_get($input, $key, $placeholder);
@@ -87,7 +87,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Get all of the input except for a specified array of items.
      *
-     * @param  mixed  $keys
+     * @param mixed $keys
      * @return array
      */
     public function except($keys)
@@ -104,7 +104,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Merge the validated input with the given array of additional data.
      *
-     * @param  array  $items
+     * @param array $items
      * @return static
      */
     public function merge(array $items)
@@ -115,7 +115,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Get the input as a collection.
      *
-     * @param  array|string|null  $key
+     * @param array|string|null $key
      * @return \Illuminate\Support\Collection
      */
     public function collect($key = null)
@@ -146,7 +146,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Dynamically access input data.
      *
-     * @param  string  $name
+     * @param string $name
      * @return mixed
      */
     public function __get($name)
@@ -157,8 +157,8 @@ class ValidatedInput implements ValidatedData
     /**
      * Dynamically set input data.
      *
-     * @param  string  $name
-     * @param  mixed  $value
+     * @param string $name
+     * @param mixed $value
      * @return mixed
      */
     public function __set($name, $value)
@@ -179,7 +179,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Remove an input key.
      *
-     * @param  string  $name
+     * @param string $name
      * @return void
      */
     public function __unset($name)
@@ -190,7 +190,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Determine if an item exists at an offset.
      *
-     * @param  mixed  $offset
+     * @param mixed $offset
      * @return bool
      */
     public function offsetExists($offset): bool
@@ -201,7 +201,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Get an item at a given offset.
      *
-     * @param  mixed  $offset
+     * @param mixed $offset
      * @return mixed
      */
     public function offsetGet($offset): mixed
@@ -212,8 +212,8 @@ class ValidatedInput implements ValidatedData
     /**
      * Set the item at a given offset.
      *
-     * @param  mixed  $offset
-     * @param  mixed  $value
+     * @param mixed $offset
+     * @param mixed $value
      * @return void
      */
     public function offsetSet($offset, $value): void
@@ -228,7 +228,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Unset the item at a given offset.
      *
-     * @param  string  $offset
+     * @param string $offset
      * @return void
      */
     public function offsetUnset($offset): void
@@ -249,7 +249,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Determine if the validated inputs contains a given input item key.
      *
-     * @param  string|array  $key
+     * @param string|array $key
      * @return bool
      */
     public function exists($key)
@@ -260,7 +260,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Determine if the validated inputs contains any of the given inputs.
      *
-     * @param  string|array  $keys
+     * @param string|array $keys
      * @return bool
      */
     public function hasAny($keys)
@@ -275,9 +275,9 @@ class ValidatedInput implements ValidatedData
     /**
      * Apply the callback if the validated inputs contains the given input item key.
      *
-     * @param  string  $key
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param string $key
+     * @param callable $callback
+     * @param callable|null $default
      * @return $this|mixed
      */
     public function whenHas($key, callable $callback, ?callable $default = null)
@@ -296,7 +296,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Determine if the validated inputs contains a non-empty value for an input item.
      *
-     * @param  string|array  $key
+     * @param string|array $key
      * @return bool
      */
     public function filled($key)
@@ -315,7 +315,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Determine if the validated inputs contains an empty value for an input item.
      *
-     * @param  string|array  $key
+     * @param string|array $key
      * @return bool
      */
     public function isNotFilled($key)
@@ -323,7 +323,7 @@ class ValidatedInput implements ValidatedData
         $keys = is_array($key) ? $key : func_get_args();
 
         foreach ($keys as $value) {
-            if (! $this->isEmptyString($value)) {
+            if (!$this->isEmptyString($value)) {
                 return false;
             }
         }
@@ -334,7 +334,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Determine if the validated inputs contains a non-empty value for any of the given inputs.
      *
-     * @param  string|array  $keys
+     * @param string|array $keys
      * @return bool
      */
     public function anyFilled($keys)
@@ -353,9 +353,9 @@ class ValidatedInput implements ValidatedData
     /**
      * Apply the callback if the validated inputs contains a non-empty value for the given input item key.
      *
-     * @param  string  $key
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param string $key
+     * @param callable $callback
+     * @param callable|null $default
      * @return $this|mixed
      */
     public function whenFilled($key, callable $callback, ?callable $default = null)
@@ -374,9 +374,9 @@ class ValidatedInput implements ValidatedData
     /**
      * Apply the callback if the validated inputs is missing the given input item key.
      *
-     * @param  string  $key
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param string $key
+     * @param callable $callback
+     * @param callable|null $default
      * @return $this|mixed
      */
     public function whenMissing($key, callable $callback, ?callable $default = null)
@@ -395,14 +395,14 @@ class ValidatedInput implements ValidatedData
     /**
      * Determine if the given input key is an empty string for "filled".
      *
-     * @param  string  $key
+     * @param string $key
      * @return bool
      */
     protected function isEmptyString($key)
     {
         $value = $this->input($key);
 
-        return ! is_bool($value) && ! is_array($value) && trim((string) $value) === '';
+        return !is_bool($value) && !is_array($value) && trim((string)$value) === '';
     }
 
     /**
@@ -418,22 +418,24 @@ class ValidatedInput implements ValidatedData
     /**
      * Retrieve an input item from the validated inputs.
      *
-     * @param  string|null  $key
-     * @param  mixed  $default
+     * @param string|null $key
+     * @param mixed $default
      * @return mixed
      */
     public function input($key = null, $default = null)
     {
         return data_get(
-            $this->all(), $key, $default
+            $this->all(),
+            $key,
+            $default
         );
     }
 
     /**
      * Retrieve input from the validated inputs as a Stringable instance.
      *
-     * @param  string  $key
-     * @param  mixed  $default
+     * @param string $key
+     * @param mixed $default
      * @return \Illuminate\Support\Stringable
      */
     public function str($key, $default = null)
@@ -444,8 +446,8 @@ class ValidatedInput implements ValidatedData
     /**
      * Retrieve input from the validated inputs as a Stringable instance.
      *
-     * @param  string  $key
-     * @param  mixed  $default
+     * @param string $key
+     * @param mixed $default
      * @return \Illuminate\Support\Stringable
      */
     public function string($key, $default = null)
@@ -458,8 +460,8 @@ class ValidatedInput implements ValidatedData
      *
      * Returns true when value is "1", "true", "on", and "yes". Otherwise, returns false.
      *
-     * @param  string|null  $key
-     * @param  bool  $default
+     * @param string|null $key
+     * @param bool $default
      * @return bool
      */
     public function boolean($key = null, $default = false)
@@ -470,8 +472,8 @@ class ValidatedInput implements ValidatedData
     /**
      * Retrieve input as an integer value.
      *
-     * @param  string  $key
-     * @param  int  $default
+     * @param string $key
+     * @param int $default
      * @return int
      */
     public function integer($key, $default = 0)
@@ -482,8 +484,8 @@ class ValidatedInput implements ValidatedData
     /**
      * Retrieve input as a float value.
      *
-     * @param  string  $key
-     * @param  float  $default
+     * @param string $key
+     * @param float $default
      * @return float
      */
     public function float($key, $default = 0.0)
@@ -494,9 +496,9 @@ class ValidatedInput implements ValidatedData
     /**
      * Retrieve input from the validated inputs as a Carbon instance.
      *
-     * @param  string  $key
-     * @param  string|null  $format
-     * @param  string|null  $tz
+     * @param string $key
+     * @param string|null $format
+     * @param string|null $tz
      * @return \Illuminate\Support\Carbon|null
      *
      * @throws \Carbon\Exceptions\InvalidFormatException
@@ -519,15 +521,17 @@ class ValidatedInput implements ValidatedData
      *
      * @template TEnum
      *
-     * @param  string  $key
-     * @param  class-string<TEnum>  $enumClass
+     * @param string $key
+     * @param class-string<TEnum> $enumClass
      * @return TEnum|null
      */
     public function enum($key, $enumClass)
     {
-        if ($this->isNotFilled($key) ||
-            ! enum_exists($enumClass) ||
-            ! method_exists($enumClass, 'tryFrom')) {
+        if (
+            $this->isNotFilled($key) ||
+            !enum_exists($enumClass) ||
+            !method_exists($enumClass, 'tryFrom')
+        ) {
             return null;
         }
 
@@ -537,7 +541,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Dump the validated inputs items and end the script.
      *
-     * @param  mixed  ...$keys
+     * @param mixed ...$keys
      * @return never
      */
     public function dd(...$keys)
@@ -550,7 +554,7 @@ class ValidatedInput implements ValidatedData
     /**
      * Dump the items.
      *
-     * @param  mixed  $keys
+     * @param mixed $keys
      * @return $this
      */
     public function dump($keys = [])

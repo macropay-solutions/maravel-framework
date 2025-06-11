@@ -58,14 +58,14 @@ class ListFailedCommand extends Command
         $failed = $this->laravel['queue.failer']->all();
 
         return collect($failed)->map(function ($failed) {
-            return $this->parseFailedJob((array) $failed);
+            return $this->parseFailedJob((array)$failed);
         })->filter()->all();
     }
 
     /**
      * Parse the failed job row.
      *
-     * @param  array  $failed
+     * @param array $failed
      * @return array
      */
     protected function parseFailedJob(array $failed)
@@ -80,14 +80,14 @@ class ListFailedCommand extends Command
     /**
      * Extract the failed job name from payload.
      *
-     * @param  string  $payload
+     * @param string $payload
      * @return string|null
      */
     private function extractJobName($payload)
     {
         $payload = json_decode($payload, true);
 
-        if ($payload && (! isset($payload['data']['command']))) {
+        if ($payload && (!isset($payload['data']['command']))) {
             return $payload['job'] ?? null;
         } elseif ($payload && isset($payload['data']['command'])) {
             return $this->matchJobName($payload);
@@ -97,7 +97,7 @@ class ListFailedCommand extends Command
     /**
      * Match the job name from the payload.
      *
-     * @param  array  $payload
+     * @param array $payload
      * @return string|null
      */
     protected function matchJobName($payload)
@@ -110,13 +110,13 @@ class ListFailedCommand extends Command
     /**
      * Display the failed jobs in the console.
      *
-     * @param  array  $jobs
+     * @param array $jobs
      * @return void
      */
     protected function displayFailedJobs(array $jobs)
     {
         collect($jobs)->each(
-            fn ($job) => $this->components->twoColumnDetail(
+            fn($job) => $this->components->twoColumnDetail(
                 sprintf('<fg=gray>%s</> %s</>', $job[4], $job[0]),
                 sprintf('<fg=gray>%s@%s</> %s', $job[1], $job[2], $job[3])
             ),

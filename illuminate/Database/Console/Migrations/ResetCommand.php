@@ -34,7 +34,7 @@ class ResetCommand extends BaseCommand
     /**
      * Create a new migration rollback command instance.
      *
-     * @param  \Illuminate\Database\Migrations\Migrator  $migrator
+     * @param \Illuminate\Database\Migrations\Migrator $migrator
      * @return void
      */
     public function __construct(Migrator $migrator)
@@ -51,7 +51,7 @@ class ResetCommand extends BaseCommand
      */
     public function handle()
     {
-        if (! $this->confirmToProceed()) {
+        if (!$this->confirmToProceed()) {
             return 1;
         }
 
@@ -59,14 +59,15 @@ class ResetCommand extends BaseCommand
             // First, we'll make sure that the migration table actually exists before we
             // start trying to rollback and re-run all of the migrations. If it's not
             // present we'll just bail out with an info message for the developers.
-            if (! $this->migrator->repositoryExists()) {
+            if (!$this->migrator->repositoryExists()) {
                 $this->components->warn('Migration table not found.');
 
                 return 1;
             }
 
             $this->migrator->setOutput($this->output)->reset(
-                $this->getMigrationPaths(), $this->option('pretend')
+                $this->getMigrationPaths(),
+                $this->option('pretend')
             );
         });
     }
@@ -83,9 +84,19 @@ class ResetCommand extends BaseCommand
 
             ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production'],
 
-            ['path', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'The path(s) to the migrations files to be executed'],
+            [
+                'path',
+                null,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'The path(s) to the migrations files to be executed',
+            ],
 
-            ['realpath', null, InputOption::VALUE_NONE, 'Indicate any provided migration file paths are pre-resolved absolute paths'],
+            [
+                'realpath',
+                null,
+                InputOption::VALUE_NONE,
+                'Indicate any provided migration file paths are pre-resolved absolute paths',
+            ],
 
             ['pretend', null, InputOption::VALUE_NONE, 'Dump the SQL queries that would be run'],
         ];

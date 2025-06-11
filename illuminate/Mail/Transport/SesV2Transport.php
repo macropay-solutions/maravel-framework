@@ -29,8 +29,8 @@ class SesV2Transport extends AbstractTransport
     /**
      * Create a new SES V2 transport instance.
      *
-     * @param  \Aws\SesV2\SesV2Client  $ses
-     * @param  array  $options
+     * @param \Aws\SesV2\SesV2Client $ses
+     * @param array $options
      * @return void
      */
     public function __construct(SesV2Client $ses, $options = [])
@@ -59,14 +59,15 @@ class SesV2Transport extends AbstractTransport
         try {
             $result = $this->ses->sendEmail(
                 array_merge(
-                    $options, [
+                    $options,
+                    [
                         'Source' => $message->getEnvelope()->getSender()->toString(),
                         'Destination' => [
                             'ToAddresses' => collect($message->getEnvelope()->getRecipients())
-                                    ->map
-                                    ->toString()
-                                    ->values()
-                                    ->all(),
+                                ->map
+                                ->toString()
+                                ->values()
+                                ->all(),
                         ],
                         'Content' => [
                             'Raw' => [
@@ -115,7 +116,7 @@ class SesV2Transport extends AbstractTransport
     /**
      * Set the transmission options being used by the transport.
      *
-     * @param  array  $options
+     * @param array $options
      * @return array
      */
     public function setOptions(array $options)

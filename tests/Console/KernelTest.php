@@ -23,7 +23,7 @@ class KernelTest extends \Laravel\Lumen\Testing\TestCase
 
         $app->configure('app');
 
-        $app->singleton(ExceptionHandlerContract::class, fn () => new ExceptionHandler());
+        $app->singleton(ExceptionHandlerContract::class, fn() => new ExceptionHandler());
         $app->singleton(ConsoleKernelContract::class, function () use ($app) {
             return tap(new ConsoleKernel($app), function ($kernel) {
                 $kernel->rerouteSymfonyCommandEvents();

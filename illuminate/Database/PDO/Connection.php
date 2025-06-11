@@ -25,7 +25,7 @@ class Connection implements ServerInfoAwareConnection
     /**
      * Create a new PDO connection instance.
      *
-     * @param  \PDO  $connection
+     * @param \PDO $connection
      * @return void
      */
     public function __construct(PDO $connection)
@@ -36,7 +36,7 @@ class Connection implements ServerInfoAwareConnection
     /**
      * Execute an SQL statement.
      *
-     * @param  string  $statement
+     * @param string $statement
      * @return int
      */
     public function exec(string $statement): int
@@ -55,7 +55,7 @@ class Connection implements ServerInfoAwareConnection
     /**
      * Prepare a new SQL statement.
      *
-     * @param  string  $sql
+     * @param string $sql
      * @return \Doctrine\DBAL\Driver\Statement
      *
      * @throws \Doctrine\DBAL\Driver\PDO\Exception
@@ -74,7 +74,7 @@ class Connection implements ServerInfoAwareConnection
     /**
      * Execute a new query against the connection.
      *
-     * @param  string  $sql
+     * @param string $sql
      * @return \Doctrine\DBAL\Driver\Result
      */
     public function query(string $sql): ResultInterface
@@ -93,7 +93,7 @@ class Connection implements ServerInfoAwareConnection
     /**
      * Get the last insert ID.
      *
-     * @param  string|null  $name
+     * @param string|null $name
      * @return mixed
      *
      * @throws \Doctrine\DBAL\Driver\PDO\Exception
@@ -114,7 +114,7 @@ class Connection implements ServerInfoAwareConnection
     /**
      * Create a new statement instance.
      *
-     * @param  \PDOStatement  $stmt
+     * @param \PDOStatement $stmt
      * @return \Doctrine\DBAL\Driver\PDO\Statement
      */
     protected function createStatement(PDOStatement $stmt): Statement
@@ -155,8 +155,8 @@ class Connection implements ServerInfoAwareConnection
     /**
      * Wrap quotes around the given input.
      *
-     * @param  string  $input
-     * @param  string  $type
+     * @param string $input
+     * @param string $type
      * @return string
      */
     public function quote($input, $type = ParameterType::STRING)

@@ -45,9 +45,9 @@ class CliDumper extends BaseCliDumper
     /**
      * Create a new CLI dumper instance.
      *
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @param  string  $basePath
-     * @param  string  $compiledViewPath
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param string $basePath
+     * @param string $compiledViewPath
      * @return void
      */
     public function __construct($output, $basePath, $compiledViewPath)
@@ -62,8 +62,8 @@ class CliDumper extends BaseCliDumper
     /**
      * Create a new CLI dumper instance and register it as the default dumper.
      *
-     * @param  string  $basePath
-     * @param  string  $compiledViewPath
+     * @param string $basePath
+     * @param string $compiledViewPath
      * @return void
      */
     public static function register($basePath, $compiledViewPath)
@@ -72,13 +72,13 @@ class CliDumper extends BaseCliDumper
 
         $dumper = new static(new ConsoleOutput(), $basePath, $compiledViewPath);
 
-        VarDumper::setHandler(fn ($value) => $dumper->dumpWithSource($cloner->cloneVar($value)));
+        VarDumper::setHandler(fn($value) => $dumper->dumpWithSource($cloner->cloneVar($value)));
     }
 
     /**
      * Dump a variable with its source file / line.
      *
-     * @param  \Symfony\Component\VarDumper\Cloner\Data  $data
+     * @param \Symfony\Component\VarDumper\Cloner\Data $data
      * @return void
      */
     public function dumpWithSource(Data $data)
@@ -91,7 +91,7 @@ class CliDumper extends BaseCliDumper
 
         $this->dumping = true;
 
-        $output = (string) $this->dump($data, true);
+        $output = (string)$this->dump($data, true);
         $lines = explode("\n", $output);
 
         $lines[array_key_last($lines) - 1] .= $this->getDumpSourceContent();

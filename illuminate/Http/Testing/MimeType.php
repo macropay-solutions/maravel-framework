@@ -22,7 +22,7 @@ class MimeType
     public static function getMimeTypes()
     {
         if (self::$mime === null) {
-            self::$mime = new MimeTypes;
+            self::$mime = new MimeTypes();
         }
 
         return self::$mime;
@@ -31,7 +31,7 @@ class MimeType
     /**
      * Get the MIME type for a file based on the file's extension.
      *
-     * @param  string  $filename
+     * @param string $filename
      * @return string
      */
     public static function from($filename)
@@ -44,7 +44,7 @@ class MimeType
     /**
      * Get the MIME type for a given extension or return all mimes.
      *
-     * @param  string  $extension
+     * @param string $extension
      * @return string
      */
     public static function get($extension)
@@ -55,7 +55,7 @@ class MimeType
     /**
      * Search for the extension of a given MIME type.
      *
-     * @param  string  $mimeType
+     * @param string $mimeType
      * @return string|null
      */
     public static function search($mimeType)

@@ -38,15 +38,15 @@ class ConsoleMakeCommand extends GeneratorCommand
     /**
      * Replace the class name for the given stub.
      *
-     * @param  string  $stub
-     * @param  string  $name
+     * @param string $stub
+     * @param string $name
      * @return string
      */
     protected function replaceClass($stub, $name)
     {
         $stub = parent::replaceClass($stub, $name);
 
-        $command = $this->option('command') ?: 'app:'.Str::of($name)->classBasename()->kebab()->value();
+        $command = $this->option('command') ?: 'app:' . Str::of($name)->classBasename()->kebab()->value();
 
         return str_replace(['dummy:command', '{{ command }}'], $command, $stub);
     }
@@ -62,18 +62,18 @@ class ConsoleMakeCommand extends GeneratorCommand
 
         return file_exists($customPath = $this->laravel->basePath(trim($relativePath, '/')))
             ? $customPath
-            : __DIR__.$relativePath;
+            : __DIR__ . $relativePath;
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Console\Commands';
+        return $rootNamespace . '\Console\Commands';
     }
 
     /**
@@ -97,7 +97,12 @@ class ConsoleMakeCommand extends GeneratorCommand
     {
         return [
             ['force', 'f', InputOption::VALUE_NONE, 'Create the class even if the console command already exists'],
-            ['command', null, InputOption::VALUE_OPTIONAL, 'The terminal command that will be used to invoke the class'],
+            [
+                'command',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The terminal command that will be used to invoke the class',
+            ],
         ];
     }
 }

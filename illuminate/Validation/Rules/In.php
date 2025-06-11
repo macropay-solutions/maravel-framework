@@ -25,7 +25,7 @@ class In
     /**
      * Create a new in rule instance.
      *
-     * @param  \Illuminate\Contracts\Support\Arrayable|array|string  $values
+     * @param \Illuminate\Contracts\Support\Arrayable|array|string $values
      * @return void
      */
     public function __construct($values)
@@ -53,9 +53,9 @@ class In
                 default => $value,
             };
 
-            return '"'.str_replace('"', '""', $value).'"';
+            return '"' . str_replace('"', '""', $value) . '"';
         }, $this->values);
 
-        return $this->rule.':'.implode(',', $values);
+        return $this->rule . ':' . implode(',', $values);
     }
 }

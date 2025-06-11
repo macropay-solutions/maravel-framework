@@ -16,10 +16,10 @@ class SQLiteConnection extends Connection
     /**
      * Create a new database connection instance.
      *
-     * @param  \PDO|\Closure  $pdo
-     * @param  string  $database
-     * @param  string  $tablePrefix
-     * @param  array  $config
+     * @param \PDO|\Closure $pdo
+     * @param string $database
+     * @param string $tablePrefix
+     * @param array $config
      * @return void
      */
     public function __construct($pdo, $database = '', $tablePrefix = '', array $config = [])
@@ -40,7 +40,7 @@ class SQLiteConnection extends Connection
     /**
      * Escape a binary value for safe SQL embedding.
      *
-     * @param  string  $value
+     * @param string $value
      * @return string
      */
     protected function escapeBinary($value)
@@ -53,12 +53,14 @@ class SQLiteConnection extends Connection
     /**
      * Determine if the given database exception was caused by a unique constraint violation.
      *
-     * @param  \Exception  $exception
+     * @param \Exception $exception
      * @return bool
      */
     protected function isUniqueConstraintError(Exception $exception)
     {
-        return boolval(preg_match('#(column(s)? .* (is|are) not unique|UNIQUE constraint failed: .*)#i', $exception->getMessage()));
+        return boolval(
+            preg_match('#(column(s)? .* (is|are) not unique|UNIQUE constraint failed: .*)#i', $exception->getMessage())
+        );
     }
 
     /**
@@ -68,7 +70,7 @@ class SQLiteConnection extends Connection
      */
     protected function getDefaultQueryGrammar()
     {
-        ($grammar = new QueryGrammar)->setConnection($this);
+        ($grammar = new QueryGrammar())->setConnection($this);
 
         return $this->withTablePrefix($grammar);
     }
@@ -95,7 +97,7 @@ class SQLiteConnection extends Connection
      */
     protected function getDefaultSchemaGrammar()
     {
-        ($grammar = new SchemaGrammar)->setConnection($this);
+        ($grammar = new SchemaGrammar())->setConnection($this);
 
         return $this->withTablePrefix($grammar);
     }
@@ -103,8 +105,8 @@ class SQLiteConnection extends Connection
     /**
      * Get the schema state for the connection.
      *
-     * @param  \Illuminate\Filesystem\Filesystem|null  $files
-     * @param  callable|null  $processFactory
+     * @param \Illuminate\Filesystem\Filesystem|null $files
+     * @param callable|null $processFactory
      *
      * @throws \RuntimeException
      */
@@ -120,7 +122,7 @@ class SQLiteConnection extends Connection
      */
     protected function getDefaultPostProcessor()
     {
-        return new SQLiteProcessor;
+        return new SQLiteProcessor();
     }
 
     /**
@@ -130,7 +132,7 @@ class SQLiteConnection extends Connection
      */
     protected function getDoctrineDriver()
     {
-        return new SQLiteDriver;
+        return new SQLiteDriver();
     }
 
     /**

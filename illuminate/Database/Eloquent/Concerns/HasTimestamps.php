@@ -23,7 +23,7 @@ trait HasTimestamps
     /**
      * Update the model's update timestamp.
      *
-     * @param  string|null  $attribute
+     * @param string|null $attribute
      * @return bool
      */
     public function touch($attribute = null)
@@ -34,7 +34,7 @@ trait HasTimestamps
             return $this->save();
         }
 
-        if (! $this->usesTimestamps()) {
+        if (!$this->usesTimestamps()) {
             return false;
         }
 
@@ -46,12 +46,12 @@ trait HasTimestamps
     /**
      * Update the model's update timestamp without raising any events.
      *
-     * @param  string|null  $attribute
+     * @param string|null $attribute
      * @return bool
      */
     public function touchQuietly($attribute = null)
     {
-        return static::withoutEvents(fn () => $this->touch($attribute));
+        return static::withoutEvents(fn() => $this->touch($attribute));
     }
 
     /**
@@ -65,13 +65,13 @@ trait HasTimestamps
 
         $updatedAtColumn = $this->getUpdatedAtColumn();
 
-        if (! is_null($updatedAtColumn) && ! $this->isDirty($updatedAtColumn)) {
+        if (!is_null($updatedAtColumn) && !$this->isDirty($updatedAtColumn)) {
             $this->setUpdatedAt($time);
         }
 
         $createdAtColumn = $this->getCreatedAtColumn();
 
-        if (! $this->exists && ! is_null($createdAtColumn) && ! $this->isDirty($createdAtColumn)) {
+        if (!$this->exists && !is_null($createdAtColumn) && !$this->isDirty($createdAtColumn)) {
             $this->setCreatedAt($time);
         }
 
@@ -81,7 +81,7 @@ trait HasTimestamps
     /**
      * Set the value of the "created at" attribute.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      * @return $this
      */
     public function setCreatedAt($value)
@@ -94,7 +94,7 @@ trait HasTimestamps
     /**
      * Set the value of the "updated at" attribute.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      * @return $this
      */
     public function setUpdatedAt($value)
@@ -131,7 +131,7 @@ trait HasTimestamps
      */
     public function usesTimestamps()
     {
-        return $this->timestamps && ! static::isIgnoringTimestamps($this::class);
+        return $this->timestamps && !static::isIgnoringTimestamps($this::class);
     }
 
     /**
@@ -177,7 +177,7 @@ trait HasTimestamps
     /**
      * Disable timestamps for the current class during the given callback scope.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return mixed
      */
     public static function withoutTimestamps(callable $callback)
@@ -188,8 +188,8 @@ trait HasTimestamps
     /**
      * Disable timestamps for the given model classes during the given callback scope.
      *
-     * @param  array  $models
-     * @param  callable  $callback
+     * @param array $models
+     * @param callable $callback
      * @return mixed
      */
     public static function withoutTimestampsOn($models, $callback)
@@ -206,7 +206,7 @@ trait HasTimestamps
     /**
      * Determine if the given model is ignoring timestamps / touches.
      *
-     * @param  string|null  $class
+     * @param string|null $class
      * @return bool
      */
     public static function isIgnoringTimestamps($class = null)

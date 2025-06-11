@@ -45,8 +45,8 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class Application extends Container
 {
-    use Concerns\RoutesRequests,
-        Concerns\RegistersExceptionHandlers;
+    use Concerns\RoutesRequests;
+    use Concerns\RegistersExceptionHandlers;
 
     /**
      * Indicates if the class aliases have been registered.
@@ -121,7 +121,7 @@ class Application extends Container
     /**
      * Create a new Lumen application instance.
      *
-     * @param  string|null  $basePath
+     * @param string|null $basePath
      * @return void
      */
     public function __construct($basePath = null)
@@ -185,7 +185,7 @@ class Application extends Container
     /**
      * Get or check the current application environment.
      *
-     * @param  mixed
+     * @param mixed
      */
     public function environment(): mixed
     {
@@ -229,7 +229,7 @@ class Application extends Container
     /**
      * Determine if the given service provider is loaded.
      *
-     * @param  string  $provider
+     * @param string $provider
      * @return bool
      */
     public function providerIsLoaded(string $provider)
@@ -240,12 +240,12 @@ class Application extends Container
     /**
      * Register a service provider with the application.
      *
-     * @param  \Illuminate\Support\ServiceProvider|string  $provider
+     * @param \Illuminate\Support\ServiceProvider|string $provider
      * @return void
      */
     public function register($provider)
     {
-        if (! $provider instanceof ServiceProvider) {
+        if (!$provider instanceof ServiceProvider) {
             $provider = new $provider($this);
         }
 
@@ -267,7 +267,7 @@ class Application extends Container
     /**
      * Register a deferred provider and service.
      *
-     * @param  string  $provider
+     * @param string $provider
      * @return void
      */
     public function registerDeferredProvider($provider)
@@ -294,7 +294,7 @@ class Application extends Container
     /**
      * Boot the given service provider.
      *
-     * @param  \Illuminate\Support\ServiceProvider  $provider
+     * @param \Illuminate\Support\ServiceProvider $provider
      * @return mixed
      */
     protected function bootProvider(ServiceProvider $provider)
@@ -307,17 +307,19 @@ class Application extends Container
     /**
      * Resolve the given type from the container.
      *
-     * @param  string  $abstract
-     * @param  array  $parameters
+     * @param string $abstract
+     * @param array $parameters
      * @return mixed
      */
     public function make($abstract, array $parameters = [])
     {
         $abstract = $this->getAlias($abstract);
 
-        if (! $this->bound($abstract) &&
+        if (
+            !$this->bound($abstract) &&
             array_key_exists($abstract, $this->availableBindings) &&
-            ! array_key_exists($this->availableBindings[$abstract], $this->ranServiceBinders)) {
+            !array_key_exists($this->availableBindings[$abstract], $this->ranServiceBinders)
+        ) {
             $this->{$method = $this->availableBindings[$abstract]}();
 
             $this->ranServiceBinders[$method] = true;
@@ -415,7 +417,7 @@ class Application extends Container
     protected function registerConfigBindings()
     {
         $this->singleton('config', function () {
-            return new ConfigRepository;
+            return new ConfigRepository();
         });
     }
 
@@ -430,10 +432,12 @@ class Application extends Container
             $this->configure('app');
 
             return $this->loadComponent(
-                'database', [
+                'database',
+                [
                     DatabaseServiceProvider::class,
                     PaginationServiceProvider::class,
-                ], 'db'
+                ],
+                'db'
             );
         });
     }
@@ -472,7 +476,7 @@ class Application extends Container
     protected function registerFilesBindings()
     {
         $this->singleton('files', function () {
-            return new Filesystem;
+            return new Filesystem();
         });
     }
 
@@ -552,12 +556,12 @@ class Application extends Container
     /**
      * Prepare the given request instance for use with the application.
      *
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Illuminate\Http\Request
      */
     protected function prepareRequest(SymfonyRequest $request)
     {
-        if (! $request instanceof Request) {
+        if (!$request instanceof Request) {
             $request = Request::createFromBase($request);
         }
 
@@ -579,13 +583,15 @@ class Application extends Container
     {
         $this->singleton(ServerRequestInterface::class, function ($app) {
             if (class_exists(Psr17Factory::class) && class_exists(PsrHttpFactory::class)) {
-                $psr17Factory = new Psr17Factory;
+                $psr17Factory = new Psr17Factory();
 
                 return (new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory))
                     ->createRequest($app->make('request'));
             }
 
-            throw new BindingResolutionException('Unable to resolve PSR request. Please install symfony/psr-http-message-bridge and nyholm/psr7.');
+            throw new BindingResolutionException(
+                'Unable to resolve PSR request. Please install symfony/psr-http-message-bridge and nyholm/psr7.'
+            );
         });
     }
 
@@ -598,7 +604,7 @@ class Application extends Container
     {
         $this->singleton(ResponseInterface::class, function () {
             if (class_exists(PsrResponse::class)) {
-                return new PsrResponse;
+                return new PsrResponse();
             }
 
             throw new BindingResolutionException('Unable to resolve PSR response. Please install nyholm/psr7.');
@@ -630,10 +636,10 @@ class Application extends Container
      */
     protected function getLanguagePath()
     {
-        if (is_dir($langPath = $this->basePath().'/resources/lang')) {
+        if (is_dir($langPath = $this->basePath() . '/resources/lang')) {
             return $langPath;
         } else {
-            return __DIR__.'/../resources/lang';
+            return __DIR__ . '/../resources/lang';
         }
     }
 
@@ -678,16 +684,16 @@ class Application extends Container
     /**
      * Configure and load the given component and provider.
      *
-     * @param  string  $config
-     * @param  array|string  $providers
-     * @param  string|null  $return
+     * @param string $config
+     * @param array|string $providers
+     * @param string|null $return
      * @return mixed
      */
     public function loadComponent($config, $providers, $return = null)
     {
         $this->configure($config);
 
-        foreach ((array) $providers as $provider) {
+        foreach ((array)$providers as $provider) {
             $this->register($provider);
         }
 
@@ -697,7 +703,7 @@ class Application extends Container
     /**
      * Load a configuration file into the application.
      *
-     * @param  string  $name
+     * @param string $name
      * @return void
      */
     public function configure($name)
@@ -720,35 +726,43 @@ class Application extends Container
      *
      * If no name is provided, then we'll return the path to the config folder.
      *
-     * @param  string|null  $name
-     * @return string
+     * @param string|null $name
+     * @return string|null
      */
     public function getConfigurationPath($name = null)
     {
-        if (! $name) {
-            $appConfigDir = $this->basePath('config').'/';
+        if (!$name) {
+            $appConfigDir = $this->basePath('config') . '/';
 
             if (file_exists($appConfigDir)) {
                 return $appConfigDir;
-            } elseif (file_exists($path = __DIR__.'/../config/')) {
-                return $path;
             }
-        } else {
-            $appConfigPath = $this->basePath('config').'/'.$name.'.php';
 
-            if (file_exists($appConfigPath)) {
-                return $appConfigPath;
-            } elseif (file_exists($path = __DIR__.'/../config/'.$name.'.php')) {
+            if (file_exists($path = __DIR__ . '/../config/')) {
                 return $path;
             }
+
+            return null;
         }
+
+        $appConfigPath = $this->basePath('config') . '/' . $name . '.php';
+
+        if (file_exists($appConfigPath)) {
+            return $appConfigPath;
+        }
+
+        if (file_exists($path = __DIR__ . '/../config/' . $name . '.php')) {
+            return $path;
+        }
+
+        return null;
     }
 
     /**
      * Register the facades for the application.
      *
-     * @param  bool  $aliases
-     * @param  array  $userAliases
+     * @param bool $aliases
+     * @param array $userAliases
      * @return void
      */
     public function withFacades($aliases = true, $userAliases = [])
@@ -763,7 +777,7 @@ class Application extends Container
     /**
      * Register the aliases for the application.
      *
-     * @param  array  $userAliases
+     * @param array $userAliases
      * @return void
      */
     public function withAliases($userAliases = [])
@@ -783,13 +797,13 @@ class Application extends Container
             \Illuminate\Support\Facades\Validator::class => 'Validator',
         ];
 
-        if (! static::$aliasesRegistered) {
+        if (!static::$aliasesRegistered) {
             static::$aliasesRegistered = true;
 
             $merged = array_merge($defaults, $userAliases);
 
             foreach ($merged as $original => $alias) {
-                if (! class_exists($alias)) {
+                if (!class_exists($alias)) {
                     class_alias($original, $alias);
                 }
             }
@@ -813,25 +827,25 @@ class Application extends Container
      */
     public function path()
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'app';
+        return $this->basePath . DIRECTORY_SEPARATOR . 'app';
     }
 
     /**
      * Get the base path for the application.
      *
-     * @param  string  $path
+     * @param string $path
      * @return string
      */
     public function basePath($path = '')
     {
         if (isset($this->basePath)) {
-            return $this->basePath.($path ? '/'.$path : $path);
+            return $this->basePath . ($path ? '/' . $path : $path);
         }
 
         if ($this->runningInConsole()) {
             $this->basePath = getcwd();
         } else {
-            $this->basePath = realpath(getcwd().'/../');
+            $this->basePath = realpath(getcwd() . '/../');
         }
 
         return $this->basePath($path);
@@ -840,51 +854,52 @@ class Application extends Container
     /**
      * Get the path to the application configuration files.
      *
-     * @param  string  $path
+     * @param string $path
      * @return string
      */
     public function configPath($path = '')
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'config'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return $this->basePath . DIRECTORY_SEPARATOR . 'config' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
      * Get the path to the database directory.
      *
-     * @param  string  $path
+     * @param string $path
      * @return string
      */
     public function databasePath($path = '')
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'database'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return $this->basePath . DIRECTORY_SEPARATOR . 'database' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
      * Get the path to the language files.
      *
-     * @param  string  $path
+     * @param string $path
      * @return string
      */
     public function langPath($path = '')
     {
-        return $this->getLanguagePath().($path != '' ? DIRECTORY_SEPARATOR.$path : '');
+        return $this->getLanguagePath() . ($path != '' ? DIRECTORY_SEPARATOR . $path : '');
     }
 
     /**
      * Get the storage path for the application.
      *
-     * @param  string|null  $path
+     * @param string|null $path
      * @return string
      */
     public function storagePath($path = '')
     {
-        return ($this->storagePath ?: $this->basePath.DIRECTORY_SEPARATOR.'storage').($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return ($this->storagePath ?: $this->basePath . DIRECTORY_SEPARATOR . 'storage') .
+            ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
      * Set the storage directory.
      *
-     * @param  string  $path
+     * @param string $path
      * @return $this
      */
     public function useStoragePath($path)
@@ -899,12 +914,12 @@ class Application extends Container
     /**
      * Get the path to the resources directory.
      *
-     * @param  string|null  $path
+     * @param string|null $path
      * @return string
      */
     public function resourcePath($path = '')
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'resources'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return $this->basePath . DIRECTORY_SEPARATOR . 'resources' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -940,7 +955,7 @@ class Application extends Container
     /**
      * Prepare the application to execute a console command.
      *
-     * @param  bool  $aliases
+     * @param bool $aliases
      * @return void
      */
     public function prepareForConsoleCommand($aliases = true)
@@ -965,15 +980,15 @@ class Application extends Container
      */
     public function getNamespace()
     {
-        if (! is_null($this->namespace)) {
+        if (!is_null($this->namespace)) {
             return $this->namespace;
         }
 
         $composer = json_decode(file_get_contents(base_path('composer.json')), true);
 
-        foreach ((array) data_get($composer, 'autoload.psr-4') as $namespace => $path) {
-            foreach ((array) $path as $pathChoice) {
-                if (realpath(app()->path()) == realpath(base_path().'/'.$pathChoice)) {
+        foreach ((array)data_get($composer, 'autoload.psr-4') as $namespace => $path) {
+            foreach ((array)$path as $pathChoice) {
+                if (realpath(app()->path()) == realpath(base_path() . '/' . $pathChoice)) {
                     return $this->namespace = $namespace;
                 }
             }
@@ -1031,7 +1046,7 @@ class Application extends Container
     /**
      * Set the current application locale.
      *
-     * @param  string  $locale
+     * @param string $locale
      * @return void
      */
     public function setLocale($locale)
@@ -1043,7 +1058,7 @@ class Application extends Container
     /**
      * Determine if application locale is the given locale.
      *
-     * @param  string  $locale
+     * @param string $locale
      * @return bool
      */
     public function isLocale($locale)
@@ -1054,7 +1069,7 @@ class Application extends Container
     /**
      * Register a terminating callback with the application.
      *
-     * @param  callable|string  $callback
+     * @param callable|string $callback
      * @return $this
      */
     public function terminating($callback)

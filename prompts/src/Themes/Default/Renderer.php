@@ -29,7 +29,7 @@ abstract class Renderer
      */
     protected function line(string $message): self
     {
-        $this->output .= $message.PHP_EOL;
+        $this->output .= $message . PHP_EOL;
 
         return $this;
     }
@@ -96,7 +96,7 @@ abstract class Renderer
     public function __toString()
     {
         return str_repeat(PHP_EOL, max(2 - $this->prompt->newLinesWritten(), 0))
-            .$this->output
-            .(in_array($this->prompt->state, ['submit', 'cancel']) ? PHP_EOL : '');
+            . $this->output
+            . (in_array($this->prompt->state, ['submit', 'cancel']) ? PHP_EOL : '');
     }
 }

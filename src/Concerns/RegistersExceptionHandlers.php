@@ -18,9 +18,9 @@ trait RegistersExceptionHandlers
     /**
      * Throw an HttpException with the given data.
      *
-     * @param  int  $code
-     * @param  string  $message
-     * @param  array  $headers
+     * @param int $code
+     * @param string $message
+     * @param array $headers
      * @return void
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
@@ -59,11 +59,11 @@ trait RegistersExceptionHandlers
     /**
      * Report PHP deprecations, or convert PHP errors to ErrorException instances.
      *
-     * @param  int  $level
-     * @param  string  $message
-     * @param  string  $file
-     * @param  int  $line
-     * @param  array  $context
+     * @param int $level
+     * @param string $message
+     * @param string $file
+     * @param int $line
+     * @param array $context
      * @return void
      *
      * @throws \ErrorException
@@ -82,9 +82,9 @@ trait RegistersExceptionHandlers
     /**
      * Reports a deprecation to the "deprecations" logger.
      *
-     * @param  string  $message
-     * @param  string  $file
-     * @param  int  $line
+     * @param string $message
+     * @param string $file
+     * @param int $line
      * @return void
      */
     public function handleDeprecation($message, $file, $line)
@@ -95,16 +95,21 @@ trait RegistersExceptionHandlers
             return;
         }
 
-        if (! $logger instanceof LogManager) {
+        if (!$logger instanceof LogManager) {
             return;
         }
 
         $this->ensureDeprecationLoggerIsConfigured();
 
         with($logger->channel('deprecations'), function ($log) use ($message, $file, $line) {
-            $log->warning(sprintf('%s in %s on line %s',
-                $message, $file, $line
-            ));
+            $log->warning(
+                sprintf(
+                    '%s in %s on line %s',
+                    $message,
+                    $file,
+                    $line
+                )
+            );
         });
     }
 
@@ -133,7 +138,7 @@ trait RegistersExceptionHandlers
      */
     public function handleShutdown()
     {
-        if (! is_null($error = error_get_last()) && $this->isFatal($error['type'])) {
+        if (!is_null($error = error_get_last()) && $this->isFatal($error['type'])) {
             $this->handleException($this->fatalErrorFromPhpError($error, 0));
         }
     }
@@ -141,8 +146,8 @@ trait RegistersExceptionHandlers
     /**
      * Create a new fatal error instance from an error array.
      *
-     * @param  array  $error
-     * @param  int|null  $traceOffset
+     * @param array $error
+     * @param int|null $traceOffset
      * @return \Symfony\Component\ErrorHandler\Error\FatalError
      */
     protected function fatalErrorFromPhpError(array $error, $traceOffset = null)
@@ -153,7 +158,7 @@ trait RegistersExceptionHandlers
     /**
      * Determine if the error level is a deprecation.
      *
-     * @param  int  $level
+     * @param int $level
      * @return bool
      */
     protected function isDeprecation($level)
@@ -164,7 +169,7 @@ trait RegistersExceptionHandlers
     /**
      * Determine if the error type is fatal.
      *
-     * @param  int  $type
+     * @param int $type
      * @return bool
      */
     protected function isFatal($type)
@@ -175,7 +180,7 @@ trait RegistersExceptionHandlers
     /**
      * Send the exception to the handler and return the response.
      *
-     * @param  \Throwable  $e
+     * @param \Throwable $e
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function sendExceptionToHandler(Throwable $e)
@@ -190,7 +195,7 @@ trait RegistersExceptionHandlers
     /**
      * Handle an uncaught exception instance.
      *
-     * @param  \Throwable  $e
+     * @param \Throwable $e
      * @return void
      */
     protected function handleException(Throwable $e)
@@ -200,7 +205,7 @@ trait RegistersExceptionHandlers
         $handler->report($e);
 
         if ($this->runningInConsole()) {
-            $handler->renderForConsole(new ConsoleOutput, $e);
+            $handler->renderForConsole(new ConsoleOutput(), $e);
         } else {
             $handler->render($this->make('request'), $e)->send();
         }

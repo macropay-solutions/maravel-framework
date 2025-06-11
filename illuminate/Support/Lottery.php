@@ -44,8 +44,8 @@ class Lottery
     /**
      * Create a new Lottery instance.
      *
-     * @param  int|float  $chances
-     * @param  int|null  $outOf
+     * @param int|float $chances
+     * @param int|null $outOf
      * @return void
      */
     public function __construct($chances, $outOf = null)
@@ -62,8 +62,8 @@ class Lottery
     /**
      * Create a new Lottery instance.
      *
-     * @param  int|float  $chances
-     * @param  int|null  $outOf
+     * @param int|float $chances
+     * @param int|null $outOf
      * @return static
      */
     public static function odds($chances, $outOf = null)
@@ -74,7 +74,7 @@ class Lottery
     /**
      * Set the winner callback.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return $this
      */
     public function winner($callback)
@@ -87,7 +87,7 @@ class Lottery
     /**
      * Set the loser callback.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return $this
      */
     public function loser($callback)
@@ -100,7 +100,7 @@ class Lottery
     /**
      * Run the lottery.
      *
-     * @param  mixed  ...$args
+     * @param mixed ...$args
      * @return mixed
      */
     public function __invoke(...$args)
@@ -111,7 +111,7 @@ class Lottery
     /**
      * Run the lottery.
      *
-     * @param  null|int  $times
+     * @param null|int $times
      * @return mixed
      */
     public function choose($times = null)
@@ -132,14 +132,14 @@ class Lottery
     /**
      * Run the winner or loser callback, randomly.
      *
-     * @param  mixed  ...$args
+     * @param mixed ...$args
      * @return callable
      */
     protected function runCallback(...$args)
     {
         return $this->wins()
-            ? ($this->winner ?? fn () => true)(...$args)
-            : ($this->loser ?? fn () => false)(...$args);
+            ? ($this->winner ?? fn() => true)(...$args)
+            : ($this->loser ?? fn() => false)(...$args);
     }
 
     /**
@@ -159,7 +159,7 @@ class Lottery
      */
     protected static function resultFactory()
     {
-        return static::$resultFactory ?? fn ($chances, $outOf) => $outOf === null
+        return static::$resultFactory ?? fn($chances, $outOf) => $outOf === null
             ? random_int(0, PHP_INT_MAX) / PHP_INT_MAX <= $chances
             : random_int(1, $outOf) <= $chances;
     }
@@ -167,12 +167,12 @@ class Lottery
     /**
      * Force the lottery to always result in a win.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return void
      */
     public static function alwaysWin($callback = null)
     {
-        self::setResultFactory(fn () => true);
+        self::setResultFactory(fn() => true);
 
         if ($callback === null) {
             return;
@@ -186,12 +186,12 @@ class Lottery
     /**
      * Force the lottery to always result in a lose.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return void
      */
     public static function alwaysLose($callback = null)
     {
-        self::setResultFactory(fn () => false);
+        self::setResultFactory(fn() => false);
 
         if ($callback === null) {
             return;
@@ -205,8 +205,8 @@ class Lottery
     /**
      * Set the sequence that will be used to determine lottery results.
      *
-     * @param  array  $sequence
-     * @param  callable|null  $whenMissing
+     * @param array $sequence
+     * @param callable|null $whenMissing
      * @return void
      */
     public static function fix($sequence, $whenMissing = null)
@@ -217,8 +217,8 @@ class Lottery
     /**
      * Set the sequence that will be used to determine lottery results.
      *
-     * @param  array  $sequence
-     * @param  callable|null  $whenMissing
+     * @param array $sequence
+     * @param callable|null $whenMissing
      * @return void
      */
     public static function forceResultWithSequence($sequence, $whenMissing = null)
@@ -261,7 +261,7 @@ class Lottery
     /**
      * Set the factory that should be used to determine the lottery results.
      *
-     * @param  callable  $factory
+     * @param callable $factory
      * @return void
      */
     public static function setResultFactory($factory)

@@ -64,9 +64,9 @@ class ViewServiceProvider extends ServiceProvider
     /**
      * Create a new Factory Instance.
      *
-     * @param  \Illuminate\View\Engines\EngineResolver  $resolver
-     * @param  \Illuminate\View\ViewFinderInterface  $finder
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
+     * @param \Illuminate\View\Engines\EngineResolver $resolver
+     * @param \Illuminate\View\ViewFinderInterface $finder
+     * @param \Illuminate\Contracts\Events\Dispatcher $events
      * @return \Illuminate\View\Factory
      */
     protected function createFactory($resolver, $finder, $events)
@@ -94,15 +94,18 @@ class ViewServiceProvider extends ServiceProvider
     public function registerBladeCompiler()
     {
         $this->app->singleton('blade.compiler', function ($app) {
-            return tap(new BladeCompiler(
-                $app['files'],
-                $app['config']['view.compiled'],
-                $app['config']->get('view.relative_hash', false) ? $app->basePath() : '',
-                $app['config']->get('view.cache', true),
-                $app['config']->get('view.compiled_extension', 'php'),
-            ), function ($blade) {
-                $blade->component('dynamic-component', DynamicComponent::class);
-            });
+            return tap(
+                new BladeCompiler(
+                    $app['files'],
+                    $app['config']['view.compiled'],
+                    $app['config']->get('view.relative_hash', false) ? $app->basePath() : '',
+                    $app['config']->get('view.cache', true),
+                    $app['config']->get('view.compiled_extension', 'php'),
+                ),
+                function ($blade) {
+                    $blade->component('dynamic-component', DynamicComponent::class);
+                }
+            );
         });
     }
 
@@ -114,13 +117,13 @@ class ViewServiceProvider extends ServiceProvider
     public function registerEngineResolver()
     {
         $this->app->singleton('view.engine.resolver', function () {
-            $resolver = new EngineResolver;
+            $resolver = new EngineResolver();
 
             // Next, we will register the various view engines with the resolver so that the
             // environment will resolve the engines needed for various views based on the
             // extension of view file. We call a method for each of the view's engines.
             foreach (['file', 'php', 'blade'] as $engine) {
-                $this->{'register'.ucfirst($engine).'Engine'}($resolver);
+                $this->{'register' . ucfirst($engine) . 'Engine'}($resolver);
             }
 
             return $resolver;
@@ -130,7 +133,7 @@ class ViewServiceProvider extends ServiceProvider
     /**
      * Register the file engine implementation.
      *
-     * @param  \Illuminate\View\Engines\EngineResolver  $resolver
+     * @param \Illuminate\View\Engines\EngineResolver $resolver
      * @return void
      */
     public function registerFileEngine($resolver)
@@ -143,7 +146,7 @@ class ViewServiceProvider extends ServiceProvider
     /**
      * Register the PHP engine implementation.
      *
-     * @param  \Illuminate\View\Engines\EngineResolver  $resolver
+     * @param \Illuminate\View\Engines\EngineResolver $resolver
      * @return void
      */
     public function registerPhpEngine($resolver)
@@ -156,7 +159,7 @@ class ViewServiceProvider extends ServiceProvider
     /**
      * Register the Blade engine implementation.
      *
-     * @param  \Illuminate\View\Engines\EngineResolver  $resolver
+     * @param \Illuminate\View\Engines\EngineResolver $resolver
      * @return void
      */
     public function registerBladeEngine($resolver)

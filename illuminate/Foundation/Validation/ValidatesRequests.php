@@ -12,8 +12,8 @@ trait ValidatesRequests
     /**
      * Run the validation routine against the given validator.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator|array  $validator
-     * @param  \Illuminate\Http\Request|null  $request
+     * @param \Illuminate\Contracts\Validation\Validator|array $validator
+     * @param \Illuminate\Http\Request|null $request
      * @return array
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -39,19 +39,25 @@ trait ValidatesRequests
     /**
      * Validate the given request with the given rules.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $rules
-     * @param  array  $messages
-     * @param  array  $attributes
+     * @param \Illuminate\Http\Request $request
+     * @param array $rules
+     * @param array $messages
+     * @param array $attributes
      * @return array
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function validate(Request $request, array $rules,
-                             array $messages = [], array $attributes = [])
-    {
+    public function validate(
+        Request $request,
+        array $rules,
+        array $messages = [],
+        array $attributes = []
+    ) {
         $validator = $this->getValidationFactory()->make(
-            $request->all(), $rules, $messages, $attributes
+            $request->all(),
+            $rules,
+            $messages,
+            $attributes
         );
 
         if ($request->isPrecognitive()) {
@@ -67,18 +73,22 @@ trait ValidatesRequests
     /**
      * Validate the given request with the given rules.
      *
-     * @param  string  $errorBag
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $rules
-     * @param  array  $messages
-     * @param  array  $attributes
+     * @param string $errorBag
+     * @param \Illuminate\Http\Request $request
+     * @param array $rules
+     * @param array $messages
+     * @param array $attributes
      * @return array
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function validateWithBag($errorBag, Request $request, array $rules,
-                                    array $messages = [], array $attributes = [])
-    {
+    public function validateWithBag(
+        $errorBag,
+        Request $request,
+        array $rules,
+        array $messages = [],
+        array $attributes = []
+    ) {
         try {
             return $this->validate($request, $rules, $messages, $attributes);
         } catch (ValidationException $e) {

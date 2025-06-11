@@ -36,7 +36,7 @@ class RestartCommand extends Command
     /**
      * Create a new queue restart command.
      *
-     * @param  \Illuminate\Contracts\Cache\Repository  $cache
+     * @param \Illuminate\Contracts\Cache\Repository $cache
      * @return void
      */
     public function __construct(Cache $cache)

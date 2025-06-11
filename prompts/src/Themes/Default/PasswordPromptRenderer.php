@@ -25,7 +25,9 @@ class PasswordPromptRenderer extends Renderer
             'cancel' => $this
                 ->box(
                     $this->truncate($prompt->label, $prompt->terminal()->cols() - 6),
-                    $this->strikethrough($this->dim($this->truncate($prompt->masked() ?: $prompt->placeholder, $maxWidth))),
+                    $this->strikethrough(
+                        $this->dim($this->truncate($prompt->masked() ?: $prompt->placeholder, $maxWidth))
+                    ),
                     color: 'red',
                 )
                 ->error($prompt->cancelMessage),
@@ -45,8 +47,8 @@ class PasswordPromptRenderer extends Renderer
                 )
                 ->when(
                     $prompt->hint,
-                    fn () => $this->hint($prompt->hint),
-                    fn () => $this->newLine() // Space for errors
+                    fn() => $this->hint($prompt->hint),
+                    fn() => $this->newLine() // Space for errors
                 ),
         };
     }

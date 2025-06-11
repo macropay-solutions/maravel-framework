@@ -38,8 +38,8 @@ class OutputStyle extends SymfonyStyle implements NewLineAware
     /**
      * Create a new Console OutputStyle instance.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return void
      */
     public function __construct(InputInterface $input, OutputInterface $output)
@@ -66,7 +66,7 @@ class OutputStyle extends SymfonyStyle implements NewLineAware
      */
     public function write(string|iterable $messages, bool $newline = false, int $options = 0)
     {
-        $this->newLinesWritten = $this->trailingNewLineCount($messages) + (int) $newline;
+        $this->newLinesWritten = $this->trailingNewLineCount($messages) + (int)$newline;
         $this->newLineWritten = $this->newLinesWritten > 0;
 
         parent::write($messages, $newline, $options);
@@ -136,7 +136,7 @@ class OutputStyle extends SymfonyStyle implements NewLineAware
             $string = '';
 
             foreach ($messages as $message) {
-                $string .= $message.PHP_EOL;
+                $string .= $message . PHP_EOL;
             }
         } else {
             $string = $messages;

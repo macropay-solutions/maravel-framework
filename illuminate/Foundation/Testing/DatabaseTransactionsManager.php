@@ -9,7 +9,7 @@ class DatabaseTransactionsManager extends BaseManager
     /**
      * Register a transaction callback.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return void
      */
     public function addCallback($callback)
@@ -37,7 +37,7 @@ class DatabaseTransactionsManager extends BaseManager
     /**
      * Determine if after commit callbacks should be executed for the given transaction level.
      *
-     * @param  int  $level
+     * @param int $level
      * @return bool
      */
     public function afterCommitCallbacksShouldBeExecuted($level)

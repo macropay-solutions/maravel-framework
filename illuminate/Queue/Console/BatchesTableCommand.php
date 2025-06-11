@@ -39,6 +39,6 @@ class BatchesTableCommand extends MigrationGeneratorCommand
      */
     protected function migrationStubFile()
     {
-        return __DIR__.'/stubs/batches.stub';
+        return __DIR__ . '/stubs/batches.stub';
     }
 }

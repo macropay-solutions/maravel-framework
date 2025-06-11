@@ -35,8 +35,8 @@ class CompilerEngine extends PhpEngine
     /**
      * Create a new compiler engine instance.
      *
-     * @param  \Illuminate\View\Compilers\CompilerInterface  $compiler
-     * @param  \Illuminate\Filesystem\Filesystem|null  $files
+     * @param \Illuminate\View\Compilers\CompilerInterface $compiler
+     * @param \Illuminate\Filesystem\Filesystem|null $files
      * @return void
      */
     public function __construct(CompilerInterface $compiler, ?Filesystem $files = null)
@@ -50,8 +50,8 @@ class CompilerEngine extends PhpEngine
     /**
      * Get the evaluated contents of the view.
      *
-     * @param  string  $path
-     * @param  array  $data
+     * @param string $path
+     * @param array $data
      * @return string
      */
     public function get($path, array $data = [])
@@ -61,7 +61,7 @@ class CompilerEngine extends PhpEngine
         // If this given view has expired, which means it has simply been edited since
         // it was last compiled, we will re-compile the views so we can evaluate a
         // fresh copy of the view. We'll pass the compiler the path of the view.
-        if (! isset($this->compiledOrNotExpired[$path]) && $this->compiler->isExpired($path)) {
+        if (!isset($this->compiledOrNotExpired[$path]) && $this->compiler->isExpired($path)) {
             $this->compiler->compile($path);
         }
 
@@ -72,11 +72,11 @@ class CompilerEngine extends PhpEngine
         try {
             $results = $this->evaluatePath($this->compiler->getCompiledPath($path), $data);
         } catch (ViewException $e) {
-            if (! str($e->getMessage())->contains(['No such file or directory', 'File does not exist at path'])) {
+            if (!str($e->getMessage())->contains(['No such file or directory', 'File does not exist at path'])) {
                 throw $e;
             }
 
-            if (! isset($this->compiledOrNotExpired[$path])) {
+            if (!isset($this->compiledOrNotExpired[$path])) {
                 throw $e;
             }
 
@@ -95,8 +95,8 @@ class CompilerEngine extends PhpEngine
     /**
      * Handle a view exception.
      *
-     * @param  \Throwable  $e
-     * @param  int  $obLevel
+     * @param \Throwable $e
+     * @param int $obLevel
      * @return void
      *
      * @throws \Throwable
@@ -115,12 +115,12 @@ class CompilerEngine extends PhpEngine
     /**
      * Get the exception message for an exception.
      *
-     * @param  \Throwable  $e
+     * @param \Throwable $e
      * @return string
      */
     protected function getMessage(Throwable $e)
     {
-        return $e->getMessage().' (View: '.realpath(last($this->lastCompiled)).')';
+        return $e->getMessage() . ' (View: ' . realpath(last($this->lastCompiled)) . ')';
     }
 
     /**

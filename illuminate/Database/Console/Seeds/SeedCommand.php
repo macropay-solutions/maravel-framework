@@ -39,7 +39,7 @@ class SeedCommand extends Command
     /**
      * Create a new database seed command instance.
      *
-     * @param  \Illuminate\Database\ConnectionResolverInterface  $resolver
+     * @param \Illuminate\Database\ConnectionResolverInterface $resolver
      * @return void
      */
     public function __construct(Resolver $resolver)
@@ -56,7 +56,7 @@ class SeedCommand extends Command
      */
     public function handle()
     {
-        if (! $this->confirmToProceed()) {
+        if (!$this->confirmToProceed()) {
             return 1;
         }
 
@@ -86,18 +86,20 @@ class SeedCommand extends Command
     {
         $class = $this->input->getArgument('class') ?? $this->input->getOption('class');
 
-        if (! str_contains($class, '\\')) {
-            $class = 'Database\\Seeders\\'.$class;
+        if (!str_contains($class, '\\')) {
+            $class = 'Database\\Seeders\\' . $class;
         }
 
-        if ($class === 'Database\\Seeders\\DatabaseSeeder' &&
-            ! class_exists($class)) {
+        if (
+            $class === 'Database\\Seeders\\DatabaseSeeder' &&
+            !class_exists($class)
+        ) {
             $class = 'DatabaseSeeder';
         }
 
         return $this->laravel->make($class)
-                        ->setContainer($this->laravel)
-                        ->setCommand($this);
+            ->setContainer($this->laravel)
+            ->setCommand($this);
     }
 
     /**
@@ -132,7 +134,13 @@ class SeedCommand extends Command
     protected function getOptions()
     {
         return [
-            ['class', null, InputOption::VALUE_OPTIONAL, 'The class name of the root seeder', 'Database\\Seeders\\DatabaseSeeder'],
+            [
+                'class',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The class name of the root seeder',
+                'Database\\Seeders\\DatabaseSeeder',
+            ],
             ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to seed'],
             ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production'],
         ];

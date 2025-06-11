@@ -68,19 +68,19 @@ class Env
     /**
      * Get the value of an environment variable.
      *
-     * @param  string  $key
-     * @param  mixed  $default
+     * @param string $key
+     * @param mixed $default
      * @return mixed
      */
     public static function get($key, $default = null)
     {
-        return self::getOption($key)->getOrCall(fn () => value($default));
+        return self::getOption($key)->getOrCall(fn() => value($default));
     }
 
     /**
      * Get the value of a required environment variable.
      *
-     * @param  string  $key
+     * @param string $key
      * @return mixed
      *
      * @throws \RuntimeException
@@ -93,7 +93,7 @@ class Env
     /**
      * Get the possible option for this environment variable.
      *
-     * @param  string  $key
+     * @param string $key
      * @return \PhpOption\Option|\PhpOption\Some
      */
     protected static function getOption($key)

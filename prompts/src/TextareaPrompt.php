@@ -116,7 +116,7 @@ class TextareaPrompt extends Prompt
         $lines = collect($this->lines());
 
         // Line length + 1 for the newline character
-        $lineLengths = $lines->map(fn ($line, $index) => mb_strlen($line) + ($index === $lines->count() - 1 ? 0 : 1));
+        $lineLengths = $lines->map(fn($line, $index) => mb_strlen($line) + ($index === $lines->count() - 1 ? 0 : 1));
 
         $currentLineIndex = $this->currentLineIndex();
 
@@ -148,7 +148,7 @@ class TextareaPrompt extends Prompt
         $lines = collect($this->lines());
 
         // Line length + 1 for the newline character
-        $lineLengths = $lines->map(fn ($line, $index) => mb_strlen($line) + ($index === $lines->count() - 1 ? 0 : 1));
+        $lineLengths = $lines->map(fn($line, $index) => mb_strlen($line) + ($index === $lines->count() - 1 ? 0 : 1));
 
         $currentLineIndex = $this->currentLineIndex();
 
@@ -207,7 +207,7 @@ class TextareaPrompt extends Prompt
     {
         $totalLineLength = 0;
 
-        return (int) collect($this->lines())->search(function ($line) use (&$totalLineLength) {
+        return (int)collect($this->lines())->search(function ($line) use (&$totalLineLength) {
             $totalLineLength += mb_strlen($line) + 1;
 
             return $totalLineLength > $this->cursorPosition;
@@ -221,11 +221,11 @@ class TextareaPrompt extends Prompt
     {
         $cursorOffset = 0;
 
-        preg_match_all('/\S{'.$this->width.',}/u', $this->value(), $matches, PREG_OFFSET_CAPTURE);
+        preg_match_all('/\S{' . $this->width . ',}/u', $this->value(), $matches, PREG_OFFSET_CAPTURE);
 
         foreach ($matches[0] as $match) {
             if ($this->cursorPosition + $cursorOffset >= $match[1] + mb_strwidth($match[0])) {
-                $cursorOffset += (int) floor(mb_strwidth($match[0]) / $this->width);
+                $cursorOffset += (int)floor(mb_strwidth($match[0]) / $this->width);
             }
         }
 
@@ -237,12 +237,18 @@ class TextareaPrompt extends Prompt
      */
     protected function wrappedPlaceholderWithCursor(): string
     {
-        return implode(PHP_EOL, array_map(
-            $this->dim(...),
-            explode(PHP_EOL, $this->addCursor(
-                $this->mbWordwrap($this->placeholder, $this->width, PHP_EOL, true),
-                cursorPosition: 0,
-            ))
-        ));
+        return implode(
+            PHP_EOL,
+            array_map(
+                $this->dim(...),
+                explode(
+                    PHP_EOL,
+                    $this->addCursor(
+                        $this->mbWordwrap($this->placeholder, $this->width, PHP_EOL, true),
+                        cursorPosition: 0,
+                    )
+                )
+            )
+        );
     }
 }

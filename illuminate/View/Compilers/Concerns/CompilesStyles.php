@@ -7,7 +7,7 @@ trait CompilesStyles
     /**
      * Compile the conditional style statement into valid PHP.
      *
-     * @param  string  $expression
+     * @param string $expression
      * @return string
      */
     protected function compileStyle($expression)

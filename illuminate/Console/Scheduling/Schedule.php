@@ -21,19 +21,19 @@ class Schedule
 {
     use Macroable;
 
-    const SUNDAY = 0;
+    public const SUNDAY = 0;
 
-    const MONDAY = 1;
+    public const MONDAY = 1;
 
-    const TUESDAY = 2;
+    public const TUESDAY = 2;
 
-    const WEDNESDAY = 3;
+    public const WEDNESDAY = 3;
 
-    const THURSDAY = 4;
+    public const THURSDAY = 4;
 
-    const FRIDAY = 5;
+    public const FRIDAY = 5;
 
-    const SATURDAY = 6;
+    public const SATURDAY = 6;
 
     /**
      * All of the events on the schedule.
@@ -80,7 +80,7 @@ class Schedule
     /**
      * Create a new schedule instance.
      *
-     * @param  \DateTimeZone|string|null  $timezone
+     * @param \DateTimeZone|string|null $timezone
      * @return void
      *
      * @throws \RuntimeException
@@ -89,7 +89,7 @@ class Schedule
     {
         $this->timezone = $timezone;
 
-        if (! class_exists(Container::class)) {
+        if (!class_exists(Container::class)) {
             throw new RuntimeException(
                 'A container implementation is required to use the scheduler. Please install the illuminate/container package.'
             );
@@ -98,26 +98,29 @@ class Schedule
         $container = Container::getInstance();
 
         $this->eventMutex = $container->bound(EventMutex::class)
-                                ? $container->make(EventMutex::class)
-                                : $container->make(CacheEventMutex::class);
+            ? $container->make(EventMutex::class)
+            : $container->make(CacheEventMutex::class);
 
         $this->schedulingMutex = $container->bound(SchedulingMutex::class)
-                                ? $container->make(SchedulingMutex::class)
-                                : $container->make(CacheSchedulingMutex::class);
+            ? $container->make(SchedulingMutex::class)
+            : $container->make(CacheSchedulingMutex::class);
     }
 
     /**
      * Add a new callback event to the schedule.
      *
-     * @param  string|callable  $callback
-     * @param  array  $parameters
+     * @param string|callable $callback
+     * @param array $parameters
      * @return \Illuminate\Console\Scheduling\CallbackEvent
      */
     public function call($callback, array $parameters = [])
     {
 //        $this->events[] = $event = new CallbackEvent(
         $this->events[] = $event = \app(CallbackEvent::class, [
-            $this->eventMutex, $callback, $parameters, $this->timezone
+            $this->eventMutex,
+            $callback,
+            $parameters,
+            $this->timezone,
         ]);
 
         return $event;
@@ -126,8 +129,8 @@ class Schedule
     /**
      * Add a new Artisan command event to the schedule.
      *
-     * @param  string  $command
-     * @param  array  $parameters
+     * @param string $command
+     * @param array $parameters
      * @return \Illuminate\Console\Scheduling\Event
      */
     public function command($command, array $parameters = [])
@@ -136,21 +139,23 @@ class Schedule
             $command = Container::getInstance()->make($command);
 
             return $this->exec(
-                Application::formatCommandString($command->getName()), $parameters,
+                Application::formatCommandString($command->getName()),
+                $parameters,
             )->description($command->getDescription());
         }
 
         return $this->exec(
-            Application::formatCommandString($command), $parameters
+            Application::formatCommandString($command),
+            $parameters
         );
     }
 
     /**
      * Add a new job callback event to the schedule.
      *
-     * @param  object|string  $job
-     * @param  string|null  $queue
-     * @param  string|null  $connection
+     * @param object|string $job
+     * @param string|null $queue
+     * @param string|null $connection
      * @return \Illuminate\Console\Scheduling\CallbackEvent
      */
     public function job($job, $queue = null, $connection = null)
@@ -169,9 +174,9 @@ class Schedule
     /**
      * Dispatch the given job to the queue.
      *
-     * @param  object  $job
-     * @param  string|null  $queue
-     * @param  string|null  $connection
+     * @param object $job
+     * @param string|null $queue
+     * @param string|null $connection
      * @return void
      *
      * @throws \RuntimeException
@@ -179,7 +184,7 @@ class Schedule
     protected function dispatchToQueue($job, $queue, $connection)
     {
         if ($job instanceof Closure) {
-            if (! class_exists(CallQueuedClosure::class)) {
+            if (!class_exists(CallQueuedClosure::class)) {
                 throw new RuntimeException(
                     'To enable support for closure jobs, please install the illuminate/queue package.'
                 );
@@ -202,20 +207,20 @@ class Schedule
     /**
      * Dispatch the given unique job to the queue.
      *
-     * @param  object  $job
-     * @param  string|null  $queue
-     * @param  string|null  $connection
+     * @param object $job
+     * @param string|null $queue
+     * @param string|null $connection
      * @return void
      *
      * @throws \RuntimeException
      */
     protected function dispatchUniqueJobToQueue($job, $queue, $connection)
     {
-        if (! Container::getInstance()->bound(Cache::class)) {
+        if (!Container::getInstance()->bound(Cache::class)) {
             throw new RuntimeException('Cache driver not available. Scheduling unique jobs not supported.');
         }
 
-        if (! (new UniqueLock(Container::getInstance()->make(Cache::class)))->acquire($job)) {
+        if (!(new UniqueLock(Container::getInstance()->make(Cache::class)))->acquire($job)) {
             return;
         }
 
@@ -227,7 +232,7 @@ class Schedule
     /**
      * Dispatch the given job right now.
      *
-     * @param  object  $job
+     * @param object $job
      * @return void
      */
     protected function dispatchNow($job)
@@ -238,14 +243,14 @@ class Schedule
     /**
      * Add a new command event to the schedule.
      *
-     * @param  string  $command
-     * @param  array  $parameters
+     * @param string $command
+     * @param array $parameters
      * @return \Illuminate\Console\Scheduling\Event
      */
     public function exec($command, array $parameters = [])
     {
         if (count($parameters)) {
-            $command .= ' '.$this->compileParameters($parameters);
+            $command .= ' ' . $this->compileParameters($parameters);
         }
 
 //        $this->events[] = $event = new Event($this->eventMutex, $command, $this->timezone);
@@ -257,7 +262,7 @@ class Schedule
     /**
      * Compile parameters for a command.
      *
-     * @param  array  $parameters
+     * @param array $parameters
      * @return string
      */
     protected function compileParameters(array $parameters)
@@ -267,7 +272,7 @@ class Schedule
                 return $this->compileArrayInput($key, $value);
             }
 
-            if (! is_numeric($value) && ! preg_match('/^(-.$|--.*)/i', $value)) {
+            if (!is_numeric($value) && !preg_match('/^(-.$|--.*)/i', $value)) {
                 $value = ProcessUtils::escapeArgument($value);
             }
 
@@ -278,8 +283,8 @@ class Schedule
     /**
      * Compile array input for a command.
      *
-     * @param  string|int  $key
-     * @param  array  $value
+     * @param string|int $key
+     * @param array $value
      * @return string
      */
     public function compileArrayInput($key, $value)
@@ -304,8 +309,8 @@ class Schedule
     /**
      * Determine if the server is allowed to run this event.
      *
-     * @param  \Illuminate\Console\Scheduling\Event  $event
-     * @param  \DateTimeInterface  $time
+     * @param \Illuminate\Console\Scheduling\Event $event
+     * @param \DateTimeInterface $time
      * @return bool
      */
     public function serverShouldRun(Event $event, DateTimeInterface $time)
@@ -316,7 +321,7 @@ class Schedule
     /**
      * Get all of the events on the schedule that are due.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param \Illuminate\Contracts\Foundation\Application $app
      * @return \Illuminate\Support\Collection
      */
     public function dueEvents($app)
@@ -337,7 +342,7 @@ class Schedule
     /**
      * Specify the cache store that should be used to store mutexes.
      *
-     * @param  string  $store
+     * @param string $store
      * @return $this
      */
     public function useCache($store)
@@ -368,7 +373,8 @@ class Schedule
             } catch (BindingResolutionException $e) {
                 throw new RuntimeException(
                     'Unable to resolve the dispatcher from the service container. Please bind it or install the illuminate/bus package.',
-                    is_int($e->getCode()) ? $e->getCode() : 0, $e
+                    is_int($e->getCode()) ? $e->getCode() : 0,
+                    $e
                 );
             }
         }

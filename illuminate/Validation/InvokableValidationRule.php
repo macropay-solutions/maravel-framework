@@ -52,7 +52,7 @@ class InvokableValidationRule implements Rule, ValidatorAwareRule
     /**
      * Create a new explicit Invokable validation rule.
      *
-     * @param  \Illuminate\Contracts\Validation\ValidationRule|\Illuminate\Contracts\Validation\InvokableRule  $invokable
+     * @param \Illuminate\Contracts\Validation\ValidationRule|\Illuminate\Contracts\Validation\InvokableRule $invokable
      * @return void
      */
     protected function __construct(ValidationRule|InvokableRule $invokable)
@@ -63,13 +63,13 @@ class InvokableValidationRule implements Rule, ValidatorAwareRule
     /**
      * Create a new implicit or explicit Invokable validation rule.
      *
-     * @param  \Illuminate\Contracts\Validation\ValidationRule|\Illuminate\Contracts\Validation\InvokableRule  $invokable
+     * @param \Illuminate\Contracts\Validation\ValidationRule|\Illuminate\Contracts\Validation\InvokableRule $invokable
      * @return \Illuminate\Contracts\Validation\Rule|\Illuminate\Validation\InvokableValidationRule
      */
     public static function make($invokable)
     {
         if ($invokable->implicit ?? false) {
-            return new class($invokable) extends InvokableValidationRule implements ImplicitRule {
+            return new class ($invokable) extends InvokableValidationRule implements ImplicitRule {
             };
         }
 
@@ -79,8 +79,8 @@ class InvokableValidationRule implements Rule, ValidatorAwareRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * @param string $attribute
+     * @param mixed $value
      * @return bool
      */
     public function passes($attribute, $value)
@@ -96,8 +96,8 @@ class InvokableValidationRule implements Rule, ValidatorAwareRule
         }
 
         $method = $this->invokable instanceof ValidationRule
-                        ? 'validate'
-                        : '__invoke';
+            ? 'validate'
+            : '__invoke';
 
         $this->invokable->{$method}($attribute, $value, function ($attribute, $message = null) {
             $this->failed = true;
@@ -105,7 +105,7 @@ class InvokableValidationRule implements Rule, ValidatorAwareRule
             return $this->pendingPotentiallyTranslatedString($attribute, $message);
         });
 
-        return ! $this->failed;
+        return !$this->failed;
     }
 
     /**
@@ -131,7 +131,7 @@ class InvokableValidationRule implements Rule, ValidatorAwareRule
     /**
      * Set the data under validation.
      *
-     * @param  array  $data
+     * @param array $data
      * @return $this
      */
     public function setData($data)
@@ -144,7 +144,7 @@ class InvokableValidationRule implements Rule, ValidatorAwareRule
     /**
      * Set the current validator.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param \Illuminate\Validation\Validator $validator
      * @return $this
      */
     public function setValidator($validator)
