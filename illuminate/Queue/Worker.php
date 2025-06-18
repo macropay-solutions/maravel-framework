@@ -312,8 +312,7 @@ class Worker
      * @param int $lastRestart
      * @param int $startTime
      * @param int $jobsProcessed
-     * @param mixed $job
-     * @return int|null
+     * @param mixed|null $job
      */
     protected function stopIfNecessary(
         WorkerOptions $options,
@@ -321,7 +320,7 @@ class Worker
         $startTime = 0,
         $jobsProcessed = 0,
         $job = null
-    ) {
+    ): ?int {
         return match (true) {
             $this->shouldQuit => static::EXIT_SUCCESS,
             $this->memoryExceeded($options->memory) => static::EXIT_MEMORY_LIMIT,

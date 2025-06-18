@@ -16,17 +16,17 @@ class ListenCommand extends Command
      * @var string
      */
     protected $signature = 'queue:listen
-                            {connection? : The name of connection}
-                            {--name=default : The name of the worker}
-                            {--delay=0 : The number of seconds to delay failed jobs (Deprecated)}
-                            {--backoff=0 : The number of seconds to wait before retrying a job that encountered an uncaught exception}
-                            {--force : Force the worker to run even in maintenance mode}
-                            {--memory=128 : The memory limit in megabytes}
-                            {--queue= : The queue to listen on}
-                            {--sleep=3 : Number of seconds to sleep when no job is available}
-                            {--rest=0 : Number of seconds to rest between jobs}
-                            {--timeout=60 : The number of seconds a child process can run}
-                            {--tries=1 : Number of times to attempt a job before logging it failed}';
+        {connection? : The name of connection}
+        {--name=default : The name of the worker}
+        {--delay=0 : The number of seconds to delay failed jobs (Deprecated)}
+        {--backoff=0 : The number of seconds to wait before retrying a job that encountered an uncaught exception}
+        {--force : Force the worker to run even in maintenance mode}
+        {--memory=128 : The memory limit in megabytes}
+        {--queue= : The queue to listen on}
+        {--sleep=3 : Number of seconds to sleep when no job is available}
+        {--rest=0 : Number of seconds to rest between jobs}
+        {--timeout=60 : The number of seconds a child process can run}
+        {--tries=1 : Number of times to attempt a job before logging it failed}';
 
     /**
      * The console command description.
@@ -73,11 +73,10 @@ class ListenCommand extends Command
             sprintf('Processing jobs from the [%s] %s.', $queue, str('queue')->plural(explode(',', $queue)))
         );
 
-        $this->listener->listen(
-            $connection,
-            $queue,
-            $this->gatherOptions()
-        );
+        $options = $this->gatherOptions();
+        \ini_set('memory_limit', $options->memory . 'M');
+
+        $this->listener->listen($connection, $queue, $options);
     }
 
     /**
@@ -114,9 +113,9 @@ class ListenCommand extends Command
             memory: $this->option('memory'),
             timeout: $this->option('timeout'),
             sleep: $this->option('sleep'),
-            rest: $this->option('rest'),
             maxTries: $this->option('tries'),
-            force: $this->option('force')
+            force: $this->option('force'),
+            rest: $this->option('rest')
         );
     }
 
