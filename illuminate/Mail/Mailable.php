@@ -840,11 +840,11 @@ class Mailable implements MailableContract, Renderable
     private function hasEnvelopeRecipient($address, $name, $property)
     {
         return method_exists($this, 'envelope') && match ($property) {
-                'from' => $this->envelope()->isFrom($address, $name),
-                'to' => $this->envelope()->hasTo($address, $name),
-                'cc' => $this->envelope()->hasCc($address, $name),
-                'bcc' => $this->envelope()->hasBcc($address, $name),
-                'replyTo' => $this->envelope()->hasReplyTo($address, $name),
+            'from' => $this->envelope()->isFrom($address, $name),
+            'to' => $this->envelope()->hasTo($address, $name),
+            'cc' => $this->envelope()->hasCc($address, $name),
+            'bcc' => $this->envelope()->hasBcc($address, $name),
+            'replyTo' => $this->envelope()->hasReplyTo($address, $name),
         };
     }
 
