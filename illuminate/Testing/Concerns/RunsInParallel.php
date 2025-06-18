@@ -49,8 +49,8 @@ trait RunsInParallel
     /**
      * Creates a new test runner instance.
      *
-     * @param  \ParaTest\Runners\PHPUnit\Options|\ParaTest\Options  $options
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param \ParaTest\Runners\PHPUnit\Options|\ParaTest\Options $options
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return void
      */
     public function __construct($options, OutputInterface $output)
@@ -75,7 +75,7 @@ trait RunsInParallel
     /**
      * Set the application resolver callback.
      *
-     * @param  \Closure|null  $resolver
+     * @param \Closure|null $resolver
      * @return void
      */
     public static function resolveApplicationUsing($resolver)
@@ -86,7 +86,7 @@ trait RunsInParallel
     /**
      * Set the runner resolver callback.
      *
-     * @param  \Closure|null  $resolver
+     * @param \Closure|null $resolver
      * @return void
      */
     public static function resolveRunnerUsing($resolver)
@@ -109,7 +109,7 @@ trait RunsInParallel
             ? $this->options->configuration
             : $this->options->configuration();
 
-        (new $phpHandlerClass)->handle($configuration->php());
+        (new $phpHandlerClass())->handle($configuration->php());
 
         $this->forEachProcess(function () {
             ParallelTesting::callSetUpProcessCallbacks();
@@ -141,7 +141,7 @@ trait RunsInParallel
     /**
      * Apply the given callback for each process.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return void
      */
     protected function forEachProcess($callback)
@@ -152,7 +152,7 @@ trait RunsInParallel
 
         collect(range(1, $processes))->each(function ($token) use ($callback) {
             tap($this->createApplication(), function ($app) use ($callback, $token) {
-                ParallelTesting::resolveTokenUsing(fn () => $token);
+                ParallelTesting::resolveTokenUsing(fn() => $token);
 
                 $callback($app);
             })->flush();
@@ -170,14 +170,15 @@ trait RunsInParallel
     {
         $applicationResolver = static::$applicationResolver ?: function () {
             if (trait_exists(\Tests\CreatesApplication::class)) {
-                $applicationCreator = new class
-                {
+                $applicationCreator = new class {
                     use \Tests\CreatesApplication;
                 };
 
                 return $applicationCreator->createApplication();
-            } elseif (file_exists($path = getcwd().'/bootstrap/app.php') ||
-                      file_exists($path = getcwd().'/.laravel/app.php')) {
+            } elseif (
+                file_exists($path = getcwd() . '/bootstrap/app.php') ||
+                file_exists($path = getcwd() . '/.laravel/app.php')
+            ) {
                 $app = require $path;
 
                 $app->make(Kernel::class)->bootstrap();

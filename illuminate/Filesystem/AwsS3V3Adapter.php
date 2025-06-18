@@ -21,10 +21,10 @@ class AwsS3V3Adapter extends FilesystemAdapter
     /**
      * Create a new AwsS3V3FilesystemAdapter instance.
      *
-     * @param  \League\Flysystem\FilesystemOperator  $driver
-     * @param  \League\Flysystem\AwsS3V3\AwsS3V3Adapter  $adapter
-     * @param  array  $config
-     * @param  \Aws\S3\S3Client  $client
+     * @param \League\Flysystem\FilesystemOperator $driver
+     * @param \League\Flysystem\AwsS3V3\AwsS3V3Adapter $adapter
+     * @param array $config
+     * @param \Aws\S3\S3Client $client
      * @return void
      */
     public function __construct(FilesystemOperator $driver, S3Adapter $adapter, array $config, S3Client $client)
@@ -37,7 +37,7 @@ class AwsS3V3Adapter extends FilesystemAdapter
     /**
      * Get the URL for the file at the given path.
      *
-     * @param  string  $path
+     * @param string $path
      * @return string
      *
      * @throws \RuntimeException
@@ -52,7 +52,8 @@ class AwsS3V3Adapter extends FilesystemAdapter
         }
 
         return $this->client->getObjectUrl(
-            $this->config['bucket'], $this->prefixer->prefixPath($path)
+            $this->config['bucket'],
+            $this->prefixer->prefixPath($path)
         );
     }
 
@@ -69,9 +70,9 @@ class AwsS3V3Adapter extends FilesystemAdapter
     /**
      * Get a temporary URL for the file at the given path.
      *
-     * @param  string  $path
-     * @param  \DateTimeInterface  $expiration
-     * @param  array  $options
+     * @param string $path
+     * @param \DateTimeInterface $expiration
+     * @param array $options
      * @return string
      */
     public function temporaryUrl($path, $expiration, array $options = [])
@@ -82,7 +83,9 @@ class AwsS3V3Adapter extends FilesystemAdapter
         ], $options));
 
         $uri = $this->client->createPresignedRequest(
-            $command, $expiration, $options
+            $command,
+            $expiration,
+            $options
         )->getUri();
 
         // If an explicit base URL has been set on the disk configuration then we will use
@@ -92,15 +95,15 @@ class AwsS3V3Adapter extends FilesystemAdapter
             $uri = $this->replaceBaseUrl($uri, $this->config['temporary_url']);
         }
 
-        return (string) $uri;
+        return (string)$uri;
     }
 
     /**
      * Get a temporary upload URL for the file at the given path.
      *
-     * @param  string  $path
-     * @param  \DateTimeInterface  $expiration
-     * @param  array  $options
+     * @param string $path
+     * @param \DateTimeInterface $expiration
+     * @param array $options
      * @return array
      */
     public function temporaryUploadUrl($path, $expiration, array $options = [])
@@ -111,7 +114,9 @@ class AwsS3V3Adapter extends FilesystemAdapter
         ], $options));
 
         $signedRequest = $this->client->createPresignedRequest(
-            $command, $expiration, $options
+            $command,
+            $expiration,
+            $options
         );
 
         $uri = $signedRequest->getUri();
@@ -124,7 +129,7 @@ class AwsS3V3Adapter extends FilesystemAdapter
         }
 
         return [
-            'url' => (string) $uri,
+            'url' => (string)$uri,
             'headers' => $signedRequest->getHeaders(),
         ];
     }

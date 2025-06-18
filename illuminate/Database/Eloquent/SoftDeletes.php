@@ -23,7 +23,7 @@ trait SoftDeletes
      */
     public static function bootSoftDeletes()
     {
-        static::addGlobalScope(new SoftDeletingScope);
+        static::addGlobalScope(new SoftDeletingScope());
     }
 
     /**
@@ -33,7 +33,7 @@ trait SoftDeletes
      */
     public function initializeSoftDeletes()
     {
-        if (! isset($this->casts[$this->getDeletedAtColumn()])) {
+        if (!isset($this->casts[$this->getDeletedAtColumn()])) {
             $this->casts[$this->getDeletedAtColumn()] = 'datetime';
         }
     }
@@ -67,7 +67,7 @@ trait SoftDeletes
      */
     public function forceDeleteQuietly()
     {
-        return static::withoutEvents(fn () => $this->forceDelete());
+        return static::withoutEvents(fn() => $this->forceDelete());
     }
 
     /**
@@ -103,7 +103,7 @@ trait SoftDeletes
 
         $this->{$this->getDeletedAtColumn()} = $time;
 
-        if ($this->usesTimestamps() && ! is_null($this->getUpdatedAtColumn())) {
+        if ($this->usesTimestamps() && !is_null($this->getUpdatedAtColumn())) {
             $this->{$this->getUpdatedAtColumn()} = $time;
 
             $columns[$this->getUpdatedAtColumn()] = $this->fromDateTime($time);
@@ -151,7 +151,7 @@ trait SoftDeletes
      */
     public function restoreQuietly()
     {
-        return static::withoutEvents(fn () => $this->restore());
+        return static::withoutEvents(fn() => $this->restore());
     }
 
     /**
@@ -161,13 +161,13 @@ trait SoftDeletes
      */
     public function trashed()
     {
-        return ! is_null($this->{$this->getDeletedAtColumn()});
+        return !is_null($this->{$this->getDeletedAtColumn()});
     }
 
     /**
      * Register a "softDeleted" model event callback with the dispatcher.
      *
-     * @param  \Closure|string  $callback
+     * @param \Closure|string $callback
      * @return void
      */
     public static function softDeleted($callback)
@@ -178,7 +178,7 @@ trait SoftDeletes
     /**
      * Register a "restoring" model event callback with the dispatcher.
      *
-     * @param  \Closure|string  $callback
+     * @param \Closure|string $callback
      * @return void
      */
     public static function restoring($callback)
@@ -189,7 +189,7 @@ trait SoftDeletes
     /**
      * Register a "restored" model event callback with the dispatcher.
      *
-     * @param  \Closure|string  $callback
+     * @param \Closure|string $callback
      * @return void
      */
     public static function restored($callback)
@@ -200,7 +200,7 @@ trait SoftDeletes
     /**
      * Register a "forceDeleting" model event callback with the dispatcher.
      *
-     * @param  \Closure|string  $callback
+     * @param \Closure|string $callback
      * @return void
      */
     public static function forceDeleting($callback)
@@ -211,7 +211,7 @@ trait SoftDeletes
     /**
      * Register a "forceDeleted" model event callback with the dispatcher.
      *
-     * @param  \Closure|string  $callback
+     * @param \Closure|string $callback
      * @return void
      */
     public static function forceDeleted($callback)
@@ -236,7 +236,7 @@ trait SoftDeletes
      */
     public function getDeletedAtColumn()
     {
-        return defined(static::class.'::DELETED_AT') ? static::DELETED_AT : 'deleted_at';
+        return defined(static::class . '::DELETED_AT') ? static::DELETED_AT : 'deleted_at';
     }
 
     /**

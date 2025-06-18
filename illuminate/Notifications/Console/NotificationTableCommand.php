@@ -39,6 +39,6 @@ class NotificationTableCommand extends MigrationGeneratorCommand
      */
     protected function migrationStubFile()
     {
-        return __DIR__.'/stubs/notifications.stub';
+        return __DIR__ . '/stubs/notifications.stub';
     }
 }

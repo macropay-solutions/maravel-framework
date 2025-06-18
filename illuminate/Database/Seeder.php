@@ -35,9 +35,9 @@ abstract class Seeder
     /**
      * Run the given seeder class.
      *
-     * @param  array|string  $class
-     * @param  bool  $silent
-     * @param  array  $parameters
+     * @param array|string $class
+     * @param bool $silent
+     * @param array $parameters
      * @return $this
      */
     public function call($class, $silent = false, array $parameters = [])
@@ -80,8 +80,8 @@ abstract class Seeder
     /**
      * Run the given seeder class.
      *
-     * @param  array|string  $class
-     * @param  array  $parameters
+     * @param array|string $class
+     * @param array $parameters
      * @return void
      */
     public function callWith($class, array $parameters = [])
@@ -92,8 +92,8 @@ abstract class Seeder
     /**
      * Silently run the given seeder class.
      *
-     * @param  array|string  $class
-     * @param  array  $parameters
+     * @param array|string $class
+     * @param array $parameters
      * @return void
      */
     public function callSilent($class, array $parameters = [])
@@ -104,8 +104,8 @@ abstract class Seeder
     /**
      * Run the given seeder class once.
      *
-     * @param  array|string  $class
-     * @param  bool  $silent
+     * @param array|string $class
+     * @param bool $silent
      * @return void
      */
     public function callOnce($class, $silent = false, array $parameters = [])
@@ -120,7 +120,7 @@ abstract class Seeder
     /**
      * Resolve an instance of the given seeder class.
      *
-     * @param  string  $class
+     * @param string $class
      * @return \Illuminate\Database\Seeder
      */
     protected function resolve($class)
@@ -130,7 +130,7 @@ abstract class Seeder
 
             $instance->setContainer($this->container);
         } else {
-            $instance = new $class;
+            $instance = new $class();
         }
 
         if (isset($this->command)) {
@@ -143,7 +143,7 @@ abstract class Seeder
     /**
      * Set the IoC container instance.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @param \Illuminate\Contracts\Container\Container $container
      * @return $this
      */
     public function setContainer(Container $container)
@@ -156,7 +156,7 @@ abstract class Seeder
     /**
      * Set the console command instance.
      *
-     * @param  \Illuminate\Console\Command  $command
+     * @param \Illuminate\Console\Command $command
      * @return $this
      */
     public function setCommand(Command $command)
@@ -169,18 +169,18 @@ abstract class Seeder
     /**
      * Run the database seeds.
      *
-     * @param  array  $parameters
+     * @param array $parameters
      * @return mixed
      *
      * @throws \InvalidArgumentException
      */
     public function __invoke(array $parameters = [])
     {
-        if (! method_exists($this, 'run')) {
-            throw new InvalidArgumentException('Method [run] missing from '.get_class($this));
+        if (!method_exists($this, 'run')) {
+            throw new InvalidArgumentException('Method [run] missing from ' . get_class($this));
         }
 
-        $callback = fn () => isset($this->container)
+        $callback = fn() => isset($this->container)
             ? $this->container->call([$this, 'run'], $parameters)
             : $this->run(...$parameters);
 

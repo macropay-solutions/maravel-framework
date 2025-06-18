@@ -21,8 +21,8 @@ class DatabaseBusy
     /**
      * Create a new event instance.
      *
-     * @param  string  $connectionName
-     * @param  int  $connections
+     * @param string $connectionName
+     * @param int $connections
      */
     public function __construct($connectionName, $connections)
     {

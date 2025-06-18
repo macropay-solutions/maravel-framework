@@ -37,9 +37,9 @@ class Response implements Arrayable
     /**
      * Create a new response.
      *
-     * @param  bool  $allowed
-     * @param  string|null  $message
-     * @param  mixed  $code
+     * @param bool $allowed
+     * @param string|null $message
+     * @param mixed $code
      * @return void
      */
     public function __construct($allowed, $message = '', $code = null)
@@ -52,8 +52,8 @@ class Response implements Arrayable
     /**
      * Create a new "allow" Response.
      *
-     * @param  string|null  $message
-     * @param  mixed  $code
+     * @param string|null $message
+     * @param mixed $code
      * @return \Illuminate\Auth\Access\Response
      */
     public static function allow($message = null, $code = null)
@@ -64,8 +64,8 @@ class Response implements Arrayable
     /**
      * Create a new "deny" Response.
      *
-     * @param  string|null  $message
-     * @param  mixed  $code
+     * @param string|null $message
+     * @param mixed $code
      * @return \Illuminate\Auth\Access\Response
      */
     public static function deny($message = null, $code = null)
@@ -76,9 +76,9 @@ class Response implements Arrayable
     /**
      * Create a new "deny" Response with a HTTP status code.
      *
-     * @param  int  $status
-     * @param  string|null  $message
-     * @param  mixed  $code
+     * @param int $status
+     * @param string|null $message
+     * @param mixed $code
      * @return \Illuminate\Auth\Access\Response
      */
     public static function denyWithStatus($status, $message = null, $code = null)
@@ -89,8 +89,8 @@ class Response implements Arrayable
     /**
      * Create a new "deny" Response with a 404 HTTP status code.
      *
-     * @param  string|null  $message
-     * @param  mixed  $code
+     * @param string|null $message
+     * @param mixed $code
      * @return \Illuminate\Auth\Access\Response
      */
     public static function denyAsNotFound($message = null, $code = null)
@@ -115,7 +115,7 @@ class Response implements Arrayable
      */
     public function denied()
     {
-        return ! $this->allowed();
+        return !$this->allowed();
     }
 
     /**
@@ -159,7 +159,7 @@ class Response implements Arrayable
     /**
      * Set the HTTP response status code.
      *
-     * @param  null|int  $status
+     * @param null|int $status
      * @return $this
      */
     public function withStatus($status)
@@ -210,6 +210,6 @@ class Response implements Arrayable
      */
     public function __toString()
     {
-        return (string) $this->message();
+        return (string)$this->message();
     }
 }

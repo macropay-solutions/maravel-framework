@@ -106,13 +106,13 @@ class Kernel implements KernelContract
     /**
      * Create a new console kernel instance.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
+     * @param \Illuminate\Contracts\Foundation\Application $app
+     * @param \Illuminate\Contracts\Events\Dispatcher $events
      * @return void
      */
     public function __construct(Application $app, Dispatcher $events)
     {
-        if (! defined('ARTISAN_BINARY')) {
+        if (!defined('ARTISAN_BINARY')) {
             define('ARTISAN_BINARY', 'artisan');
         }
 
@@ -120,7 +120,7 @@ class Kernel implements KernelContract
         $this->events = $events;
 
         $this->app->booted(function () {
-            if (! $this->app->runningUnitTests()) {
+            if (!$this->app->runningUnitTests()) {
                 $this->rerouteSymfonyCommandEvents();
             }
 
@@ -131,14 +131,14 @@ class Kernel implements KernelContract
     /**
      * Re-route the Symfony command events to their Laravel counterparts.
      *
+     * @return $this
      * @internal
      *
-     * @return $this
      */
     public function rerouteSymfonyCommandEvents()
     {
         if (is_null($this->symfonyDispatcher)) {
-            $this->symfonyDispatcher = new EventDispatcher;
+            $this->symfonyDispatcher = new EventDispatcher();
 
             $this->symfonyDispatcher->addListener(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) {
                 $this->events->dispatch(
@@ -148,7 +148,12 @@ class Kernel implements KernelContract
 
             $this->symfonyDispatcher->addListener(ConsoleEvents::TERMINATE, function (ConsoleTerminateEvent $event) {
                 $this->events->dispatch(
-                    new CommandFinished($event->getCommand()->getName(), $event->getInput(), $event->getOutput(), $event->getExitCode())
+                    new CommandFinished(
+                        $event->getCommand()->getName(),
+                        $event->getInput(),
+                        $event->getOutput(),
+                        $event->getExitCode()
+                    )
                 );
             });
         }
@@ -184,8 +189,8 @@ class Kernel implements KernelContract
     /**
      * Run the console application.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface|null  $output
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface|null $output
      * @return int
      */
     public function handle($input, $output = null)
@@ -212,8 +217,8 @@ class Kernel implements KernelContract
     /**
      * Terminate the application.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  int  $status
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param int $status
      * @return void
      */
     public function terminate($input, $status)
@@ -240,8 +245,8 @@ class Kernel implements KernelContract
     /**
      * Register a callback to be invoked when the command lifecycle duration exceeds a given amount of time.
      *
-     * @param  \DateTimeInterface|\Carbon\CarbonInterval|float|int  $threshold
-     * @param  callable  $handler
+     * @param \DateTimeInterface|\Carbon\CarbonInterval|float|int $threshold
+     * @param callable $handler
      * @return void
      */
     public function whenCommandLifecycleIsLongerThan($threshold, $handler)
@@ -273,7 +278,7 @@ class Kernel implements KernelContract
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -306,8 +311,8 @@ class Kernel implements KernelContract
     /**
      * Register a Closure based command with the application.
      *
-     * @param  string  $signature
-     * @param  \Closure  $callback
+     * @param string $signature
+     * @param \Closure $callback
      * @return \Illuminate\Foundation\Console\ClosureCommand
      */
     public function command($signature, Closure $callback)
@@ -324,7 +329,7 @@ class Kernel implements KernelContract
     /**
      * Register all of the commands in the given directory.
      *
-     * @param  array|string  $paths
+     * @param array|string $paths
      * @return void
      */
     protected function load($paths)
@@ -344,8 +349,10 @@ class Kernel implements KernelContract
         foreach (Finder::create()->in($paths)->files() as $file) {
             $command = $this->commandClassFromFile($file, $namespace);
 
-            if (is_subclass_of($command, Command::class) &&
-                ! (new ReflectionClass($command))->isAbstract()) {
+            if (
+                is_subclass_of($command, Command::class) &&
+                !(new ReflectionClass($command))->isAbstract()
+            ) {
                 Artisan::starting(function ($artisan) use ($command) {
                     $artisan->resolve($command);
                 });
@@ -356,23 +363,23 @@ class Kernel implements KernelContract
     /**
      * Extract the command class name from the given file path.
      *
-     * @param  \SplFileInfo  $file
-     * @param  string  $namespace
+     * @param \SplFileInfo $file
+     * @param string $namespace
      * @return string
      */
     protected function commandClassFromFile(SplFileInfo $file, string $namespace): string
     {
-        return $namespace.str_replace(
+        return $namespace . str_replace(
             ['/', '.php'],
             ['\\', ''],
-            Str::after($file->getRealPath(), realpath(app_path()).DIRECTORY_SEPARATOR)
+            Str::after($file->getRealPath(), realpath(app_path()) . DIRECTORY_SEPARATOR)
         );
     }
 
     /**
      * Register the given command with the console application.
      *
-     * @param  \Symfony\Component\Console\Command\Command  $command
+     * @param \Symfony\Component\Console\Command\Command $command
      * @return void
      */
     public function registerCommand($command)
@@ -383,9 +390,9 @@ class Kernel implements KernelContract
     /**
      * Run an Artisan console command by name.
      *
-     * @param  string  $command
-     * @param  array  $parameters
-     * @param  \Symfony\Component\Console\Output\OutputInterface|null  $outputBuffer
+     * @param string $command
+     * @param array $parameters
+     * @param \Symfony\Component\Console\Output\OutputInterface|null $outputBuffer
      * @return int
      *
      * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
@@ -404,8 +411,8 @@ class Kernel implements KernelContract
     /**
      * Queue the given console command.
      *
-     * @param  string  $command
-     * @param  array  $parameters
+     * @param string $command
+     * @param array $parameters
      * @return \Illuminate\Foundation\Bus\PendingDispatch
      */
     public function queue($command, array $parameters = [])
@@ -444,13 +451,13 @@ class Kernel implements KernelContract
      */
     public function bootstrap()
     {
-        if (! $this->app->hasBeenBootstrapped()) {
+        if (!$this->app->hasBeenBootstrapped()) {
             $this->app->bootstrapWith($this->bootstrappers());
         }
 
         $this->app->loadDeferredProviders();
 
-        if (! $this->commandsLoaded) {
+        if (!$this->commandsLoaded) {
             $this->commands();
 
             $this->commandsLoaded = true;
@@ -480,8 +487,8 @@ class Kernel implements KernelContract
     {
         if (is_null($this->artisan)) {
             $this->artisan = (new Artisan($this->app, $this->events, $this->app->version()))
-                                    ->resolveCommands($this->commands)
-                                    ->setContainerCommandLoader();
+                ->resolveCommands($this->commands)
+                ->setContainerCommandLoader();
 
             if ($this->symfonyDispatcher instanceof EventDispatcher) {
                 $this->artisan->setDispatcher($this->symfonyDispatcher);
@@ -495,7 +502,7 @@ class Kernel implements KernelContract
     /**
      * Set the Artisan application instance.
      *
-     * @param  \Illuminate\Console\Application|null  $artisan
+     * @param \Illuminate\Console\Application|null $artisan
      * @return void
      */
     public function setArtisan($artisan)
@@ -516,7 +523,7 @@ class Kernel implements KernelContract
     /**
      * Report the exception to the exception handler.
      *
-     * @param  \Throwable  $e
+     * @param \Throwable $e
      * @return void
      */
     protected function reportException(Throwable $e)
@@ -527,8 +534,8 @@ class Kernel implements KernelContract
     /**
      * Render the given exception.
      *
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
-     * @param  \Throwable  $e
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Throwable $e
      * @return void
      */
     protected function renderException($output, Throwable $e)

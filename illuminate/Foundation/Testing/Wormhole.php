@@ -16,7 +16,7 @@ class Wormhole
     /**
      * Create a new wormhole instance.
      *
-     * @param  int  $value
+     * @param int $value
      * @return void
      */
     public function __construct($value)
@@ -27,7 +27,7 @@ class Wormhole
     /**
      * Travel forward the given number of milliseconds.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function millisecond($callback = null)
@@ -38,7 +38,7 @@ class Wormhole
     /**
      * Travel forward the given number of milliseconds.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function milliseconds($callback = null)
@@ -51,7 +51,7 @@ class Wormhole
     /**
      * Travel forward the given number of seconds.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function second($callback = null)
@@ -62,7 +62,7 @@ class Wormhole
     /**
      * Travel forward the given number of seconds.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function seconds($callback = null)
@@ -75,7 +75,7 @@ class Wormhole
     /**
      * Travel forward the given number of minutes.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function minute($callback = null)
@@ -86,7 +86,7 @@ class Wormhole
     /**
      * Travel forward the given number of minutes.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function minutes($callback = null)
@@ -99,7 +99,7 @@ class Wormhole
     /**
      * Travel forward the given number of hours.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function hour($callback = null)
@@ -110,7 +110,7 @@ class Wormhole
     /**
      * Travel forward the given number of hours.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function hours($callback = null)
@@ -123,7 +123,7 @@ class Wormhole
     /**
      * Travel forward the given number of days.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function day($callback = null)
@@ -134,7 +134,7 @@ class Wormhole
     /**
      * Travel forward the given number of days.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function days($callback = null)
@@ -147,7 +147,7 @@ class Wormhole
     /**
      * Travel forward the given number of weeks.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function week($callback = null)
@@ -158,7 +158,7 @@ class Wormhole
     /**
      * Travel forward the given number of weeks.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function weeks($callback = null)
@@ -171,7 +171,7 @@ class Wormhole
     /**
      * Travel forward the given number of months.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function month($callback = null)
@@ -182,7 +182,7 @@ class Wormhole
     /**
      * Travel forward the given number of months.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function months($callback = null)
@@ -195,7 +195,7 @@ class Wormhole
     /**
      * Travel forward the given number of years.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function year($callback = null)
@@ -206,7 +206,7 @@ class Wormhole
     /**
      * Travel forward the given number of years.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     public function years($callback = null)
@@ -231,7 +231,7 @@ class Wormhole
     /**
      * Handle the given optional execution callback.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return mixed
      */
     protected function handleCallback($callback)

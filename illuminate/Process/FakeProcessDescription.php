@@ -37,7 +37,7 @@ class FakeProcessDescription
     /**
      * Specify the process ID that should be assigned to the process.
      *
-     * @param  int  $processId
+     * @param int $processId
      * @return $this
      */
     public function id(int $processId)
@@ -50,18 +50,18 @@ class FakeProcessDescription
     /**
      * Describe a line of standard output.
      *
-     * @param  array|string  $output
+     * @param array|string $output
      * @return $this
      */
     public function output(array|string $output)
     {
         if (is_array($output)) {
-            collect($output)->each(fn ($line) => $this->output($line));
+            collect($output)->each(fn($line) => $this->output($line));
 
             return $this;
         }
 
-        $this->output[] = ['type' => 'out', 'buffer' => rtrim($output, "\n")."\n"];
+        $this->output[] = ['type' => 'out', 'buffer' => rtrim($output, "\n") . "\n"];
 
         return $this;
     }
@@ -69,18 +69,18 @@ class FakeProcessDescription
     /**
      * Describe a line of error output.
      *
-     * @param  array|string  $output
+     * @param array|string $output
      * @return $this
      */
     public function errorOutput(array|string $output)
     {
         if (is_array($output)) {
-            collect($output)->each(fn ($line) => $this->errorOutput($line));
+            collect($output)->each(fn($line) => $this->errorOutput($line));
 
             return $this;
         }
 
-        $this->output[] = ['type' => 'err', 'buffer' => rtrim($output, "\n")."\n"];
+        $this->output[] = ['type' => 'err', 'buffer' => rtrim($output, "\n") . "\n"];
 
         return $this;
     }
@@ -88,7 +88,7 @@ class FakeProcessDescription
     /**
      * Replace the entire output buffer with the given string.
      *
-     * @param  string  $output
+     * @param string $output
      * @return $this
      */
     public function replaceOutput(string $output)
@@ -100,7 +100,7 @@ class FakeProcessDescription
         if (strlen($output) > 0) {
             $this->output[] = [
                 'type' => 'out',
-                'buffer' => rtrim($output, "\n")."\n",
+                'buffer' => rtrim($output, "\n") . "\n",
             ];
         }
 
@@ -110,7 +110,7 @@ class FakeProcessDescription
     /**
      * Replace the entire error output buffer with the given string.
      *
-     * @param  string  $output
+     * @param string $output
      * @return $this
      */
     public function replaceErrorOutput(string $output)
@@ -122,7 +122,7 @@ class FakeProcessDescription
         if (strlen($output) > 0) {
             $this->output[] = [
                 'type' => 'err',
-                'buffer' => rtrim($output, "\n")."\n",
+                'buffer' => rtrim($output, "\n") . "\n",
             ];
         }
 
@@ -132,7 +132,7 @@ class FakeProcessDescription
     /**
      * Specify the process exit code.
      *
-     * @param  int  $exitCode
+     * @param int $exitCode
      * @return $this
      */
     public function exitCode(int $exitCode)
@@ -145,7 +145,7 @@ class FakeProcessDescription
     /**
      * Specify how many times the "isRunning" method should return "true".
      *
-     * @param  int  $iterations
+     * @param int $iterations
      * @return $this
      */
     public function iterations(int $iterations)
@@ -156,7 +156,7 @@ class FakeProcessDescription
     /**
      * Specify how many times the "isRunning" method should return "true".
      *
-     * @param  int  $iterations
+     * @param int $iterations
      * @return $this
      */
     public function runsFor(int $iterations)
@@ -169,7 +169,7 @@ class FakeProcessDescription
     /**
      * Turn the fake process description into an actual process.
      *
-     * @param  string  $command
+     * @param string $command
      * @return \Symfony\Component\Process\Process
      */
     public function toSymfonyProcess(string $command)
@@ -180,7 +180,7 @@ class FakeProcessDescription
     /**
      * Convert the process description into a process result.
      *
-     * @param  string  $command
+     * @param string $command
      * @return \Illuminate\Contracts\Process\ProcessResult
      */
     public function toProcessResult(string $command)
@@ -201,11 +201,11 @@ class FakeProcessDescription
     protected function resolveOutput()
     {
         $output = collect($this->output)
-            ->filter(fn ($output) => $output['type'] === 'out');
+            ->filter(fn($output) => $output['type'] === 'out');
 
         return $output->isNotEmpty()
-                    ? rtrim($output->map->buffer->implode(''), "\n")."\n"
-                    : '';
+            ? rtrim($output->map->buffer->implode(''), "\n") . "\n"
+            : '';
     }
 
     /**
@@ -216,10 +216,10 @@ class FakeProcessDescription
     protected function resolveErrorOutput()
     {
         $output = collect($this->output)
-            ->filter(fn ($output) => $output['type'] === 'err');
+            ->filter(fn($output) => $output['type'] === 'err');
 
         return $output->isNotEmpty()
-                    ? rtrim($output->map->buffer->implode(''), "\n")."\n"
-                    : '';
+            ? rtrim($output->map->buffer->implode(''), "\n") . "\n"
+            : '';
     }
 }

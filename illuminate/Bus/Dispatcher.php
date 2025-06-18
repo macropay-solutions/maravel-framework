@@ -54,8 +54,8 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Create a new command dispatcher instance.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
-     * @param  \Closure|null  $queueResolver
+     * @param \Illuminate\Contracts\Container\Container $container
+     * @param \Closure|null $queueResolver
      * @return void
      */
     public function __construct(Container $container, ?Closure $queueResolver = null)
@@ -68,14 +68,14 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Dispatch a command to its appropriate handler.
      *
-     * @param  mixed  $command
+     * @param mixed $command
      * @return mixed
      */
     public function dispatch($command)
     {
         return $this->queueResolver && $this->commandShouldBeQueued($command)
-                        ? $this->dispatchToQueue($command)
-                        : $this->dispatchNow($command);
+            ? $this->dispatchToQueue($command)
+            : $this->dispatchNow($command);
     }
 
     /**
@@ -83,15 +83,17 @@ class Dispatcher implements QueueingDispatcher
      *
      * Queueable jobs will be dispatched to the "sync" queue.
      *
-     * @param  mixed  $command
-     * @param  mixed  $handler
+     * @param mixed $command
+     * @param mixed $handler
      * @return mixed
      */
     public function dispatchSync($command, $handler = null)
     {
-        if ($this->queueResolver &&
+        if (
+            $this->queueResolver &&
             $this->commandShouldBeQueued($command) &&
-            method_exists($command, 'onConnection')) {
+            method_exists($command, 'onConnection')
+        ) {
             return $this->dispatchToQueue($command->onConnection('sync'));
         }
 
@@ -101,17 +103,19 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Dispatch a command to its appropriate handler in the current process without using the synchronous queue.
      *
-     * @param  mixed  $command
-     * @param  mixed  $handler
+     * @param mixed $command
+     * @param mixed $handler
      * @return mixed
      */
     public function dispatchNow($command, $handler = null)
     {
         $uses = class_uses_recursive($command);
 
-        if (in_array(InteractsWithQueue::class, $uses) &&
+        if (
+            in_array(InteractsWithQueue::class, $uses) &&
             in_array(Queueable::class, $uses) &&
-            ! $command->job) {
+            !$command->job
+        ) {
             $command->setJob(new SyncJob($this->container, json_encode([]), 'sync', 'sync'));
         }
 
@@ -135,7 +139,7 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Attempt to find the batch with the given ID.
      *
-     * @param  string  $batchId
+     * @param string $batchId
      * @return \Illuminate\Bus\Batch|null
      */
     public function findBatch(string $batchId)
@@ -146,7 +150,7 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Create a new batch of queueable jobs.
      *
-     * @param  \Illuminate\Support\Collection|array|mixed  $jobs
+     * @param \Illuminate\Support\Collection|array|mixed $jobs
      * @return \Illuminate\Bus\PendingBatch
      */
     public function batch($jobs)
@@ -157,7 +161,7 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Create a new chain of queueable jobs.
      *
-     * @param  \Illuminate\Support\Collection|array  $jobs
+     * @param \Illuminate\Support\Collection|array $jobs
      * @return \Illuminate\Foundation\Bus\PendingChain
      */
     public function chain($jobs)
@@ -171,7 +175,7 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Determine if the given command has a handler.
      *
-     * @param  mixed  $command
+     * @param mixed $command
      * @return bool
      */
     public function hasCommandHandler($command)
@@ -182,7 +186,7 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Retrieve the handler for a command.
      *
-     * @param  mixed  $command
+     * @param mixed $command
      * @return bool|mixed
      */
     public function getCommandHandler($command)
@@ -197,7 +201,7 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Determine if the given command should be queued.
      *
-     * @param  mixed  $command
+     * @param mixed $command
      * @return bool
      */
     protected function commandShouldBeQueued($command)
@@ -208,7 +212,7 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Dispatch a command to its appropriate handler behind a queue.
      *
-     * @param  mixed  $command
+     * @param mixed $command
      * @return mixed
      *
      * @throws \RuntimeException
@@ -219,7 +223,7 @@ class Dispatcher implements QueueingDispatcher
 
         $queue = call_user_func($this->queueResolver, $connection);
 
-        if (! $queue instanceof Queue) {
+        if (!$queue instanceof Queue) {
             throw new RuntimeException('Queue resolver did not return a Queue implementation.');
         }
 
@@ -233,8 +237,8 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Push the command onto the given queue instance.
      *
-     * @param  \Illuminate\Contracts\Queue\Queue  $queue
-     * @param  mixed  $command
+     * @param \Illuminate\Contracts\Queue\Queue $queue
+     * @param mixed $command
      * @return mixed
      */
     protected function pushCommandToQueue($queue, $command)
@@ -257,8 +261,8 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Dispatch a command to its appropriate handler after the current process.
      *
-     * @param  mixed  $command
-     * @param  mixed  $handler
+     * @param mixed $command
+     * @param mixed $handler
      * @return void
      */
     public function dispatchAfterResponse($command, $handler = null)
@@ -271,7 +275,7 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Set the pipes through which commands should be piped before dispatching.
      *
-     * @param  array  $pipes
+     * @param array $pipes
      * @return $this
      */
     public function pipeThrough(array $pipes)
@@ -284,7 +288,7 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Map a command to a handler.
      *
-     * @param  array  $map
+     * @param array $map
      * @return $this
      */
     public function map(array $map)

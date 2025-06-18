@@ -7,7 +7,7 @@ class MySqlBuilder extends Builder
     /**
      * Create a database in the schema.
      *
-     * @param  string  $name
+     * @param string $name
      * @return bool
      */
     public function createDatabase($name)
@@ -20,7 +20,7 @@ class MySqlBuilder extends Builder
     /**
      * Drop a database from the schema if the database exists.
      *
-     * @param  string  $name
+     * @param string $name
      * @return bool
      */
     public function dropDatabaseIfExists($name)
@@ -61,9 +61,9 @@ class MySqlBuilder extends Builder
     /**
      * Get all of the table names for the database.
      *
+     * @return array
      * @deprecated Will be removed in a future Laravel version.
      *
-     * @return array
      */
     public function getAllTables()
     {
@@ -75,9 +75,9 @@ class MySqlBuilder extends Builder
     /**
      * Get all of the view names for the database.
      *
+     * @return array
      * @deprecated Will be removed in a future Laravel version.
      *
-     * @return array
      */
     public function getAllViews()
     {
@@ -89,12 +89,12 @@ class MySqlBuilder extends Builder
     /**
      * Get the columns for a given table.
      *
-     * @param  string  $table
+     * @param string $table
      * @return array
      */
     public function getColumns($table)
     {
-        $table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix() . $table;
 
         $results = $this->connection->selectFromWriteConnection(
             $this->grammar->compileColumns($this->connection->getDatabaseName(), $table)
@@ -106,12 +106,12 @@ class MySqlBuilder extends Builder
     /**
      * Get the indexes for a given table.
      *
-     * @param  string  $table
+     * @param string $table
      * @return array
      */
     public function getIndexes($table)
     {
-        $table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix() . $table;
 
         return $this->connection->getPostProcessor()->processIndexes(
             $this->connection->selectFromWriteConnection(
@@ -123,12 +123,12 @@ class MySqlBuilder extends Builder
     /**
      * Get the foreign keys for a given table.
      *
-     * @param  string  $table
+     * @param string $table
      * @return array
      */
     public function getForeignKeys($table)
     {
-        $table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix() . $table;
 
         return $this->connection->getPostProcessor()->processForeignKeys(
             $this->connection->selectFromWriteConnection(

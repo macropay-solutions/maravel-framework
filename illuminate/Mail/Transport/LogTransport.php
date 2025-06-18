@@ -21,7 +21,7 @@ class LogTransport implements TransportInterface
     /**
      * Create a new log transport instance.
      *
-     * @param  \Psr\Log\LoggerInterface  $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @return void
      */
     public function __construct(LoggerInterface $logger)
@@ -51,7 +51,7 @@ class LogTransport implements TransportInterface
             $string = $this->decodeQuotedPrintableContent($string);
         }
 
-        $this->logger->debug((string) $string);
+        $this->logger->debug((string)$string);
 
         return new SentMessage($message, $envelope ?? Envelope::create($message));
     }
@@ -59,12 +59,12 @@ class LogTransport implements TransportInterface
     /**
      * Decode the given quoted printable content.
      *
-     * @param  string  $part
+     * @param string $part
      * @return string
      */
     protected function decodeQuotedPrintableContent(string $part)
     {
-        if (! str_contains($part, 'Content-Transfer-Encoding: quoted-printable')) {
+        if (!str_contains($part, 'Content-Transfer-Encoding: quoted-printable')) {
             return $part;
         }
 

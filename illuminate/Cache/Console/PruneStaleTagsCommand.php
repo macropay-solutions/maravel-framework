@@ -28,14 +28,14 @@ class PruneStaleTagsCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  \Illuminate\Cache\CacheManager  $cache
+     * @param \Illuminate\Cache\CacheManager $cache
      * @return int|null
      */
     public function handle(CacheManager $cache)
     {
         $cache = $cache->store($this->argument('store'));
 
-        if (! $cache->getStore() instanceof RedisStore) {
+        if (!$cache->getStore() instanceof RedisStore) {
             $this->components->error('Pruning cache tags is only necessary when using Redis.');
 
             return 1;

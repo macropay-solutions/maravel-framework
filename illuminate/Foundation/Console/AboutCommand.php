@@ -50,7 +50,7 @@ class AboutCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @param  \Illuminate\Support\Composer  $composer
+     * @param \Illuminate\Support\Composer $composer
      * @return void
      */
     public function __construct(Composer $composer)
@@ -70,7 +70,7 @@ class AboutCommand extends Command
         $this->gatherApplicationInformation();
 
         collect(static::$data)
-            ->map(fn ($items) => collect($items)
+            ->map(fn($items) => collect($items)
                 ->map(function ($value) {
                     if (is_array($value)) {
                         return [$value];
@@ -81,11 +81,10 @@ class AboutCommand extends Command
                     }
 
                     return collect($this->laravel->call($value))
-                        ->map(fn ($value, $key) => [$key, $value])
+                        ->map(fn($value, $key) => [$key, $value])
                         ->values()
                         ->all();
-                })->flatten(1)
-            )
+                })->flatten(1))
             ->sortBy(function ($data, $key) {
                 $index = array_search($key, ['Environment', 'Cache', 'Drivers']);
 
@@ -94,7 +93,7 @@ class AboutCommand extends Command
             ->filter(function ($data, $key) {
                 return $this->option('only') ? in_array($this->toSearchKeyword($key), $this->sections()) : true;
             })
-            ->pipe(fn ($data) => $this->display($data));
+            ->pipe(fn($data) => $this->display($data));
 
         $this->newLine();
 
@@ -104,7 +103,7 @@ class AboutCommand extends Command
     /**
      * Display the application information.
      *
-     * @param  \Illuminate\Support\Collection  $data
+     * @param \Illuminate\Support\Collection $data
      * @return void
      */
     protected function display($data)
@@ -115,7 +114,7 @@ class AboutCommand extends Command
     /**
      * Display the application information as a detail view.
      *
-     * @param  \Illuminate\Support\Collection  $data
+     * @param \Illuminate\Support\Collection $data
      * @return void
      */
     protected function displayDetail($data)
@@ -123,9 +122,9 @@ class AboutCommand extends Command
         $data->each(function ($data, $section) {
             $this->newLine();
 
-            $this->components->twoColumnDetail('  <fg=green;options=bold>'.$section.'</>');
+            $this->components->twoColumnDetail('  <fg=green;options=bold>' . $section . '</>');
 
-            $data->pipe(fn ($data) => $section !== 'Environment' ? $data->sort() : $data)->each(function ($detail) {
+            $data->pipe(fn($data) => $section !== 'Environment' ? $data->sort() : $data)->each(function ($detail) {
                 [$label, $value] = $detail;
 
                 $this->components->twoColumnDetail($label, value($value, false));
@@ -136,14 +135,14 @@ class AboutCommand extends Command
     /**
      * Display the application information as JSON.
      *
-     * @param  \Illuminate\Support\Collection  $data
+     * @param \Illuminate\Support\Collection $data
      * @return void
      */
     protected function displayJson($data)
     {
         $output = $data->flatMap(function ($data, $section) {
             return [
-                (string) Str::of($section)->snake() => $data->mapWithKeys(fn ($item, $key) => [
+                (string)Str::of($section)->snake() => $data->mapWithKeys(fn($item, $key) => [
                     $this->toSearchKeyword($item[0]) => value($item[1], true),
                 ]),
             ];
@@ -161,10 +160,11 @@ class AboutCommand extends Command
     {
         self::$data = [];
 
-        $formatEnabledStatus = fn ($value) => $value ? '<fg=yellow;options=bold>ENABLED</>' : 'OFF';
-        $formatCachedStatus = fn ($value) => $value ? '<fg=green;options=bold>CACHED</>' : '<fg=yellow;options=bold>NOT CACHED</>';
+        $formatEnabledStatus = fn($value) => $value ? '<fg=yellow;options=bold>ENABLED</>' : 'OFF';
+        $formatCachedStatus = fn($value
+        ) => $value ? '<fg=green;options=bold>CACHED</>' : '<fg=yellow;options=bold>NOT CACHED</>';
 
-        static::addToSection('Environment', fn () => [
+        static::addToSection('Environment', fn() => [
             'Application Name' => config('app.name'),
             'Laravel Version' => $this->laravel->version(),
             'PHP Version' => phpversion(),
@@ -175,28 +175,37 @@ class AboutCommand extends Command
             'Maintenance Mode' => static::format($this->laravel->isDownForMaintenance(), console: $formatEnabledStatus),
         ]);
 
-        static::addToSection('Cache', fn () => [
+        static::addToSection('Cache', fn() => [
             'Config' => static::format($this->laravel->configurationIsCached(), console: $formatCachedStatus),
             'Events' => static::format($this->laravel->eventsAreCached(), console: $formatCachedStatus),
             'Routes' => static::format($this->laravel->routesAreCached(), console: $formatCachedStatus),
-            'Views' => static::format($this->hasPhpFiles($this->laravel->storagePath('framework/views')), console: $formatCachedStatus),
+            'Views' => static::format(
+                $this->hasPhpFiles($this->laravel->storagePath('framework/views')),
+                console: $formatCachedStatus
+            ),
         ]);
 
-        static::addToSection('Drivers', fn () => array_filter([
+        static::addToSection('Drivers', fn() => array_filter([
             'Broadcasting' => config('broadcasting.default'),
             'Cache' => config('cache.default'),
             'Database' => config('database.default'),
             'Logs' => function ($json) {
                 $logChannel = config('logging.default');
 
-                if (config('logging.channels.'.$logChannel.'.driver') === 'stack') {
-                    $secondary = collect(config('logging.channels.'.$logChannel.'.channels'));
+                if (config('logging.channels.' . $logChannel . '.driver') === 'stack') {
+                    $secondary = collect(config('logging.channels.' . $logChannel . '.channels'));
 
-                    return value(static::format(
-                        value: $logChannel,
-                        console: fn ($value) => '<fg=yellow;options=bold>'.$value.'</> <fg=gray;options=bold>/</> '.$secondary->implode(', '),
-                        json: fn () => $secondary->all(),
-                    ), $json);
+                    return value(
+                        static::format(
+                            value: $logChannel,
+                            console: fn($value
+                            ) => '<fg=yellow;options=bold>' . $value . '</> <fg=gray;options=bold>/</> ' . $secondary->implode(
+                                ', '
+                            ),
+                            json: fn() => $secondary->all(),
+                        ),
+                        $json
+                    );
                 } else {
                     $logs = $logChannel;
                 }
@@ -216,33 +225,33 @@ class AboutCommand extends Command
     /**
      * Determine whether the given directory has PHP files.
      *
-     * @param  string  $path
+     * @param string $path
      * @return bool
      */
     protected function hasPhpFiles(string $path): bool
     {
-        return count(glob($path.'/*.php')) > 0;
+        return count(glob($path . '/*.php')) > 0;
     }
 
     /**
      * Add additional data to the output of the "about" command.
      *
-     * @param  string  $section
-     * @param  callable|string|array  $data
-     * @param  string|null  $value
+     * @param string $section
+     * @param callable|string|array $data
+     * @param string|null $value
      * @return void
      */
     public static function add(string $section, $data, ?string $value = null)
     {
-        static::$customDataResolvers[] = fn () => static::addToSection($section, $data, $value);
+        static::$customDataResolvers[] = fn() => static::addToSection($section, $data, $value);
     }
 
     /**
      * Add additional data to the output of the "about" command.
      *
-     * @param  string  $section
-     * @param  callable|string|array  $data
-     * @param  string|null  $value
+     * @param string $section
+     * @param callable|string|array $data
+     * @param string|null $value
      * @return void
      */
     protected static function addToSection(string $section, $data, ?string $value = null)
@@ -267,16 +276,16 @@ class AboutCommand extends Command
     {
         return collect(explode(',', $this->option('only') ?? ''))
             ->filter()
-            ->map(fn ($only) => $this->toSearchKeyword($only))
+            ->map(fn($only) => $this->toSearchKeyword($only))
             ->all();
     }
 
     /**
      * Materialize a function that formats a given value for CLI or JSON output.
      *
-     * @param  mixed  $value
-     * @param  (\Closure(mixed):(mixed))|null  $console
-     * @param  (\Closure(mixed):(mixed))|null  $json
+     * @param mixed $value
+     * @param (\Closure(mixed):(mixed))|null $console
+     * @param (\Closure(mixed):(mixed))|null $json
      * @return \Closure(bool):mixed
      */
     public static function format($value, ?Closure $console = null, ?Closure $json = null)
@@ -295,12 +304,12 @@ class AboutCommand extends Command
     /**
      * Format the given string for searching.
      *
-     * @param  string  $value
+     * @param string $value
      * @return string
      */
     protected function toSearchKeyword(string $value)
     {
-        return (string) Str::of($value)->lower()->snake();
+        return (string)Str::of($value)->lower()->snake();
     }
 
     /**

@@ -16,14 +16,14 @@ trait CompilesLoops
     /**
      * Compile the for-else statements into valid PHP.
      *
-     * @param  string  $expression
+     * @param string $expression
      * @return string
      *
      * @throws \Illuminate\Contracts\View\ViewCompilationException
      */
     protected function compileForelse($expression)
     {
-        $empty = '$__empty_'.++$this->forElseCounter;
+        $empty = '$__empty_' . ++$this->forElseCounter;
 
         preg_match('/\( *(.+) +as +(.+)\)$/is', $expression ?? '', $matches);
 
@@ -45,7 +45,7 @@ trait CompilesLoops
     /**
      * Compile the for-else-empty and empty statements into valid PHP.
      *
-     * @param  string  $expression
+     * @param string $expression
      * @return string
      */
     protected function compileEmpty($expression)
@@ -54,7 +54,7 @@ trait CompilesLoops
             return "<?php if(empty{$expression}): ?>";
         }
 
-        $empty = '$__empty_'.$this->forElseCounter--;
+        $empty = '$__empty_' . $this->forElseCounter--;
 
         return "<?php endforeach; \$__env->popLoop(); \$loop = \$__env->getLastLoop(); if ({$empty}): ?>";
     }
@@ -82,7 +82,7 @@ trait CompilesLoops
     /**
      * Compile the for statements into valid PHP.
      *
-     * @param  string  $expression
+     * @param string $expression
      * @return string
      */
     protected function compileFor($expression)
@@ -93,7 +93,7 @@ trait CompilesLoops
     /**
      * Compile the for-each statements into valid PHP.
      *
-     * @param  string  $expression
+     * @param string $expression
      * @return string
      *
      * @throws \Illuminate\Contracts\View\ViewCompilationException
@@ -120,7 +120,7 @@ trait CompilesLoops
     /**
      * Compile the break statements into valid PHP.
      *
-     * @param  string  $expression
+     * @param string $expression
      * @return string
      */
     protected function compileBreak($expression)
@@ -128,7 +128,7 @@ trait CompilesLoops
         if ($expression) {
             preg_match('/\(\s*(-?\d+)\s*\)$/', $expression, $matches);
 
-            return $matches ? '<?php break '.max(1, $matches[1]).'; ?>' : "<?php if{$expression} break; ?>";
+            return $matches ? '<?php break ' . max(1, $matches[1]) . '; ?>' : "<?php if{$expression} break; ?>";
         }
 
         return '<?php break; ?>';
@@ -137,7 +137,7 @@ trait CompilesLoops
     /**
      * Compile the continue statements into valid PHP.
      *
-     * @param  string  $expression
+     * @param string $expression
      * @return string
      */
     protected function compileContinue($expression)
@@ -145,7 +145,7 @@ trait CompilesLoops
         if ($expression) {
             preg_match('/\(\s*(-?\d+)\s*\)$/', $expression, $matches);
 
-            return $matches ? '<?php continue '.max(1, $matches[1]).'; ?>' : "<?php if{$expression} continue; ?>";
+            return $matches ? '<?php continue ' . max(1, $matches[1]) . '; ?>' : "<?php if{$expression} continue; ?>";
         }
 
         return '<?php continue; ?>';
@@ -174,7 +174,7 @@ trait CompilesLoops
     /**
      * Compile the while statements into valid PHP.
      *
-     * @param  string  $expression
+     * @param string $expression
      * @return string
      */
     protected function compileWhile($expression)

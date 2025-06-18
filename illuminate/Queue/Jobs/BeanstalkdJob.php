@@ -26,15 +26,20 @@ class BeanstalkdJob extends Job implements JobContract
     /**
      * Create a new job instance.
      *
-     * @param  \Illuminate\Container\Container  $container
-     * @param  \Pheanstalk\Pheanstalk  $pheanstalk
-     * @param  \Pheanstalk\Job  $job
-     * @param  string  $connectionName
-     * @param  string  $queue
+     * @param \Illuminate\Container\Container $container
+     * @param \Pheanstalk\Pheanstalk $pheanstalk
+     * @param \Pheanstalk\Job $job
+     * @param string $connectionName
+     * @param string $queue
      * @return void
      */
-    public function __construct(Container $container, Pheanstalk $pheanstalk, PheanstalkJob $job, $connectionName, $queue)
-    {
+    public function __construct(
+        Container $container,
+        Pheanstalk $pheanstalk,
+        PheanstalkJob $job,
+        $connectionName,
+        $queue
+    ) {
         $this->job = $job;
         $this->queue = $queue;
         $this->container = $container;
@@ -45,7 +50,7 @@ class BeanstalkdJob extends Job implements JobContract
     /**
      * Release the job back into the queue after (n) seconds.
      *
-     * @param  int  $delay
+     * @param int $delay
      * @return void
      */
     public function release($delay = 0)
@@ -90,7 +95,7 @@ class BeanstalkdJob extends Job implements JobContract
     {
         $stats = $this->pheanstalk->statsJob($this->job);
 
-        return (int) $stats->reserves;
+        return (int)$stats->reserves;
     }
 
     /**

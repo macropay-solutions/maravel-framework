@@ -51,7 +51,7 @@ abstract class DatabaseInspectionCommand extends Command
     /**
      * Create a new command instance.
      *
-     * @param  \Illuminate\Support\Composer|null  $composer
+     * @param \Illuminate\Support\Composer|null $composer
      * @return void
      */
     public function __construct(?Composer $composer = null)
@@ -64,7 +64,7 @@ abstract class DatabaseInspectionCommand extends Command
     /**
      * Register the custom Doctrine type mappings for inspection commands.
      *
-     * @param  \Doctrine\DBAL\Platforms\AbstractPlatform  $platform
+     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
      * @return void
      */
     protected function registerTypeMappings(AbstractPlatform $platform)
@@ -77,8 +77,8 @@ abstract class DatabaseInspectionCommand extends Command
     /**
      * Get a human-readable platform name for the given platform.
      *
-     * @param  \Doctrine\DBAL\Platforms\AbstractPlatform  $platform
-     * @param  string  $database
+     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform
+     * @param string $database
      * @return string
      */
     protected function getPlatformName(AbstractPlatform $platform, $database)
@@ -98,8 +98,8 @@ abstract class DatabaseInspectionCommand extends Command
     /**
      * Get the size of a table in bytes.
      *
-     * @param  \Illuminate\Database\ConnectionInterface  $connection
-     * @param  string  $table
+     * @param \Illuminate\Database\ConnectionInterface $connection
+     * @param string $table
      * @return int|null
      */
     protected function getTableSize(ConnectionInterface $connection, string $table)
@@ -115,25 +115,28 @@ abstract class DatabaseInspectionCommand extends Command
     /**
      * Get the size of a MySQL table in bytes.
      *
-     * @param  \Illuminate\Database\ConnectionInterface  $connection
-     * @param  string  $table
+     * @param \Illuminate\Database\ConnectionInterface $connection
+     * @param string $table
      * @return mixed
      */
     protected function getMySQLTableSize(ConnectionInterface $connection, string $table)
     {
-        $result = $connection->selectOne('SELECT (data_length + index_length) AS size FROM information_schema.TABLES WHERE table_schema = ? AND table_name = ?', [
-            $connection->getDatabaseName(),
-            $table,
-        ]);
+        $result = $connection->selectOne(
+            'SELECT (data_length + index_length) AS size FROM information_schema.TABLES WHERE table_schema = ? AND table_name = ?',
+            [
+                $connection->getDatabaseName(),
+                $table,
+            ]
+        );
 
-        return Arr::wrap((array) $result)['size'];
+        return Arr::wrap((array)$result)['size'];
     }
 
     /**
      * Get the size of a Postgres table in bytes.
      *
-     * @param  \Illuminate\Database\ConnectionInterface  $connection
-     * @param  string  $table
+     * @param \Illuminate\Database\ConnectionInterface $connection
+     * @param string $table
      * @return mixed
      */
     protected function getPostgresTableSize(ConnectionInterface $connection, string $table)
@@ -142,14 +145,14 @@ abstract class DatabaseInspectionCommand extends Command
             $table,
         ]);
 
-        return Arr::wrap((array) $result)['size'];
+        return Arr::wrap((array)$result)['size'];
     }
 
     /**
      * Get the size of a SQLite table in bytes.
      *
-     * @param  \Illuminate\Database\ConnectionInterface  $connection
-     * @param  string  $table
+     * @param \Illuminate\Database\ConnectionInterface $connection
+     * @param string $table
      * @return mixed
      */
     protected function getSqliteTableSize(ConnectionInterface $connection, string $table)
@@ -159,7 +162,7 @@ abstract class DatabaseInspectionCommand extends Command
                 $table,
             ]);
 
-            return Arr::wrap((array) $result)['size'];
+            return Arr::wrap((array)$result)['size'];
         } catch (QueryException) {
             return null;
         }
@@ -168,36 +171,43 @@ abstract class DatabaseInspectionCommand extends Command
     /**
      * Get the number of open connections for a database.
      *
-     * @param  \Illuminate\Database\ConnectionInterface  $connection
+     * @param \Illuminate\Database\ConnectionInterface $connection
      * @return int|null
      */
     protected function getConnectionCount(ConnectionInterface $connection)
     {
         $result = match (true) {
-            $connection instanceof MySqlConnection => $connection->selectOne('show status where variable_name = "threads_connected"'),
-            $connection instanceof PostgresConnection => $connection->selectOne('select count(*) AS "Value" from pg_stat_activity'),
-            $connection instanceof SqlServerConnection => $connection->selectOne('SELECT COUNT(*) Value FROM sys.dm_exec_sessions WHERE status = ?', ['running']),
+            $connection instanceof MySqlConnection => $connection->selectOne(
+                'show status where variable_name = "threads_connected"'
+            ),
+            $connection instanceof PostgresConnection => $connection->selectOne(
+                'select count(*) AS "Value" from pg_stat_activity'
+            ),
+            $connection instanceof SqlServerConnection => $connection->selectOne(
+                'SELECT COUNT(*) Value FROM sys.dm_exec_sessions WHERE status = ?',
+                ['running']
+            ),
             default => null,
         };
 
-        if (! $result) {
+        if (!$result) {
             return null;
         }
 
-        return Arr::wrap((array) $result)['Value'];
+        return Arr::wrap((array)$result)['Value'];
     }
 
     /**
      * Get the connection configuration details for the given connection.
      *
-     * @param  string  $database
+     * @param string $database
      * @return array
      */
     protected function getConfigFromDatabase($database)
     {
         $database ??= config('database.default');
 
-        return Arr::except(config('database.connections.'.$database), ['password']);
+        return Arr::except(config('database.connections.' . $database), ['password']);
     }
 
     /**
@@ -208,7 +218,12 @@ abstract class DatabaseInspectionCommand extends Command
     protected function ensureDependenciesExist()
     {
         return tap(interface_exists('Doctrine\DBAL\Driver'), function ($dependenciesExist) {
-            if (! $dependenciesExist && confirm('Inspecting database information requires the Doctrine DBAL (doctrine/dbal) package. Would you like to install it?', default: false)) {
+            if (
+                !$dependenciesExist && confirm(
+                    'Inspecting database information requires the Doctrine DBAL (doctrine/dbal) package. Would you like to install it?',
+                    default: false
+                )
+            ) {
                 $this->installDependencies();
             }
         });
@@ -238,7 +253,7 @@ abstract class DatabaseInspectionCommand extends Command
         }
 
         try {
-            $process->run(fn ($type, $line) => $this->output->write($line));
+            $process->run(fn($type, $line) => $this->output->write($line));
         } catch (ProcessSignaledException $e) {
             if (extension_loaded('pcntl') && $e->getSignal() !== SIGINT) {
                 throw $e;

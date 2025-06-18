@@ -10,7 +10,8 @@ use Illuminate\Queue\InteractsWithQueue;
 
 class CallQueuedListener implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable;
+    use InteractsWithQueue;
+    use Queueable;
 
     /**
      * The listener class name.
@@ -85,9 +86,9 @@ class CallQueuedListener implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  string  $class
-     * @param  string  $method
-     * @param  array  $data
+     * @param string $class
+     * @param string $method
+     * @param array $data
      * @return void
      */
     public function __construct($class, $method, $data)
@@ -100,7 +101,7 @@ class CallQueuedListener implements ShouldQueue
     /**
      * Handle the queued job.
      *
-     * @param  \Illuminate\Container\Container  $container
+     * @param \Illuminate\Container\Container $container
      * @return void
      */
     public function handle(Container $container)
@@ -108,7 +109,8 @@ class CallQueuedListener implements ShouldQueue
         $this->prepareData();
 
         $handler = $this->setJobInstanceIfNecessary(
-            $this->job, $container->make($this->class)
+            $this->job,
+            $container->make($this->class)
         );
 
         $handler->{$this->method}(...array_values($this->data));
@@ -117,8 +119,8 @@ class CallQueuedListener implements ShouldQueue
     /**
      * Set the job instance of the given class if necessary.
      *
-     * @param  \Illuminate\Contracts\Queue\Job  $job
-     * @param  object  $instance
+     * @param \Illuminate\Contracts\Queue\Job $job
+     * @param object $instance
      * @return object
      */
     protected function setJobInstanceIfNecessary(Job $job, $instance)
@@ -135,7 +137,7 @@ class CallQueuedListener implements ShouldQueue
      *
      * The event instance and the exception will be passed.
      *
-     * @param  \Throwable  $e
+     * @param \Throwable $e
      * @return void
      */
     public function failed($e)

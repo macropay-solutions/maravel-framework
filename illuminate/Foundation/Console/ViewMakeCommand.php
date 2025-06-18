@@ -39,7 +39,7 @@ class ViewMakeCommand extends GeneratorCommand
     /**
      * Build the class with the given name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return string
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -58,13 +58,13 @@ class ViewMakeCommand extends GeneratorCommand
     /**
      * Get the destination view path.
      *
-     * @param  string  $name
+     * @param string $name
      * @return string
      */
     protected function getPath($name)
     {
         return $this->viewPath(
-            $this->getNameInput().'.'.$this->option('extension'),
+            $this->getNameInput() . '.' . $this->option('extension'),
         );
     }
 
@@ -97,14 +97,14 @@ class ViewMakeCommand extends GeneratorCommand
     /**
      * Resolve the fully-qualified path to the stub.
      *
-     * @param  string  $stub
+     * @param string $stub
      * @return string
      */
     protected function resolveStubPath($stub)
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
-                        ? $customPath
-                        : __DIR__.$stub;
+            ? $customPath
+            : __DIR__ . $stub;
     }
 
     /**
@@ -126,11 +126,11 @@ class ViewMakeCommand extends GeneratorCommand
     /**
      * Create the matching test case if requested.
      *
-     * @param  string  $path
+     * @param string $path
      */
     protected function handleTestCreation($path): bool
     {
-        if (! $this->option('test') && ! $this->option('pest')) {
+        if (!$this->option('test') && !$this->option('pest')) {
             return false;
         }
 
@@ -177,21 +177,21 @@ class ViewMakeCommand extends GeneratorCommand
      */
     protected function testClassFullyQualifiedName()
     {
-        $name = Str::of(Str::lower($this->getNameInput()))->replace('.'.$this->option('extension'), '');
+        $name = Str::of(Str::lower($this->getNameInput()))->replace('.' . $this->option('extension'), '');
 
         $namespacedName = Str::of(
             Str::of($name)
                 ->replace('/', ' ')
                 ->explode(' ')
-                ->map(fn ($part) => Str::of($part)->ucfirst())
+                ->map(fn($part) => Str::of($part)->ucfirst())
                 ->implode('\\')
         )
             ->replace(['-', '_'], ' ')
             ->explode(' ')
-            ->map(fn ($part) => Str::of($part)->ucfirst())
+            ->map(fn($part) => Str::of($part)->ucfirst())
             ->implode('');
 
-        return 'Tests\\Feature\\View\\'.$namespacedName;
+        return 'Tests\\Feature\\View\\' . $namespacedName;
     }
 
     /**
@@ -201,11 +201,11 @@ class ViewMakeCommand extends GeneratorCommand
      */
     protected function getTestStub()
     {
-        $stubName = 'view.'.($this->option('pest') ? 'pest' : 'test').'.stub';
+        $stubName = 'view.' . ($this->option('pest') ? 'pest' : 'test') . '.stub';
 
         return file_exists($customPath = $this->laravel->basePath("stubs/$stubName"))
             ? $customPath
-            : __DIR__.'/stubs/'.$stubName;
+            : __DIR__ . '/stubs/' . $stubName;
     }
 
     /**

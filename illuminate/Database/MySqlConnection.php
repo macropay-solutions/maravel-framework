@@ -24,9 +24,9 @@ class MySqlConnection extends Connection
     /**
      * Run an insert statement against the database.
      *
-     * @param  string  $query
-     * @param  array  $bindings
-     * @param  string|null  $sequence
+     * @param string $query
+     * @param array $bindings
+     * @param string|null $sequence
      * @return bool
      */
     public function insert($query, $bindings = [], $sequence = null)
@@ -53,7 +53,7 @@ class MySqlConnection extends Connection
     /**
      * Escape a binary value for safe SQL embedding.
      *
-     * @param  string  $value
+     * @param string $value
      * @return string
      */
     protected function escapeBinary($value)
@@ -66,7 +66,7 @@ class MySqlConnection extends Connection
     /**
      * Determine if the given database exception was caused by a unique constraint violation.
      *
-     * @param  \Exception  $exception
+     * @param \Exception $exception
      * @return bool
      */
     protected function isUniqueConstraintError(Exception $exception)
@@ -101,7 +101,7 @@ class MySqlConnection extends Connection
      */
     protected function getDefaultQueryGrammar()
     {
-        ($grammar = new QueryGrammar)->setConnection($this);
+        ($grammar = new QueryGrammar())->setConnection($this);
 
         return $this->withTablePrefix($grammar);
     }
@@ -128,7 +128,7 @@ class MySqlConnection extends Connection
      */
     protected function getDefaultSchemaGrammar()
     {
-        ($grammar = new SchemaGrammar)->setConnection($this);
+        ($grammar = new SchemaGrammar())->setConnection($this);
 
         return $this->withTablePrefix($grammar);
     }
@@ -136,8 +136,8 @@ class MySqlConnection extends Connection
     /**
      * Get the schema state for the connection.
      *
-     * @param  \Illuminate\Filesystem\Filesystem|null  $files
-     * @param  callable|null  $processFactory
+     * @param \Illuminate\Filesystem\Filesystem|null $files
+     * @param callable|null $processFactory
      * @return \Illuminate\Database\Schema\MySqlSchemaState
      */
     public function getSchemaState(?Filesystem $files = null, ?callable $processFactory = null)
@@ -152,7 +152,7 @@ class MySqlConnection extends Connection
      */
     protected function getDefaultPostProcessor()
     {
-        return new MySqlProcessor;
+        return new MySqlProcessor();
     }
 
     /**
@@ -162,6 +162,6 @@ class MySqlConnection extends Connection
      */
     protected function getDoctrineDriver()
     {
-        return new MySqlDriver;
+        return new MySqlDriver();
     }
 }

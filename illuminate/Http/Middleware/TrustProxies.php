@@ -24,8 +24,8 @@ class TrustProxies
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      * @return mixed
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
@@ -42,7 +42,7 @@ class TrustProxies
     /**
      * Sets the trusted proxies on the request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return void
      */
     protected function setTrustedProxyIpAddresses(Request $request)
@@ -60,8 +60,8 @@ class TrustProxies
         }
 
         $trustedIps = is_string($trustedIps)
-                ? array_map('trim', explode(',', $trustedIps))
-                : $trustedIps;
+            ? array_map('trim', explode(',', $trustedIps))
+            : $trustedIps;
 
         if (is_array($trustedIps)) {
             $this->setTrustedProxyIpAddressesToSpecificIps($request, $trustedIps);
@@ -71,8 +71,8 @@ class TrustProxies
     /**
      * Specify the IP addresses to trust explicitly.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $trustedIps
+     * @param \Illuminate\Http\Request $request
+     * @param array $trustedIps
      * @return void
      */
     protected function setTrustedProxyIpAddressesToSpecificIps(Request $request, array $trustedIps)
@@ -83,7 +83,7 @@ class TrustProxies
     /**
      * Set the trusted proxy to be the IP address calling this servers.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return void
      */
     protected function setTrustedProxyIpAddressesToTheCallingIp(Request $request)

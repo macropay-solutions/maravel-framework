@@ -9,9 +9,9 @@ class FileFactory
     /**
      * Create a new fake file.
      *
-     * @param  string  $name
-     * @param  string|int  $kilobytes
-     * @param  string|null  $mimeType
+     * @param string $name
+     * @param string|int $kilobytes
+     * @param string|null $mimeType
      * @return \Illuminate\Http\Testing\File
      */
     public function create($name, $kilobytes = 0, $mimeType = null)
@@ -30,8 +30,8 @@ class FileFactory
     /**
      * Create a new fake file with content.
      *
-     * @param  string  $name
-     * @param  string  $content
+     * @param string $name
+     * @param string $content
      * @return \Illuminate\Http\Testing\File
      */
     public function createWithContent($name, $content)
@@ -49,9 +49,9 @@ class FileFactory
     /**
      * Create a new fake image.
      *
-     * @param  string  $name
-     * @param  int  $width
-     * @param  int  $height
+     * @param string $name
+     * @param int $width
+     * @param int $height
      * @return \Illuminate\Http\Testing\File
      *
      * @throws \LogicException
@@ -61,23 +61,23 @@ class FileFactory
 //        return new File($name, $this->generateImage(
         return \app(File::class, [
             $name,
-            $this->generateImage($width, $height, pathinfo($name, PATHINFO_EXTENSION))
+            $this->generateImage($width, $height, pathinfo($name, PATHINFO_EXTENSION)),
         ]);
     }
 
     /**
      * Generate a dummy image of the given width and height.
      *
-     * @param  int  $width
-     * @param  int  $height
-     * @param  string  $extension
+     * @param int $width
+     * @param int $height
+     * @param string $extension
      * @return resource
      *
      * @throws \LogicException
      */
     protected function generateImage($width, $height, $extension)
     {
-        if (! function_exists('imagecreatetruecolor')) {
+        if (!function_exists('imagecreatetruecolor')) {
             throw new LogicException('GD extension is not installed.');
         }
 
@@ -90,7 +90,7 @@ class FileFactory
 
             $image = imagecreatetruecolor($width, $height);
 
-            if (! function_exists($functionName = "image{$extension}")) {
+            if (!function_exists($functionName = "image{$extension}")) {
                 ob_get_clean();
 
                 throw new LogicException("{$functionName} function is not defined and image cannot be generated.");

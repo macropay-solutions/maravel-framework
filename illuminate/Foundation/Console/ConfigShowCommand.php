@@ -32,7 +32,7 @@ class ConfigShowCommand extends Command
     {
         $config = $this->argument('config');
 
-        if (! config()->has($config)) {
+        if (!config()->has($config)) {
             $this->components->error("Configuration file `{$config}` does not exist.");
 
             return Command::FAILURE;
@@ -48,14 +48,14 @@ class ConfigShowCommand extends Command
     /**
      * Render the configuration values.
      *
-     * @param  string  $name
+     * @param string $name
      * @return void
      */
     public function render($name)
     {
         $data = config($name);
 
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $this->title($name, $this->formatValue($data));
 
             return;
@@ -74,8 +74,8 @@ class ConfigShowCommand extends Command
     /**
      * Render the title.
      *
-     * @param  string  $title
-     * @param  string|null  $subtitle
+     * @param string $title
+     * @param string|null $subtitle
      * @return void
      */
     public function title($title, $subtitle = null)
@@ -89,24 +89,26 @@ class ConfigShowCommand extends Command
     /**
      * Format the given configuration key.
      *
-     * @param  string  $key
+     * @param string $key
      * @return string
      */
     protected function formatKey($key)
     {
         return preg_replace_callback(
-            '/(.*)\.(.*)$/', fn ($matches) => sprintf(
+            '/(.*)\.(.*)$/',
+            fn($matches) => sprintf(
                 '<fg=gray>%s ⇁</> %s',
                 str_replace('.', ' ⇁ ', $matches[1]),
                 $matches[2]
-            ), $key
+            ),
+            $key
         );
     }
 
     /**
      * Format the given configuration value.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      * @return string
      */
     protected function formatValue($value)

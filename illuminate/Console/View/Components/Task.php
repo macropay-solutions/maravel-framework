@@ -12,9 +12,9 @@ class Task extends Component
     /**
      * Renders the component using the given arguments.
      *
-     * @param  string  $description
-     * @param  (callable(): bool)|null  $task
-     * @param  int  $verbosity
+     * @param string $description
+     * @param (callable(): bool)|null $task
+     * @param int $verbosity
      * @return void
      */
     public function render($description, $task = null, $verbosity = OutputInterface::VERBOSITY_NORMAL)
@@ -34,12 +34,12 @@ class Task extends Component
         $result = false;
 
         try {
-            $result = ($task ?: fn () => true)();
+            $result = ($task ?: fn() => true)();
         } catch (Throwable $e) {
             throw $e;
         } finally {
             $runTime = $task
-                ? (' '.number_format((microtime(true) - $startTime) * 1000).'ms')
+                ? (' ' . number_format((microtime(true) - $startTime) * 1000) . 'ms')
                 : '';
 
             $runTimeWidth = mb_strlen($runTime);

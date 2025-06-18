@@ -44,9 +44,9 @@ class Factory
     /**
      * Create a new fake process response for testing purposes.
      *
-     * @param  array|string  $output
-     * @param  array|string  $errorOutput
-     * @param  int  $exitCode
+     * @param array|string $output
+     * @param array|string $errorOutput
+     * @param int $exitCode
      * @return \Illuminate\Process\FakeProcessResult
      */
     public function result(array|string $output = '', array|string $errorOutput = '', int $exitCode = 0)
@@ -65,13 +65,13 @@ class Factory
      */
     public function describe()
     {
-        return new FakeProcessDescription;
+        return new FakeProcessDescription();
     }
 
     /**
      * Begin describing a fake process sequence.
      *
-     * @param  array  $processes
+     * @param array $processes
      * @return \Illuminate\Process\FakeProcessSequence
      */
     public function sequence(array $processes = [])
@@ -82,7 +82,7 @@ class Factory
     /**
      * Indicate that the process factory should fake processes.
      *
-     * @param  \Closure|array|null  $callback
+     * @param \Closure|array|null $callback
      * @return $this
      */
     public function fake(Closure|array|null $callback = null)
@@ -90,7 +90,7 @@ class Factory
         $this->recording = true;
 
         if (is_null($callback)) {
-            $this->fakeHandlers = ['*' => fn () => new FakeProcessResult];
+            $this->fakeHandlers = ['*' => fn() => new FakeProcessResult()];
 
             return $this;
         }
@@ -103,8 +103,8 @@ class Factory
 
         foreach ($callback as $command => $handler) {
             $this->fakeHandlers[is_numeric($command) ? '*' : $command] = $handler instanceof Closure
-                    ? $handler
-                    : fn () => $handler;
+                ? $handler
+                : fn() => $handler;
         }
 
         return $this;
@@ -123,8 +123,8 @@ class Factory
     /**
      * Record the given process if processes should be recorded.
      *
-     * @param  \Illuminate\Process\PendingProcess  $process
-     * @param  \Illuminate\Contracts\Process\ProcessResult  $result
+     * @param \Illuminate\Process\PendingProcess $process
+     * @param \Illuminate\Contracts\Process\ProcessResult $result
      * @return $this
      */
     public function recordIfRecording(PendingProcess $process, ProcessResultContract $result)
@@ -139,8 +139,8 @@ class Factory
     /**
      * Record the given process.
      *
-     * @param  \Illuminate\Process\PendingProcess  $process
-     * @param  \Illuminate\Contracts\Process\ProcessResult  $result
+     * @param \Illuminate\Process\PendingProcess $process
+     * @param \Illuminate\Contracts\Process\ProcessResult $result
      * @return $this
      */
     public function record(PendingProcess $process, ProcessResultContract $result)
@@ -153,7 +153,7 @@ class Factory
     /**
      * Indicate that an exception should be thrown if any process is not faked.
      *
-     * @param  bool  $prevent
+     * @param bool $prevent
      * @return $this
      */
     public function preventStrayProcesses(bool $prevent = true)
@@ -176,12 +176,12 @@ class Factory
     /**
      * Assert that a process was recorded matching a given truth test.
      *
-     * @param  \Closure|string  $callback
+     * @param \Closure|string $callback
      * @return $this
      */
     public function assertRan(Closure|string $callback)
     {
-        $callback = is_string($callback) ? fn ($process) => $process->command === $callback : $callback;
+        $callback = is_string($callback) ? fn($process) => $process->command === $callback : $callback;
 
         PHPUnit::assertTrue(
             collect($this->recorded)->filter(function ($pair) use ($callback) {
@@ -196,20 +196,21 @@ class Factory
     /**
      * Assert that a process was recorded a given number of times matching a given truth test.
      *
-     * @param  \Closure|string  $callback
-     * @param  int  $times
+     * @param \Closure|string $callback
+     * @param int $times
      * @return $this
      */
     public function assertRanTimes(Closure|string $callback, int $times = 1)
     {
-        $callback = is_string($callback) ? fn ($process) => $process->command === $callback : $callback;
+        $callback = is_string($callback) ? fn($process) => $process->command === $callback : $callback;
 
         $count = collect($this->recorded)->filter(function ($pair) use ($callback) {
             return $callback($pair[0], $pair[1]);
         })->count();
 
         PHPUnit::assertSame(
-            $times, $count,
+            $times,
+            $count,
             "An expected process ran {$count} times instead of {$times} times."
         );
 
@@ -219,12 +220,12 @@ class Factory
     /**
      * Assert that a process was not recorded matching a given truth test.
      *
-     * @param  \Closure|string  $callback
+     * @param \Closure|string $callback
      * @return $this
      */
     public function assertNotRan(Closure|string $callback)
     {
-        $callback = is_string($callback) ? fn ($process) => $process->command === $callback : $callback;
+        $callback = is_string($callback) ? fn($process) => $process->command === $callback : $callback;
 
         PHPUnit::assertTrue(
             collect($this->recorded)->filter(function ($pair) use ($callback) {
@@ -239,7 +240,7 @@ class Factory
     /**
      * Assert that a process was not recorded matching a given truth test.
      *
-     * @param  \Closure|string  $callback
+     * @param \Closure|string $callback
      * @return $this
      */
     public function assertDidntRun(Closure|string $callback)
@@ -265,7 +266,7 @@ class Factory
     /**
      * Start defining a pool of processes.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return \Illuminate\Process\Pool
      */
     public function pool(callable $callback)
@@ -276,14 +277,14 @@ class Factory
     /**
      * Start defining a series of piped processes.
      *
-     * @param  callable|array  $callback
+     * @param callable|array $callback
      * @return \Illuminate\Contracts\Process\ProcessResult
      */
     public function pipe(callable|array $callback, ?callable $output = null)
     {
         return is_array($callback)
-            ? (new Pipe($this, fn ($pipe) => collect($callback)->each(
-                fn ($command) => $pipe->command($command)
+            ? (new Pipe($this, fn($pipe) => collect($callback)->each(
+                fn($command) => $pipe->command($command)
             )))->run(output: $output)
             : (new Pipe($this, $callback))->run(output: $output);
     }
@@ -291,8 +292,8 @@ class Factory
     /**
      * Run a pool of processes and wait for them to finish executing.
      *
-     * @param  callable  $callback
-     * @param  callable|null  $output
+     * @param callable $callback
+     * @param callable|null $output
      * @return \Illuminate\Process\ProcessPoolResults
      */
     public function concurrently(callable $callback, ?callable $output = null)
@@ -313,8 +314,8 @@ class Factory
     /**
      * Dynamically proxy methods to a new pending process instance.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return mixed
      */
     public function __call($method, $parameters)

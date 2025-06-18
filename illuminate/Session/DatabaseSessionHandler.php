@@ -53,10 +53,10 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     /**
      * Create a new database session handler instance.
      *
-     * @param  \Illuminate\Database\ConnectionInterface  $connection
-     * @param  string  $table
-     * @param  int  $minutes
-     * @param  \Illuminate\Contracts\Container\Container|null  $container
+     * @param \Illuminate\Database\ConnectionInterface $connection
+     * @param string $table
+     * @param int $minutes
+     * @param \Illuminate\Contracts\Container\Container|null $container
      * @return void
      */
     public function __construct(ConnectionInterface $connection, $table, $minutes, ?Container $container = null)
@@ -94,7 +94,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
      */
     public function read($id): string|false
     {
-        $session = (object) $this->getQuery()->find($id);
+        $session = (object)$this->getQuery()->find($id);
 
         if ($this->expired($session)) {
             $this->exists = true;
@@ -114,7 +114,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     /**
      * Determine if the session is expired.
      *
-     * @param  \stdClass  $session
+     * @param \stdClass $session
      * @return bool
      */
     protected function expired($session)
@@ -132,7 +132,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     {
         $payload = $this->getDefaultPayload($data);
 
-        if (! $this->exists) {
+        if (!$this->exists) {
             $this->read($id);
         }
 
@@ -148,8 +148,8 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     /**
      * Perform an insert operation on the session ID.
      *
-     * @param  string  $sessionId
-     * @param  array<string, mixed>  $payload
+     * @param string $sessionId
+     * @param array<string, mixed> $payload
      * @return bool|null
      */
     protected function performInsert($sessionId, $payload)
@@ -164,8 +164,8 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     /**
      * Perform an update operation on the session ID.
      *
-     * @param  string  $sessionId
-     * @param  array<string, mixed>  $payload
+     * @param string $sessionId
+     * @param array<string, mixed> $payload
      * @return int
      */
     protected function performUpdate($sessionId, $payload)
@@ -176,7 +176,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     /**
      * Get the default payload for the session.
      *
-     * @param  string  $data
+     * @param string $data
      * @return array
      */
     protected function getDefaultPayload($data)
@@ -186,20 +186,20 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
             'last_activity' => $this->currentTime(),
         ];
 
-        if (! $this->container) {
+        if (!$this->container) {
             return $payload;
         }
 
         return tap($payload, function (&$payload) {
             $this->addUserInformation($payload)
-                 ->addRequestInformation($payload);
+                ->addRequestInformation($payload);
         });
     }
 
     /**
      * Add the user information to the session payload.
      *
-     * @param  array  $payload
+     * @param array $payload
      * @return $this
      */
     protected function addUserInformation(&$payload)
@@ -224,7 +224,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     /**
      * Add the request information to the session payload.
      *
-     * @param  array  $payload
+     * @param array $payload
      * @return $this
      */
     protected function addRequestInformation(&$payload)
@@ -256,7 +256,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
      */
     protected function userAgent()
     {
-        return substr((string) $this->container->make('request')->header('User-Agent'), 0, 500);
+        return substr((string)$this->container->make('request')->header('User-Agent'), 0, 500);
     }
 
     /**
@@ -294,7 +294,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     /**
      * Set the application instance used by the handler.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $container
+     * @param \Illuminate\Contracts\Foundation\Application $container
      * @return $this
      */
     public function setContainer($container)
@@ -307,7 +307,7 @@ class DatabaseSessionHandler implements ExistenceAwareInterface, SessionHandlerI
     /**
      * Set the existence state for the session.
      *
-     * @param  bool  $value
+     * @param bool $value
      * @return $this
      */
     public function setExists($value)

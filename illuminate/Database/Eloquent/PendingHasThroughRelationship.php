@@ -25,8 +25,8 @@ class PendingHasThroughRelationship
     /**
      * Create a pending has-many-through or has-one-through relationship.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $rootModel
-     * @param  \Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Relations\HasOne  $localRelationship
+     * @param \Illuminate\Database\Eloquent\Model $rootModel
+     * @param \Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Relations\HasOne $localRelationship
      */
     public function __construct($rootModel, $localRelationship)
     {
@@ -38,13 +38,13 @@ class PendingHasThroughRelationship
     /**
      * Define the distant relationship that this model has.
      *
-     * @param  string|(callable(\Illuminate\Database\Eloquent\Model): (\Illuminate\Database\Eloquent\Relations\HasOne|\Illuminate\Database\Eloquent\Relations\HasMany))  $callback
+     * @param string|(callable(\Illuminate\Database\Eloquent\Model): (\Illuminate\Database\Eloquent\Relations\HasOne|\Illuminate\Database\Eloquent\Relations\HasMany)) $callback
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough|\Illuminate\Database\Eloquent\Relations\HasOneThrough
      */
     public function has($callback)
     {
         if (is_string($callback)) {
-            $callback = fn () => $this->localRelationship->getRelated()->{$callback}();
+            $callback = fn() => $this->localRelationship->getRelated()->{$callback}();
         }
 
         $distantRelation = $callback($this->localRelationship->getRelated());
@@ -73,8 +73,8 @@ class PendingHasThroughRelationship
     /**
      * Handle dynamic method calls into the model.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return mixed
      */
     public function __call($method, $parameters)
@@ -83,8 +83,12 @@ class PendingHasThroughRelationship
             return $this->has(Str::of($method)->after('has')->lcfirst()->toString());
         }
 
-        throw new BadMethodCallException(sprintf(
-            'Call to undefined method %s::%s()', static::class, $method
-        ));
+        throw new BadMethodCallException(
+            sprintf(
+                'Call to undefined method %s::%s()',
+                static::class,
+                $method
+            )
+        );
     }
 }

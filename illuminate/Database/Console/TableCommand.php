@@ -39,7 +39,7 @@ class TableCommand extends DatabaseInspectionCommand
      */
     public function handle(ConnectionResolverInterface $connections)
     {
-        if (! $this->ensureDependenciesExist()) {
+        if (!$this->ensureDependenciesExist()) {
             return 1;
         }
 
@@ -51,10 +51,10 @@ class TableCommand extends DatabaseInspectionCommand
 
         $table = $this->argument('table') ?: select(
             'Which table would you like to inspect?',
-            collect($schema->listTables())->flatMap(fn (Table $table) => [$table->getName()])->toArray()
+            collect($schema->listTables())->flatMap(fn(Table $table) => [$table->getName()])->toArray()
         );
 
-        if (! $schema->tablesExist([$table])) {
+        if (!$schema->tablesExist([$table])) {
             $this->components->warn("Table [{$table}] doesn't exist.");
 
             return 1;
@@ -85,12 +85,12 @@ class TableCommand extends DatabaseInspectionCommand
     /**
      * Get the information regarding the table's columns.
      *
-     * @param  \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Table $table
      * @return \Illuminate\Support\Collection
      */
     protected function columns(Table $table)
     {
-        return collect($table->getColumns())->map(fn (Column $column) => [
+        return collect($table->getColumns())->map(fn(Column $column) => [
             'column' => $column->getName(),
             'attributes' => $this->getAttributesForColumn($column),
             'default' => $column->getDefault(),
@@ -101,7 +101,7 @@ class TableCommand extends DatabaseInspectionCommand
     /**
      * Get the attributes for a table column.
      *
-     * @param  \Doctrine\DBAL\Schema\Column  $column
+     * @param \Doctrine\DBAL\Schema\Column $column
      * @return \Illuminate\Support\Collection
      */
     protected function getAttributesForColumn(Column $column)
@@ -110,19 +110,19 @@ class TableCommand extends DatabaseInspectionCommand
             $column->getAutoincrement() ? 'autoincrement' : null,
             'type' => $column->getType()->getName(),
             $column->getUnsigned() ? 'unsigned' : null,
-            ! $column->getNotNull() ? 'nullable' : null,
+            !$column->getNotNull() ? 'nullable' : null,
         ])->filter();
     }
 
     /**
      * Get the information regarding the table's indexes.
      *
-     * @param  \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Table $table
      * @return \Illuminate\Support\Collection
      */
     protected function indexes(Table $table)
     {
-        return collect($table->getIndexes())->map(fn (Index $index) => [
+        return collect($table->getIndexes())->map(fn(Index $index) => [
             'name' => $index->getName(),
             'columns' => collect($index->getColumns()),
             'attributes' => $this->getAttributesForIndex($index),
@@ -132,7 +132,7 @@ class TableCommand extends DatabaseInspectionCommand
     /**
      * Get the attributes for a table index.
      *
-     * @param  \Doctrine\DBAL\Schema\Index  $index
+     * @param \Doctrine\DBAL\Schema\Index $index
      * @return \Illuminate\Support\Collection
      */
     protected function getAttributesForIndex(Index $index)
@@ -141,32 +141,32 @@ class TableCommand extends DatabaseInspectionCommand
             'compound' => count($index->getColumns()) > 1,
             'unique' => $index->isUnique(),
             'primary' => $index->isPrimary(),
-        ])->filter()->keys()->map(fn ($attribute) => Str::lower($attribute));
+        ])->filter()->keys()->map(fn($attribute) => Str::lower($attribute));
     }
 
     /**
      * Get the information regarding the table's foreign keys.
      *
-     * @param  \Doctrine\DBAL\Schema\Table  $table
+     * @param \Doctrine\DBAL\Schema\Table $table
      * @return \Illuminate\Support\Collection
      */
     protected function foreignKeys(Table $table)
     {
-        return collect($table->getForeignKeys())->map(fn (ForeignKeyConstraint $foreignKey) => [
+        return collect($table->getForeignKeys())->map(fn(ForeignKeyConstraint $foreignKey) => [
             'name' => $foreignKey->getName(),
             'local_table' => $table->getName(),
             'local_columns' => collect($foreignKey->getLocalColumns()),
             'foreign_table' => $foreignKey->getForeignTableName(),
             'foreign_columns' => collect($foreignKey->getForeignColumns()),
-            'on_update' => Str::lower(rescue(fn () => $foreignKey->getOption('onUpdate'), 'N/A')),
-            'on_delete' => Str::lower(rescue(fn () => $foreignKey->getOption('onDelete'), 'N/A')),
+            'on_update' => Str::lower(rescue(fn() => $foreignKey->getOption('onUpdate'), 'N/A')),
+            'on_delete' => Str::lower(rescue(fn() => $foreignKey->getOption('onDelete'), 'N/A')),
         ]);
     }
 
     /**
      * Render the table information.
      *
-     * @param  array  $data
+     * @param array $data
      * @return void
      */
     protected function display(array $data)
@@ -177,7 +177,7 @@ class TableCommand extends DatabaseInspectionCommand
     /**
      * Render the table information as JSON.
      *
-     * @param  array  $data
+     * @param array $data
      * @return void
      */
     protected function displayJson(array $data)
@@ -188,22 +188,25 @@ class TableCommand extends DatabaseInspectionCommand
     /**
      * Render the table information formatted for the CLI.
      *
-     * @param  array  $data
+     * @param array $data
      * @return void
      */
     protected function displayForCli(array $data)
     {
         [$table, $columns, $indexes, $foreignKeys] = [
-            $data['table'], $data['columns'], $data['indexes'], $data['foreign_keys'],
+            $data['table'],
+            $data['columns'],
+            $data['indexes'],
+            $data['foreign_keys'],
         ];
 
         $this->newLine();
 
-        $this->components->twoColumnDetail('<fg=green;options=bold>'.$table['name'].'</>');
+        $this->components->twoColumnDetail('<fg=green;options=bold>' . $table['name'] . '</>');
         $this->components->twoColumnDetail('Columns', $table['columns']);
 
         if ($size = $table['size']) {
-            $this->components->twoColumnDetail('Size', number_format($size / 1024 / 1024, 2).'MiB');
+            $this->components->twoColumnDetail('Size', number_format($size / 1024 / 1024, 2) . 'MiB');
         }
 
         $this->newLine();
@@ -213,8 +216,10 @@ class TableCommand extends DatabaseInspectionCommand
 
             $columns->each(function ($column) {
                 $this->components->twoColumnDetail(
-                    $column['column'].' <fg=gray>'.$column['attributes']->implode(', ').'</>',
-                    (! is_null($column['default']) ? '<fg=gray>'.$column['default'].'</> ' : '').''.$column['type'].''
+                    $column['column'] . ' <fg=gray>' . $column['attributes']->implode(', ') . '</>',
+                    (!is_null(
+                        $column['default']
+                    ) ? '<fg=gray>' . $column['default'] . '</> ' : '') . '' . $column['type'] . ''
                 );
             });
 
@@ -226,7 +231,7 @@ class TableCommand extends DatabaseInspectionCommand
 
             $indexes->each(function ($index) {
                 $this->components->twoColumnDetail(
-                    $index['name'].' <fg=gray>'.$index['columns']->implode(', ').'</>',
+                    $index['name'] . ' <fg=gray>' . $index['columns']->implode(', ') . '</>',
                     $index['attributes']->implode(', ')
                 );
             });
@@ -239,8 +244,12 @@ class TableCommand extends DatabaseInspectionCommand
 
             $foreignKeys->each(function ($foreignKey) {
                 $this->components->twoColumnDetail(
-                    $foreignKey['name'].' <fg=gray;options=bold>'.$foreignKey['local_columns']->implode(', ').' references '.$foreignKey['foreign_columns']->implode(', ').' on '.$foreignKey['foreign_table'].'</>',
-                    $foreignKey['on_update'].' / '.$foreignKey['on_delete'],
+                    $foreignKey['name'] . ' <fg=gray;options=bold>' . $foreignKey['local_columns']->implode(
+                        ', '
+                    ) . ' references ' . $foreignKey['foreign_columns']->implode(
+                        ', '
+                    ) . ' on ' . $foreignKey['foreign_table'] . '</>',
+                    $foreignKey['on_update'] . ' / ' . $foreignKey['on_delete'],
                 );
             });
 

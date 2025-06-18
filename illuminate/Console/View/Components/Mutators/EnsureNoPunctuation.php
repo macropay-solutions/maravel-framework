@@ -7,7 +7,7 @@ class EnsureNoPunctuation
     /**
      * Ensures the given string does not end with punctuation.
      *
-     * @param  string  $string
+     * @param string $string
      * @return string
      */
     public function __invoke($string)

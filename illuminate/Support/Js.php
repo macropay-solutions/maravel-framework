@@ -27,9 +27,9 @@ class Js implements Htmlable
     /**
      * Create a new class instance.
      *
-     * @param  mixed  $data
-     * @param  int|null  $flags
-     * @param  int  $depth
+     * @param mixed $data
+     * @param int|null $flags
+     * @param int $depth
      * @return void
      *
      * @throws \JsonException
@@ -42,9 +42,9 @@ class Js implements Htmlable
     /**
      * Create a new JavaScript string from the given data.
      *
-     * @param  mixed  $data
-     * @param  int  $flags
-     * @param  int  $depth
+     * @param mixed $data
+     * @param int $flags
+     * @param int $depth
      * @return static
      *
      * @throws \JsonException
@@ -57,9 +57,9 @@ class Js implements Htmlable
     /**
      * Convert the given data to a JavaScript expression.
      *
-     * @param  mixed  $data
-     * @param  int  $flags
-     * @param  int  $depth
+     * @param mixed $data
+     * @param int $flags
+     * @param int $depth
      * @return string
      *
      * @throws \JsonException
@@ -77,7 +77,7 @@ class Js implements Htmlable
         $json = static::encode($data, $flags, $depth);
 
         if (is_string($data)) {
-            return "'".substr($json, 1, -1)."'";
+            return "'" . substr($json, 1, -1) . "'";
         }
 
         return $this->convertJsonToJavaScriptExpression($json, $flags);
@@ -86,9 +86,9 @@ class Js implements Htmlable
     /**
      * Encode the given data as JSON.
      *
-     * @param  mixed  $data
-     * @param  int  $flags
-     * @param  int  $depth
+     * @param mixed $data
+     * @param int $flags
+     * @param int $depth
      * @return string
      *
      * @throws \JsonException
@@ -99,7 +99,7 @@ class Js implements Htmlable
             return $data->toJson($flags | static::REQUIRED_FLAGS);
         }
 
-        if ($data instanceof Arrayable && ! ($data instanceof JsonSerializable)) {
+        if ($data instanceof Arrayable && !($data instanceof JsonSerializable)) {
             $data = $data->toArray();
         }
 
@@ -109,8 +109,8 @@ class Js implements Htmlable
     /**
      * Convert the given JSON to a JavaScript expression.
      *
-     * @param  string  $json
-     * @param  int  $flags
+     * @param string $json
+     * @param int $flags
      * @return string
      *
      * @throws \JsonException
@@ -122,7 +122,7 @@ class Js implements Htmlable
         }
 
         if (Str::startsWith($json, ['"', '{', '['])) {
-            return "JSON.parse('".substr(json_encode($json, $flags | static::REQUIRED_FLAGS), 1, -1)."')";
+            return "JSON.parse('" . substr(json_encode($json, $flags | static::REQUIRED_FLAGS), 1, -1) . "')";
         }
 
         return $json;

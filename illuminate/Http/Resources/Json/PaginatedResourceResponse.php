@@ -9,36 +9,39 @@ class PaginatedResourceResponse extends ResourceResponse
     /**
      * Create an HTTP response that represents the object.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function toResponse($request)
     {
-        return tap(response()->json(
-            $this->wrap(
-                $this->resource->resolve($request),
-                array_merge_recursive(
-                    $this->paginationInformation($request),
-                    $this->resource->with($request),
-                    $this->resource->additional
-                )
+        return tap(
+            response()->json(
+                $this->wrap(
+                    $this->resource->resolve($request),
+                    array_merge_recursive(
+                        $this->paginationInformation($request),
+                        $this->resource->with($request),
+                        $this->resource->additional
+                    )
+                ),
+                $this->calculateStatus(),
+                [],
+                $this->resource->jsonOptions()
             ),
-            $this->calculateStatus(),
-            [],
-            $this->resource->jsonOptions()
-        ), function ($response) use ($request) {
-            $response->original = $this->resource->resource->map(function ($item) {
-                return is_array($item) ? Arr::get($item, 'resource') : $item->resource;
-            });
+            function ($response) use ($request) {
+                $response->original = $this->resource->resource->map(function ($item) {
+                    return is_array($item) ? Arr::get($item, 'resource') : $item->resource;
+                });
 
-            $this->resource->withResponse($request, $response);
-        });
+                $this->resource->withResponse($request, $response);
+            }
+        );
     }
 
     /**
      * Add the pagination information to the response.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     protected function paginationInformation($request)
@@ -50,8 +53,10 @@ class PaginatedResourceResponse extends ResourceResponse
             'meta' => $this->meta($paginated),
         ];
 
-        if (method_exists($this->resource, 'paginationInformation') ||
-            $this->resource->hasMacro('paginationInformation')) {
+        if (
+            method_exists($this->resource, 'paginationInformation') ||
+            $this->resource->hasMacro('paginationInformation')
+        ) {
             return $this->resource->paginationInformation($request, $paginated, $default);
         }
 
@@ -61,7 +66,7 @@ class PaginatedResourceResponse extends ResourceResponse
     /**
      * Get the pagination links for the response.
      *
-     * @param  array  $paginated
+     * @param array $paginated
      * @return array
      */
     protected function paginationLinks($paginated)
@@ -77,7 +82,7 @@ class PaginatedResourceResponse extends ResourceResponse
     /**
      * Gather the meta data for the response.
      *
-     * @param  array  $paginated
+     * @param array $paginated
      * @return array
      */
     protected function meta($paginated)

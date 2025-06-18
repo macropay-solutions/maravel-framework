@@ -13,27 +13,27 @@ class SetCacheHeaders
     /**
      * Specify the options for the middleware.
      *
-     * @param  array|string  $options
+     * @param array|string $options
      * @return string
      */
     public static function using($options)
     {
         if (is_string($options)) {
-            return static::class.':'.$options;
+            return static::class . ':' . $options;
         }
 
         return collect($options)
-            ->map(fn ($value, $key) => is_int($key) ? $value : "{$key}={$value}")
-            ->map(fn ($value) => Str::finish($value, ';'))
-            ->pipe(fn ($options) => rtrim(static::class.':'.$options->implode(''), ';'));
+            ->map(fn($value, $key) => is_int($key) ? $value : "{$key}={$value}")
+            ->map(fn($value) => Str::finish($value, ';'))
+            ->pipe(fn($options) => rtrim(static::class . ':' . $options->implode(''), ';'));
     }
 
     /**
      * Add cache related HTTP headers.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|array  $options
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param string|array $options
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws \InvalidArgumentException
@@ -42,7 +42,10 @@ class SetCacheHeaders
     {
         $response = $next($request);
 
-        if (! $request->isMethodCacheable() || (! $response->getContent() && ! $response instanceof BinaryFileResponse && ! $response instanceof StreamedResponse)) {
+        if (
+            !$request->isMethodCacheable() || (!$response->getContent(
+            ) && !$response instanceof BinaryFileResponse && !$response instanceof StreamedResponse)
+        ) {
             return $response;
         }
 
@@ -71,7 +74,7 @@ class SetCacheHeaders
     /**
      * Parse the given header options.
      *
-     * @param  string  $options
+     * @param string $options
      * @return array
      */
     protected function parseOptions($options)

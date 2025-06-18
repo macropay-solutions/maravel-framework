@@ -28,7 +28,7 @@ class ScheduleTestCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     public function handle(Schedule $schedule)
@@ -49,8 +49,8 @@ class ScheduleTestCommand extends Command
             return;
         }
 
-        if (! empty($name = $this->option('name'))) {
-            $commandBinary = $phpBinary.' '.Application::artisanBinary();
+        if (!empty($name = $this->option('name'))) {
+            $commandBinary = $phpBinary . ' ' . Application::artisanBinary();
 
             $matches = array_filter($commandNames, function ($commandName) use ($commandBinary, $name) {
                 return trim(str_replace($commandBinary, '', $commandName)) === $name;
@@ -81,9 +81,9 @@ class ScheduleTestCommand extends Command
             $event->runInBackground ? ' in background' : '',
         );
 
-        $this->components->task($description, fn () => $event->run($this->laravel));
+        $this->components->task($description, fn() => $event->run($this->laravel));
 
-        if (! $event instanceof CallbackEvent) {
+        if (!$event instanceof CallbackEvent) {
             $this->components->bulletList([$event->getSummaryForDisplay()]);
         }
 
@@ -93,7 +93,7 @@ class ScheduleTestCommand extends Command
     /**
      * Get the selected command name by index.
      *
-     * @param  array  $commandNames
+     * @param array $commandNames
      * @return int
      */
     protected function getSelectedCommandByIndex(array $commandNames)
@@ -108,7 +108,7 @@ class ScheduleTestCommand extends Command
 
             preg_match('/\[(\d+)\]/', $selectedCommand, $choice);
 
-            return (int) $choice[1];
+            return (int)$choice[1];
         } else {
             return array_search(
                 select('Which command would you like to run?', $commandNames),

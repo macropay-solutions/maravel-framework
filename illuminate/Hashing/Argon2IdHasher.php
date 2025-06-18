@@ -9,16 +9,16 @@ class Argon2IdHasher extends ArgonHasher
     /**
      * Check the given plain value against a hash.
      *
-     * @param  string  $value
-     * @param  string|null  $hashedValue
-     * @param  array  $options
+     * @param string $value
+     * @param string|null $hashedValue
+     * @param array $options
      * @return bool
      *
      * @throws \RuntimeException
      */
     public function check($value, $hashedValue, array $options = [])
     {
-        if ($this->verifyAlgorithm && ! $this->isUsingCorrectAlgorithm($hashedValue)) {
+        if ($this->verifyAlgorithm && !$this->isUsingCorrectAlgorithm($hashedValue)) {
             throw new RuntimeException('This password does not use the Argon2id algorithm.');
         }
 
@@ -32,7 +32,7 @@ class Argon2IdHasher extends ArgonHasher
     /**
      * Verify the hashed value's algorithm.
      *
-     * @param  string  $hashedValue
+     * @param string $hashedValue
      * @return bool
      */
     protected function isUsingCorrectAlgorithm($hashedValue)

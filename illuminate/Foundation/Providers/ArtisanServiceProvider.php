@@ -217,14 +217,16 @@ class ArtisanServiceProvider extends ServiceProvider implements DeferrableProvid
      */
     public function register()
     {
-        $this->registerCommands(array_merge(
-            $this->commands,
-            $this->devCommands
-        ));
+        $this->registerCommands(
+            array_merge(
+                $this->commands,
+                $this->devCommands
+            )
+        );
 
         Signals::resolveAvailabilityUsing(function () {
             return $this->app->runningInConsole()
-                && ! $this->app->runningUnitTests()
+                && !$this->app->runningUnitTests()
                 && extension_loaded('pcntl');
         });
     }
@@ -232,7 +234,7 @@ class ArtisanServiceProvider extends ServiceProvider implements DeferrableProvid
     /**
      * Register the given commands.
      *
-     * @param  array  $commands
+     * @param array $commands
      * @return void
      */
     protected function registerCommands(array $commands)
@@ -592,7 +594,7 @@ class ArtisanServiceProvider extends ServiceProvider implements DeferrableProvid
     protected function registerQueuePruneBatchesCommand()
     {
         $this->app->singleton(QueuePruneBatchesCommand::class, function () {
-            return new QueuePruneBatchesCommand;
+            return new QueuePruneBatchesCommand();
         });
     }
 
@@ -604,7 +606,7 @@ class ArtisanServiceProvider extends ServiceProvider implements DeferrableProvid
     protected function registerQueuePruneFailedJobsCommand()
     {
         $this->app->singleton(QueuePruneFailedJobsCommand::class, function () {
-            return new QueuePruneFailedJobsCommand;
+            return new QueuePruneFailedJobsCommand();
         });
     }
 

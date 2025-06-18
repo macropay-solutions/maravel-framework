@@ -49,14 +49,14 @@ class TimestampType extends Type implements PhpDateTimeMappingType
             SQLServerPlatform::class,
             SQLServer2012Platform::class => $this->getSqlServerPlatformSQLDeclaration($column),
             SqlitePlatform::class => 'DATETIME',
-            default => throw new DBALException('Invalid platform: '.substr(strrchr(get_class($platform), '\\'), 1)),
+            default => throw new DBALException('Invalid platform: ' . substr(strrchr(get_class($platform), '\\'), 1)),
         };
     }
 
     /**
      * Get the SQL declaration for MySQL.
      *
-     * @param  array  $column
+     * @param array $column
      * @return string
      */
     protected function getMySqlPlatformSQLDeclaration(array $column): string
@@ -64,13 +64,13 @@ class TimestampType extends Type implements PhpDateTimeMappingType
         $columnType = 'TIMESTAMP';
 
         if ($column['precision']) {
-            $columnType = 'TIMESTAMP('.min((int) $column['precision'], 6).')';
+            $columnType = 'TIMESTAMP(' . min((int)$column['precision'], 6) . ')';
         }
 
         $notNull = $column['notnull'] ?? false;
 
-        if (! $notNull) {
-            return $columnType.' NULL';
+        if (!$notNull) {
+            return $columnType . ' NULL';
         }
 
         return $columnType;
@@ -79,24 +79,24 @@ class TimestampType extends Type implements PhpDateTimeMappingType
     /**
      * Get the SQL declaration for PostgreSQL.
      *
-     * @param  array  $column
+     * @param array $column
      * @return string
      */
     protected function getPostgresPlatformSQLDeclaration(array $column): string
     {
-        return 'TIMESTAMP('.min((int) $column['precision'], 6).')';
+        return 'TIMESTAMP(' . min((int)$column['precision'], 6) . ')';
     }
 
     /**
      * Get the SQL declaration for SQL Server.
      *
-     * @param  array  $column
+     * @param array $column
      * @return string
      */
     protected function getSqlServerPlatformSQLDeclaration(array $column): string
     {
         return $column['precision'] ?? false
-            ? 'DATETIME2('.min((int) $column['precision'], 7).')'
+            ? 'DATETIME2(' . min((int)$column['precision'], 7) . ')'
             : 'DATETIME';
     }
 

@@ -14,7 +14,8 @@ use InvalidArgumentException;
 
 class Translator extends NamespacedItemResolver implements TranslatorContract
 {
-    use Macroable, ReflectsClosures;
+    use Macroable;
+    use ReflectsClosures;
 
     /**
      * The loader implementation.
@@ -82,8 +83,8 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Create a new translator instance.
      *
-     * @param  \Illuminate\Contracts\Translation\Loader  $loader
-     * @param  string  $locale
+     * @param \Illuminate\Contracts\Translation\Loader $loader
+     * @param string $locale
      * @return void
      */
     public function __construct(Loader $loader, $locale)
@@ -96,8 +97,8 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Determine if a translation exists for a given locale.
      *
-     * @param  string  $key
-     * @param  string|null  $locale
+     * @param string $key
+     * @param string|null $locale
      * @return bool
      */
     public function hasForLocale($key, $locale = null)
@@ -108,9 +109,9 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Determine if a translation exists.
      *
-     * @param  string  $key
-     * @param  string|null  $locale
-     * @param  bool  $fallback
+     * @param string $key
+     * @param string|null $locale
+     * @param bool $fallback
      * @return bool
      */
     public function has($key, $locale = null, $fallback = true)
@@ -122,7 +123,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
         // For JSON translations, the loaded files will contain the correct line.
         // Otherwise, we must assume we are handling typical translation file
         // and check if the returned line is not the same as the given key.
-        if (! is_null($this->loaded['*']['*'][$locale][$key] ?? null)) {
+        if (!is_null($this->loaded['*']['*'][$locale][$key] ?? null)) {
             return true;
         }
 
@@ -132,10 +133,10 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Get the translation for the given key.
      *
-     * @param  string  $key
-     * @param  array  $replace
-     * @param  string|null  $locale
-     * @param  bool  $fallback
+     * @param string $key
+     * @param array $replace
+     * @param string|null $locale
+     * @param bool $fallback
      * @return string|array
      */
     public function get($key, array $replace = [], $locale = null, $fallback = true)
@@ -152,7 +153,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
         // If we can't find a translation for the JSON key, we will attempt to translate it
         // using the typical translation file. This way developers can always just use a
         // helper such as __ instead of having to pick between trans or __ with views.
-        if (! isset($line)) {
+        if (!isset($line)) {
             [$namespace, $group, $item] = $this->parseKey($key);
 
             // Here we will get the locale that should be used for the language line. If one
@@ -161,15 +162,26 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
             $locales = $fallback ? $this->localeArray($locale) : [$locale];
 
             foreach ($locales as $languageLineLocale) {
-                if (! is_null($line = $this->getLine(
-                    $namespace, $group, $languageLineLocale, $item, $replace
-                ))) {
+                if (
+                    !is_null(
+                        $line = $this->getLine(
+                            $namespace,
+                            $group,
+                            $languageLineLocale,
+                            $item,
+                            $replace
+                        )
+                    )
+                ) {
                     return $line;
                 }
             }
 
             $key = $this->handleMissingTranslationKey(
-                $key, $replace, $locale, $fallback
+                $key,
+                $replace,
+                $locale,
+                $fallback
             );
         }
 
@@ -182,16 +194,18 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Get a translation according to an integer value.
      *
-     * @param  string  $key
-     * @param  \Countable|int|float|array  $number
-     * @param  array  $replace
-     * @param  string|null  $locale
+     * @param string $key
+     * @param \Countable|int|float|array $number
+     * @param array $replace
+     * @param string|null $locale
      * @return string
      */
     public function choice($key, $number, array $replace = [], $locale = null)
     {
         $line = $this->get(
-            $key, $replace, $locale = $this->localeForChoice($locale)
+            $key,
+            $replace,
+            $locale = $this->localeForChoice($locale)
         );
 
         // If the given "number" is actually an array or countable we will simply count the
@@ -204,14 +218,15 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
         $replace['count'] = $number;
 
         return $this->makeReplacements(
-            $this->getSelector()->choose($line, $number, $locale), $replace
+            $this->getSelector()->choose($line, $number, $locale),
+            $replace
         );
     }
 
     /**
      * Get the proper locale for a choice operation.
      *
-     * @param  string|null  $locale
+     * @param string|null $locale
      * @return string
      */
     protected function localeForChoice($locale)
@@ -222,11 +237,11 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Retrieve a language line out the loaded array.
      *
-     * @param  string  $namespace
-     * @param  string  $group
-     * @param  string  $locale
-     * @param  string  $item
-     * @param  array  $replace
+     * @param string $namespace
+     * @param string $group
+     * @param string $locale
+     * @param string $item
+     * @param array $replace
      * @return string|array|null
      */
     protected function getLine($namespace, $group, $locale, $item, array $replace)
@@ -249,8 +264,8 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Make the place-holder replacements on a line.
      *
-     * @param  string  $line
-     * @param  array  $replace
+     * @param string $line
+     * @param array $replace
      * @return string
      */
     protected function makeReplacements($line, array $replace)
@@ -266,9 +281,9 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
                 $value = call_user_func($this->stringableHandlers[get_class($value)], $value);
             }
 
-            $shouldReplace[':'.Str::ucfirst($key ?? '')] = Str::ucfirst($value ?? '');
-            $shouldReplace[':'.Str::upper($key ?? '')] = Str::upper($value ?? '');
-            $shouldReplace[':'.$key] = $value;
+            $shouldReplace[':' . Str::ucfirst($key ?? '')] = Str::ucfirst($value ?? '');
+            $shouldReplace[':' . Str::upper($key ?? '')] = Str::upper($value ?? '');
+            $shouldReplace[':' . $key] = $value;
         }
 
         return strtr($line, $shouldReplace);
@@ -277,9 +292,9 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Add translation lines to the given locale.
      *
-     * @param  array  $lines
-     * @param  string  $locale
-     * @param  string  $namespace
+     * @param array $lines
+     * @param string $locale
+     * @param string $namespace
      * @return void
      */
     public function addLines(array $lines, $locale, $namespace = '*')
@@ -294,9 +309,9 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Load the specified language group.
      *
-     * @param  string  $namespace
-     * @param  string  $group
-     * @param  string  $locale
+     * @param string $namespace
+     * @param string $group
+     * @param string $locale
      * @return void
      */
     public function load($namespace, $group, $locale)
@@ -316,9 +331,9 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Determine if the given group has been loaded.
      *
-     * @param  string  $namespace
-     * @param  string  $group
-     * @param  string  $locale
+     * @param string $namespace
+     * @param string $group
+     * @param string $locale
      * @return bool
      */
     protected function isLoaded($namespace, $group, $locale)
@@ -329,16 +344,18 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Handle a missing translation key.
      *
-     * @param  string  $key
-     * @param  array  $replace
-     * @param  string|null  $locale
-     * @param  bool  $fallback
+     * @param string $key
+     * @param array $replace
+     * @param string|null $locale
+     * @param bool $fallback
      * @return string
      */
     protected function handleMissingTranslationKey($key, $replace, $locale, $fallback)
     {
-        if (! $this->handleMissingTranslationKeys ||
-            ! isset($this->missingTranslationKeyCallback)) {
+        if (
+            !$this->handleMissingTranslationKeys ||
+            !isset($this->missingTranslationKeyCallback)
+        ) {
             return $key;
         }
 
@@ -347,7 +364,10 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
 
         $key = call_user_func(
             $this->missingTranslationKeyCallback,
-            $key, $replace, $locale, $fallback
+            $key,
+            $replace,
+            $locale,
+            $fallback
         ) ?? $key;
 
         $this->handleMissingTranslationKeys = true;
@@ -358,7 +378,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Register a callback that is responsible for handling missing translation keys.
      *
-     * @param  callable|null  $callback
+     * @param callable|null $callback
      * @return static
      */
     public function handleMissingKeysUsing(?callable $callback)
@@ -371,8 +391,8 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Add a new namespace to the loader.
      *
-     * @param  string  $namespace
-     * @param  string  $hint
+     * @param string $namespace
+     * @param string $hint
      * @return void
      */
     public function addNamespace($namespace, $hint)
@@ -383,7 +403,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Add a new JSON path to the loader.
      *
-     * @param  string  $path
+     * @param string $path
      * @return void
      */
     public function addJsonPath($path)
@@ -394,7 +414,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Parse a key into namespace, group, and item.
      *
-     * @param  string  $key
+     * @param string $key
      * @return array
      */
     public function parseKey($key)
@@ -411,20 +431,20 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Get the array of locales to be checked.
      *
-     * @param  string|null  $locale
+     * @param string|null $locale
      * @return array
      */
     protected function localeArray($locale)
     {
         $locales = array_filter([$locale ?: $this->locale, $this->fallback]);
 
-        return call_user_func($this->determineLocalesUsing ?: fn () => $locales, $locales);
+        return call_user_func($this->determineLocalesUsing ?: fn() => $locales, $locales);
     }
 
     /**
      * Specify a callback that should be invoked to determined the applicable locale array.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return void
      */
     public function determineLocalesUsing($callback)
@@ -439,8 +459,8 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      */
     public function getSelector()
     {
-        if (! isset($this->selector)) {
-            $this->selector = new MessageSelector;
+        if (!isset($this->selector)) {
+            $this->selector = new MessageSelector();
         }
 
         return $this->selector;
@@ -449,7 +469,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Set the message selector instance.
      *
-     * @param  \Illuminate\Translation\MessageSelector  $selector
+     * @param \Illuminate\Translation\MessageSelector $selector
      * @return void
      */
     public function setSelector(MessageSelector $selector)
@@ -490,7 +510,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Set the default locale.
      *
-     * @param  string  $locale
+     * @param string $locale
      * @return void
      *
      * @throws \InvalidArgumentException
@@ -517,7 +537,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Set the fallback locale being used.
      *
-     * @param  string  $fallback
+     * @param string $fallback
      * @return void
      */
     public function setFallback($fallback)
@@ -528,7 +548,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Set the loaded translation groups.
      *
-     * @param  array  $loaded
+     * @param array $loaded
      * @return void
      */
     public function setLoaded(array $loaded)
@@ -539,8 +559,8 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     /**
      * Add a handler to be executed in order to format a given class to a string during translation replacements.
      *
-     * @param  callable|string  $class
-     * @param  callable|null  $handler
+     * @param callable|string $class
+     * @param callable|null $handler
      * @return void
      */
     public function stringable($class, $handler = null)

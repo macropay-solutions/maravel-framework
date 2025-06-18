@@ -35,7 +35,7 @@ class RouteCacheCommand extends Command
     /**
      * Create a new route command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param \Illuminate\Filesystem\Filesystem $files
      * @return void
      */
     public function __construct(Filesystem $files)
@@ -67,7 +67,8 @@ class RouteCacheCommand extends Command
         }
 
         $this->files->put(
-            $this->laravel->getCachedRoutesPath(), $this->buildRouteCacheFile($routes)
+            $this->laravel->getCachedRoutesPath(),
+            $this->buildRouteCacheFile($routes)
         );
 
         $this->components->info('Routes cached successfully.');
@@ -101,12 +102,12 @@ class RouteCacheCommand extends Command
     /**
      * Build the route cache file.
      *
-     * @param  \Illuminate\Routing\RouteCollection  $routes
+     * @param \Illuminate\Routing\RouteCollection $routes
      * @return string
      */
     protected function buildRouteCacheFile(RouteCollection $routes)
     {
-        $stub = $this->files->get(__DIR__.'/stubs/routes.stub');
+        $stub = $this->files->get(__DIR__ . '/stubs/routes.stub');
 
         return str_replace('{{routes}}', var_export($routes->compile(), true), $stub);
     }

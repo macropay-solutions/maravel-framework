@@ -7,7 +7,8 @@ use Illuminate\Support\Traits\Conditionable;
 
 class Unique
 {
-    use Conditionable, DatabaseRule;
+    use Conditionable;
+    use DatabaseRule;
 
     /**
      * The ID that should be ignored.
@@ -26,8 +27,8 @@ class Unique
     /**
      * Ignore the given ID during the unique check.
      *
-     * @param  mixed  $id
-     * @param  string|null  $idColumn
+     * @param mixed $id
+     * @param string|null $idColumn
      * @return $this
      */
     public function ignore($id, $idColumn = null)
@@ -45,8 +46,8 @@ class Unique
     /**
      * Ignore the given model during the unique check.
      *
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @param  string|null  $idColumn
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param string|null $idColumn
      * @return $this
      */
     public function ignoreModel($model, $idColumn = null)
@@ -64,12 +65,16 @@ class Unique
      */
     public function __toString()
     {
-        return rtrim(sprintf('unique:%s,%s,%s,%s,%s',
-            $this->table,
-            $this->column,
-            $this->ignore ? '"'.addslashes($this->ignore).'"' : 'NULL',
-            $this->idColumn,
-            $this->formatWheres()
-        ), ',');
+        return rtrim(
+            sprintf(
+                'unique:%s,%s,%s,%s,%s',
+                $this->table,
+                $this->column,
+                $this->ignore ? '"' . addslashes($this->ignore) . '"' : 'NULL',
+                $this->idColumn,
+                $this->formatWheres()
+            ),
+            ','
+        );
     }
 }

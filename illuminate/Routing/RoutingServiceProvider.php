@@ -62,9 +62,12 @@ class RoutingServiceProvider extends ServiceProvider
             $app->instance('routes', $routes);
 
             return new UrlGenerator(
-                $routes, $app->rebinding(
-                    'request', $this->requestRebinder()
-                ), $app['config']['app.asset_url']
+                $routes,
+                $app->rebinding(
+                    'request',
+                    $this->requestRebinder()
+                ),
+                $app['config']['app.asset_url']
             );
         });
 
@@ -135,21 +138,29 @@ class RoutingServiceProvider extends ServiceProvider
     {
         $this->app->bind(ServerRequestInterface::class, function ($app) {
             if (class_exists(Psr17Factory::class) && class_exists(PsrHttpFactory::class)) {
-                $psr17Factory = new Psr17Factory;
+                $psr17Factory = new Psr17Factory();
 
-                return with((new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory))
-                    ->createRequest($illuminateRequest = $app->make('request')), function (ServerRequestInterface $request) use ($illuminateRequest) {
-                        if ($illuminateRequest->getContentTypeFormat() !== 'json' && $illuminateRequest->request->count() === 0) {
+                return with(
+                    (new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory))
+                        ->createRequest($illuminateRequest = $app->make('request')),
+                    function (ServerRequestInterface $request) use ($illuminateRequest) {
+                        if (
+                            $illuminateRequest->getContentTypeFormat() !== 'json' && $illuminateRequest->request->count(
+                            ) === 0
+                        ) {
                             return $request;
                         }
 
                         return $request->withParsedBody(
                             array_merge($request->getParsedBody() ?? [], $illuminateRequest->getPayload()->all())
                         );
-                    });
+                    }
+                );
             }
 
-            throw new BindingResolutionException('Unable to resolve PSR request. Please install the symfony/psr-http-message-bridge and nyholm/psr7 packages.');
+            throw new BindingResolutionException(
+                'Unable to resolve PSR request. Please install the symfony/psr-http-message-bridge and nyholm/psr7 packages.'
+            );
         });
     }
 
@@ -164,10 +175,12 @@ class RoutingServiceProvider extends ServiceProvider
     {
         $this->app->bind(ResponseInterface::class, function () {
             if (class_exists(PsrResponse::class)) {
-                return new PsrResponse;
+                return new PsrResponse();
             }
 
-            throw new BindingResolutionException('Unable to resolve PSR response. Please install the nyholm/psr7 package.');
+            throw new BindingResolutionException(
+                'Unable to resolve PSR response. Please install the nyholm/psr7 package.'
+            );
         });
     }
 

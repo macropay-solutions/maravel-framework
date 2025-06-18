@@ -36,7 +36,7 @@ class ConfigCacheCommand extends Command
     /**
      * Create a new config cache command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param \Illuminate\Filesystem\Filesystem $files
      * @return void
      */
     public function __construct(Filesystem $files)
@@ -62,7 +62,8 @@ class ConfigCacheCommand extends Command
         $configPath = $this->laravel->getCachedConfigPath();
 
         $this->files->put(
-            $configPath, '<?php return '.var_export($config, true).';'.PHP_EOL
+            $configPath,
+            '<?php return ' . var_export($config, true) . ';' . PHP_EOL
         );
 
         try {

@@ -20,20 +20,20 @@ class ValidateSignature
     /**
      * Specify that the URL signature is for a relative URL.
      *
-     * @param  array|string  $ignore
+     * @param array|string $ignore
      * @return string
      */
     public static function relative($ignore = [])
     {
         $ignore = Arr::wrap($ignore);
 
-        return static::class.':'.implode(',', empty($ignore) ? ['relative'] : ['relative',  ...$ignore]);
+        return static::class . ':' . implode(',', empty($ignore) ? ['relative'] : ['relative', ...$ignore]);
     }
 
     /**
      * Specify that the URL signature is for an absolute URL.
      *
-     * @param  array|string  $ignore
+     * @param array|string $ignore
      * @return class-string
      */
     public static function absolute($ignore = [])
@@ -42,15 +42,15 @@ class ValidateSignature
 
         return empty($ignore)
             ? static::class
-            : static::class.':'.implode(',', $ignore);
+            : static::class . ':' . implode(',', $ignore);
     }
 
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  array|null  $args
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param array|null $args
      * @return \Illuminate\Http\Response
      *
      * @throws \Illuminate\Routing\Exceptions\InvalidSignatureException
@@ -59,22 +59,22 @@ class ValidateSignature
     {
         [$relative, $ignore] = $this->parseArguments($args);
 
-        if ($request->hasValidSignatureWhileIgnoring($ignore, ! $relative)) {
+        if ($request->hasValidSignatureWhileIgnoring($ignore, !$relative)) {
             return $next($request);
         }
 
-        throw new InvalidSignatureException;
+        throw new InvalidSignatureException();
     }
 
     /**
      * Parse the additional arguments given to the middleware.
      *
-     * @param  array  $args
+     * @param array $args
      * @return array
      */
     protected function parseArguments(array $args)
     {
-        $relative = ! empty($args) && $args[0] === 'relative';
+        $relative = !empty($args) && $args[0] === 'relative';
 
         if ($relative) {
             array_shift($args);

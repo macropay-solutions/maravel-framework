@@ -39,83 +39,93 @@ trait BroadcastsEvents
     /**
      * Broadcast that the model was created.
      *
-     * @param  \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null  $channels
+     * @param \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null $channels
      * @return \Illuminate\Broadcasting\PendingBroadcast
      */
     public function broadcastCreated($channels = null)
     {
         return $this->broadcastIfBroadcastChannelsExistForEvent(
-            $this->newBroadcastableModelEvent('created'), 'created', $channels
+            $this->newBroadcastableModelEvent('created'),
+            'created',
+            $channels
         );
     }
 
     /**
      * Broadcast that the model was updated.
      *
-     * @param  \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null  $channels
+     * @param \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null $channels
      * @return \Illuminate\Broadcasting\PendingBroadcast
      */
     public function broadcastUpdated($channels = null)
     {
         return $this->broadcastIfBroadcastChannelsExistForEvent(
-            $this->newBroadcastableModelEvent('updated'), 'updated', $channels
+            $this->newBroadcastableModelEvent('updated'),
+            'updated',
+            $channels
         );
     }
 
     /**
      * Broadcast that the model was trashed.
      *
-     * @param  \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null  $channels
+     * @param \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null $channels
      * @return \Illuminate\Broadcasting\PendingBroadcast
      */
     public function broadcastTrashed($channels = null)
     {
         return $this->broadcastIfBroadcastChannelsExistForEvent(
-            $this->newBroadcastableModelEvent('trashed'), 'trashed', $channels
+            $this->newBroadcastableModelEvent('trashed'),
+            'trashed',
+            $channels
         );
     }
 
     /**
      * Broadcast that the model was restored.
      *
-     * @param  \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null  $channels
+     * @param \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null $channels
      * @return \Illuminate\Broadcasting\PendingBroadcast
      */
     public function broadcastRestored($channels = null)
     {
         return $this->broadcastIfBroadcastChannelsExistForEvent(
-            $this->newBroadcastableModelEvent('restored'), 'restored', $channels
+            $this->newBroadcastableModelEvent('restored'),
+            'restored',
+            $channels
         );
     }
 
     /**
      * Broadcast that the model was deleted.
      *
-     * @param  \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null  $channels
+     * @param \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null $channels
      * @return \Illuminate\Broadcasting\PendingBroadcast
      */
     public function broadcastDeleted($channels = null)
     {
         return $this->broadcastIfBroadcastChannelsExistForEvent(
-            $this->newBroadcastableModelEvent('deleted'), 'deleted', $channels
+            $this->newBroadcastableModelEvent('deleted'),
+            'deleted',
+            $channels
         );
     }
 
     /**
      * Broadcast the given event instance if channels are configured for the model event.
      *
-     * @param  mixed  $instance
-     * @param  string  $event
-     * @param  mixed  $channels
+     * @param mixed $instance
+     * @param string $event
+     * @param mixed $channels
      * @return \Illuminate\Broadcasting\PendingBroadcast|null
      */
     protected function broadcastIfBroadcastChannelsExistForEvent($instance, $event, $channels = null)
     {
-        if (! static::$isBroadcasting) {
+        if (!static::$isBroadcasting) {
             return;
         }
 
-        if (! empty($this->broadcastOn($event)) || ! empty($channels)) {
+        if (!empty($this->broadcastOn($event)) || !empty($channels)) {
             return broadcast($instance->onChannels(Arr::wrap($channels)));
         }
     }
@@ -123,30 +133,30 @@ trait BroadcastsEvents
     /**
      * Create a new broadcastable model event event.
      *
-     * @param  string  $event
+     * @param string $event
      * @return mixed
      */
     public function newBroadcastableModelEvent($event)
     {
         return tap($this->newBroadcastableEvent($event), function ($event) {
             $event->connection = property_exists($this, 'broadcastConnection')
-                            ? $this->broadcastConnection
-                            : $this->broadcastConnection();
+                ? $this->broadcastConnection
+                : $this->broadcastConnection();
 
             $event->queue = property_exists($this, 'broadcastQueue')
-                            ? $this->broadcastQueue
-                            : $this->broadcastQueue();
+                ? $this->broadcastQueue
+                : $this->broadcastQueue();
 
             $event->afterCommit = property_exists($this, 'broadcastAfterCommit')
-                            ? $this->broadcastAfterCommit
-                            : $this->broadcastAfterCommit();
+                ? $this->broadcastAfterCommit
+                : $this->broadcastAfterCommit();
         });
     }
 
     /**
      * Create a new broadcastable model event for the model.
      *
-     * @param  string  $event
+     * @param string $event
      * @return \Illuminate\Database\Eloquent\BroadcastableModelEventOccurred
      */
     protected function newBroadcastableEvent(string $event)
@@ -157,7 +167,7 @@ trait BroadcastsEvents
     /**
      * Get the channels that model events should broadcast on.
      *
-     * @param  string  $event
+     * @param string $event
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn($event)

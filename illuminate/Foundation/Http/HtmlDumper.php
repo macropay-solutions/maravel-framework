@@ -51,8 +51,8 @@ class HtmlDumper extends BaseHtmlDumper
     /**
      * Create a new HTML dumper instance.
      *
-     * @param  string  $basePath
-     * @param  string  $compiledViewPath
+     * @param string $basePath
+     * @param string $compiledViewPath
      * @return void
      */
     public function __construct($basePath, $compiledViewPath)
@@ -66,8 +66,8 @@ class HtmlDumper extends BaseHtmlDumper
     /**
      * Create a new HTML dumper instance and register it as the default dumper.
      *
-     * @param  string  $basePath
-     * @param  string  $compiledViewPath
+     * @param string $basePath
+     * @param string $compiledViewPath
      * @return void
      */
     public static function register($basePath, $compiledViewPath)
@@ -76,13 +76,13 @@ class HtmlDumper extends BaseHtmlDumper
 
         $dumper = new static($basePath, $compiledViewPath);
 
-        VarDumper::setHandler(fn ($value) => $dumper->dumpWithSource($cloner->cloneVar($value)));
+        VarDumper::setHandler(fn($value) => $dumper->dumpWithSource($cloner->cloneVar($value)));
     }
 
     /**
      * Dump a variable with its source file / line.
      *
-     * @param  \Symfony\Component\VarDumper\Cloner\Data  $data
+     * @param \Symfony\Component\VarDumper\Cloner\Data $data
      * @return void
      */
     public function dumpWithSource(Data $data)
@@ -95,17 +95,17 @@ class HtmlDumper extends BaseHtmlDumper
 
         $this->dumping = true;
 
-        $output = (string) $this->dump($data, true);
+        $output = (string)$this->dump($data, true);
 
         $output = match (true) {
             str_contains($output, static::EXPANDED_SEPARATOR) => str_replace(
                 static::EXPANDED_SEPARATOR,
-                static::EXPANDED_SEPARATOR.$this->getDumpSourceContent(),
+                static::EXPANDED_SEPARATOR . $this->getDumpSourceContent(),
                 $output,
             ),
             str_contains($output, static::NON_EXPANDED_SEPARATOR) => str_replace(
                 static::NON_EXPANDED_SEPARATOR,
-                $this->getDumpSourceContent().static::NON_EXPANDED_SEPARATOR,
+                $this->getDumpSourceContent() . static::NON_EXPANDED_SEPARATOR,
                 $output,
             ),
             default => $output,

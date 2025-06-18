@@ -64,7 +64,7 @@ class Sleep
     /**
      * Create a new class instance.
      *
-     * @param  int|float|\DateInterval  $duration
+     * @param int|float|\DateInterval $duration
      * @return void
      */
     public function __construct($duration)
@@ -75,7 +75,7 @@ class Sleep
     /**
      * Sleep for the given duration.
      *
-     * @param  \DateInterval|int|float  $duration
+     * @param \DateInterval|int|float $duration
      * @return static
      */
     public static function for($duration)
@@ -86,7 +86,7 @@ class Sleep
     /**
      * Sleep until the given timestamp.
      *
-     * @param  \DateTimeInterface|int|float|numeric-string  $timestamp
+     * @param \DateTimeInterface|int|float|numeric-string $timestamp
      * @return static
      */
     public static function until($timestamp)
@@ -101,7 +101,7 @@ class Sleep
     /**
      * Sleep for the given number of microseconds.
      *
-     * @param  int  $duration
+     * @param int $duration
      * @return static
      */
     public static function usleep($duration)
@@ -112,7 +112,7 @@ class Sleep
     /**
      * Sleep for the given number of seconds.
      *
-     * @param  int|float  $duration
+     * @param int|float $duration
      * @return static
      */
     public static function sleep($duration)
@@ -123,12 +123,12 @@ class Sleep
     /**
      * Sleep for the given duration. Replaces any previously defined duration.
      *
-     * @param  \DateInterval|int|float  $duration
+     * @param \DateInterval|int|float $duration
      * @return $this
      */
     protected function duration($duration)
     {
-        if (! $duration instanceof DateInterval) {
+        if (!$duration instanceof DateInterval) {
             $this->duration = CarbonInterval::microsecond(0);
 
             $this->pending = $duration;
@@ -237,7 +237,7 @@ class Sleep
     /**
      * Add additional time to sleep for.
      *
-     * @param  int|float  $duration
+     * @param int|float $duration
      * @return $this
      */
     public function and($duration)
@@ -254,7 +254,7 @@ class Sleep
      */
     public function __destruct()
     {
-        if (! $this->shouldSleep) {
+        if (!$this->shouldSleep) {
             return;
         }
 
@@ -278,7 +278,7 @@ class Sleep
 
         $remaining = $this->duration->copy();
 
-        $seconds = (int) $remaining->totalSeconds;
+        $seconds = (int)$remaining->totalSeconds;
 
         if ($seconds > 0) {
             sleep($seconds);
@@ -286,7 +286,7 @@ class Sleep
             $remaining = $remaining->subSeconds($seconds);
         }
 
-        $microseconds = (int) $remaining->totalMicroseconds;
+        $microseconds = (int)$remaining->totalMicroseconds;
 
         if ($microseconds > 0) {
             usleep($microseconds);
@@ -318,8 +318,8 @@ class Sleep
     /**
      * Stay awake and capture any attempts to sleep.
      *
-     * @param  bool  $value
-     * @param  bool  $syncWithCarbon
+     * @param bool $value
+     * @param bool $syncWithCarbon
      * @return void
      */
     public static function fake($value = true, $syncWithCarbon = false)
@@ -334,8 +334,8 @@ class Sleep
     /**
      * Assert a given amount of sleeping occurred a specific number of times.
      *
-     * @param  \Closure  $expected
-     * @param  int  $times
+     * @param \Closure $expected
+     * @param int $times
      * @return void
      */
     public static function assertSlept($expected, $times = 1)
@@ -352,18 +352,22 @@ class Sleep
     /**
      * Assert sleeping occurred a given number of times.
      *
-     * @param  int  $expected
+     * @param int $expected
      * @return void
      */
     public static function assertSleptTimes($expected)
     {
-        PHPUnit::assertSame($expected, $count = count(static::$sequence), "Expected [{$expected}] sleeps but found [{$count}].");
+        PHPUnit::assertSame(
+            $expected,
+            $count = count(static::$sequence),
+            "Expected [{$expected}] sleeps but found [{$count}]."
+        );
     }
 
     /**
      * Assert the given sleep sequence was encountered.
      *
-     * @param  array  $sequence
+     * @param array $sequence
      * @return void
      */
     public static function assertSequence($sequence)
@@ -439,12 +443,12 @@ class Sleep
     /**
      * Only sleep when the given condition is true.
      *
-     * @param  (\Closure($this): bool)|bool  $condition
+     * @param (\Closure($this): bool)|bool $condition
      * @return $this
      */
     public function when($condition)
     {
-        $this->shouldSleep = (bool) value($condition, $this);
+        $this->shouldSleep = (bool)value($condition, $this);
 
         return $this;
     }
@@ -452,18 +456,18 @@ class Sleep
     /**
      * Don't sleep when the given condition is true.
      *
-     * @param  (\Closure($this): bool)|bool  $condition
+     * @param (\Closure($this): bool)|bool $condition
      * @return $this
      */
     public function unless($condition)
     {
-        return $this->when(! value($condition, $this));
+        return $this->when(!value($condition, $this));
     }
 
     /**
      * Specify a callback that should be invoked when faking sleep within a test.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return void
      */
     public static function whenFakingSleep($callback)

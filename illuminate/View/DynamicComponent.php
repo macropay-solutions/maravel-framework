@@ -32,7 +32,7 @@ class DynamicComponent extends Component
     /**
      * Create a new component instance.
      *
-     * @param  string  $component
+     * @param string $component
      * @return void
      */
     public function __construct(string $component)
@@ -84,7 +84,7 @@ EOF;
     /**
      * Compile the @props directive for the component.
      *
-     * @param  array  $bindings
+     * @param array $bindings
      * @return string
      */
     protected function compileProps(array $bindings)
@@ -93,34 +93,37 @@ EOF;
             return '';
         }
 
-        return '@props('.'[\''.implode('\',\'', collect($bindings)->map(function ($dataKey) {
-            return Str::camel($dataKey);
-        })->all()).'\']'.')';
+        return '@props(' . '[\'' . implode(
+            '\',\'',
+            collect($bindings)->map(function ($dataKey) {
+                    return Str::camel($dataKey);
+            })->all()
+        ) . '\']' . ')';
     }
 
     /**
      * Compile the bindings for the component.
      *
-     * @param  array  $bindings
+     * @param array $bindings
      * @return string
      */
     protected function compileBindings(array $bindings)
     {
         return collect($bindings)->map(function ($key) {
-            return ':'.$key.'="$'.Str::camel(str_replace([':', '.'], ' ', $key)).'"';
+            return ':' . $key . '="$' . Str::camel(str_replace([':', '.'], ' ', $key)) . '"';
         })->implode(' ');
     }
 
     /**
      * Compile the slots for the component.
      *
-     * @param  array  $slots
+     * @param array $slots
      * @return string
      */
     protected function compileSlots(array $slots)
     {
         return collect($slots)->map(function ($slot, $name) {
-            return $name === '__default' ? null : '<x-slot name="'.$name.'" '.((string) $slot->attributes).'>{{ $'.$name.' }}</x-slot>';
+            return $name === '__default' ? null : '<x-slot name="' . $name . '" ' . ((string)$slot->attributes) . '>{{ $' . $name . ' }}</x-slot>';
         })->filter()->implode(PHP_EOL);
     }
 
@@ -136,18 +139,21 @@ EOF;
         }
 
         return static::$componentClasses[$this->component] =
-                    $this->compiler()->componentClass($this->component);
+            $this->compiler()->componentClass($this->component);
     }
 
     /**
      * Get the names of the variables that should be bound to the component.
      *
-     * @param  string  $class
+     * @param string $class
      * @return array
      */
     protected function bindings(string $class)
     {
-        [$data, $attributes] = $this->compiler()->partitionDataAndAttributes($class, $this->attributes->getAttributes());
+        [$data, $attributes] = $this->compiler()->partitionDataAndAttributes(
+            $class,
+            $this->attributes->getAttributes()
+        );
 
         return array_keys($data->all());
     }
@@ -159,7 +165,7 @@ EOF;
      */
     protected function compiler()
     {
-        if (! static::$compiler) {
+        if (!static::$compiler) {
             static::$compiler = new ComponentTagCompiler(
                 Container::getInstance()->make('blade.compiler')->getClassComponentAliases(),
                 Container::getInstance()->make('blade.compiler')->getClassComponentNamespaces(),

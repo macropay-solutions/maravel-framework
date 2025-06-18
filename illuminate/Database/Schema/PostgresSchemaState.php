@@ -9,31 +9,34 @@ class PostgresSchemaState extends SchemaState
     /**
      * Dump the database's schema into a file.
      *
-     * @param  \Illuminate\Database\Connection  $connection
-     * @param  string  $path
+     * @param \Illuminate\Database\Connection $connection
+     * @param string $path
      * @return void
      */
     public function dump(Connection $connection, $path)
     {
         $commands = collect([
-            $this->baseDumpCommand().' --schema-only > '.$path,
+            $this->baseDumpCommand() . ' --schema-only > ' . $path,
         ]);
 
         if ($this->hasMigrationTable()) {
-            $commands->push($this->baseDumpCommand().' -t '.$this->migrationTable.' --data-only >> '.$path);
+            $commands->push($this->baseDumpCommand() . ' -t ' . $this->migrationTable . ' --data-only >> ' . $path);
         }
 
         $commands->map(function ($command, $path) {
-            $this->makeProcess($command)->mustRun($this->output, array_merge($this->baseVariables($this->connection->getConfig()), [
-                'LARAVEL_LOAD_PATH' => $path,
-            ]));
+            $this->makeProcess($command)->mustRun(
+                $this->output,
+                array_merge($this->baseVariables($this->connection->getConfig()), [
+                    'LARAVEL_LOAD_PATH' => $path,
+                ])
+            );
         });
     }
 
     /**
      * Load the given schema file into the database.
      *
-     * @param  string  $path
+     * @param string $path
      * @return void
      */
     public function load($path)
@@ -64,7 +67,7 @@ class PostgresSchemaState extends SchemaState
     /**
      * Get the base variables for a dump / load command.
      *
-     * @param  array  $config
+     * @param array $config
      * @return array
      */
     protected function baseVariables(array $config)

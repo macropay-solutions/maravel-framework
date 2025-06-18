@@ -12,12 +12,12 @@ class WhoopsExceptionRenderer implements ExceptionRenderer
     /**
      * Renders the given exception as HTML.
      *
-     * @param  \Throwable  $throwable
+     * @param \Throwable $throwable
      * @return string
      */
     public function render($throwable)
     {
-        return tap(new Whoops, function ($whoops) {
+        return tap(new Whoops(), function ($whoops) {
             $whoops->appendHandler($this->whoopsHandler());
 
             $whoops->writeToOutput(false);
@@ -33,6 +33,6 @@ class WhoopsExceptionRenderer implements ExceptionRenderer
      */
     protected function whoopsHandler()
     {
-        return (new WhoopsHandler)->forDebug();
+        return (new WhoopsHandler())->forDebug();
     }
 }

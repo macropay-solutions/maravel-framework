@@ -44,9 +44,9 @@ class MonitorCommand extends DatabaseInspectionCommand
     /**
      * Create a new command instance.
      *
-     * @param  \Illuminate\Database\ConnectionResolverInterface  $connection
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
-     * @param  \Illuminate\Support\Composer  $composer
+     * @param \Illuminate\Database\ConnectionResolverInterface $connection
+     * @param \Illuminate\Contracts\Events\Dispatcher $events
+     * @param \Illuminate\Support\Composer $composer
      */
     public function __construct(ConnectionResolverInterface $connection, Dispatcher $events, Composer $composer)
     {
@@ -75,13 +75,13 @@ class MonitorCommand extends DatabaseInspectionCommand
     /**
      * Parse the database into an array of the connections.
      *
-     * @param  string  $databases
+     * @param string $databases
      * @return \Illuminate\Support\Collection
      */
     protected function parseDatabases($databases)
     {
         return collect(explode(',', $databases))->map(function ($database) {
-            if (! $database) {
+            if (!$database) {
                 $database = $this->laravel['config']['database.default'];
             }
 
@@ -98,7 +98,7 @@ class MonitorCommand extends DatabaseInspectionCommand
     /**
      * Display the databases and their connection counts in the console.
      *
-     * @param  \Illuminate\Support\Collection  $databases
+     * @param \Illuminate\Support\Collection $databases
      * @return void
      */
     protected function displayConnections($databases)
@@ -108,7 +108,7 @@ class MonitorCommand extends DatabaseInspectionCommand
         $this->components->twoColumnDetail('<fg=gray>Database name</>', '<fg=gray>Connections</>');
 
         $databases->each(function ($database) {
-            $status = '['.$database['connections'].'] '.$database['status'];
+            $status = '[' . $database['connections'] . '] ' . $database['status'];
 
             $this->components->twoColumnDetail($database['database'], $status);
         });
@@ -119,7 +119,7 @@ class MonitorCommand extends DatabaseInspectionCommand
     /**
      * Dispatch the database monitoring events.
      *
-     * @param  \Illuminate\Support\Collection  $databases
+     * @param \Illuminate\Support\Collection $databases
      * @return void
      */
     protected function dispatchEvents($databases)

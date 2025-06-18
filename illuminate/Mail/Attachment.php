@@ -36,7 +36,7 @@ class Attachment
     /**
      * Create a mail attachment.
      *
-     * @param  \Closure  $resolver
+     * @param \Closure $resolver
      * @return void
      */
     private function __construct(Closure $resolver)
@@ -47,32 +47,32 @@ class Attachment
     /**
      * Create a mail attachment from a path.
      *
-     * @param  string  $path
+     * @param string $path
      * @return static
      */
     public static function fromPath($path)
     {
-        return new static(fn ($attachment, $pathStrategy) => $pathStrategy($path, $attachment));
+        return new static(fn($attachment, $pathStrategy) => $pathStrategy($path, $attachment));
     }
 
     /**
      * Create a mail attachment from in-memory data.
      *
-     * @param  \Closure  $data
-     * @param  string|null  $name
+     * @param \Closure $data
+     * @param string|null $name
      * @return static
      */
     public static function fromData(Closure $data, $name = null)
     {
         return (new static(
-            fn ($attachment, $pathStrategy, $dataStrategy) => $dataStrategy($data, $attachment)
+            fn($attachment, $pathStrategy, $dataStrategy) => $dataStrategy($data, $attachment)
         ))->as($name);
     }
 
     /**
      * Create a mail attachment from a file in the default storage disk.
      *
-     * @param  string  $path
+     * @param string $path
      * @return static
      */
     public static function fromStorage($path)
@@ -83,8 +83,8 @@ class Attachment
     /**
      * Create a mail attachment from a file in the specified storage disk.
      *
-     * @param  string|null  $disk
-     * @param  string  $path
+     * @param string|null $disk
+     * @param string $path
      * @return static
      */
     public static function fromStorageDisk($disk, $path)
@@ -98,14 +98,14 @@ class Attachment
                 ->as($attachment->as ?? basename($path))
                 ->withMime($attachment->mime ?? $storage->mimeType($path));
 
-            return $dataStrategy(fn () => $storage->get($path), $attachment);
+            return $dataStrategy(fn() => $storage->get($path), $attachment);
         });
     }
 
     /**
      * Set the attached file's filename.
      *
-     * @param  string|null  $name
+     * @param string|null $name
      * @return $this
      */
     public function as($name)
@@ -118,7 +118,7 @@ class Attachment
     /**
      * Set the attached file's mime type.
      *
-     * @param  string  $mime
+     * @param string $mime
      * @return $this
      */
     public function withMime($mime)
@@ -131,8 +131,8 @@ class Attachment
     /**
      * Attach the attachment with the given strategies.
      *
-     * @param  \Closure  $pathStrategy
-     * @param  \Closure  $dataStrategy
+     * @param \Closure $pathStrategy
+     * @param \Closure $dataStrategy
      * @return mixed
      */
     public function attachWith(Closure $pathStrategy, Closure $dataStrategy)
@@ -143,14 +143,14 @@ class Attachment
     /**
      * Attach the attachment to a built-in mail type.
      *
-     * @param  \Illuminate\Mail\Mailable|\Illuminate\Mail\Message|\Illuminate\Notifications\Messages\MailMessage  $mail
-     * @param  array  $options
+     * @param \Illuminate\Mail\Mailable|\Illuminate\Mail\Message|\Illuminate\Notifications\Messages\MailMessage $mail
+     * @param array $options
      * @return mixed
      */
     public function attachTo($mail, $options = [])
     {
         return $this->attachWith(
-            fn ($path) => $mail->attach($path, [
+            fn($path) => $mail->attach($path, [
                 'as' => $options['as'] ?? $this->as,
                 'mime' => $options['mime'] ?? $this->mime,
             ]),
@@ -172,8 +172,8 @@ class Attachment
     /**
      * Determine if the given attachment is equivalent to this attachment.
      *
-     * @param  \Illuminate\Mail\Attachment  $attachment
-     * @param  array  $options
+     * @param \Illuminate\Mail\Attachment $attachment
+     * @param array $options
      * @return bool
      */
     public function isEquivalent(Attachment $attachment, $options = [])
@@ -181,12 +181,12 @@ class Attachment
         return with([
             'as' => $options['as'] ?? $attachment->as,
             'mime' => $options['mime'] ?? $attachment->mime,
-        ], fn ($options) => $this->attachWith(
-            fn ($path) => [$path, ['as' => $this->as, 'mime' => $this->mime]],
-            fn ($data) => [$data(), ['as' => $this->as, 'mime' => $this->mime]],
+        ], fn($options) => $this->attachWith(
+            fn($path) => [$path, ['as' => $this->as, 'mime' => $this->mime]],
+            fn($data) => [$data(), ['as' => $this->as, 'mime' => $this->mime]],
         ) === $attachment->attachWith(
-            fn ($path) => [$path, $options],
-            fn ($data) => [$data(), $options],
+            fn($path) => [$path, $options],
+            fn($data) => [$data(), $options],
         ));
     }
 }

@@ -35,7 +35,7 @@ class HigherOrderWhenProxy
     /**
      * Create a new proxy instance.
      *
-     * @param  mixed  $target
+     * @param mixed $target
      * @return void
      */
     public function __construct($target)
@@ -46,7 +46,7 @@ class HigherOrderWhenProxy
     /**
      * Set the condition on the proxy.
      *
-     * @param  bool  $condition
+     * @param bool $condition
      * @return $this
      */
     public function condition($condition)
@@ -71,15 +71,15 @@ class HigherOrderWhenProxy
     /**
      * Proxy accessing an attribute onto the target.
      *
-     * @param  string  $key
+     * @param string $key
      * @return mixed
      */
     public function __get($key)
     {
-        if (! $this->hasCondition) {
+        if (!$this->hasCondition) {
             $condition = $this->target->{$key};
 
-            return $this->condition($this->negateConditionOnCapture ? ! $condition : $condition);
+            return $this->condition($this->negateConditionOnCapture ? !$condition : $condition);
         }
 
         return $this->condition
@@ -90,16 +90,16 @@ class HigherOrderWhenProxy
     /**
      * Proxy a method call on the target.
      *
-     * @param  string  $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return mixed
      */
     public function __call($method, $parameters)
     {
-        if (! $this->hasCondition) {
+        if (!$this->hasCondition) {
             $condition = $this->target->{$method}(...$parameters);
 
-            return $this->condition($this->negateConditionOnCapture ? ! $condition : $condition);
+            return $this->condition($this->negateConditionOnCapture ? !$condition : $condition);
         }
 
         return $this->condition

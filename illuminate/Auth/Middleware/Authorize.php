@@ -18,7 +18,7 @@ class Authorize
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
+     * @param \Illuminate\Contracts\Auth\Access\Gate $gate
      * @return void
      */
     public function __construct(Gate $gate)
@@ -29,22 +29,22 @@ class Authorize
     /**
      * Specify the ability and models for the middleware.
      *
-     * @param  string  $ability
-     * @param  string  ...$models
+     * @param string $ability
+     * @param string ...$models
      * @return string
      */
     public static function using($ability, ...$models)
     {
-        return static::class.':'.implode(',', [$ability, ...$models]);
+        return static::class . ':' . implode(',', [$ability, ...$models]);
     }
 
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  $ability
-     * @param  array|null  ...$models
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param string $ability
+     * @param array|null ...$models
      * @return mixed
      *
      * @throws \Illuminate\Auth\AuthenticationException
@@ -60,8 +60,8 @@ class Authorize
     /**
      * Get the arguments parameter for the gate.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array|null  $models
+     * @param \Illuminate\Http\Request $request
+     * @param array|null $models
      * @return \Illuminate\Database\Eloquent\Model|array|string
      */
     protected function getGateArguments($request, $models)
@@ -78,8 +78,8 @@ class Authorize
     /**
      * Get the model to authorize.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $model
+     * @param \Illuminate\Http\Request $request
+     * @param string $model
      * @return \Illuminate\Database\Eloquent\Model|string
      */
     protected function getModel($request, $model)
@@ -95,7 +95,7 @@ class Authorize
     /**
      * Checks if the given string looks like a fully qualified class name.
      *
-     * @param  string  $value
+     * @param string $value
      * @return bool
      */
     protected function isClassName($value)

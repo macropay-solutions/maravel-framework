@@ -97,7 +97,7 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     /**
      * Register the connectors on the queue manager.
      *
-     * @param  \Illuminate\Queue\QueueManager  $manager
+     * @param \Illuminate\Queue\QueueManager $manager
      * @return void
      */
     public function registerConnectors($manager)
@@ -110,33 +110,33 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     /**
      * Register the Null queue connector.
      *
-     * @param  \Illuminate\Queue\QueueManager  $manager
+     * @param \Illuminate\Queue\QueueManager $manager
      * @return void
      */
     protected function registerNullConnector($manager)
     {
         $manager->addConnector('null', function () {
-            return new NullConnector;
+            return new NullConnector();
         });
     }
 
     /**
      * Register the Sync queue connector.
      *
-     * @param  \Illuminate\Queue\QueueManager  $manager
+     * @param \Illuminate\Queue\QueueManager $manager
      * @return void
      */
     protected function registerSyncConnector($manager)
     {
         $manager->addConnector('sync', function () {
-            return new SyncConnector;
+            return new SyncConnector();
         });
     }
 
     /**
      * Register the database queue connector.
      *
-     * @param  \Illuminate\Queue\QueueManager  $manager
+     * @param \Illuminate\Queue\QueueManager $manager
      * @return void
      */
     protected function registerDatabaseConnector($manager)
@@ -149,7 +149,7 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     /**
      * Register the Redis queue connector.
      *
-     * @param  \Illuminate\Queue\QueueManager  $manager
+     * @param \Illuminate\Queue\QueueManager $manager
      * @return void
      */
     protected function registerRedisConnector($manager)
@@ -162,26 +162,26 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     /**
      * Register the Beanstalkd queue connector.
      *
-     * @param  \Illuminate\Queue\QueueManager  $manager
+     * @param \Illuminate\Queue\QueueManager $manager
      * @return void
      */
     protected function registerBeanstalkdConnector($manager)
     {
         $manager->addConnector('beanstalkd', function () {
-            return new BeanstalkdConnector;
+            return new BeanstalkdConnector();
         });
     }
 
     /**
      * Register the Amazon SQS queue connector.
      *
-     * @param  \Illuminate\Queue\QueueManager  $manager
+     * @param \Illuminate\Queue\QueueManager $manager
      * @return void
      */
     protected function registerSqsConnector($manager)
     {
         $manager->addConnector('sqs', function () {
-            return new SqsConnector;
+            return new SqsConnector();
         });
     }
 
@@ -248,16 +248,18 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
         $this->app->singleton('queue.failer', function ($app) {
             $config = $app['config']['queue.failed'];
 
-            if (array_key_exists('driver', $config) &&
-                (is_null($config['driver']) || $config['driver'] === 'null')) {
-                return new NullFailedJobProvider;
+            if (
+                array_key_exists('driver', $config) &&
+                (is_null($config['driver']) || $config['driver'] === 'null')
+            ) {
+                return new NullFailedJobProvider();
             }
 
             if (isset($config['driver']) && $config['driver'] === 'file') {
                 return new FileFailedJobProvider(
                     $config['path'] ?? $this->app->storagePath('framework/cache/failed-jobs.json'),
                     $config['limit'] ?? 100,
-                    fn () => $app['cache']->store('file'),
+                    fn() => $app['cache']->store('file'),
                 );
             } elseif (isset($config['driver']) && $config['driver'] === 'dynamodb') {
                 return $this->dynamoFailedJobProvider($config);
@@ -266,7 +268,7 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
             } elseif (isset($config['table'])) {
                 return $this->databaseFailedJobProvider($config);
             } else {
-                return new NullFailedJobProvider;
+                return new NullFailedJobProvider();
             }
         });
     }
@@ -274,33 +276,37 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
     /**
      * Create a new database failed job provider.
      *
-     * @param  array  $config
+     * @param array $config
      * @return \Illuminate\Queue\Failed\DatabaseFailedJobProvider
      */
     protected function databaseFailedJobProvider($config)
     {
         return new DatabaseFailedJobProvider(
-            $this->app['db'], $config['database'], $config['table']
+            $this->app['db'],
+            $config['database'],
+            $config['table']
         );
     }
 
     /**
      * Create a new database failed job provider that uses UUIDs as IDs.
      *
-     * @param  array  $config
+     * @param array $config
      * @return \Illuminate\Queue\Failed\DatabaseUuidFailedJobProvider
      */
     protected function databaseUuidFailedJobProvider($config)
     {
         return new DatabaseUuidFailedJobProvider(
-            $this->app['db'], $config['database'], $config['table']
+            $this->app['db'],
+            $config['database'],
+            $config['table']
         );
     }
 
     /**
      * Create a new DynamoDb failed job provider.
      *
-     * @param  array  $config
+     * @param array $config
      * @return \Illuminate\Queue\Failed\DynamoDbFailedJobProvider
      */
     protected function dynamoFailedJobProvider($config)
@@ -311,9 +317,10 @@ class QueueServiceProvider extends ServiceProvider implements DeferrableProvider
             'endpoint' => $config['endpoint'] ?? null,
         ];
 
-        if (! empty($config['key']) && ! empty($config['secret'])) {
+        if (!empty($config['key']) && !empty($config['secret'])) {
             $dynamoConfig['credentials'] = Arr::only(
-                $config, ['key', 'secret', 'token']
+                $config,
+                ['key', 'secret', 'token']
             );
         }
 

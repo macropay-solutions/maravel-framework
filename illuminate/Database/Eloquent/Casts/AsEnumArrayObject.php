@@ -14,13 +14,12 @@ class AsEnumArrayObject implements Castable
      *
      * @template TEnum
      *
-     * @param  array{class-string<TEnum>}  $arguments
+     * @param array{class-string<TEnum>} $arguments
      * @return \Illuminate\Contracts\Database\Eloquent\CastsAttributes<\Illuminate\Database\Eloquent\Casts\ArrayObject<array-key, TEnum>, iterable<TEnum>>
      */
     public static function castUsing(array $arguments)
     {
-        return new class($arguments) implements CastsAttributes
-        {
+        return new class ($arguments) implements CastsAttributes {
             protected $arguments;
 
             public function __construct(array $arguments)
@@ -30,24 +29,26 @@ class AsEnumArrayObject implements Castable
 
             public function get($model, $key, $value, $attributes)
             {
-                if (! isset($attributes[$key])) {
+                if (!isset($attributes[$key])) {
                     return;
                 }
 
                 $data = Json::decode($attributes[$key]);
 
-                if (! is_array($data)) {
+                if (!is_array($data)) {
                     return;
                 }
 
                 $enumClass = $this->arguments[0];
 
 //                return new ArrayObject((new Collection($data))->map(function ($value) use ($enumClass) {
-                return new ArrayObject(\app(Collection::class, [$data])->map(function ($value) use ($enumClass) {
-                    return is_subclass_of($enumClass, BackedEnum::class)
-                        ? $enumClass::from($value)
-                        : constant($enumClass.'::'.$value);
-                })->toArray());
+                return new ArrayObject(
+                    \app(Collection::class, [$data])->map(function ($value) use ($enumClass) {
+                        return is_subclass_of($enumClass, BackedEnum::class)
+                            ? $enumClass::from($value)
+                            : constant($enumClass . '::' . $value);
+                    })->toArray()
+                );
             }
 
             public function set($model, $key, $value, $attributes)

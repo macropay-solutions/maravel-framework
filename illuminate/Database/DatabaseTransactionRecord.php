@@ -35,9 +35,9 @@ class DatabaseTransactionRecord
     /**
      * Create a new database transaction record instance.
      *
-     * @param  string  $connection
-     * @param  int  $level
-     * @param  \Illuminate\Database\DatabaseTransactionRecord|null  $parent
+     * @param string $connection
+     * @param int $level
+     * @param \Illuminate\Database\DatabaseTransactionRecord|null $parent
      * @return void
      */
     public function __construct($connection, $level, ?DatabaseTransactionRecord $parent = null)
@@ -50,7 +50,7 @@ class DatabaseTransactionRecord
     /**
      * Register a callback to be executed after committing.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return void
      */
     public function addCallback($callback)

@@ -18,15 +18,20 @@ class EncryptedStore extends Store
     /**
      * Create a new session instance.
      *
-     * @param  string  $name
-     * @param  \SessionHandlerInterface  $handler
-     * @param  \Illuminate\Contracts\Encryption\Encrypter  $encrypter
-     * @param  string|null  $id
-     * @param  string  $serialization
+     * @param string $name
+     * @param \SessionHandlerInterface $handler
+     * @param \Illuminate\Contracts\Encryption\Encrypter $encrypter
+     * @param string|null $id
+     * @param string $serialization
      * @return void
      */
-    public function __construct($name, SessionHandlerInterface $handler, EncrypterContract $encrypter, $id = null, $serialization = 'php')
-    {
+    public function __construct(
+        $name,
+        SessionHandlerInterface $handler,
+        EncrypterContract $encrypter,
+        $id = null,
+        $serialization = 'php'
+    ) {
         $this->encrypter = $encrypter;
 
         parent::__construct($name, $handler, $id, $serialization);
@@ -35,7 +40,7 @@ class EncryptedStore extends Store
     /**
      * Prepare the raw string data from the session for unserialization.
      *
-     * @param  string  $data
+     * @param string $data
      * @return string
      */
     protected function prepareForUnserialize($data)
@@ -50,7 +55,7 @@ class EncryptedStore extends Store
     /**
      * Prepare the serialized session data for storage.
      *
-     * @param  string  $data
+     * @param string $data
      * @return string
      */
     protected function prepareForStorage($data)

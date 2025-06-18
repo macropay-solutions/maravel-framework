@@ -39,6 +39,6 @@ class FailedTableCommand extends MigrationGeneratorCommand
      */
     protected function migrationStubFile()
     {
-        return __DIR__.'/stubs/failed_jobs.stub';
+        return __DIR__ . '/stubs/failed_jobs.stub';
     }
 }

@@ -115,8 +115,8 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Set the view for the mail message.
      *
-     * @param  array|string  $view
-     * @param  array  $data
+     * @param array|string $view
+     * @param array $data
      * @return $this
      */
     public function view($view, array $data = [])
@@ -132,8 +132,8 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Set the plain text view for the mail message.
      *
-     * @param  string  $textView
-     * @param  array  $data
+     * @param string $textView
+     * @param array $data
      * @return $this
      */
     public function text($textView, array $data = [])
@@ -147,8 +147,8 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Set the Markdown template for the notification.
      *
-     * @param  string  $view
-     * @param  array  $data
+     * @param string $view
+     * @param array $data
      * @return $this
      */
     public function markdown($view, array $data = [])
@@ -164,7 +164,7 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Set the default markdown template.
      *
-     * @param  string  $template
+     * @param string $template
      * @return $this
      */
     public function template($template)
@@ -177,7 +177,7 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Set the theme to use with the Markdown template.
      *
-     * @param  string  $theme
+     * @param string $theme
      * @return $this
      */
     public function theme($theme)
@@ -190,8 +190,8 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Set the from address for the mail message.
      *
-     * @param  string  $address
-     * @param  string|null  $name
+     * @param string $address
+     * @param string|null $name
      * @return $this
      */
     public function from($address, $name = null)
@@ -204,8 +204,8 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Set the "reply to" address of the message.
      *
-     * @param  array|string  $address
-     * @param  string|null  $name
+     * @param array|string $address
+     * @param string|null $name
      * @return $this
      */
     public function replyTo($address, $name = null)
@@ -222,8 +222,8 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Set the cc address for the mail message.
      *
-     * @param  array|string  $address
-     * @param  string|null  $name
+     * @param array|string $address
+     * @param string|null $name
      * @return $this
      */
     public function cc($address, $name = null)
@@ -240,8 +240,8 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Set the bcc address for the mail message.
      *
-     * @param  array|string  $address
-     * @param  string|null  $name
+     * @param array|string $address
+     * @param string|null $name
      * @return $this
      */
     public function bcc($address, $name = null)
@@ -258,8 +258,8 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Attach a file to the message.
      *
-     * @param  string|\Illuminate\Contracts\Mail\Attachable|\Illuminate\Mail\Attachment  $file
-     * @param  array  $options
+     * @param string|\Illuminate\Contracts\Mail\Attachable|\Illuminate\Mail\Attachment $file
+     * @param array $options
      * @return $this
      */
     public function attach($file, array $options = [])
@@ -280,7 +280,7 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Attach multiple files to the message.
      *
-     * @param  array<string|\Illuminate\Contracts\Mail\Attachable|\Illuminate\Mail\Attachment|array>  $files
+     * @param array<string|\Illuminate\Contracts\Mail\Attachable|\Illuminate\Mail\Attachment|array> $files
      * @return $this
      */
     public function attachMany($files)
@@ -299,9 +299,9 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Attach in-memory data as an attachment.
      *
-     * @param  string  $data
-     * @param  string  $name
-     * @param  array  $options
+     * @param string $data
+     * @param string $name
+     * @param array $options
      * @return $this
      */
     public function attachData($data, $name, array $options = [])
@@ -314,7 +314,7 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Add a tag header to the message when supported by the underlying transport.
      *
-     * @param  string  $value
+     * @param string $value
      * @return $this
      */
     public function tag($value)
@@ -327,8 +327,8 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Add a metadata header to the message when supported by the underlying transport.
      *
-     * @param  string  $key
-     * @param  string  $value
+     * @param string $key
+     * @param string $value
      * @return $this
      */
     public function metadata($key, $value)
@@ -343,7 +343,7 @@ class MailMessage extends SimpleMessage implements Renderable
      *
      * The value is an integer where 1 is the highest priority and 5 is the lowest.
      *
-     * @param  int  $level
+     * @param int $level
      * @return $this
      */
     public function priority($level)
@@ -366,7 +366,7 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Parse the multi-address array into the necessary format.
      *
-     * @param  array  $value
+     * @param array $value
      * @return array
      */
     protected function parseAddresses($value)
@@ -379,7 +379,7 @@ class MailMessage extends SimpleMessage implements Renderable
     /**
      * Determine if the given "address" is actually an array of addresses.
      *
-     * @param  mixed  $address
+     * @param mixed $address
      * @return bool
      */
     protected function arrayOfAddresses($address)
@@ -396,20 +396,21 @@ class MailMessage extends SimpleMessage implements Renderable
     {
         if (isset($this->view)) {
             return Container::getInstance()->make('mailer')->render(
-                $this->view, $this->data()
+                $this->view,
+                $this->data()
             );
         }
 
         $markdown = Container::getInstance()->make(Markdown::class);
 
         return $markdown->theme($this->theme ?: $markdown->getTheme())
-                ->render($this->markdown, $this->data());
+            ->render($this->markdown, $this->data());
     }
 
     /**
      * Register a callback to be called with the Symfony message instance.
      *
-     * @param  callable  $callback
+     * @param callable $callback
      * @return $this
      */
     public function withSymfonyMessage($callback)

@@ -11,7 +11,7 @@ trait InteractsWithDictionary
     /**
      * Get a dictionary key attribute - casting it to a string if necessary.
      *
-     * @param  mixed  $attribute
+     * @param mixed $attribute
      * @return mixed
      *
      * @throws \InvalidArgumentException
@@ -27,7 +27,9 @@ trait InteractsWithDictionary
                 return $attribute instanceof BackedEnum ? $attribute->value : $attribute->name;
             }
 
-            throw new InvalidArgumentException('Model attribute value is an object but does not have a __toString method.');
+            throw new InvalidArgumentException(
+                'Model attribute value is an object but does not have a __toString method.'
+            );
         }
 
         return $attribute;

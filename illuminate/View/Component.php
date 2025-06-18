@@ -85,7 +85,7 @@ abstract class Component
     /**
      * Resolve the component instance with the given data.
      *
-     * @param  array  $data
+     * @param array $data
      * @return static
      */
     public static function resolve($data)
@@ -112,7 +112,7 @@ abstract class Component
      */
     protected static function extractConstructorParameters()
     {
-        if (! isset(static::$constructorParametersCache[static::class])) {
+        if (!isset(static::$constructorParametersCache[static::class])) {
             $class = new ReflectionClass(static::class);
 
             $constructor = $class->getConstructor();
@@ -153,13 +153,13 @@ abstract class Component
         return $view instanceof Closure ? function (array $data = []) use ($view, $resolver) {
             return $resolver($view($data));
         }
-        : $resolver($view);
+            : $resolver($view);
     }
 
     /**
      * Create a Blade view with the raw component string content.
      *
-     * @param  string  $contents
+     * @param string $contents
      * @return string
      */
     protected function extractBladeViewFromString($contents)
@@ -180,8 +180,8 @@ abstract class Component
     /**
      * Create a Blade view with the raw component string content.
      *
-     * @param  \Illuminate\Contracts\View\Factory  $factory
-     * @param  string  $contents
+     * @param \Illuminate\Contracts\View\Factory $factory
+     * @param string $contents
      * @return string
      */
     protected function createBladeViewFromString($factory, $contents)
@@ -191,24 +191,24 @@ abstract class Component
             $directory = Container::getInstance()['config']->get('view.compiled')
         );
 
-        if (! is_file($viewFile = $directory.'/'.hash('xxh128', $contents).'.blade.php')) {
-            if (! is_dir($directory)) {
+        if (!is_file($viewFile = $directory . '/' . hash('xxh128', $contents) . '.blade.php')) {
+            if (!is_dir($directory)) {
                 mkdir($directory, 0755, true);
             }
 
             file_put_contents($viewFile, $contents);
         }
 
-        return '__components::'.basename($viewFile, '.blade.php');
+        return '__components::' . basename($viewFile, '.blade.php');
     }
 
     /**
      * Get the data that should be supplied to the view.
      *
-     * @author Freek Van der Herten
+     * @return array
      * @author Brent Roose
      *
-     * @return array
+     * @author Freek Van der Herten
      */
     public function data()
     {
@@ -226,7 +226,7 @@ abstract class Component
     {
         $class = get_class($this);
 
-        if (! isset(static::$propertyCache[$class])) {
+        if (!isset(static::$propertyCache[$class])) {
             $reflection = new ReflectionClass($this);
 
             static::$propertyCache[$class] = collect($reflection->getProperties(ReflectionProperty::IS_PUBLIC))
@@ -259,7 +259,7 @@ abstract class Component
     {
         $class = get_class($this);
 
-        if (! isset(static::$methodCache[$class])) {
+        if (!isset(static::$methodCache[$class])) {
             $reflection = new ReflectionClass($this);
 
             static::$methodCache[$class] = collect($reflection->getMethods(ReflectionMethod::IS_PUBLIC))
@@ -283,20 +283,20 @@ abstract class Component
     /**
      * Create a callable variable from the given method.
      *
-     * @param  \ReflectionMethod  $method
+     * @param \ReflectionMethod $method
      * @return mixed
      */
     protected function createVariableFromMethod(ReflectionMethod $method)
     {
         return $method->getNumberOfParameters() === 0
-                        ? $this->createInvokableVariable($method->getName())
-                        : Closure::fromCallable([$this, $method->getName()]);
+            ? $this->createInvokableVariable($method->getName())
+            : Closure::fromCallable([$this, $method->getName()]);
     }
 
     /**
      * Create an invokable, toStringable variable for the given component method.
      *
-     * @param  string  $method
+     * @param string $method
      * @return \Illuminate\View\InvokableComponentVariable
      */
     protected function createInvokableVariable(string $method)
@@ -309,13 +309,13 @@ abstract class Component
     /**
      * Determine if the given property / method should be ignored.
      *
-     * @param  string  $name
+     * @param string $name
      * @return bool
      */
     protected function shouldIgnore($name)
     {
         return str_starts_with($name, '__') ||
-               in_array($name, $this->ignoredMethods());
+            in_array($name, $this->ignoredMethods());
     }
 
     /**
@@ -344,7 +344,7 @@ abstract class Component
     /**
      * Set the component alias name.
      *
-     * @param  string  $name
+     * @param string $name
      * @return $this
      */
     public function withName($name)
@@ -357,7 +357,7 @@ abstract class Component
     /**
      * Set the extra attributes that the component should make available.
      *
-     * @param  array  $attributes
+     * @param array $attributes
      * @return $this
      */
     public function withAttributes(array $attributes)
@@ -372,7 +372,7 @@ abstract class Component
     /**
      * Get a new attribute bag instance.
      *
-     * @param  array  $attributes
+     * @param array $attributes
      * @return \Illuminate\View\ComponentAttributeBag
      */
     protected function newAttributeBag(array $attributes = [])
@@ -394,9 +394,9 @@ abstract class Component
     /**
      * Get the evaluated view contents for the given view.
      *
-     * @param  string|null  $view
-     * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
-     * @param  array  $mergeData
+     * @param string|null $view
+     * @param \Illuminate\Contracts\Support\Arrayable|array $data
+     * @param array $mergeData
      * @return \Illuminate\Contracts\View\View
      */
     public function view($view, $data = [], $mergeData = [])
@@ -456,7 +456,7 @@ abstract class Component
     /**
      * Set the callback that should be used to resolve components within views.
      *
-     * @param  \Closure(string $component, array $data): Component  $resolver
+     * @param \Closure(string $component, array $data): Component $resolver
      * @return void
      *
      * @internal

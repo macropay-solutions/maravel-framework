@@ -21,7 +21,7 @@ class SqlServerConnection implements ServerInfoAwareConnection
     /**
      * Create a new SQL Server connection instance.
      *
-     * @param  \Illuminate\Database\PDO\Connection  $connection
+     * @param \Illuminate\Database\PDO\Connection $connection
      * @return void
      */
     public function __construct(Connection $connection)
@@ -32,7 +32,7 @@ class SqlServerConnection implements ServerInfoAwareConnection
     /**
      * Prepare a new SQL statement.
      *
-     * @param  string  $sql
+     * @param string $sql
      * @return \Doctrine\DBAL\Driver\Statement
      */
     public function prepare(string $sql): StatementInterface
@@ -45,7 +45,7 @@ class SqlServerConnection implements ServerInfoAwareConnection
     /**
      * Execute a new query against the connection.
      *
-     * @param  string  $sql
+     * @param string $sql
      * @return \Doctrine\DBAL\Driver\Result
      */
     public function query(string $sql): Result
@@ -56,7 +56,7 @@ class SqlServerConnection implements ServerInfoAwareConnection
     /**
      * Execute an SQL statement.
      *
-     * @param  string  $statement
+     * @param string $statement
      * @return int
      */
     public function exec(string $statement): int
@@ -67,7 +67,7 @@ class SqlServerConnection implements ServerInfoAwareConnection
     /**
      * Get the last insert ID.
      *
-     * @param  string|null  $name
+     * @param string|null $name
      * @return mixed
      */
     public function lastInsertId($name = null)
@@ -114,8 +114,8 @@ class SqlServerConnection implements ServerInfoAwareConnection
     /**
      * Wrap quotes around the given input.
      *
-     * @param  string  $value
-     * @param  int  $type
+     * @param string $value
+     * @param int $type
      * @return string
      */
     public function quote($value, $type = ParameterType::STRING)

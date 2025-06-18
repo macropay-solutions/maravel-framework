@@ -24,7 +24,7 @@ trait SerializesModels
         [$class, $properties, $classLevelWithoutRelations] = [
             get_class($this),
             $reflectionClass->getProperties(),
-            ! empty($reflectionClass->getAttributes(WithoutRelations::class)),
+            !empty($reflectionClass->getAttributes(WithoutRelations::class)),
         ];
 
         foreach ($properties as $property) {
@@ -32,7 +32,7 @@ trait SerializesModels
                 continue;
             }
 
-            if (! $property->isInitialized($this)) {
+            if (!$property->isInitialized($this)) {
                 continue;
             }
 
@@ -52,8 +52,8 @@ trait SerializesModels
 
             $values[$name] = $this->getSerializedPropertyValue(
                 $value,
-                ! $classLevelWithoutRelations &&
-                    empty($property->getAttributes(WithoutRelations::class))
+                !$classLevelWithoutRelations &&
+                empty($property->getAttributes(WithoutRelations::class))
             );
         }
 
@@ -63,7 +63,7 @@ trait SerializesModels
     /**
      * Restore the model after serialization.
      *
-     * @param  array  $values
+     * @param array $values
      * @return void
      */
     public function __unserialize(array $values)
@@ -85,12 +85,13 @@ trait SerializesModels
                 $name = "\0*\0{$name}";
             }
 
-            if (! array_key_exists($name, $values)) {
+            if (!array_key_exists($name, $values)) {
                 continue;
             }
 
             $property->setValue(
-                $this, $this->getRestoredPropertyValue($values[$name])
+                $this,
+                $this->getRestoredPropertyValue($values[$name])
             );
         }
     }
@@ -98,7 +99,7 @@ trait SerializesModels
     /**
      * Get the property value for the given property.
      *
-     * @param  \ReflectionProperty  $property
+     * @param \ReflectionProperty $property
      * @return mixed
      */
     protected function getPropertyValue(ReflectionProperty $property)

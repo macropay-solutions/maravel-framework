@@ -32,9 +32,9 @@ class OptimizeCommand extends Command
         $this->components->info('Caching the framework bootstrap files');
 
         collect([
-            'config' => fn () => $this->callSilent('config:cache') == 0,
-            'routes' => fn () => $this->callSilent('route:cache') == 0,
-        ])->each(fn ($task, $description) => $this->components->task($description, $task));
+            'config' => fn() => $this->callSilent('config:cache') == 0,
+            'routes' => fn() => $this->callSilent('route:cache') == 0,
+        ])->each(fn($task, $description) => $this->components->task($description, $task));
 
         $this->newLine();
     }

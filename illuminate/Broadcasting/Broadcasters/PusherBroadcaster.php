@@ -23,7 +23,7 @@ class PusherBroadcaster extends Broadcaster
     /**
      * Create a new broadcaster instance.
      *
-     * @param  \Pusher\Pusher  $pusher
+     * @param \Pusher\Pusher $pusher
      * @return void
      */
     public function __construct(Pusher $pusher)
@@ -37,12 +37,12 @@ class PusherBroadcaster extends Broadcaster
      * See: https://pusher.com/docs/channels/library_auth_reference/auth-signatures/#user-authentication
      * See: https://pusher.com/docs/channels/server_api/authenticating-users/#response
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|null
      */
     public function resolveAuthenticatedUser($request)
     {
-        if (! $user = parent::resolveAuthenticatedUser($request)) {
+        if (!$user = parent::resolveAuthenticatedUser($request)) {
             return;
         }
 
@@ -54,8 +54,10 @@ class PusherBroadcaster extends Broadcaster
         $encodedUser = json_encode($user);
         $decodedString = "{$request->socket_id}::user::{$encodedUser}";
 
-        $auth = $settings['auth_key'].':'.hash_hmac(
-            'sha256', $decodedString, $settings['secret']
+        $auth = $settings['auth_key'] . ':' . hash_hmac(
+            'sha256',
+            $decodedString,
+            $settings['secret']
         );
 
         return [
@@ -67,7 +69,7 @@ class PusherBroadcaster extends Broadcaster
     /**
      * Authenticate the incoming request for a given channel.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return mixed
      *
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
@@ -76,22 +78,25 @@ class PusherBroadcaster extends Broadcaster
     {
         $channelName = $this->normalizeChannelName($request->channel_name);
 
-        if (empty($request->channel_name) ||
+        if (
+            empty($request->channel_name) ||
             ($this->isGuardedChannel($request->channel_name) &&
-            ! $this->retrieveUser($request, $channelName))) {
-            throw new AccessDeniedHttpException;
+                !$this->retrieveUser($request, $channelName))
+        ) {
+            throw new AccessDeniedHttpException();
         }
 
         return parent::verifyUserCanAccessChannel(
-            $request, $channelName
+            $request,
+            $channelName
         );
     }
 
     /**
      * Return the valid authentication response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $result
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $result
      * @return mixed
      */
     public function validAuthenticationResponse($request, $result)
@@ -110,40 +115,50 @@ class PusherBroadcaster extends Broadcaster
         $user = $this->retrieveUser($request, $channelName);
 
         $broadcastIdentifier = method_exists($user, 'getAuthIdentifierForBroadcasting')
-                        ? $user->getAuthIdentifierForBroadcasting()
-                        : $user->getAuthIdentifier();
+            ? $user->getAuthIdentifierForBroadcasting()
+            : $user->getAuthIdentifier();
 
         return $this->decodePusherResponse(
             $request,
             method_exists($this->pusher, 'authorizePresenceChannel')
-                ? $this->pusher->authorizePresenceChannel($request->channel_name, $request->socket_id, $broadcastIdentifier, $result)
-                : $this->pusher->presence_auth($request->channel_name, $request->socket_id, $broadcastIdentifier, $result)
+                ? $this->pusher->authorizePresenceChannel(
+                    $request->channel_name,
+                    $request->socket_id,
+                    $broadcastIdentifier,
+                    $result
+                )
+                : $this->pusher->presence_auth(
+                    $request->channel_name,
+                    $request->socket_id,
+                    $broadcastIdentifier,
+                    $result
+                )
         );
     }
 
     /**
      * Decode the given Pusher response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $response
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $response
      * @return array
      */
     protected function decodePusherResponse($request, $response)
     {
-        if (! $request->input('callback', false)) {
+        if (!$request->input('callback', false)) {
             return json_decode($response, true);
         }
 
         return response()->json(json_decode($response, true))
-                    ->withCallback($request->callback);
+            ->withCallback($request->callback);
     }
 
     /**
      * Broadcast the given event.
      *
-     * @param  array  $channels
-     * @param  string  $event
-     * @param  array  $payload
+     * @param array $channels
+     * @param string $event
+     * @param array $payload
      * @return void
      *
      * @throws \Illuminate\Broadcasting\BroadcastException
@@ -180,7 +195,7 @@ class PusherBroadcaster extends Broadcaster
     /**
      * Set the Pusher SDK instance.
      *
-     * @param  \Pusher\Pusher  $pusher
+     * @param \Pusher\Pusher $pusher
      * @return void
      */
     public function setPusher($pusher)

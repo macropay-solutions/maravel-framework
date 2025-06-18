@@ -20,7 +20,7 @@ class HandlePrecognitiveRequests
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Container\Container  $container
+     * @param \Illuminate\Container\Container $container
      * @return void
      */
     public function __construct(Container $container)
@@ -31,13 +31,13 @@ class HandlePrecognitiveRequests
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      * @return \Illuminate\Http\Response
      */
     public function handle($request, $next)
     {
-        if (! $request->isAttemptingPrecognition()) {
+        if (!$request->isAttemptingPrecognition()) {
             return $this->appendVaryHeader($request, $next($request));
         }
 
@@ -53,27 +53,30 @@ class HandlePrecognitiveRequests
     /**
      * Prepare to handle a precognitive request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return void
      */
     protected function prepareForPrecognition($request)
     {
         $request->attributes->set('precognitive', true);
 
-        $this->container->bind(CallableDispatcherContract::class, fn ($app) => new PrecognitionCallableDispatcher($app));
-        $this->container->bind(ControllerDispatcherContract::class, fn ($app) => new PrecognitionControllerDispatcher($app));
+        $this->container->bind(CallableDispatcherContract::class, fn($app) => new PrecognitionCallableDispatcher($app));
+        $this->container->bind(
+            ControllerDispatcherContract::class,
+            fn($app) => new PrecognitionControllerDispatcher($app)
+        );
     }
 
     /**
      * Append the appropriate "Vary" header to the given response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Http\Response  $response
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Response $response
      * @return \Illuminate\Http\Response
      */
     protected function appendVaryHeader($request, $response)
     {
-        return tap($response, fn () => $response->headers->set('Vary', implode(', ', array_filter([
+        return tap($response, fn() => $response->headers->set('Vary', implode(', ', array_filter([
             $response->headers->get('Vary'),
             'Precognition',
         ]))));

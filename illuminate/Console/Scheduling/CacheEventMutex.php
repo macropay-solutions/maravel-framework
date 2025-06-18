@@ -25,7 +25,7 @@ class CacheEventMutex implements EventMutex, CacheAware
     /**
      * Create a new overlapping strategy.
      *
-     * @param  \Illuminate\Contracts\Cache\Factory  $cache
+     * @param \Illuminate\Contracts\Cache\Factory $cache
      * @return void
      */
     public function __construct(Cache $cache)
@@ -36,7 +36,7 @@ class CacheEventMutex implements EventMutex, CacheAware
     /**
      * Attempt to obtain an event mutex for the given event.
      *
-     * @param  \Illuminate\Console\Scheduling\Event  $event
+     * @param \Illuminate\Console\Scheduling\Event $event
      * @return bool
      */
     public function create(Event $event)
@@ -48,22 +48,24 @@ class CacheEventMutex implements EventMutex, CacheAware
         }
 
         return $this->cache->store($this->store)->add(
-            $event->mutexName(), true, $event->expiresAt * 60
+            $event->mutexName(),
+            true,
+            $event->expiresAt * 60
         );
     }
 
     /**
      * Determine if an event mutex exists for the given event.
      *
-     * @param  \Illuminate\Console\Scheduling\Event  $event
+     * @param \Illuminate\Console\Scheduling\Event $event
      * @return bool
      */
     public function exists(Event $event)
     {
         if ($this->shouldUseLocks($this->cache->store($this->store)->getStore())) {
-            return ! $this->cache->store($this->store)->getStore()
+            return !$this->cache->store($this->store)->getStore()
                 ->lock($event->mutexName(), $event->expiresAt * 60)
-                ->get(fn () => true);
+                ->get(fn() => true);
         }
 
         return $this->cache->store($this->store)->has($event->mutexName());
@@ -72,7 +74,7 @@ class CacheEventMutex implements EventMutex, CacheAware
     /**
      * Clear the event mutex for the given event.
      *
-     * @param  \Illuminate\Console\Scheduling\Event  $event
+     * @param \Illuminate\Console\Scheduling\Event $event
      * @return void
      */
     public function forget(Event $event)
@@ -91,18 +93,18 @@ class CacheEventMutex implements EventMutex, CacheAware
     /**
      * Determine if the given store should use locks for cache event mutexes.
      *
-     * @param  \Illuminate\Contracts\Cache\Store  $store
+     * @param \Illuminate\Contracts\Cache\Store $store
      * @return bool
      */
     protected function shouldUseLocks($store)
     {
-        return $store instanceof LockProvider && ! $store instanceof DynamoDbStore;
+        return $store instanceof LockProvider && !$store instanceof DynamoDbStore;
     }
 
     /**
      * Specify the cache store that should be used.
      *
-     * @param  string  $store
+     * @param string $store
      * @return $this
      */
     public function useStore($store)

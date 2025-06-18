@@ -25,8 +25,8 @@ final class ArraySubset extends Constraint
     /**
      * Create a new array subset constraint instance.
      *
-     * @param  iterable  $subset
-     * @param  bool  $strict
+     * @param iterable $subset
+     * @param bool $strict
      * @return void
      */
     public function __construct(iterable $subset, bool $strict = false)
@@ -45,9 +45,9 @@ final class ArraySubset extends Constraint
      * a boolean value instead: true in case of success, false in case of a
      * failure.
      *
-     * @param  mixed  $other
-     * @param  string  $description
-     * @param  bool  $returnResult
+     * @param mixed $other
+     * @param string $description
+     * @param bool $returnResult
      * @return bool|null
      *
      * @throws \PHPUnit\Framework\ExpectationFailedException
@@ -72,7 +72,7 @@ final class ArraySubset extends Constraint
             return $result;
         }
 
-        if (! $result) {
+        if (!$result) {
             $f = new ComparisonFailure(
                 $patched,
                 $other,
@@ -95,7 +95,7 @@ final class ArraySubset extends Constraint
      */
     public function toString(): string
     {
-        return 'has the subset '.$this->exporter()->export($this->subset);
+        return 'has the subset ' . $this->exporter()->export($this->subset);
     }
 
     /**
@@ -104,14 +104,14 @@ final class ArraySubset extends Constraint
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
      *
-     * @param  mixed  $other
+     * @param mixed $other
      * @return string
      *
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     protected function failureDescription($other): string
     {
-        return 'an array '.$this->toString();
+        return 'an array ' . $this->toString();
     }
 
     /**
@@ -120,7 +120,7 @@ final class ArraySubset extends Constraint
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
      *
-     * @param  iterable  $other
+     * @param iterable $other
      * @return array
      */
     private function toArray(iterable $other): array
@@ -138,6 +138,6 @@ final class ArraySubset extends Constraint
         }
 
         // Keep BC even if we know that array would not be the expected one
-        return (array) $other;
+        return (array)$other;
     }
 }

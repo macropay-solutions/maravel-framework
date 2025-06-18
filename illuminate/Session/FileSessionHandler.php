@@ -33,9 +33,9 @@ class FileSessionHandler implements SessionHandlerInterface
     /**
      * Create a new file driven handler instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @param  string  $path
-     * @param  int  $minutes
+     * @param \Illuminate\Filesystem\Filesystem $files
+     * @param string $path
+     * @param int $minutes
      * @return void
      */
     public function __construct(Filesystem $files, $path, $minutes)
@@ -72,8 +72,10 @@ class FileSessionHandler implements SessionHandlerInterface
      */
     public function read($id): string|false
     {
-        if ($this->files->isFile($path = $this->path.'/'.$id) &&
-            $this->files->lastModified($path) >= Carbon::now()->subMinutes($this->minutes)->getTimestamp()) {
+        if (
+            $this->files->isFile($path = $this->path . '/' . $id) &&
+            $this->files->lastModified($path) >= Carbon::now()->subMinutes($this->minutes)->getTimestamp()
+        ) {
             return $this->files->sharedGet($path);
         }
 
@@ -87,7 +89,7 @@ class FileSessionHandler implements SessionHandlerInterface
      */
     public function write($id, $data): bool
     {
-        $this->files->put($this->path.'/'.$id, $data, true);
+        $this->files->put($this->path . '/' . $id, $data, true);
 
         return true;
     }
@@ -99,7 +101,7 @@ class FileSessionHandler implements SessionHandlerInterface
      */
     public function destroy($id): bool
     {
-        $this->files->delete($this->path.'/'.$id);
+        $this->files->delete($this->path . '/' . $id);
 
         return true;
     }
@@ -112,10 +114,10 @@ class FileSessionHandler implements SessionHandlerInterface
     public function gc($max_lifetime): int
     {
         $files = Finder::create()
-                    ->in($this->path)
-                    ->files()
-                    ->ignoreDotFiles(true)
-                    ->date('<= now - '.$max_lifetime.' seconds');
+            ->in($this->path)
+            ->files()
+            ->ignoreDotFiles(true)
+            ->date('<= now - ' . $max_lifetime . ' seconds');
 
         $deletedSessions = 0;
 

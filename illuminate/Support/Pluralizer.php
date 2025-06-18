@@ -35,8 +35,8 @@ class Pluralizer
     /**
      * Get the plural form of an English word.
      *
-     * @param  string  $value
-     * @param  int|array|\Countable  $count
+     * @param string $value
+     * @param int|array|\Countable $count
      * @return string
      */
     public static function plural($value, $count = 2)
@@ -45,7 +45,12 @@ class Pluralizer
             $count = count($count);
         }
 
-        if ((int) abs($count) === 1 || static::uncountable($value) || preg_match('/^(.*)[A-Za-z0-9\x{0080}-\x{FFFF}]$/u', $value) == 0) {
+        if (
+            (int)abs($count) === 1 || static::uncountable($value) || preg_match(
+                '/^(.*)[A-Za-z0-9\x{0080}-\x{FFFF}]$/u',
+                $value
+            ) == 0
+        ) {
             return $value;
         }
 
@@ -57,7 +62,7 @@ class Pluralizer
     /**
      * Get the singular form of an English word.
      *
-     * @param  string  $value
+     * @param string $value
      * @return string
      */
     public static function singular($value)
@@ -70,7 +75,7 @@ class Pluralizer
     /**
      * Determine if the given value is uncountable.
      *
-     * @param  string  $value
+     * @param string $value
      * @return bool
      */
     protected static function uncountable($value)
@@ -81,8 +86,8 @@ class Pluralizer
     /**
      * Attempt to match the case on two strings.
      *
-     * @param  string  $value
-     * @param  string  $comparison
+     * @param string $value
+     * @param string $comparison
      * @return string
      */
     protected static function matchCase($value, $comparison)
@@ -115,7 +120,7 @@ class Pluralizer
     /**
      * Specify the language that should be used by the inflector.
      *
-     * @param  string  $language
+     * @param string $language
      * @return void
      */
     public static function useLanguage(string $language)

@@ -9,7 +9,7 @@ class FileBasedMaintenanceMode implements MaintenanceModeContract
     /**
      * Take the application down for maintenance.
      *
-     * @param  array  $payload
+     * @param array $payload
      * @return void
      */
     public function activate(array $payload): void

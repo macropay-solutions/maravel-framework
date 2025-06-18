@@ -51,9 +51,9 @@ class JoinClause extends Builder
     /**
      * Create a new join clause instance.
      *
-     * @param  \Illuminate\Database\Query\Builder  $parentQuery
-     * @param  string  $type
-     * @param  string  $table
+     * @param \Illuminate\Database\Query\Builder $parentQuery
+     * @param string $type
+     * @param string $table
      * @return void
      */
     public function __construct(Builder $parentQuery, $type, $table)
@@ -66,7 +66,9 @@ class JoinClause extends Builder
         $this->parentConnection = $parentQuery->getConnection();
 
         parent::__construct(
-            $this->parentConnection, $this->parentGrammar, $this->parentProcessor
+            $this->parentConnection,
+            $this->parentGrammar,
+            $this->parentProcessor
         );
     }
 
@@ -82,10 +84,10 @@ class JoinClause extends Builder
      *
      * on `contacts`.`user_id` = `users`.`id` and `contacts`.`info_id` = `info`.`id`
      *
-     * @param  \Closure|\Illuminate\Contracts\Database\Query\Expression|string  $first
-     * @param  string|null  $operator
-     * @param  \Illuminate\Contracts\Database\Query\Expression|string|null  $second
-     * @param  string  $boolean
+     * @param \Closure|\Illuminate\Contracts\Database\Query\Expression|string $first
+     * @param string|null $operator
+     * @param \Illuminate\Contracts\Database\Query\Expression|string|null $second
+     * @param string $boolean
      * @return $this
      *
      * @throws \InvalidArgumentException
@@ -102,9 +104,9 @@ class JoinClause extends Builder
     /**
      * Add an "or on" clause to the join.
      *
-     * @param  \Closure|\Illuminate\Contracts\Database\Query\Expression|string  $first
-     * @param  string|null  $operator
-     * @param  \Illuminate\Contracts\Database\Query\Expression|string|null  $second
+     * @param \Closure|\Illuminate\Contracts\Database\Query\Expression|string $first
+     * @param string|null $operator
+     * @param \Illuminate\Contracts\Database\Query\Expression|string|null $second
      * @return \Illuminate\Database\Query\JoinClause
      */
     public function orOn($first, $operator = null, $second = null)

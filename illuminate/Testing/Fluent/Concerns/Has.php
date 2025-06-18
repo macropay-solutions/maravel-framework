@@ -11,8 +11,8 @@ trait Has
     /**
      * Assert that the prop is of the expected size.
      *
-     * @param  string|int  $key
-     * @param  int|null  $length
+     * @param string|int $key
+     * @param int|null $length
      * @return $this
      */
     public function count($key, ?int $length = null): self
@@ -43,9 +43,9 @@ trait Has
     /**
      * Ensure that the given prop exists.
      *
-     * @param  string|int  $key
-     * @param  int|\Closure|null  $length
-     * @param  \Closure|null  $callback
+     * @param string|int $key
+     * @param int|\Closure|null $length
+     * @param \Closure|null $callback
      * @return $this
      */
     public function has($key, $length = null, ?Closure $callback = null): self
@@ -63,11 +63,11 @@ trait Has
 
         $this->interactsWith($key);
 
-        if (! is_null($callback)) {
+        if (!is_null($callback)) {
             return $this->has($key, function (self $scope) use ($length, $callback) {
                 return $scope
                     ->tap(function (self $scope) use ($length) {
-                        if (! is_null($length)) {
+                        if (!is_null($length)) {
                             $scope->count($length);
                         }
                     })
@@ -80,7 +80,7 @@ trait Has
             return $this->scope($key, $length);
         }
 
-        if (! is_null($length)) {
+        if (!is_null($length)) {
             return $this->count($key, $length);
         }
 
@@ -90,7 +90,7 @@ trait Has
     /**
      * Assert that all of the given props exist.
      *
-     * @param  array|string  $key
+     * @param array|string $key
      * @return $this
      */
     public function hasAll($key): self
@@ -111,7 +111,7 @@ trait Has
     /**
      * Assert that at least one of the given props exists.
      *
-     * @param  array|string  $key
+     * @param array|string $key
      * @return $this
      */
     public function hasAny($key): self
@@ -133,7 +133,7 @@ trait Has
     /**
      * Assert that none of the given props exist.
      *
-     * @param  array|string  $key
+     * @param array|string $key
      * @return $this
      */
     public function missingAll($key): self
@@ -150,7 +150,7 @@ trait Has
     /**
      * Assert that the given prop does not exist.
      *
-     * @param  string  $key
+     * @param string $key
      * @return $this
      */
     public function missing(string $key): self
@@ -166,7 +166,7 @@ trait Has
     /**
      * Compose the absolute "dot" path to the given key.
      *
-     * @param  string  $key
+     * @param string $key
      * @return string
      */
     abstract protected function dotPath(string $key = ''): string;
@@ -174,7 +174,7 @@ trait Has
     /**
      * Marks the property as interacted.
      *
-     * @param  string  $key
+     * @param string $key
      * @return void
      */
     abstract protected function interactsWith(string $key): void;
@@ -182,7 +182,7 @@ trait Has
     /**
      * Retrieve a prop within the current scope using "dot" notation.
      *
-     * @param  string|null  $key
+     * @param string|null $key
      * @return mixed
      */
     abstract protected function prop(?string $key = null);
@@ -190,8 +190,8 @@ trait Has
     /**
      * Instantiate a new "scope" at the path of the given key.
      *
-     * @param  string  $key
-     * @param  \Closure  $callback
+     * @param string $key
+     * @param \Closure $callback
      * @return $this
      */
     abstract protected function scope(string $key, Closure $callback);
@@ -206,7 +206,7 @@ trait Has
     /**
      * Instantiate a new "scope" on the first element.
      *
-     * @param  \Closure  $callback
+     * @param \Closure $callback
      * @return $this
      */
     abstract public function first(Closure $callback);

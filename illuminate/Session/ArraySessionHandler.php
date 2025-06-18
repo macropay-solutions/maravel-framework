@@ -26,7 +26,7 @@ class ArraySessionHandler implements SessionHandlerInterface
     /**
      * Create a new array driven handler instance.
      *
-     * @param  int  $minutes
+     * @param int $minutes
      * @return void
      */
     public function __construct($minutes)
@@ -61,7 +61,7 @@ class ArraySessionHandler implements SessionHandlerInterface
      */
     public function read($id): string|false
     {
-        if (! isset($this->storage[$id])) {
+        if (!isset($this->storage[$id])) {
             return '';
         }
 
@@ -129,7 +129,7 @@ class ArraySessionHandler implements SessionHandlerInterface
     /**
      * Get the expiration time of the session.
      *
-     * @param  int  $seconds
+     * @param int $seconds
      * @return int
      */
     protected function calculateExpiration($seconds)

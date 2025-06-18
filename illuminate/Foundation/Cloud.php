@@ -33,7 +33,7 @@ class Cloud
             HandleExceptions::class => function () use ($app) {
                 static::configureCloudLogging($app);
             },
-            default => fn () => true,
+            default => fn() => true,
         })();
     }
 
@@ -42,14 +42,14 @@ class Cloud
      */
     public static function configureDisks(Application $app): void
     {
-        if (! isset($_SERVER['LARAVEL_CLOUD_DISK_CONFIG'])) {
+        if (!isset($_SERVER['LARAVEL_CLOUD_DISK_CONFIG'])) {
             return;
         }
 
         $disks = json_decode($_SERVER['LARAVEL_CLOUD_DISK_CONFIG'], true);
 
         foreach ($disks as $disk) {
-            $app['config']->set('filesystems.disks.'.$disk['disk'], [
+            $app['config']->set('filesystems.disks.' . $disk['disk'], [
                 'driver' => 's3',
                 'key' => $disk['access_key_id'],
                 'secret' => $disk['access_key_secret'],
@@ -75,8 +75,10 @@ class Cloud
     {
         $host = $app['config']->get('database.connections.pgsql.host', '');
 
-        if (str_contains($host, 'pg.laravel.cloud') &&
-            str_contains($host, '-pooler')) {
+        if (
+            str_contains($host, 'pg.laravel.cloud') &&
+            str_contains($host, '-pooler')
+        ) {
             $app['config']->set(
                 'database.connections.pgsql-unpooled',
                 array_merge($app['config']->get('database.connections.pgsql'), [
@@ -99,7 +101,7 @@ class Cloud
      */
     public static function ensureMigrationsUseUnpooledConnection(Application $app): void
     {
-        if (! is_array($app['config']->get('database.connections.pgsql-unpooled'))) {
+        if (!is_array($app['config']->get('database.connections.pgsql-unpooled'))) {
             return;
         }
 
@@ -130,8 +132,8 @@ class Cloud
             ],
             'with' => [
                 'connectionString' => $_ENV['LARAVEL_CLOUD_LOG_SOCKET'] ??
-                                      $_SERVER['LARAVEL_CLOUD_LOG_SOCKET'] ??
-                                      'unix:///tmp/cloud-init.sock',
+                        $_SERVER['LARAVEL_CLOUD_LOG_SOCKET'] ??
+                        'unix:///tmp/cloud-init.sock',
                 'persistent' => true,
             ],
         ]);

@@ -28,8 +28,8 @@ abstract class MigrationGeneratorCommand extends Command
     /**
      * Create a new migration generator command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @param  \Illuminate\Support\Composer  $composer
+     * @param \Illuminate\Filesystem\Filesystem $files
+     * @param \Illuminate\Support\Composer $composer
      * @return void
      */
     public function __construct(Filesystem $files, Composer $composer)
@@ -70,7 +70,8 @@ abstract class MigrationGeneratorCommand extends Command
         }
 
         $this->replaceMigrationPlaceholders(
-            $this->createBaseMigration($table), $table
+            $this->createBaseMigration($table),
+            $table
         );
 
         $this->components->info('Migration created successfully.');
@@ -81,27 +82,30 @@ abstract class MigrationGeneratorCommand extends Command
     /**
      * Create a base migration file for the table.
      *
-     * @param  string  $table
+     * @param string $table
      * @return string
      */
     protected function createBaseMigration($table)
     {
         return $this->laravel['migration.creator']->create(
-            'create_'.$table.'_table', $this->laravel->databasePath('/migrations')
+            'create_' . $table . '_table',
+            $this->laravel->databasePath('/migrations')
         );
     }
 
     /**
      * Replace the placeholders in the generated migration file.
      *
-     * @param  string  $path
-     * @param  string  $table
+     * @param string $path
+     * @param string $table
      * @return void
      */
     protected function replaceMigrationPlaceholders($path, $table)
     {
         $stub = str_replace(
-            '{{table}}', $table, $this->files->get($this->migrationStubFile())
+            '{{table}}',
+            $table,
+            $this->files->get($this->migrationStubFile())
         );
 
         $this->files->put($path, $stub);
@@ -110,13 +114,15 @@ abstract class MigrationGeneratorCommand extends Command
     /**
      * Determine whether a migration for the table already exists.
      *
-     * @param  string  $table
+     * @param string $table
      * @return bool
      */
     protected function migrationExists($table)
     {
-        return count($this->files->glob(
-            join_paths($this->laravel->databasePath('migrations'), '*_*_*_*_create_'.$table.'_table.php')
-        )) !== 0;
+        return count(
+            $this->files->glob(
+                join_paths($this->laravel->databasePath('migrations'), '*_*_*_*_create_' . $table . '_table.php')
+            )
+        ) !== 0;
     }
 }

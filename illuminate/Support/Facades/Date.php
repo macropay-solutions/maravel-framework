@@ -8,7 +8,7 @@ use Illuminate\Support\DateFactory;
  * @see https://carbon.nesbot.com/docs/
  * @see https://github.com/briannesbitt/Carbon/blob/master/src/Carbon/Factory.php
  *
- * @method static mixed use(mixed $handler)
+ * @method static mixed use (mixed $handler)
  * @method static void useDefault()
  * @method static void useCallable(callable $callable)
  * @method static void useClass(string $dateClass)
@@ -106,15 +106,15 @@ class Date extends Facade
     /**
      * Resolve the facade root instance from the container.
      *
-     * @param  string  $name
+     * @param string $name
      * @return mixed
      */
     protected static function resolveFacadeInstance($name)
     {
-        if (! isset(static::$resolvedInstance[$name]) && ! isset(static::$app, static::$app[$name])) {
+        if (!isset(static::$resolvedInstance[$name]) && !isset(static::$app, static::$app[$name])) {
             $class = static::DEFAULT_FACADE;
 
-            static::swap(new $class);
+            static::swap(new $class());
         }
 
         return parent::resolveFacadeInstance($name);

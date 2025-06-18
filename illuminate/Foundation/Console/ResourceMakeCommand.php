@@ -52,8 +52,8 @@ class ResourceMakeCommand extends GeneratorCommand
     protected function getStub()
     {
         return $this->collection()
-                    ? $this->resolveStubPath('/stubs/resource-collection.stub')
-                    : $this->resolveStubPath('/stubs/resource.stub');
+            ? $this->resolveStubPath('/stubs/resource-collection.stub')
+            : $this->resolveStubPath('/stubs/resource.stub');
     }
 
     /**
@@ -64,31 +64,31 @@ class ResourceMakeCommand extends GeneratorCommand
     protected function collection()
     {
         return $this->option('collection') ||
-               str_ends_with($this->argument('name'), 'Collection');
+            str_ends_with($this->argument('name'), 'Collection');
     }
 
     /**
      * Resolve the fully-qualified path to the stub.
      *
-     * @param  string  $stub
+     * @param string $stub
      * @return string
      */
     protected function resolveStubPath($stub)
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
-                        ? $customPath
-                        : __DIR__.$stub;
+            ? $customPath
+            : __DIR__ . $stub;
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace.'\Http\Resources';
+        return $rootNamespace . '\Http\Resources';
     }
 
     /**

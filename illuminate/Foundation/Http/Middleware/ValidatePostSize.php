@@ -10,8 +10,8 @@ class ValidatePostSize
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      * @return mixed
      *
      * @throws \Illuminate\Http\Exceptions\PostTooLargeException
@@ -21,7 +21,7 @@ class ValidatePostSize
         $max = $this->getPostMaxSize();
 
         if ($max > 0 && $request->server('CONTENT_LENGTH') > $max) {
-            throw new PostTooLargeException;
+            throw new PostTooLargeException();
         }
 
         return $next($request);
@@ -35,11 +35,11 @@ class ValidatePostSize
     protected function getPostMaxSize()
     {
         if (is_numeric($postMaxSize = ini_get('post_max_size'))) {
-            return (int) $postMaxSize;
+            return (int)$postMaxSize;
         }
 
         $metric = strtoupper(substr($postMaxSize, -1));
-        $postMaxSize = (int) $postMaxSize;
+        $postMaxSize = (int)$postMaxSize;
 
         return match ($metric) {
             'K' => $postMaxSize * 1024,

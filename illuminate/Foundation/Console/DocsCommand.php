@@ -94,8 +94,8 @@ class DocsCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  \Illuminate\Http\Client\Factory  $http
-     * @param  \Illuminate\Contracts\Cache\Repository  $cache
+     * @param \Illuminate\Http\Client\Factory $http
+     * @param \Illuminate\Contracts\Cache\Repository $cache
      * @return int
      */
     public function handle(Http $http, Cache $cache)
@@ -140,9 +140,9 @@ class DocsCommand extends Command
     protected function url()
     {
         if ($this->isSearching()) {
-            return "https://laravel.com/docs/{$this->version()}?".Arr::query([
-                'q' => $this->searchQuery(),
-            ]);
+            return "https://laravel.com/docs/{$this->version()}?" . Arr::query([
+                    'q' => $this->searchQuery(),
+                ]);
         }
 
         return with($this->page(), function ($page) {
@@ -217,7 +217,7 @@ class DocsCommand extends Command
             return null;
         }
 
-        if (! is_callable($strategy)) {
+        if (!is_callable($strategy)) {
             return null;
         }
 
@@ -233,17 +233,17 @@ class DocsCommand extends Command
     {
         $choice = suggest(
             label: 'Which page would you like to open?',
-            options: fn ($value) => $this->pages()
-                ->mapWithKeys(fn ($option) => [
+            options: fn($value) => $this->pages()
+                ->mapWithKeys(fn($option) => [
                     Str::lower($option['title']) => $option['title'],
                 ])
-                ->filter(fn ($title) => str_contains(Str::lower($title), Str::lower($value)))
+                ->filter(fn($title) => str_contains(Str::lower($title), Str::lower($value)))
                 ->all(),
             placeholder: 'E.g. Collections'
         );
 
         return $this->pages()->filter(
-            fn ($page) => $page['title'] === $choice || Str::lower($page['title']) === $choice
+            fn($page) => $page['title'] === $choice || Str::lower($page['title']) === $choice
         )->keys()->first() ?: $this->guessPage($choice);
     }
 
@@ -255,17 +255,17 @@ class DocsCommand extends Command
     protected function guessPage($search)
     {
         return $this->pages()
-            ->filter(fn ($page) => str_starts_with(
+            ->filter(fn($page) => str_starts_with(
                 Str::slug($page['title'], ' '),
                 Str::slug($search, ' ')
-            ))->keys()->first() ?? $this->pages()->map(fn ($page) => similar_text(
+            ))->keys()->first() ?? $this->pages()->map(fn($page) => similar_text(
                 Str::slug($page['title'], ' '),
                 Str::slug($search, ' '),
             ))
-            ->filter(fn ($score) => $score >= min(3, Str::length($search)))
+            ->filter(fn($score) => $score >= min(3, Str::length($search)))
             ->sortDesc()
             ->keys()
-            ->sortByDesc(fn ($slug) => Str::contains(
+            ->sortByDesc(fn($slug) => Str::contains(
                 Str::slug($this->pages()[$slug]['title'], ' '),
                 Str::slug($search, ' ')
             ) ? 1 : 0)
@@ -275,7 +275,7 @@ class DocsCommand extends Command
     /**
      * The section the user specifically asked to open.
      *
-     * @param  string  $page
+     * @param string $page
      * @return string|null
      */
     protected function section($page)
@@ -298,23 +298,23 @@ class DocsCommand extends Command
     /**
      * Guess the section the user is attempting to open.
      *
-     * @param  string  $page
+     * @param string $page
      * @return string|null
      */
     protected function guessSection($page)
     {
         return $this->sectionsFor($page)
-            ->filter(fn ($section) => str_starts_with(
+            ->filter(fn($section) => str_starts_with(
                 Str::slug($section['title'], ' '),
                 Str::slug($this->argument('section'), ' ')
-            ))->keys()->first() ?? $this->sectionsFor($page)->map(fn ($section) => similar_text(
+            ))->keys()->first() ?? $this->sectionsFor($page)->map(fn($section) => similar_text(
                 Str::slug($section['title'], ' '),
                 Str::slug($this->argument('section'), ' '),
             ))
-            ->filter(fn ($score) => $score >= min(3, Str::length($this->argument('section'))))
+            ->filter(fn($score) => $score >= min(3, Str::length($this->argument('section'))))
             ->sortDesc()
             ->keys()
-            ->sortByDesc(fn ($slug) => Str::contains(
+            ->sortByDesc(fn($slug) => Str::contains(
                 Str::slug($this->sectionsFor($page)[$slug]['title'], ' '),
                 Str::slug($this->argument('section'), ' ')
             ) ? 1 : 0)
@@ -324,7 +324,7 @@ class DocsCommand extends Command
     /**
      * Open the URL in the user's browser.
      *
-     * @param  string  $url
+     * @param string $url
      * @return void
      */
     protected function open($url)
@@ -335,15 +335,19 @@ class DocsCommand extends Command
             } elseif (in_array($this->systemOsFamily, ['Darwin', 'Windows', 'Linux'])) {
                 $this->openViaBuiltInStrategy($url);
             } else {
-                $this->components->warn('Unable to open the URL on your system. You will need to open it yourself or create a custom opener for your system.');
+                $this->components->warn(
+                    'Unable to open the URL on your system. You will need to open it yourself or create a custom opener for your system.'
+                );
             }
-        })($url);
+        })(
+            $url
+        );
     }
 
     /**
      * Open the URL via a custom strategy.
      *
-     * @param  string  $url
+     * @param string $url
      * @return void
      */
     protected function openViaCustomStrategy($url)
@@ -354,8 +358,10 @@ class DocsCommand extends Command
             $command = null;
         }
 
-        if (! is_callable($command)) {
-            $this->components->warn('Unable to open the URL with your custom strategy. You will need to open it yourself.');
+        if (!is_callable($command)) {
+            $this->components->warn(
+                'Unable to open the URL with your custom strategy. You will need to open it yourself.'
+            );
 
             return;
         }
@@ -366,7 +372,7 @@ class DocsCommand extends Command
     /**
      * Open the URL via the built in strategy.
      *
-     * @param  string  $url
+     * @param string $url
      * @return void
      */
     protected function openViaBuiltInStrategy($url)
@@ -374,27 +380,31 @@ class DocsCommand extends Command
         if ($this->systemOsFamily === 'Windows') {
             $process = tap(Process::fromShellCommandline(escapeshellcmd("start {$url}")))->run();
 
-            if (! $process->isSuccessful()) {
+            if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
             }
 
             return;
         }
 
-        $binary = Collection::make(match ($this->systemOsFamily) {
-            'Darwin' => ['open'],
-            'Linux' => ['xdg-open', 'wslview'],
-        })->first(fn ($binary) => (new ExecutableFinder)->find($binary) !== null);
+        $binary = Collection::make(
+            match ($this->systemOsFamily) {
+                'Darwin' => ['open'],
+                'Linux' => ['xdg-open', 'wslview'],
+            }
+        )->first(fn($binary) => (new ExecutableFinder())->find($binary) !== null);
 
         if ($binary === null) {
-            $this->components->warn('Unable to open the URL on your system. You will need to open it yourself or create a custom opener for your system.');
+            $this->components->warn(
+                'Unable to open the URL on your system. You will need to open it yourself or create a custom opener for your system.'
+            );
 
             return;
         }
 
         $process = tap(Process::fromShellCommandline(escapeshellcmd("{$binary} {$url}")))->run();
 
-        if (! $process->isSuccessful()) {
+        if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
     }
@@ -402,7 +412,7 @@ class DocsCommand extends Command
     /**
      * The available sections for the page.
      *
-     * @param  string  $page
+     * @param string $page
      * @return \Illuminate\Support\Collection
      */
     public function sectionsFor($page)
@@ -432,7 +442,7 @@ class DocsCommand extends Command
         return $this->cache->remember(
             "artisan.docs.{{$this->version()}}.index",
             CarbonInterval::months(2),
-            fn () => $this->fetchDocs()->throw()->collect()
+            fn() => $this->fetchDocs()->throw()->collect()
         );
     }
 
@@ -445,7 +455,11 @@ class DocsCommand extends Command
     {
         with($this->fetchDocs(), function ($response) {
             if ($response->successful()) {
-                $this->cache->put("artisan.docs.{{$this->version()}}.index", $response->collect(), CarbonInterval::months(2));
+                $this->cache->put(
+                    "artisan.docs.{{$this->version()}}.index",
+                    $response->collect(),
+                    CarbonInterval::months(2)
+                );
             }
         });
     }
@@ -467,7 +481,7 @@ class DocsCommand extends Command
      */
     protected function version()
     {
-        return Str::before($this->version ?? $this->laravel->version(), '.').'.x';
+        return Str::before($this->version ?? $this->laravel->version(), '.') . '.x';
     }
 
     /**
@@ -493,7 +507,7 @@ class DocsCommand extends Command
     /**
      * Set the documentation version.
      *
-     * @param  string  $version
+     * @param string $version
      * @return $this
      */
     public function setVersion($version)
@@ -506,7 +520,7 @@ class DocsCommand extends Command
     /**
      * Set a custom URL opener.
      *
-     * @param  callable|null  $opener
+     * @param callable|null $opener
      * @return $this
      */
     public function setUrlOpener($opener)
@@ -519,7 +533,7 @@ class DocsCommand extends Command
     /**
      * Set the system operating system family.
      *
-     * @param  string  $family
+     * @param string $family
      * @return $this
      */
     public function setSystemOsFamily($family)

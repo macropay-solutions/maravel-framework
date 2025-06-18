@@ -14,7 +14,7 @@ class ModelPruningFinished
     /**
      * Create a new event instance.
      *
-     * @param  array<class-string>  $models
+     * @param array<class-string> $models
      * @return void
      */
     public function __construct($models)

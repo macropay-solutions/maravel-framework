@@ -29,7 +29,7 @@ abstract class Component
     /**
      * Creates a new component instance.
      *
-     * @param  \Illuminate\Console\OutputStyle  $output
+     * @param \Illuminate\Console\OutputStyle $output
      * @return void
      */
     public function __construct($output)
@@ -40,23 +40,23 @@ abstract class Component
     /**
      * Renders the given view.
      *
-     * @param  string  $view
-     * @param  \Illuminate\Contracts\Support\Arrayable|array  $data
-     * @param  int  $verbosity
+     * @param string $view
+     * @param \Illuminate\Contracts\Support\Arrayable|array $data
+     * @param int $verbosity
      * @return void
      */
     protected function renderView($view, $data, $verbosity)
     {
         renderUsing($this->output);
 
-        render((string) $this->compile($view, $data), $verbosity);
+        render((string)$this->compile($view, $data), $verbosity);
     }
 
     /**
      * Compile the given view contents.
      *
-     * @param  string  $view
-     * @param  array  $data
+     * @param string $view
+     * @param array $data
      * @return void
      */
     protected function compile($view, $data)
@@ -65,7 +65,7 @@ abstract class Component
 
         ob_start();
 
-        include __DIR__."/../../resources/views/components/$view.php";
+        include __DIR__ . "/../../resources/views/components/$view.php";
 
         return tap(ob_get_contents(), function () {
             ob_end_clean();
@@ -75,14 +75,14 @@ abstract class Component
     /**
      * Mutates the given data with the given set of mutators.
      *
-     * @param  array<int, string>|string  $data
-     * @param  array<int, callable(string): string>  $mutators
+     * @param array<int, string>|string $data
+     * @param array<int, callable(string): string> $mutators
      * @return array<int, string>|string
      */
     protected function mutate($data, $mutators)
     {
         foreach ($mutators as $mutator) {
-            $mutator = new $mutator;
+            $mutator = new $mutator();
 
             if (is_iterable($data)) {
                 foreach ($data as $key => $value) {
@@ -99,7 +99,7 @@ abstract class Component
     /**
      * Eventually performs a question using the component's question helper.
      *
-     * @param  callable  $callable
+     * @param callable $callable
      * @return mixed
      */
     protected function usingQuestionHelper($callable)
@@ -112,7 +112,7 @@ abstract class Component
             ? $property->getValue($this->output)
             : new SymfonyQuestionHelper();
 
-        $property->setValue($this->output, new QuestionHelper);
+        $property->setValue($this->output, new QuestionHelper());
 
         try {
             return $callable();

@@ -7,7 +7,8 @@ use Illuminate\Routing\Contracts\ControllerDispatcher as ControllerDispatcherCon
 
 class ControllerDispatcher implements ControllerDispatcherContract
 {
-    use FiltersControllerMiddleware, ResolvesRouteDependencies;
+    use FiltersControllerMiddleware;
+    use ResolvesRouteDependencies;
 
     /**
      * The container instance.
@@ -19,7 +20,7 @@ class ControllerDispatcher implements ControllerDispatcherContract
     /**
      * Create a new controller dispatcher instance.
      *
-     * @param  \Illuminate\Container\Container  $container
+     * @param \Illuminate\Container\Container $container
      * @return void
      */
     public function __construct(Container $container)
@@ -30,9 +31,9 @@ class ControllerDispatcher implements ControllerDispatcherContract
     /**
      * Dispatch a request to a given controller and method.
      *
-     * @param  \Illuminate\Routing\Route  $route
-     * @param  mixed  $controller
-     * @param  string  $method
+     * @param \Illuminate\Routing\Route $route
+     * @param mixed $controller
+     * @param string $method
      * @return mixed
      */
     public function dispatch(Route $route, $controller, $method)
@@ -49,28 +50,30 @@ class ControllerDispatcher implements ControllerDispatcherContract
     /**
      * Resolve the parameters for the controller.
      *
-     * @param  \Illuminate\Routing\Route  $route
-     * @param  mixed  $controller
-     * @param  string  $method
+     * @param \Illuminate\Routing\Route $route
+     * @param mixed $controller
+     * @param string $method
      * @return array
      */
     protected function resolveParameters(Route $route, $controller, $method)
     {
         return $this->resolveClassMethodDependencies(
-            $route->parametersWithoutNulls(), $controller, $method
+            $route->parametersWithoutNulls(),
+            $controller,
+            $method
         );
     }
 
     /**
      * Get the middleware for the controller instance.
      *
-     * @param  \Illuminate\Routing\Controller  $controller
-     * @param  string  $method
+     * @param \Illuminate\Routing\Controller $controller
+     * @param string $method
      * @return array
      */
     public function getMiddleware($controller, $method)
     {
-        if (! method_exists($controller, 'getMiddleware')) {
+        if (!method_exists($controller, 'getMiddleware')) {
             return [];
         }
 

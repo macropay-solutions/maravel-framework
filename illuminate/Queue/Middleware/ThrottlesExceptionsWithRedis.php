@@ -29,8 +29,8 @@ class ThrottlesExceptionsWithRedis extends ThrottlesExceptions
     /**
      * Process the job.
      *
-     * @param  mixed  $job
-     * @param  callable  $next
+     * @param mixed $job
+     * @param callable $next
      * @return mixed
      */
     public function handle($job, $next)
@@ -38,7 +38,10 @@ class ThrottlesExceptionsWithRedis extends ThrottlesExceptions
         $this->redis = Container::getInstance()->make(Redis::class);
 
         $this->limiter = new DurationLimiter(
-            $this->redis, $this->getKey($job), $this->maxAttempts, $this->decayMinutes * 60
+            $this->redis,
+            $this->getKey($job),
+            $this->maxAttempts,
+            $this->decayMinutes * 60
         );
 
         if ($this->limiter->tooManyAttempts()) {
@@ -50,7 +53,7 @@ class ThrottlesExceptionsWithRedis extends ThrottlesExceptions
 
             $this->limiter->clear();
         } catch (Throwable $throwable) {
-            if ($this->whenCallback && ! call_user_func($this->whenCallback, $throwable)) {
+            if ($this->whenCallback && !call_user_func($this->whenCallback, $throwable)) {
                 throw $throwable;
             }
 
