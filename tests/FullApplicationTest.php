@@ -29,7 +29,7 @@ class FullApplicationTest extends TestCase
 
     public function testBasicRequest()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->router->get('/', function () {
             return response('Hello World');
@@ -45,7 +45,7 @@ class FullApplicationTest extends TestCase
 
     public function testBasicSymfonyRequest()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->router->get('/', function () {
             return response('Hello World');
@@ -57,7 +57,7 @@ class FullApplicationTest extends TestCase
 
     public function testAddRouteMultipleMethodRequest()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->router->addRoute(['GET', 'POST'], '/', function () {
             return response('Hello World');
@@ -76,10 +76,10 @@ class FullApplicationTest extends TestCase
 
     public function testRequestWithParameters()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->router->get('/foo/{bar}/{baz}', function ($bar, $baz) {
-            return response($bar.$baz);
+            return response($bar . $baz);
         });
 
         $response = $app->handle($request = Request::create('/foo/1/2', 'GET'));
@@ -93,7 +93,7 @@ class FullApplicationTest extends TestCase
 
     public function testCallbackRouteWithDefaultParameter()
     {
-        $app = new Application;
+        $app = new Application();
         $app->router->get('/foo-bar/{baz}', function ($baz = 'default-value') {
             return response($baz);
         });
@@ -106,7 +106,7 @@ class FullApplicationTest extends TestCase
 
     public function testGlobalMiddleware()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->middleware(['LumenTestMiddleware']);
 
@@ -122,7 +122,7 @@ class FullApplicationTest extends TestCase
 
     public function testRouteMiddleware()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->routeMiddleware(['foo' => 'LumenTestMiddleware', 'passing' => 'LumenTestPlainMiddleware']);
 
@@ -161,7 +161,7 @@ class FullApplicationTest extends TestCase
 
     public function testGlobalMiddlewareParameters()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->middleware(['LumenTestParameterizedMiddleware:foo,bar']);
 
@@ -177,7 +177,7 @@ class FullApplicationTest extends TestCase
 
     public function testRouteMiddlewareParameters()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->routeMiddleware(['foo' => 'LumenTestParameterizedMiddleware', 'passing' => 'LumenTestPlainMiddleware']);
 
@@ -193,7 +193,7 @@ class FullApplicationTest extends TestCase
 
     public function testWithMiddlewareDisabled()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->middleware(['LumenTestMiddleware']);
         $app->instance('middleware.disable', true);
@@ -210,7 +210,7 @@ class FullApplicationTest extends TestCase
 
     public function testTerminableGlobalMiddleware()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->middleware(['LumenTestTerminateMiddleware']);
 
@@ -226,7 +226,7 @@ class FullApplicationTest extends TestCase
 
     public function testTerminateWithMiddlewareDisabled()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->middleware(['LumenTestTerminateMiddleware']);
         $app->instance('middleware.disable', true);
@@ -243,7 +243,7 @@ class FullApplicationTest extends TestCase
 
     public function testNotFoundResponse()
     {
-        $app = new Application;
+        $app = new Application();
         $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
@@ -258,7 +258,7 @@ class FullApplicationTest extends TestCase
 
     public function testMethodNotAllowedResponse()
     {
-        $app = new Application;
+        $app = new Application();
         $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
@@ -273,10 +273,10 @@ class FullApplicationTest extends TestCase
 
     public function testResponsableInterface()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->router->get('/foo/{foo}', function () {
-            return new ResponsableResponse;
+            return new ResponsableResponse();
         });
 
         $request = Request::create('/foo/999', 'GET');
@@ -288,7 +288,7 @@ class FullApplicationTest extends TestCase
 
     public function testUncaughtExceptionResponse()
     {
-        $app = new Application;
+        $app = new Application();
         $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
@@ -302,7 +302,7 @@ class FullApplicationTest extends TestCase
 
     public function testGeneratingUrls()
     {
-        $app = new Application;
+        $app = new Application();
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
 
         $app->router->get('/foo-bar', ['as' => 'foo', function () {
@@ -333,7 +333,7 @@ class FullApplicationTest extends TestCase
 
     public function testGeneratingUrlsForRegexParameters()
     {
-        $app = new Application;
+        $app = new Application();
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
 
         $app->router->get('/foo-bar', ['as' => 'foo', function () {
@@ -356,13 +356,16 @@ class FullApplicationTest extends TestCase
         $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}?ba=1&bo=2', route('baz', ['ba' => 1, 'bo' => 2]));
+        $this->assertEquals(
+            'http://lumen.laravel.com/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}?ba=1&bo=2',
+            route('baz', ['ba' => 1, 'bo' => 2])
+        );
         $this->assertEquals('http://lumen.laravel.com/foo-bar/5', route('boom', ['baz' => 5]));
     }
 
     public function testRegisterServiceProvider()
     {
-        $app = new Application;
+        $app = new Application();
         $provider = new LumenTestServiceProvider($app);
         $app->register($provider);
 
@@ -393,7 +396,7 @@ class FullApplicationTest extends TestCase
     public function testApplicationBootsOnlyOnce()
     {
         $app = new Application();
-        $provider = new class($app) extends \Illuminate\Support\ServiceProvider
+        $provider = new class ($app) extends \Illuminate\Support\ServiceProvider
         {
             public $bootCount = 0;
 
@@ -420,13 +423,16 @@ class FullApplicationTest extends TestCase
 
     public function testUsingCustomDispatcher()
     {
-        $routes = new FastRoute\RouteCollector(new FastRoute\RouteParser\Std, new FastRoute\DataGenerator\GroupCountBased);
+        $routes = new FastRoute\RouteCollector(
+            new FastRoute\RouteParser\Std(),
+            new FastRoute\DataGenerator\GroupCountBased()
+        );
 
         $routes->addRoute('GET', '/', [function () {
             return response('Hello World');
         }]);
 
-        $app = new Application;
+        $app = new Application();
 
         $app->setDispatcher(new FastRoute\Dispatcher\GroupCountBased($routes->getData()));
 
@@ -440,7 +446,7 @@ class FullApplicationTest extends TestCase
     {
         unset($_SERVER['__middleware.response']);
 
-        $app = new Application;
+        $app = new Application();
 
         $app->routeMiddleware(['foo' => 'LumenTestPlainMiddleware']);
 
@@ -456,7 +462,7 @@ class FullApplicationTest extends TestCase
 
     public function testBasicControllerDispatching()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->router->get('/show/{id}', 'LumenTestController@show');
 
@@ -468,7 +474,7 @@ class FullApplicationTest extends TestCase
 
     public function testBasicControllerDispatchingWithGroup()
     {
-        $app = new Application;
+        $app = new Application();
         $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
 
         $app->router->group(['middleware' => 'test'], function ($router) {
@@ -483,7 +489,7 @@ class FullApplicationTest extends TestCase
 
     public function testBasicControllerDispatchingWithGroupSuffix()
     {
-        $app = new Application;
+        $app = new Application();
         $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
 
         $app->router->group(['suffix' => '.{format:json|xml}'], function ($router) {
@@ -498,7 +504,7 @@ class FullApplicationTest extends TestCase
 
     public function testBasicControllerDispatchingWithGroupAndSuffixWithPath()
     {
-        $app = new Application;
+        $app = new Application();
         $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
 
         $app->router->group(['suffix' => '/{format:json|xml}'], function ($router) {
@@ -513,7 +519,7 @@ class FullApplicationTest extends TestCase
 
     public function testBasicControllerDispatchingWithMiddlewareIntercept()
     {
-        $app = new Application;
+        $app = new Application();
         $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
         $app->router->get('/show/{id}', 'LumenTestControllerWithMiddleware@show');
 
@@ -525,7 +531,7 @@ class FullApplicationTest extends TestCase
 
     public function testBasicInvokableActionDispatching()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->router->get('/action/{id}', 'LumenTestAction');
 
@@ -537,7 +543,7 @@ class FullApplicationTest extends TestCase
 
     public function testEnvironmentDetection()
     {
-        $app = new Application;
+        $app = new Application();
 
         $this->assertEquals('production', $app->environment());
         $this->assertTrue($app->environment('production'));
@@ -546,21 +552,21 @@ class FullApplicationTest extends TestCase
 
     public function testNamespaceDetection()
     {
-        $app = new Application;
+        $app = new Application();
         $this->expectException('RuntimeException');
         $app->getNamespace();
     }
 
     public function testRunningUnitTestsDetection()
     {
-        $app = new Application;
+        $app = new Application();
 
         $this->assertFalse($app->runningUnitTests());
     }
 
     public function testValidationHelpers()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->router->get('/', function (Illuminate\Http\Request $request) {
             $data = $this->validate($request, ['name' => 'required']);
@@ -580,7 +586,7 @@ class FullApplicationTest extends TestCase
 
     public function testRedirectResponse()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->router->get('/', function (Illuminate\Http\Request $request) {
             return redirect('home');
@@ -593,7 +599,7 @@ class FullApplicationTest extends TestCase
 
     public function testRedirectToNamedRoute()
     {
-        $app = new Application;
+        $app = new Application();
 
         $app->router->get('login', ['as' => 'login', function (Illuminate\Http\Request $request) {
             return 'login';
@@ -808,7 +814,7 @@ class FullApplicationTest extends TestCase
 
     public function testTerminationTests()
     {
-        $app = new LumenTestApplication;
+        $app = new LumenTestApplication();
 
         $result = [];
         $callback1 = function () use (&$result) {

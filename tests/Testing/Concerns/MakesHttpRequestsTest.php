@@ -12,7 +12,7 @@ class MakesHttpRequestsTest extends TestCase
 
     public function testReceiveJson()
     {
-        $this->app = new Application;
+        $this->app = new Application();
         $this->app->router->get('/', function () {
             return new JsonResponse(['foo' => 'bar', 'hello' => 'world']);
         });
