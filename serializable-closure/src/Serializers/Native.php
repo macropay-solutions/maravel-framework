@@ -68,7 +68,7 @@ class Native implements Serializable
     /**
      * The "key" that marks an array as recursive.
      */
-    const ARRAY_RECURSIVE_KEY = 'LARAVEL_SERIALIZABLE_RECURSIVE_KEY';
+    public const ARRAY_RECURSIVE_KEY = 'LARAVEL_SERIALIZABLE_RECURSIVE_KEY';
 
     /**
      * Creates a new serializable closure instance.
@@ -457,11 +457,9 @@ class Native implements Serializable
             }
 
             unset($value);
-        } elseif (
-            is_object(
+        } elseif (is_object(
                 $data
-            ) && !$data instanceof SerializableClosure && !$data instanceof UnsignedSerializableClosure
-        ) {
+            ) && !$data instanceof SerializableClosure && !$data instanceof UnsignedSerializableClosure) {
             if (isset($this->scope[$data])) {
                 $data = $this->scope[$data];
 

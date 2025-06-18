@@ -495,8 +495,7 @@ class Handler implements ExceptionHandlerContract
             $e instanceof AuthorizationException && $e->hasStatus() => new HttpException(
                 $e->status(),
                 $e->response()?->message() ?: (Response::$statusTexts[$e->status(
-                )] ?? 'Whoops, looks like something went wrong.'),
-                $e
+                )] ?? 'Whoops, looks like something went wrong.'), $e
             ),
             $e instanceof AuthorizationException && !$e->hasStatus() => new AccessDeniedHttpException(
                 $e->getMessage(),

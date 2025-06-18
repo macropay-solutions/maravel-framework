@@ -14,7 +14,8 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class Response extends SymfonyResponse
 {
-    use ResponseTrait, Macroable {
+    use ResponseTrait;
+    use Macroable {
         Macroable::__call as macroCall;
     }
 
@@ -60,12 +61,10 @@ class Response extends SymfonyResponse
             if ($content === false) {
                 throw new InvalidArgumentException(json_last_error_msg());
             }
-        }
-
-        // If this content implements the "Renderable" interface then we will call the
-        // render method on the object so we will avoid any "__toString" exceptions
-        // that might be thrown and have their errors obscured by PHP's handling.
-        elseif ($content instanceof Renderable) {
+        } elseif ($content instanceof Renderable) {
+            // If this content implements the "Renderable" interface then we will call the
+            // render method on the object so we will avoid any "__toString" exceptions
+            // that might be thrown and have their errors obscured by PHP's handling.
             $content = $content->render();
         }
 

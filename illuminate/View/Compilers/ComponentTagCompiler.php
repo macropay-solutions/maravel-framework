@@ -306,8 +306,10 @@ class ComponentTagCompiler
             return $class;
         }
 
-        if (!is_null($guess = $this->guessAnonymousComponentUsingNamespaces($viewFactory, $component)) ||
-            !is_null($guess = $this->guessAnonymousComponentUsingPaths($viewFactory, $component))) {
+        if (
+            !is_null($guess = $this->guessAnonymousComponentUsingNamespaces($viewFactory, $component)) ||
+            !is_null($guess = $this->guessAnonymousComponentUsingPaths($viewFactory, $component))
+        ) {
             return $guess;
         }
 
@@ -333,8 +335,10 @@ class ComponentTagCompiler
 
         foreach ($this->blade->getAnonymousComponentPaths() as $path) {
             try {
-                if (str_contains($component, $delimiter) &&
-                    !str_starts_with($component, $path['prefix'] . $delimiter)) {
+                if (
+                    str_contains($component, $delimiter) &&
+                    !str_starts_with($component, $path['prefix'] . $delimiter)
+                ) {
                     continue;
                 }
 
@@ -342,15 +346,19 @@ class ComponentTagCompiler
                     ? Str::after($component, $delimiter)
                     : $component;
 
-                if (!is_null(
-                    $guess = match (true) {
-                        $viewFactory->exists($guess = $path['prefixHash'] . $delimiter . $formattedComponent) => $guess,
-                        $viewFactory->exists(
-                            $guess = $path['prefixHash'] . $delimiter . $formattedComponent . '.index'
-                        ) => $guess,
-                        default => null,
-                    }
-                )) {
+                if (
+                    !is_null(
+                        $guess = match (true) {
+                            $viewFactory->exists(
+                                $guess = $path['prefixHash'] . $delimiter . $formattedComponent
+                            ) => $guess,
+                            $viewFactory->exists(
+                                $guess = $path['prefixHash'] . $delimiter . $formattedComponent . '.index'
+                            ) => $guess,
+                            default => null,
+                        }
+                    )
+                ) {
                     return $guess;
                 }
             } catch (InvalidArgumentException) {

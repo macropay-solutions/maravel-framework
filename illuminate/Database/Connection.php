@@ -824,12 +824,10 @@ class Connection implements ConnectionInterface
         // took to execute and log the query SQL, bindings and time in our memory.
         try {
             return $callback($query, $bindings);
-        }
-
+        } catch (Exception $e) {
             // If an exception occurs when attempting to run a query, we'll format the error
             // message to include the bindings with SQL, which will make this exception a
             // lot more helpful to the developer instead of just the database's errors.
-        catch (Exception $e) {
             if ($this->isUniqueConstraintError($e)) {
                 throw new UniqueConstraintViolationException(
                     $this->getName(),
@@ -1260,7 +1258,8 @@ class Connection implements ConnectionInterface
     }
 
     /**
-     * Indicates whether native alter operations will be used when dropping, renaming, or modifying columns, even if Doctrine DBAL is installed.
+     * Indicates whether native alter operations will be used when dropping, renaming, or modifying columns,
+     * even if Doctrine DBAL is installed.
      *
      * @return bool
      */

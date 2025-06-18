@@ -22,7 +22,8 @@ use Illuminate\Support\Traits\Macroable;
  */
 class Repository implements ArrayAccess, CacheContract
 {
-    use InteractsWithTime, Macroable {
+    use InteractsWithTime;
+    use Macroable {
         __call as macroCall;
     }
 

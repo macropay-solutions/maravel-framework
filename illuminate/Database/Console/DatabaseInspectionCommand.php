@@ -122,7 +122,8 @@ abstract class DatabaseInspectionCommand extends Command
     protected function getMySQLTableSize(ConnectionInterface $connection, string $table)
     {
         $result = $connection->selectOne(
-            'SELECT (data_length + index_length) AS size FROM information_schema.TABLES WHERE table_schema = ? AND table_name = ?',
+            'SELECT (data_length + index_length) AS size FROM information_schema.TABLES WHERE table_schema = ? ' .
+                'AND table_name = ?',
             [
                 $connection->getDatabaseName(),
                 $table,
@@ -219,8 +220,10 @@ abstract class DatabaseInspectionCommand extends Command
     {
         return tap(interface_exists('Doctrine\DBAL\Driver'), function ($dependenciesExist) {
             if (
-                !$dependenciesExist && confirm(
-                    'Inspecting database information requires the Doctrine DBAL (doctrine/dbal) package. Would you like to install it?',
+                !$dependenciesExist
+                && confirm(
+                    'Inspecting database information requires the Doctrine DBAL (doctrine/dbal) package. ' .
+                        'Would you like to install it?',
                     default: false
                 )
             ) {

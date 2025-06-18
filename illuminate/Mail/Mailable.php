@@ -29,7 +29,10 @@ use Symfony\Component\Mime\Address;
 
 class Mailable implements MailableContract, Renderable
 {
-    use Conditionable, ForwardsCalls, Localizable, Macroable {
+    use Conditionable;
+    use ForwardsCalls;
+    use Localizable;
+    use Macroable {
         __call as macroCall;
     }
 

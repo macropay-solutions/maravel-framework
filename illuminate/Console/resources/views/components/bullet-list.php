@@ -5,6 +5,6 @@
             ⇂ <?php
             echo htmlspecialchars($element) ?>
         </div>
-        <?php
+    <?php
     } ?>
 </div>

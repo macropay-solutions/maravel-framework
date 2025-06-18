@@ -96,7 +96,8 @@ class MySqlGrammar extends Grammar
      */
     public function compileTableExists()
     {
-        return "select * from information_schema.tables where table_schema = ? and table_name = ? and table_type = 'BASE TABLE'";
+        return "select * from information_schema.tables where table_schema = ? and table_name = ? " .
+            "and table_type = 'BASE TABLE'";
     }
 
     /**
@@ -109,9 +110,9 @@ class MySqlGrammar extends Grammar
     {
         return sprintf(
             'select table_name as `name`, (data_length + index_length) as `size`, '
-            . 'table_comment as `comment`, engine as `engine`, table_collation as `collation` '
-            . "from information_schema.tables where table_schema = %s and table_type in ('BASE TABLE', 'SYSTEM VERSIONED') "
-            . 'order by table_name',
+                . 'table_comment as `comment`, engine as `engine`, table_collation as `collation` '
+                . "from information_schema.tables where table_schema = %s and table_type in "
+                . "('BASE TABLE', 'SYSTEM VERSIONED') order by table_name",
             $this->quoteString($database)
         );
     }
@@ -165,7 +166,8 @@ class MySqlGrammar extends Grammar
      */
     public function compileColumnListing()
     {
-        return 'select column_name as `column_name` from information_schema.columns where table_schema = ? and table_name = ?';
+        return 'select column_name as `column_name` from information_schema.columns where table_schema = ? ' .
+            'and table_name = ?';
     }
 
     /**
@@ -218,16 +220,17 @@ class MySqlGrammar extends Grammar
     {
         return sprintf(
             'select kc.constraint_name as `name`, '
-            . 'group_concat(kc.column_name order by kc.ordinal_position) as `columns`, '
-            . 'kc.referenced_table_schema as `foreign_schema`, '
-            . 'kc.referenced_table_name as `foreign_table`, '
-            . 'group_concat(kc.referenced_column_name order by kc.ordinal_position) as `foreign_columns`, '
-            . 'rc.update_rule as `on_update`, '
-            . 'rc.delete_rule as `on_delete` '
-            . 'from information_schema.key_column_usage kc join information_schema.referential_constraints rc '
-            . 'on kc.constraint_schema = rc.constraint_schema and kc.constraint_name = rc.constraint_name '
-            . 'where kc.table_schema = %s and kc.table_name = %s and kc.referenced_table_name is not null '
-            . 'group by kc.constraint_name, kc.referenced_table_schema, kc.referenced_table_name, rc.update_rule, rc.delete_rule',
+                . 'group_concat(kc.column_name order by kc.ordinal_position) as `columns`, '
+                . 'kc.referenced_table_schema as `foreign_schema`, '
+                . 'kc.referenced_table_name as `foreign_table`, '
+                . 'group_concat(kc.referenced_column_name order by kc.ordinal_position) as `foreign_columns`, '
+                . 'rc.update_rule as `on_update`, '
+                . 'rc.delete_rule as `on_delete` '
+                . 'from information_schema.key_column_usage kc join information_schema.referential_constraints rc '
+                . 'on kc.constraint_schema = rc.constraint_schema and kc.constraint_name = rc.constraint_name '
+                . 'where kc.table_schema = %s and kc.table_name = %s and kc.referenced_table_name is not null '
+                . 'group by kc.constraint_name, kc.referenced_table_schema, kc.referenced_table_name, rc.update_rule, '
+                . 'rc.delete_rule',
             $this->quoteString($database),
             $this->quoteString($table)
         );

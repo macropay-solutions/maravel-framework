@@ -108,9 +108,9 @@ class ConcurrencyLimiter
 
         return $this->redis->eval(
             ...array_merge(
-                [$this->lockScript(), count($slots)],
-                array_merge($slots, [$this->name, $this->releaseAfter, $id])
-            )
+            [$this->lockScript(), count($slots)],
+            array_merge($slots, [$this->name, $this->releaseAfter, $id])
+        )
         );
     }
 

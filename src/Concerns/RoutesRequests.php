@@ -168,7 +168,9 @@ trait RoutesRequests
                 $this->instance(Request::class, $request);
 
                 if (isset($this->router->getRoutes()[$method . $pathInfo])) {
-                    return $this->handleFoundRoute([true, $this->router->getRoutes()[$method . $pathInfo]['action'], []]);
+                    return $this->handleFoundRoute(
+                        [true, $this->router->getRoutes()[$method . $pathInfo]['action'], []]
+                    );
                 }
 
                 return $this->handleDispatcherResponse(

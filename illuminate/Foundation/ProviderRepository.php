@@ -150,12 +150,10 @@ class ProviderRepository
                 }
 
                 $manifest['when'][$provider] = $instance->when();
-            }
-
-            // If the service providers are not deferred, we will simply add it to an
-            // array of eagerly loaded providers that will get registered on every
-            // request to this application instead of "lazy" loading every time.
-            else {
+            } else {
+                // If the service providers are not deferred, we will simply add it to an
+                // array of eagerly loaded providers that will get registered on every
+                // request to this application instead of "lazy" loading every time.
                 $manifest['eager'][] = $provider;
             }
         }

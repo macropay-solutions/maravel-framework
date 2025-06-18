@@ -6,10 +6,8 @@ use DateTimeInterface;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Support\Facades\Date;
 
-class DatabaseFailedJobProvider implements
-    CountableFailedJobProvider,
-    FailedJobProviderInterface,
-    PrunableFailedJobProvider
+class DatabaseFailedJobProvider implements CountableFailedJobProvider, FailedJobProviderInterface,
+                                           PrunableFailedJobProvider
 {
     /**
      * The connection resolver implementation.

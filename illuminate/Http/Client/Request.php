@@ -150,7 +150,7 @@ class Request implements ArrayAccess
                 return $file['name'] != $name ||
                     ($value && $file['contents'] != $value) ||
                     ($filename && $file['filename'] != $filename);
-        })->count() > 0;
+            })->count() > 0;
     }
 
     /**

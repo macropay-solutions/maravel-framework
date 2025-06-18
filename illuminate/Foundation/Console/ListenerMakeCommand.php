@@ -50,9 +50,9 @@ class ListenerMakeCommand extends GeneratorCommand
 
         if (
             !Str::startsWith($event, [
-            $this->laravel->getNamespace(),
-            'Illuminate',
-            '\\',
+                $this->laravel->getNamespace(),
+                'Illuminate',
+                '\\',
             ])
         ) {
             $event = $this->laravel->getNamespace() . 'Events\\' . str_replace('/', '\\', $event);

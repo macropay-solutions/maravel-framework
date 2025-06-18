@@ -295,11 +295,7 @@ class Event
             null,
             null,
             null
-        )->run(
-            laravel_cloud()
-                ? fn($type, $line) => fwrite($type === 'out' ? STDOUT : STDERR, $line)
-                : fn() => true
-        );
+        )->run(fn() => true);
     }
 
     /**
@@ -649,7 +645,7 @@ class Event
         return function (Container $container, HttpClient $http) use ($url) {
             try {
                 $http->request('GET', $url);
-            } catch (ClientExceptionInterface | TransferException $e) {
+            } catch (ClientExceptionInterface|TransferException $e) {
                 $container->make(ExceptionHandler::class)->report($e);
             }
         };

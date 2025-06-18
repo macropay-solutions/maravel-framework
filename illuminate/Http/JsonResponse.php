@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\JsonResponse as BaseJsonResponse;
 
 class JsonResponse extends BaseJsonResponse
 {
-    use ResponseTrait, Macroable {
+    use ResponseTrait;
+    use Macroable {
         Macroable::__call as macroCall;
     }
 

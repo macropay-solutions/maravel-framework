@@ -192,11 +192,9 @@ class MigrateCommand extends BaseCommand implements Isolatable
      */
     protected function createMissingMysqlDatabase($connection)
     {
-        if (
-            $this->laravel['config']->get(
+        if ($this->laravel['config']->get(
                 "database.connections.{$connection->getName()}.database"
-            ) !== $connection->getDatabaseName()
-        ) {
+            ) !== $connection->getDatabaseName()) {
             return false;
         }
 

@@ -172,8 +172,8 @@ class ShowCommand extends DatabaseInspectionCommand
                     ($tableSize ? $tableSize : '—') . ($this->option(
                         'counts'
                     ) ? ' <fg=gray;options=bold>/</> <fg=yellow;options=bold>' . number_format(
-                        $table['rows']
-                    ) . '</>' : '')
+                            $table['rows']
+                        ) . '</>' : '')
                 );
 
                 if ($this->output->isVerbose()) {

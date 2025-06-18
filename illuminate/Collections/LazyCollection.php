@@ -6,6 +6,7 @@ use ArrayIterator;
 use Closure;
 use DateTimeInterface;
 use Generator;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
 use Illuminate\Support\Traits\EnumeratesValues;
 use Illuminate\Support\Traits\Macroable;
@@ -39,7 +40,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Create a new lazy collection instance.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue>|(Closure(): \Generator<TKey, TValue, mixed, void>)|self<TKey, TValue>|array<TKey, TValue>|null $source
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue>|(Closure(): \Generator<TKey, TValue, mixed, void>)|self<TKey, TValue>|array<TKey, TValue>|null $source
      * @return void
      */
     public function __construct($source = null)
@@ -63,7 +64,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
      * @template TMakeKey of array-key
      * @template TMakeValue
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TMakeKey, TMakeValue>|iterable<TMakeKey, TMakeValue>|(Closure(): \Generator<TMakeKey, TMakeValue, mixed, void>)|self<TMakeKey, TMakeValue>|array<TMakeKey, TMakeValue>|null $items
+     * @param Arrayable<TMakeKey, TMakeValue>|iterable<TMakeKey, TMakeValue>|(Closure(): \Generator<TMakeKey, TMakeValue, mixed, void>)|self<TMakeKey, TMakeValue>|array<TMakeKey, TMakeValue>|null $items
      * @return static<TMakeKey, TMakeValue>
      */
     public static function make($items = [])
@@ -283,7 +284,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
      * @template TCrossJoinKey
      * @template TCrossJoinValue
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TCrossJoinKey, TCrossJoinValue>|iterable<TCrossJoinKey, TCrossJoinValue> ...$arrays
+     * @param Arrayable<TCrossJoinKey, TCrossJoinValue>|iterable<TCrossJoinKey, TCrossJoinValue> ...$arrays
      * @return static<int, array<int, TValue|TCrossJoinValue>>
      */
     public function crossJoin(...$arrays)
@@ -323,7 +324,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Get the items that are not present in the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
+     * @param Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
      * @return static
      */
     public function diff($items)
@@ -334,7 +335,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Get the items that are not present in the given items, using the callback.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
+     * @param Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
      * @param callable(TValue, TValue): int $callback
      * @return static
      */
@@ -346,7 +347,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Get the items whose keys and values are not present in the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function diffAssoc($items)
@@ -357,7 +358,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Get the items whose keys and values are not present in the given items, using the callback.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @param callable(TKey, TKey): int $callback
      * @return static
      */
@@ -369,7 +370,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Get the items whose keys are not present in the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function diffKeys($items)
@@ -380,7 +381,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Get the items whose keys are not present in the given items, using the callback.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @param callable(TKey, TKey): int $callback
      * @return static
      */
@@ -624,7 +625,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Intersect the collection with the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function intersect($items)
@@ -635,7 +636,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Intersect the collection with the given items, using the callback.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
+     * @param Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
      * @param callable(TValue, TValue): int $callback
      * @return static
      */
@@ -647,7 +648,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Intersect the collection with the given items with additional index check.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function intersectAssoc($items)
@@ -658,7 +659,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Intersect the collection with the given items with additional index check, using the callback.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
+     * @param Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
      * @param callable(TValue, TValue): int $callback
      * @return static
      */
@@ -670,7 +671,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Intersect the collection with the given items by key.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function intersectByKeys($items)
@@ -832,7 +833,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Merge the collection with the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function merge($items)
@@ -845,7 +846,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
      *
      * @template TMergeRecursiveValue
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TMergeRecursiveValue>|iterable<TKey, TMergeRecursiveValue> $items
+     * @param Arrayable<TKey, TMergeRecursiveValue>|iterable<TKey, TMergeRecursiveValue> $items
      * @return static<TKey, TValue|TMergeRecursiveValue>
      */
     public function mergeRecursive($items)
@@ -889,7 +890,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Union the collection with the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function union($items)
@@ -1024,7 +1025,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Replace the collection items with the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function replace($items)
@@ -1051,7 +1052,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
     /**
      * Recursively replace the collection items with the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function replaceRecursive($items)
@@ -1640,7 +1641,7 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
      *
      * @template TZipValue
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<array-key, TZipValue>|iterable<array-key, TZipValue> ...$items
+     * @param Arrayable<array-key, TZipValue>|iterable<array-key, TZipValue> ...$items
      * @return static<int, static<int, TValue|TZipValue>>
      */
     public function zip($items)

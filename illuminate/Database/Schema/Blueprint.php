@@ -226,22 +226,18 @@ class Blueprint
                     $column->{$index} = null;
 
                     continue 2;
-                }
-
-                // If the index has been specified on the given column, but it equals false
-                // and the column is supposed to be changed, we will call the drop index
-                // method with an array of column to drop it by its conventional name.
-                elseif ($column->{$index} === false && $column->change) {
+                } elseif ($column->{$index} === false && $column->change) {
+                    // If the index has been specified on the given column, but it equals false
+                    // and the column is supposed to be changed, we will call the drop index
+                    // method with an array of column to drop it by its conventional name.
                     $this->{'drop' . ucfirst($index)}([$column->name]);
                     $column->{$index} = null;
 
                     continue 2;
-                }
-
-                // If the index has been specified on the given column, and it has a string
-                // value, we'll go ahead and call the index method and pass the name for
-                // the index since the developer specified the explicit name for this.
-                elseif (isset($column->{$index})) {
+                } elseif (isset($column->{$index})) {
+                    // If the index has been specified on the given column, and it has a string
+                    // value, we'll go ahead and call the index method and pass the name for
+                    // the index since the developer specified the explicit name for this.
                     $this->{$index}($column->name, $column->{$index});
                     $column->{$index} = null;
 

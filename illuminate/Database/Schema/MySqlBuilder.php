@@ -35,7 +35,7 @@ class MySqlBuilder extends Builder
      *
      * @return array
      */
-    public function getTables()
+    public function getTables($withSize = true)
     {
         return $this->connection->getPostProcessor()->processTables(
             $this->connection->selectFromWriteConnection(

@@ -1074,12 +1074,10 @@ class Container implements ArrayAccess, ContainerContract
             return $parameter->isVariadic()
                 ? $this->resolveVariadicClass($parameter)
                 : $this->make(Util::getParameterClassName($parameter));
-        }
-
+        } catch (BindingResolutionException $e) {
             // If we can not resolve the class instance, we will check to see if the value
             // is optional, and if it is we will return the optional parameter value as
             // the value of the dependency, similarly to how we do this with scalars.
-        catch (BindingResolutionException $e) {
             if ($parameter->isDefaultValueAvailable()) {
                 array_pop($this->with);
 
@@ -1146,7 +1144,8 @@ class Container implements ArrayAccess, ContainerContract
      */
     protected function unresolvablePrimitive(ReflectionParameter $parameter)
     {
-        $message = "Unresolvable dependency resolving [$parameter] in class {$parameter->getDeclaringClass()->getName()}";
+        $message = 'Unresolvable dependency resolving [$parameter] in class ' .
+            $parameter->getDeclaringClass()->getName();
 
         throw new BindingResolutionException($message);
     }

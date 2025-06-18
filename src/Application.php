@@ -727,7 +727,7 @@ class Application extends Container
      * If no name is provided, then we'll return the path to the config folder.
      *
      * @param string|null $name
-     * @return string
+     * @return string|null
      */
     public function getConfigurationPath($name = null)
     {
@@ -736,18 +736,26 @@ class Application extends Container
 
             if (file_exists($appConfigDir)) {
                 return $appConfigDir;
-            } elseif (file_exists($path = __DIR__ . '/../config/')) {
-                return $path;
             }
-        } else {
-            $appConfigPath = $this->basePath('config') . '/' . $name . '.php';
 
-            if (file_exists($appConfigPath)) {
-                return $appConfigPath;
-            } elseif (file_exists($path = __DIR__ . '/../config/' . $name . '.php')) {
+            if (file_exists($path = __DIR__ . '/../config/')) {
                 return $path;
             }
+
+            return null;
         }
+
+        $appConfigPath = $this->basePath('config') . '/' . $name . '.php';
+
+        if (file_exists($appConfigPath)) {
+            return $appConfigPath;
+        }
+
+        if (file_exists($path = __DIR__ . '/../config/' . $name . '.php')) {
+            return $path;
+        }
+
+        return null;
     }
 
     /**
@@ -884,7 +892,8 @@ class Application extends Container
      */
     public function storagePath($path = '')
     {
-        return ($this->storagePath ?: $this->basePath . DIRECTORY_SEPARATOR . 'storage') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return ($this->storagePath ?: $this->basePath . DIRECTORY_SEPARATOR . 'storage') .
+            ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**

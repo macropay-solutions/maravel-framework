@@ -17,7 +17,11 @@ trait CreatesPotentiallyTranslatedStrings
             ? fn($message) => $this->messages[] = $message
             : fn($message) => $this->messages[$attribute] = $message;
 
-        return new class ($message ?? $attribute, $this->validator->getTranslator(), $destructor) extends PotentiallyTranslatedString {
+        return new class (
+            $message ?? $attribute,
+            $this->validator->getTranslator(),
+            $destructor
+        ) extends PotentiallyTranslatedString {
             /**
              * The callback to call when the object destructs.
              *

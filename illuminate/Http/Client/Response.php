@@ -9,7 +9,8 @@ use LogicException;
 
 class Response implements ArrayAccess
 {
-    use Concerns\DeterminesStatusCode, Macroable {
+    use Concerns\DeterminesStatusCode;
+    use Macroable {
         __call as macroCall;
     }
 

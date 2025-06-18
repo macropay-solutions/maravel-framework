@@ -49,7 +49,8 @@ class Builder
     public static $defaultMorphKeyType = 'int';
 
     /**
-     * Indicates whether Doctrine DBAL usage will be prevented if possible when dropping, renaming, and modifying columns.
+     * Indicates whether Doctrine DBAL usage will be prevented if possible when dropping, renaming,
+     * and modifying columns.
      *
      * @var bool
      */
@@ -116,7 +117,8 @@ class Builder
     }
 
     /**
-     * Attempt to use native schema operations for dropping, renaming, and modifying columns, even if Doctrine DBAL is installed.
+     * Attempt to use native schema operations for dropping, renaming, and modifying columns,
+     * even if Doctrine DBAL is installed.
      *
      * @param bool $value
      * @return void
@@ -195,7 +197,7 @@ class Builder
      *
      * @return array
      */
-    public function getTables()
+    public function getTables($withSize = true)
     {
         return $this->connection->getPostProcessor()->processTables(
             $this->connection->selectFromWriteConnection($this->grammar->compileTables())

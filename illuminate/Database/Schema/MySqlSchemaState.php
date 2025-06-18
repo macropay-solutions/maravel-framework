@@ -63,8 +63,8 @@ class MySqlSchemaState extends SchemaState
     {
         $process = $this->executeDumpProcess(
             $this->makeProcess(
-                $this->baseDumpCommand(
-                ) . ' ' . $this->migrationTable . ' --no-create-info --skip-extended-insert --skip-routines --compact --complete-insert'
+                $this->baseDumpCommand() . ' ' . $this->migrationTable .
+                    ' --no-create-info --skip-extended-insert --skip-routines --compact --complete-insert'
             ),
             null,
             array_merge($this->baseVariables($this->connection->getConfig()), [
@@ -83,8 +83,8 @@ class MySqlSchemaState extends SchemaState
      */
     public function load($path)
     {
-        $command = 'mysql ' . $this->connectionString(
-        ) . ' --database="${:LARAVEL_LOAD_DATABASE}" < "${:LARAVEL_LOAD_PATH}"';
+        $command = 'mysql ' . $this->connectionString() .
+            ' --database="${:LARAVEL_LOAD_DATABASE}" < "${:LARAVEL_LOAD_PATH}"';
 
         $process = $this->makeProcess($command)->setTimeout(null);
 
@@ -100,8 +100,8 @@ class MySqlSchemaState extends SchemaState
      */
     protected function baseDumpCommand()
     {
-        $command = 'mysqldump ' . $this->connectionString(
-        ) . ' --no-tablespaces --skip-add-locks --skip-comments --skip-set-charset --tz-utc --column-statistics=0';
+        $command = 'mysqldump ' . $this->connectionString() .
+            ' --no-tablespaces --skip-add-locks --skip-comments --skip-set-charset --tz-utc --column-statistics=0';
 
         if (!$this->connection->isMaria()) {
             $command .= ' --set-gtid-purged=OFF';

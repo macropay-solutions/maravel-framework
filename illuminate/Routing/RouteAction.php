@@ -34,12 +34,10 @@ class RouteAction
                 'uses' => $action[0] . '@' . $action[1],
                 'controller' => $action[0] . '@' . $action[1],
             ];
-        }
-
-        // If no "uses" property has been set, we will dig through the array to find a
-        // Closure instance within this list. We will set the first Closure we come
-        // across into the "uses" property that will get fired off by this route.
-        elseif (!isset($action['uses'])) {
+        } elseif (!isset($action['uses'])) {
+            // If no "uses" property has been set, we will dig through the array to find a
+            // Closure instance within this list. We will set the first Closure we come
+            // across into the "uses" property that will get fired off by this route.
             $action['uses'] = static::findCallable($action);
         }
 

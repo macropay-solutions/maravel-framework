@@ -202,7 +202,7 @@ class SqlServerConnector extends Connector implements ConnectorInterface
     {
         return $driver . ':' . implode(';', array_map(function ($key) use ($arguments) {
                 return sprintf('%s=%s', $key, $arguments[$key]);
-        }, array_keys($arguments)));
+            }, array_keys($arguments)));
     }
 
     /**

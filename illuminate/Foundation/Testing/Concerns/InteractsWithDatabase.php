@@ -210,7 +210,8 @@ trait InteractsWithDatabase
                 $this->assertSame(
                     $actual,
                     $expected,
-                    "Expected {$expected} database queries on the [{$connectionInstance->getName()}] connection. {$actual} occurred."
+                    "Expected {$expected} database queries on the [{$connectionInstance->getName()}] " .
+                        "connection. {$actual} occurred."
                 );
             });
         });

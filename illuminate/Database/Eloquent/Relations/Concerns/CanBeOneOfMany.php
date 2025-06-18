@@ -226,7 +226,7 @@ trait CanBeOneOfMany
             }
         }
 
-        $this->addOneOfManySubQueryConstraints($subQuery, $groupBy, $columns, $aggregate);
+        $this->addOneOfManySubQueryConstraints($subQuery, null, $aggregate);
 
         return $subQuery;
     }
@@ -253,7 +253,7 @@ trait CanBeOneOfMany
                     );
                 }
 
-                $this->addOneOfManyJoinSubQueryConstraints($join, $on);
+                $this->addOneOfManyJoinSubQueryConstraints($join);
             });
         });
     }

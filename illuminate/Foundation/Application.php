@@ -44,7 +44,7 @@ class Application extends Container implements
      *
      * @var string
      */
-    const VERSION = '10.48.29';
+    public const VERSION = '10.48.29';
 
     /**
      * The base path for the Laravel installation.
@@ -208,7 +208,6 @@ class Application extends Container implements
         $this->registerBaseBindings();
         $this->registerBaseServiceProviders();
         $this->registerCoreContainerAliases();
-        $this->registerLaravelCloudServices();
     }
 
     /**
@@ -252,28 +251,6 @@ class Application extends Container implements
         $this->register(new EventServiceProvider($this));
         $this->register(new LogServiceProvider($this));
         $this->register(new RoutingServiceProvider($this));
-    }
-
-    /**
-     * Register any services needed for Laravel Cloud.
-     *
-     * @return void
-     */
-    protected function registerLaravelCloudServices()
-    {
-        if (!laravel_cloud()) {
-            return;
-        }
-
-        $this['events']->listen(
-            'bootstrapping: *',
-            fn($bootstrapper) => Cloud::bootstrapperBootstrapping($this, Str::after($bootstrapper, 'bootstrapping: '))
-        );
-
-        $this['events']->listen(
-            'bootstrapped: *',
-            fn($bootstrapper) => Cloud::bootstrapperBootstrapped($this, Str::after($bootstrapper, 'bootstrapped: '))
-        );
     }
 
     /**
@@ -741,9 +718,8 @@ class Application extends Container implements
     public function runningInConsole()
     {
         if ($this->isRunningInConsole === null) {
-            $this->isRunningInConsole = Env::get(
-                'APP_RUNNING_IN_CONSOLE'
-            ) ?? (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg');
+            $this->isRunningInConsole = Env::get('APP_RUNNING_IN_CONSOLE') ??
+                (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg');
         }
 
         return $this->isRunningInConsole;

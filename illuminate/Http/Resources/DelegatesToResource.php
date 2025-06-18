@@ -8,7 +8,8 @@ use Illuminate\Support\Traits\Macroable;
 
 trait DelegatesToResource
 {
-    use ForwardsCalls, Macroable {
+    use ForwardsCalls;
+    use Macroable {
         __call as macroCall;
     }
 

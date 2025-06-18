@@ -4,93 +4,93 @@ namespace Laravel\Prompts;
 
 class Key
 {
-    const UP = "\e[A";
+    public const UP = "\e[A";
 
-    const SHIFT_UP = "\e[1;2A";
+    public const SHIFT_UP = "\e[1;2A";
 
-    const DOWN = "\e[B";
+    public const DOWN = "\e[B";
 
-    const SHIFT_DOWN = "\e[1;2B";
+    public const SHIFT_DOWN = "\e[1;2B";
 
-    const RIGHT = "\e[C";
+    public const RIGHT = "\e[C";
 
-    const LEFT = "\e[D";
+    public const LEFT = "\e[D";
 
-    const UP_ARROW = "\eOA";
+    public const UP_ARROW = "\eOA";
 
-    const DOWN_ARROW = "\eOB";
+    public const DOWN_ARROW = "\eOB";
 
-    const RIGHT_ARROW = "\eOC";
+    public const RIGHT_ARROW = "\eOC";
 
-    const LEFT_ARROW = "\eOD";
+    public const LEFT_ARROW = "\eOD";
 
-    const ESCAPE = "\e";
+    public const ESCAPE = "\e";
 
-    const DELETE = "\e[3~";
+    public const DELETE = "\e[3~";
 
-    const BACKSPACE = "\177";
+    public const BACKSPACE = "\177";
 
-    const ENTER = "\n";
+    public const ENTER = "\n";
 
-    const SPACE = ' ';
+    public const SPACE = ' ';
 
-    const TAB = "\t";
+    public const TAB = "\t";
 
-    const SHIFT_TAB = "\e[Z";
+    public const SHIFT_TAB = "\e[Z";
 
-    const HOME = ["\e[1~", "\eOH", "\e[H", "\e[7~"];
+    public const HOME = ["\e[1~", "\eOH", "\e[H", "\e[7~"];
 
-    const END = ["\e[4~", "\eOF", "\e[F", "\e[8~"];
+    public const END = ["\e[4~", "\eOF", "\e[F", "\e[8~"];
 
     /**
      * Cancel/SIGINT
      */
-    const CTRL_C = "\x03";
+    public const CTRL_C = "\x03";
 
     /**
      * Previous/Up
      */
-    const CTRL_P = "\x10";
+    public const CTRL_P = "\x10";
 
     /**
      * Next/Down
      */
-    const CTRL_N = "\x0E";
+    public const CTRL_N = "\x0E";
 
     /**
      * Forward/Right
      */
-    const CTRL_F = "\x06";
+    public const CTRL_F = "\x06";
 
     /**
      * Back/Left
      */
-    const CTRL_B = "\x02";
+    public const CTRL_B = "\x02";
 
     /**
      * Backspace
      */
-    const CTRL_H = "\x08";
+    public const CTRL_H = "\x08";
 
     /**
      * Home
      */
-    const CTRL_A = "\x01";
+    public const CTRL_A = "\x01";
 
     /**
      * EOF
      */
-    const CTRL_D = "\x04";
+    public const CTRL_D = "\x04";
 
     /**
      * End
      */
-    const CTRL_E = "\x05";
+    public const CTRL_E = "\x05";
 
     /**
      * Negative affirmation
      */
-    const CTRL_U = "\x15";
+    public const CTRL_U = "\x15";
 
     /**
      * Checks for the constant values for the given match and returns the match

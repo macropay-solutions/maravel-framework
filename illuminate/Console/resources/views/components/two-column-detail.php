@@ -10,6 +10,6 @@
             <?php
             echo htmlspecialchars($second) ?>
         </span>
-        <?php
+    <?php
     } ?>
 </div>

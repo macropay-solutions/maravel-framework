@@ -219,7 +219,7 @@ class TableCommand extends DatabaseInspectionCommand
                     $column['column'] . ' <fg=gray>' . $column['attributes']->implode(', ') . '</>',
                     (!is_null(
                         $column['default']
-                    ) ? '<fg=gray>' . $column['default'] . '</> ' : '') . '' . $column['type'] . ''
+                    ) ? '<fg=gray>' . $column['default'] . '</> ' : '') . $column['type']
                 );
             });
 

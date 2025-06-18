@@ -48,7 +48,14 @@ class DynamicComponent extends Component
     public function render()
     {
         $template = <<<'EOF'
-<?php extract(collect($attributes->getAttributes())->mapWithKeys(function ($value, $key) { return [Illuminate\Support\Str::camel(str_replace([':', '.'], ' ', $key)) => $value]; })->all(), EXTR_SKIP); ?>
+<?php extract(
+    collect(
+        $attributes->getAttributes()
+    )->mapWithKeys(
+        fn ($value, $key) => [Illuminate\Support\Str::camel(str_replace([':', '.'], ' ', $key)) => $value]
+    )->all(),
+    EXTR_SKIP
+); ?>
 {{ props }}
 <x-{{ component }} {{ bindings }} {{ attributes }}>
 {{ slots }}
@@ -96,7 +103,7 @@ EOF;
         return '@props(' . '[\'' . implode(
             '\',\'',
             collect($bindings)->map(function ($dataKey) {
-                    return Str::camel($dataKey);
+                return Str::camel($dataKey);
             })->all()
         ) . '\']' . ')';
     }
@@ -123,7 +130,8 @@ EOF;
     protected function compileSlots(array $slots)
     {
         return collect($slots)->map(function ($slot, $name) {
-            return $name === '__default' ? null : '<x-slot name="' . $name . '" ' . ((string)$slot->attributes) . '>{{ $' . $name . ' }}</x-slot>';
+            return $name === '__default' ? null : '<x-slot name="' . $name . '" ' . ((string)$slot->attributes) .
+                '>{{ $' . $name . ' }}</x-slot>';
         })->filter()->implode(PHP_EOL);
     }
 

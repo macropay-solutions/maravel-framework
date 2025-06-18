@@ -175,8 +175,8 @@ class NotificationSender
         }
 
         return $this->events->until(
-            new NotificationSending($notifiable, $notification, $channel)
-        ) !== false;
+                new NotificationSending($notifiable, $notification, $channel)
+            ) !== false;
     }
 
     /**

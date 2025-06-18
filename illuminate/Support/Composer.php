@@ -80,10 +80,9 @@ class Composer
 
         return 0 === $this->getProcess($command, ['COMPOSER_MEMORY_LIMIT' => '-1'])
                 ->run(
-                    $output instanceof OutputInterface
-                        ? function ($type, $line) use ($output) {
-                            $output->write('    ' . $line);
-                        } : $output
+                    $output instanceof OutputInterface ? function ($type, $line) use ($output) {
+                        $output->write('    ' . $line);
+                    }: $output
                 );
     }
 
@@ -113,10 +112,9 @@ class Composer
 
         return 0 === $this->getProcess($command, ['COMPOSER_MEMORY_LIMIT' => '-1'])
                 ->run(
-                    $output instanceof OutputInterface
-                        ? function ($type, $line) use ($output) {
-                            $output->write('    ' . $line);
-                        } : $output
+                    $output instanceof OutputInterface ? function ($type, $line) use ($output) {
+                        $output->write('    ' . $line);
+                    } : $output
                 );
     }
 

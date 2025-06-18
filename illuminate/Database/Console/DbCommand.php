@@ -37,7 +37,8 @@ class DbCommand extends Command
         if (!isset($connection['host']) && $connection['driver'] !== 'sqlite') {
             $this->components->error('No host specified for this database connection.');
             $this->line(
-                '  Use the <options=bold>[--read]</> and <options=bold>[--write]</> options to specify a read or write connection.'
+                '  Use the <options=bold>[--read]</> and <options=bold>[--write]</> ' .
+                'options to specify a read or write connection.'
             );
             $this->newLine();
 
@@ -146,19 +147,15 @@ class DbCommand extends Command
      */
     protected function getMysqlArguments(array $connection)
     {
-        return array_merge(
-            [
+        return array_merge([
             '--host=' . $connection['host'],
             '--port=' . $connection['port'],
             '--user=' . $connection['username'],
-            ],
-            $this->getOptionalArguments([
-                'password' => '--password=' . $connection['password'],
-                'unix_socket' => '--socket=' . ($connection['unix_socket'] ?? ''),
-                'charset' => '--default-character-set=' . ($connection['charset'] ?? ''),
-            ], $connection),
-            [$connection['database']]
-        );
+        ], $this->getOptionalArguments([
+            'password' => '--password=' . $connection['password'],
+            'unix_socket' => '--socket=' . ($connection['unix_socket'] ?? ''),
+            'charset' => '--default-character-set=' . ($connection['charset'] ?? ''),
+        ], $connection), [$connection['database']]);
     }
 
     /**

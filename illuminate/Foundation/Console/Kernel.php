@@ -370,10 +370,10 @@ class Kernel implements KernelContract
     protected function commandClassFromFile(SplFileInfo $file, string $namespace): string
     {
         return $namespace . str_replace(
-            ['/', '.php'],
-            ['\\', ''],
-            Str::after($file->getRealPath(), realpath(app_path()) . DIRECTORY_SEPARATOR)
-        );
+                ['/', '.php'],
+                ['\\', ''],
+                Str::after($file->getRealPath(), realpath(app_path()) . DIRECTORY_SEPARATOR)
+            );
     }
 
     /**

@@ -55,8 +55,8 @@ class FormBuilder
 
             $index > 0
                 ? Prompt::revertUsing(function () use (&$wasReverted) {
-                    $wasReverted = true;
-                }) : Prompt::preventReverting();
+                $wasReverted = true;
+            }) : Prompt::preventReverting();
 
             try {
                 $this->responses[$step->name ?? $index] = $step->run(

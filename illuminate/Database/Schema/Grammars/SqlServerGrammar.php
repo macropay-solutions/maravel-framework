@@ -445,9 +445,9 @@ class SqlServerGrammar extends Grammar
         $dropExistingConstraintsSql = $this->compileDropDefaultConstraint($blueprint, $command) . ';';
 
         return $dropExistingConstraintsSql . 'alter table ' . $this->wrapTable($blueprint) . ' drop column ' . implode(
-            ', ',
-            $columns
-        );
+                ', ',
+                $columns
+            );
     }
 
     /**

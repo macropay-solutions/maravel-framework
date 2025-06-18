@@ -179,7 +179,8 @@ trait BuildsQueries
 
             if ($lastId === null) {
                 throw new RuntimeException(
-                    "The chunkById operation was aborted because the [{$alias}] column is not present in the query result."
+                    'The chunkById operation was aborted because the [' . $alias .
+                        '] column is not present in the query result.'
                 );
             }
 
@@ -319,7 +320,8 @@ trait BuildsQueries
 
                 if ($lastId === null) {
                     throw new RuntimeException(
-                        "The lazyById operation was aborted because the [{$alias}] column is not present in the query result."
+                        'The lazyById operation was aborted because the [' . $alias .
+                            '] column is not present in the query result.'
                     );
                 }
             }
@@ -392,8 +394,7 @@ trait BuildsQueries
                 $originalColumn,
                 $i
             ) use (
-                &
-                $addCursorConditions,
+                &$addCursorConditions,
                 $cursor,
                 $orders
             ) {

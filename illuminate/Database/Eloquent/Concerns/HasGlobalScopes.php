@@ -58,7 +58,8 @@ trait HasGlobalScopes
         }
 
         throw new InvalidArgumentException(
-            'Global scope must be an instance of Closure or Scope or be a class name of a class extending ' . Scope::class
+            'Global scope must be an instance of Closure or Scope or be a class name of a class extending ' .
+                Scope::class
         );
     }
 

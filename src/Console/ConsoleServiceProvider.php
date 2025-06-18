@@ -403,7 +403,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerSeederMakeCommand()
     {
         $this->app->singleton('command.seeder.make', function ($app) {
-            return new SeederMakeCommand($app['files'], $app['composer']);
+            return new SeederMakeCommand($app['files']);
         });
     }
 
@@ -427,7 +427,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerWipeCommand()
     {
         $this->app->singleton('command.wipe', function ($app) {
-            return new WipeCommand($app['db']);
+            return new WipeCommand();
         });
     }
 

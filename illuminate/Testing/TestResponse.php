@@ -34,7 +34,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class TestResponse implements ArrayAccess
 {
-    use Concerns\AssertsStatusCodes, Conditionable, Tappable, Macroable {
+    use Concerns\AssertsStatusCodes;
+    use Conditionable;
+    use Tappable;
+    use Macroable {
         __call as macroCall;
     }
 

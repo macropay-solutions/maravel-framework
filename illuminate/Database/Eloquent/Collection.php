@@ -14,7 +14,7 @@ use LogicException;
  * @template TKey of array-key
  * @template TModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends \Illuminate\Support\Collection<TKey, TModel>
+ * @extends BaseCollection<TKey, TModel>
  */
 class Collection extends BaseCollection implements QueueableCollection
 {
@@ -337,7 +337,7 @@ class Collection extends BaseCollection implements QueueableCollection
      * @template TMapValue
      *
      * @param callable(TModel, TKey): TMapValue $callback
-     * @return \Illuminate\Support\Collection<TKey, TMapValue>|static<TKey, TMapValue>
+     * @return BaseCollection<TKey, TMapValue>|static<TKey, TMapValue>
      */
     public function map(callable $callback)
     {
@@ -355,7 +355,7 @@ class Collection extends BaseCollection implements QueueableCollection
      * @template TMapWithKeysValue
      *
      * @param callable(TModel, TKey): array<TMapWithKeysKey, TMapWithKeysValue> $callback
-     * @return \Illuminate\Support\Collection<TMapWithKeysKey, TMapWithKeysValue>|static<TMapWithKeysKey, TMapWithKeysValue>
+     * @return BaseCollection<TMapWithKeysKey, TMapWithKeysValue>|static<TMapWithKeysKey, TMapWithKeysValue>
      */
     public function mapWithKeys(callable $callback)
     {
@@ -566,7 +566,7 @@ class Collection extends BaseCollection implements QueueableCollection
      * Count the number of items in the collection by a field or using a callback.
      *
      * @param (callable(TModel, TKey): array-key)|string|null $countBy
-     * @return \Illuminate\Support\Collection<array-key, int>
+     * @return BaseCollection<array-key, int>
      */
     public function countBy($countBy = null)
     {
@@ -576,7 +576,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Collapse the collection of items into a single array.
      *
-     * @return \Illuminate\Support\Collection<int, mixed>
+     * @return BaseCollection<int, mixed>
      */
     public function collapse()
     {
@@ -587,7 +587,7 @@ class Collection extends BaseCollection implements QueueableCollection
      * Get a flattened array of the items in the collection.
      *
      * @param int $depth
-     * @return \Illuminate\Support\Collection<int, mixed>
+     * @return BaseCollection<int, mixed>
      */
     public function flatten($depth = INF)
     {
@@ -597,7 +597,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Flip the items in the collection.
      *
-     * @return \Illuminate\Support\Collection<TModel, TKey>
+     * @return BaseCollection<TModel, TKey>
      */
     public function flip()
     {
@@ -607,7 +607,7 @@ class Collection extends BaseCollection implements QueueableCollection
     /**
      * Get the keys of the collection items.
      *
-     * @return \Illuminate\Support\Collection<int, TKey>
+     * @return BaseCollection<int, TKey>
      */
     public function keys()
     {
@@ -621,7 +621,7 @@ class Collection extends BaseCollection implements QueueableCollection
      *
      * @param int $size
      * @param TPadValue $value
-     * @return \Illuminate\Support\Collection<int, TModel|TPadValue>
+     * @return BaseCollection<int, TModel|TPadValue>
      */
     public function pad($size, $value)
     {
@@ -633,7 +633,7 @@ class Collection extends BaseCollection implements QueueableCollection
      *
      * @param string|array<array-key, string> $value
      * @param string|null $key
-     * @return \Illuminate\Support\Collection<array-key, mixed>
+     * @return BaseCollection<array-key, mixed>
      */
     public function pluck($value, $key = null)
     {
@@ -646,7 +646,7 @@ class Collection extends BaseCollection implements QueueableCollection
      * @template TZipValue
      *
      * @param \Illuminate\Contracts\Support\Arrayable<array-key, TZipValue>|iterable<array-key, TZipValue> ...$items
-     * @return \Illuminate\Support\Collection<int, \Illuminate\Support\Collection<int, TModel|TZipValue>>
+     * @return BaseCollection<int, \Illuminate\Support\Collection<int, TModel|TZipValue>>
      */
     public function zip($items)
     {

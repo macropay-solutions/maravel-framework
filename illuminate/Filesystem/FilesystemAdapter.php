@@ -345,7 +345,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      * Write the contents of a file.
      *
      * @param string $path
-     * @param \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource $contents
+     * @param StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource $contents
      * @param mixed $options
      * @return string|bool
      */

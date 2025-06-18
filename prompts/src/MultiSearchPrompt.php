@@ -45,9 +45,9 @@ class MultiSearchPrompt extends Prompt
         public ?Closure $transform = null,
     ) {
         $this->trackTypedValue(submit: false, ignore: fn($key) => Key::oneOf(
-            [Key::SPACE, Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E],
-            $key
-        ) && $this->highlighted !== null);
+                [Key::SPACE, Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E],
+                $key
+            ) && $this->highlighted !== null);
 
         $this->initializeScrolling(null);
 

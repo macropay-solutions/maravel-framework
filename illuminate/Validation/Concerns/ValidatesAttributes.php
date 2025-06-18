@@ -459,8 +459,8 @@ trait ValidatesAttributes
         return with(
             BigNumber::of($this->getSize($attribute, $value)),
             fn($size) => $size->isGreaterThanOrEqualTo($this->trim($parameters[0])) && $size->isLessThanOrEqualTo(
-                $this->trim($parameters[1])
-            )
+                    $this->trim($parameters[1])
+                )
         );
     }
 
@@ -878,12 +878,12 @@ trait ValidatesAttributes
         }
 
         return $this->getExistCount(
-            $connection,
-            $table,
-            $column,
-            $value,
-            $parameters
-        ) >= $expected;
+                $connection,
+                $table,
+                $column,
+                $value,
+                $parameters
+            ) >= $expected;
     }
 
     /**
@@ -956,13 +956,13 @@ trait ValidatesAttributes
         }
 
         return $verifier->getCount(
-            $table,
-            $column,
-            $value,
-            $id,
-            $idColumn,
-            $extra
-        ) == 0;
+                $table,
+                $column,
+                $value,
+                $id,
+                $idColumn,
+                $extra
+            ) == 0;
     }
 
     /**

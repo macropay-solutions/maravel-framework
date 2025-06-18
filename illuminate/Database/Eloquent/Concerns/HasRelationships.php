@@ -183,7 +183,7 @@ trait HasRelationships
         $localKey,
         $secondLocalKey
     ) {
-//        return new HasOneThrough($query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey);
+//      return new HasOneThrough($query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey);
         return \app(
             HasOneThrough::class,
             [$query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey]
@@ -406,7 +406,7 @@ trait HasRelationships
     /**
      * Create a pending has-many-through or has-one-through relationship.
      *
-     * @param string|\Illuminate\Database\Eloquent\Relations\HasMany|\Illuminate\Database\Eloquent\Relations\HasOne $relationship
+     * @param string|HasMany|\Illuminate\Database\Eloquent\Relations\HasOne $relationship
      * @return \Illuminate\Database\Eloquent\PendingHasThroughRelationship
      */
     public function through($relationship)
@@ -424,7 +424,7 @@ trait HasRelationships
      * @param string $related
      * @param string|null $foreignKey
      * @param string|null $localKey
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function hasMany($related, $foreignKey = null, $localKey = null)
     {
@@ -449,7 +449,7 @@ trait HasRelationships
      * @param \Illuminate\Database\Eloquent\Model $parent
      * @param string $foreignKey
      * @param string $localKey
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     protected function newHasMany(Builder $query, Model $parent, $foreignKey, $localKey)
     {
@@ -514,7 +514,7 @@ trait HasRelationships
         $localKey,
         $secondLocalKey
     ) {
-//        return new HasManyThrough($query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey);
+//     return new HasManyThrough($query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey);
         return \app(
             HasManyThrough::class,
             [$query, $farParent, $throughParent, $firstKey, $secondKey, $localKey, $secondLocalKey]
@@ -642,7 +642,16 @@ trait HasRelationships
         $relatedKey,
         $relationName = null
     ) {
-//        return new BelongsToMany($query, $parent, $table, $foreignPivotKey, $relatedPivotKey, $parentKey, $relatedKey, $relationName);
+        //return new BelongsToMany(
+        //    $query,
+        //    $parent,
+        //    $table,
+        //    $foreignPivotKey,
+        //    $relatedPivotKey,
+        //    $parentKey,
+        //    $relatedKey,
+        //    $relationName
+        //);
         return \app(
             BelongsToMany::class,
             [$query, $parent, $table, $foreignPivotKey, $relatedPivotKey, $parentKey, $relatedKey, $relationName]
@@ -737,7 +746,7 @@ trait HasRelationships
         $relationName = null,
         $inverse = false
     ) {
-//        return new MorphToMany($query, $parent, $name, $table, $foreignPivotKey, $relatedPivotKey, $parentKey, $relatedKey,
+//  return new MorphToMany($query, $parent, $name, $table, $foreignPivotKey, $relatedPivotKey, $parentKey, $relatedKey,
 //            $relationName, $inverse);
         return \app(MorphToMany::class, [
             $query,

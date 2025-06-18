@@ -144,10 +144,8 @@ class RoutingServiceProvider extends ServiceProvider
                     (new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory))
                         ->createRequest($illuminateRequest = $app->make('request')),
                     function (ServerRequestInterface $request) use ($illuminateRequest) {
-                        if (
-                            $illuminateRequest->getContentTypeFormat() !== 'json' && $illuminateRequest->request->count(
-                            ) === 0
-                        ) {
+                        if ($illuminateRequest->getContentTypeFormat() !== 'json' && $illuminateRequest->request->count(
+                            ) === 0) {
                             return $request;
                         }
 

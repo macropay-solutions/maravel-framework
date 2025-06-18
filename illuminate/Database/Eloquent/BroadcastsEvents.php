@@ -2,6 +2,7 @@
 
 namespace Illuminate\Database\Eloquent;
 
+use Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
 use Illuminate\Support\Arr;
 
 trait BroadcastsEvents
@@ -39,7 +40,7 @@ trait BroadcastsEvents
     /**
      * Broadcast that the model was created.
      *
-     * @param \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null $channels
+     * @param \Illuminate\Broadcasting\Channel|HasBroadcastChannel|array|null $channels
      * @return \Illuminate\Broadcasting\PendingBroadcast
      */
     public function broadcastCreated($channels = null)
@@ -54,7 +55,7 @@ trait BroadcastsEvents
     /**
      * Broadcast that the model was updated.
      *
-     * @param \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null $channels
+     * @param \Illuminate\Broadcasting\Channel|HasBroadcastChannel|array|null $channels
      * @return \Illuminate\Broadcasting\PendingBroadcast
      */
     public function broadcastUpdated($channels = null)
@@ -69,7 +70,7 @@ trait BroadcastsEvents
     /**
      * Broadcast that the model was trashed.
      *
-     * @param \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null $channels
+     * @param \Illuminate\Broadcasting\Channel|HasBroadcastChannel|array|null $channels
      * @return \Illuminate\Broadcasting\PendingBroadcast
      */
     public function broadcastTrashed($channels = null)
@@ -84,7 +85,7 @@ trait BroadcastsEvents
     /**
      * Broadcast that the model was restored.
      *
-     * @param \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null $channels
+     * @param \Illuminate\Broadcasting\Channel|HasBroadcastChannel|array|null $channels
      * @return \Illuminate\Broadcasting\PendingBroadcast
      */
     public function broadcastRestored($channels = null)
@@ -99,7 +100,7 @@ trait BroadcastsEvents
     /**
      * Broadcast that the model was deleted.
      *
-     * @param \Illuminate\Broadcasting\Channel|\Illuminate\Contracts\Broadcasting\HasBroadcastChannel|array|null $channels
+     * @param \Illuminate\Broadcasting\Channel|HasBroadcastChannel|array|null $channels
      * @return \Illuminate\Broadcasting\PendingBroadcast
      */
     public function broadcastDeleted($channels = null)

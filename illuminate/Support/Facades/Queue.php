@@ -2,6 +2,8 @@
 
 namespace Illuminate\Support\Facades;
 
+use DateInterval;
+use DateTimeInterface;
 use Illuminate\Queue\Worker;
 use Illuminate\Support\Testing\Fakes\QueueFake;
 
@@ -25,8 +27,8 @@ use Illuminate\Support\Testing\Fakes\QueueFake;
  * @method static mixed push(string|object $job, mixed $data = '', string|null $queue = null)
  * @method static mixed pushOn(string $queue, string|object $job, mixed $data = '')
  * @method static mixed pushRaw(string $payload, string|null $queue = null, array $options = [])
- * @method static mixed later(\DateTimeInterface|\DateInterval|int $delay, string|object $job, mixed $data = '', string|null $queue = null)
- * @method static mixed laterOn(string $queue, \DateTimeInterface|\DateInterval|int $delay, string|object $job, mixed $data = '')
+ * @method static later(DateTimeInterface|DateInterval|int$delay,string|object$job,mixed$data='',string|null$queue=null)
+ * @method static mixed laterOn(string $queue, DateTimeInterface|DateInterval|int$delay,string|object$job,mixed$data='')
  * @method static mixed bulk(array $jobs, mixed $data = '', string|null $queue = null)
  * @method static \Illuminate\Contracts\Queue\Job|null pop(string|null $queue = null)
  * @method static string getConnectionName()

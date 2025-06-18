@@ -174,12 +174,10 @@ class ControllerMakeCommand extends GeneratorCommand
     {
         $modelClass = $this->parseModel($this->option('model'));
 
-        if (
-            !class_exists($modelClass) && confirm(
+        if (!class_exists($modelClass) && confirm(
                 "A {$modelClass} model does not exist. Do you want to generate it?",
                 default: true
-            )
-        ) {
+            )) {
             $this->call('make:model', ['name' => $modelClass]);
         }
 

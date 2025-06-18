@@ -130,17 +130,26 @@ class FullApplicationTest extends TestCase
             return response('Hello World');
         });
 
-        $app->router->get('/foo', ['middleware' => 'foo', function () {
-            return response('Hello World');
-        }]);
+        $app->router->get('/foo', [
+            'middleware' => 'foo',
+            function () {
+                return response('Hello World');
+            },
+        ]);
 
-        $app->router->get('/bar', ['middleware' => ['foo'], function () {
-            return response('Hello World');
-        }]);
+        $app->router->get('/bar', [
+            'middleware' => ['foo'],
+            function () {
+                return response('Hello World');
+            },
+        ]);
 
-        $app->router->get('/fooBar', ['middleware' => 'passing|foo', function () {
-            return response('Hello World');
-        }]);
+        $app->router->get('/fooBar', [
+            'middleware' => 'passing|foo',
+            function () {
+                return response('Hello World');
+            },
+        ]);
 
         $response = $app->handle(Request::create('/', 'GET'));
         $this->assertEquals(200, $response->getStatusCode());
@@ -181,9 +190,12 @@ class FullApplicationTest extends TestCase
 
         $app->routeMiddleware(['foo' => 'LumenTestParameterizedMiddleware', 'passing' => 'LumenTestPlainMiddleware']);
 
-        $app->router->get('/', ['middleware' => 'passing|foo:bar,boom', function () {
-            return response('Hello World');
-        }]);
+        $app->router->get('/', [
+            'middleware' => 'passing|foo:bar,boom',
+            function () {
+                return response('Hello World');
+            },
+        ]);
 
         $response = $app->handle(Request::create('/', 'GET'));
 
@@ -305,21 +317,33 @@ class FullApplicationTest extends TestCase
         $app = new Application();
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
 
-        $app->router->get('/foo-bar', ['as' => 'foo', function () {
-            //
-        }]);
+        $app->router->get('/foo-bar', [
+            'as' => 'foo',
+            function () {
+                //
+            },
+        ]);
 
-        $app->router->get('/foo-bar/{baz}/{boom}', ['as' => 'bar', function () {
-            //
-        }]);
+        $app->router->get('/foo-bar/{baz}/{boom}', [
+            'as' => 'bar',
+            function () {
+                //
+            },
+        ]);
 
-        $app->router->get('/foo-bar/{baz}[/{boom}]', ['as' => 'optional', function () {
-            //
-        }]);
+        $app->router->get('/foo-bar/{baz}[/{boom}]', [
+            'as' => 'optional',
+            function () {
+                //
+            },
+        ]);
 
-        $app->router->get('/foo-bar/{baz:[0-9]+}[/{boom}]', ['as' => 'regex', function () {
-            //
-        }]);
+        $app->router->get('/foo-bar/{baz:[0-9]+}[/{boom}]', [
+            'as' => 'regex',
+            function () {
+                //
+            },
+        ]);
 
         $this->assertEquals('http://lumen.laravel.com/something', url('something'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
@@ -336,21 +360,33 @@ class FullApplicationTest extends TestCase
         $app = new Application();
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
 
-        $app->router->get('/foo-bar', ['as' => 'foo', function () {
-            //
-        }]);
+        $app->router->get('/foo-bar', [
+            'as' => 'foo',
+            function () {
+                //
+            },
+        ]);
 
-        $app->router->get('/foo-bar/{baz:[0-9]+}/{boom}', ['as' => 'bar', function () {
-            //
-        }]);
+        $app->router->get('/foo-bar/{baz:[0-9]+}/{boom}', [
+            'as' => 'bar',
+            function () {
+                //
+            },
+        ]);
 
-        $app->router->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', ['as' => 'baz', function () {
-            //
-        }]);
+        $app->router->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', [
+            'as' => 'baz',
+            function () {
+                //
+            },
+        ]);
 
-        $app->router->get('/foo-bar/{baz:[0-9]{2,5}}', ['as' => 'boom', function () {
-            //
-        }]);
+        $app->router->get('/foo-bar/{baz:[0-9]{2,5}}', [
+            'as' => 'boom',
+            function () {
+                //
+            },
+        ]);
 
         $this->assertEquals('http://lumen.laravel.com/something', url('something'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
@@ -396,8 +432,7 @@ class FullApplicationTest extends TestCase
     public function testApplicationBootsOnlyOnce()
     {
         $app = new Application();
-        $provider = new class ($app) extends \Illuminate\Support\ServiceProvider
-        {
+        $provider = new class ($app) extends \Illuminate\Support\ServiceProvider {
             public $bootCount = 0;
 
             public function boot()
@@ -428,9 +463,11 @@ class FullApplicationTest extends TestCase
             new FastRoute\DataGenerator\GroupCountBased()
         );
 
-        $routes->addRoute('GET', '/', [function () {
-            return response('Hello World');
-        }]);
+        $routes->addRoute('GET', '/', [
+            function () {
+                return response('Hello World');
+            },
+        ]);
 
         $app = new Application();
 
@@ -450,9 +487,12 @@ class FullApplicationTest extends TestCase
 
         $app->routeMiddleware(['foo' => 'LumenTestPlainMiddleware']);
 
-        $app->router->get('/', ['middleware' => 'foo', function () {
-            return 'Hello World';
-        }]);
+        $app->router->get('/', [
+            'middleware' => 'foo',
+            function () {
+                return 'Hello World';
+            },
+        ]);
 
         $response = $app->handle(Request::create('/', 'GET'));
         $this->assertEquals(200, $response->getStatusCode());
@@ -601,9 +641,12 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application();
 
-        $app->router->get('login', ['as' => 'login', function (Illuminate\Http\Request $request) {
-            return 'login';
-        }]);
+        $app->router->get('login', [
+            'as' => 'login',
+            function (Illuminate\Http\Request $request) {
+                return 'login';
+            },
+        ]);
 
         $app->router->get('/', function (Illuminate\Http\Request $request) {
             return redirect()->route('login');
@@ -796,7 +839,7 @@ class FullApplicationTest extends TestCase
 
         $kernel = $app[Laravel\Lumen\Console\Kernel::class];
 
-        (fn () => $kernel->getArtisan())->call($kernel)->resolveCommands(
+        (fn() => $kernel->getArtisan())->call($kernel)->resolveCommands(
             SendEmails::class,
         );
 

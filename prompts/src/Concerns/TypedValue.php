@@ -49,10 +49,10 @@ trait TypedValue
                     Key::oneOf([Key::HOME, Key::CTRL_A], $key) => $this->cursorPosition = 0,
                     Key::oneOf([Key::END, Key::CTRL_E], $key) => $this->cursorPosition = mb_strlen($this->typedValue),
                     Key::DELETE => $this->typedValue = mb_substr(
-                        $this->typedValue,
-                        0,
+                            $this->typedValue,
+                            0,
                             $this->cursorPosition
-                    ) . mb_substr($this->typedValue, $this->cursorPosition + 1),
+                        ) . mb_substr($this->typedValue, $this->cursorPosition + 1),
                     default => null,
                 };
 
@@ -74,10 +74,10 @@ trait TypedValue
 
                     if ($allowNewLine) {
                         $this->typedValue = mb_substr(
-                            $this->typedValue,
-                            0,
-                            $this->cursorPosition
-                        ) . PHP_EOL . mb_substr($this->typedValue, $this->cursorPosition);
+                                $this->typedValue,
+                                0,
+                                $this->cursorPosition
+                            ) . PHP_EOL . mb_substr($this->typedValue, $this->cursorPosition);
                         $this->cursorPosition++;
                     }
                 } elseif ($key === Key::BACKSPACE || $key === Key::CTRL_H) {
@@ -86,15 +86,15 @@ trait TypedValue
                     }
 
                     $this->typedValue = mb_substr($this->typedValue, 0, $this->cursorPosition - 1) . mb_substr(
-                        $this->typedValue,
-                        $this->cursorPosition
-                    );
+                            $this->typedValue,
+                            $this->cursorPosition
+                        );
                     $this->cursorPosition--;
                 } elseif (ord($key) >= 32) {
                     $this->typedValue = mb_substr($this->typedValue, 0, $this->cursorPosition) . $key . mb_substr(
-                        $this->typedValue,
-                        $this->cursorPosition
-                    );
+                            $this->typedValue,
+                            $this->cursorPosition
+                        );
                     $this->cursorPosition++;
                 }
             }
@@ -121,8 +121,8 @@ trait TypedValue
         $cursor = mb_strlen($current) && $current !== PHP_EOL ? $current : ' ';
 
         $spaceBefore = $maxWidth < 0 || $maxWidth === null ? mb_strwidth($before) : $maxWidth - mb_strwidth(
-            $cursor
-        ) - (mb_strwidth($after) > 0 ? 1 : 0);
+                $cursor
+            ) - (mb_strwidth($after) > 0 ? 1 : 0);
         [$truncatedBefore, $wasTruncatedBefore] = mb_strwidth($before) > $spaceBefore
             ? [$this->trimWidthBackwards($before, 0, $spaceBefore - 1), true]
             : [$before, false];

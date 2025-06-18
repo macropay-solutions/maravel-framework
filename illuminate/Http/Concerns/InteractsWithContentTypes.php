@@ -158,9 +158,9 @@ trait InteractsWithContentTypes
         $split = explode('/', $actual);
 
         return isset($split[1]) && preg_match(
-            '#' . preg_quote($split[0], '#') . '/.+\+' . preg_quote($split[1], '#') . '#',
-            $type
-        );
+                '#' . preg_quote($split[0], '#') . '/.+\+' . preg_quote($split[1], '#') . '#',
+                $type
+            );
     }
 
     /**

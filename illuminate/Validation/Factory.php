@@ -262,7 +262,8 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Indicate that unvalidated array keys should be excluded from the validated data, even if the parent array was validated.
+     * Indicate that unvalidated array keys should be excluded from the validated data, even if the parent array was
+     * validated.
      *
      * @return void
      */

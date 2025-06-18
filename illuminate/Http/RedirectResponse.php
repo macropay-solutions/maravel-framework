@@ -14,7 +14,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse as BaseRedirectResponse;
 
 class RedirectResponse extends BaseRedirectResponse
 {
-    use ForwardsCalls, ResponseTrait, Macroable {
+    use ForwardsCalls;
+    use ResponseTrait;
+    use Macroable {
         Macroable::__call as macroCall;
     }
 

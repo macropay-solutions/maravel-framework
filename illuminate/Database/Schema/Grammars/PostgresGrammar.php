@@ -75,7 +75,8 @@ class PostgresGrammar extends Grammar
      */
     public function compileTableExists()
     {
-        return "select * from information_schema.tables where table_catalog = ? and table_schema = ? and table_name = ? and table_type = 'BASE TABLE'";
+        return "select * from information_schema.tables where table_catalog = ? and table_schema = ? and " .
+            "table_name = ? and table_type = 'BASE TABLE'";
     }
 
     /**
@@ -87,7 +88,8 @@ class PostgresGrammar extends Grammar
     {
         return 'select c.relname as name, n.nspname as schema, pg_total_relation_size(c.oid) as size, '
             . "obj_description(c.oid, 'pg_class') as comment from pg_class c, pg_namespace n "
-            . "where c.relkind in ('r', 'p') and n.oid = c.relnamespace and n.nspname not in ('pg_catalog', 'information_schema') "
+            . "where c.relkind in ('r', 'p') and n.oid = c.relnamespace and n.nspname not in ('pg_catalog', "
+            . "'information_schema') "
             . 'order by c.relname';
     }
 
@@ -98,7 +100,8 @@ class PostgresGrammar extends Grammar
      */
     public function compileViews()
     {
-        return "select viewname as name, schemaname as schema, definition from pg_views where schemaname not in ('pg_catalog', 'information_schema') order by viewname";
+        return "select viewname as name, schemaname as schema, definition from pg_views where schemaname not in "
+            . "('pg_catalog', 'information_schema') order by viewname";
     }
 
     /**
@@ -109,7 +112,8 @@ class PostgresGrammar extends Grammar
     public function compileTypes()
     {
         return 'select t.typname as name, n.nspname as schema, t.typtype as type, t.typcategory as category, '
-            . "((t.typinput = 'array_in'::regproc and t.typoutput = 'array_out'::regproc) or t.typtype = 'm') as implicit "
+            . "((t.typinput = 'array_in'::regproc and t.typoutput = 'array_out'::regproc) or t.typtype = 'm') as "
+            . "implicit "
             . 'from pg_type t join pg_namespace n on n.oid = t.typnamespace '
             . 'left join pg_class c on c.oid = t.typrelid '
             . 'left join pg_type el on el.oid = t.typelem '
@@ -129,10 +133,11 @@ class PostgresGrammar extends Grammar
      */
     public function compileGetAllTables($searchPath)
     {
-        return "select tablename, concat('\"', schemaname, '\".\"', tablename, '\"') as qualifiedname from pg_catalog.pg_tables where schemaname in ('" . implode(
-            "','",
-            (array)$searchPath
-        ) . "')";
+        return "select tablename, concat('\"', schemaname, '\".\"', tablename, '\"') as qualifiedname " .
+            "from pg_catalog.pg_tables where schemaname in ('" . implode(
+                "','",
+                (array)$searchPath
+            ) . "')";
     }
 
     /**
@@ -145,10 +150,11 @@ class PostgresGrammar extends Grammar
      */
     public function compileGetAllViews($searchPath)
     {
-        return "select viewname, concat('\"', schemaname, '\".\"', viewname, '\"') as qualifiedname from pg_catalog.pg_views where schemaname in ('" . implode(
-            "','",
-            (array)$searchPath
-        ) . "')";
+        return "select viewname, concat('\"', schemaname, '\".\"', viewname, '\"') as qualifiedname from " .
+            "pg_catalog.pg_views where schemaname in ('" . implode(
+                "','",
+                (array)$searchPath
+            ) . "')";
     }
 
     /**
@@ -160,7 +166,8 @@ class PostgresGrammar extends Grammar
      */
     public function compileColumnListing()
     {
-        return 'select column_name from information_schema.columns where table_catalog = ? and table_schema = ? and table_name = ?';
+        return 'select column_name from information_schema.columns where table_catalog = ? and table_schema = ? ' .
+            'and table_name = ?';
     }
 
     /**
@@ -177,10 +184,12 @@ class PostgresGrammar extends Grammar
             'select a.attname as name, t.typname as type_name, format_type(a.atttypid, a.atttypmod) as type, '
             . '(select tc.collcollate from pg_catalog.pg_collation tc where tc.oid = a.attcollation) as collation, '
             . 'not a.attnotnull as nullable, '
-            . '(select pg_get_expr(adbin, adrelid) from pg_attrdef where c.oid = pg_attrdef.adrelid and pg_attrdef.adnum = a.attnum) as default, '
+            . '(select pg_get_expr(adbin, adrelid) from pg_attrdef where c.oid = pg_attrdef.adrelid and '
+            . 'pg_attrdef.adnum = a.attnum) as default, '
             . 'col_description(c.oid, a.attnum) as comment '
             . 'from pg_attribute a, pg_class c, pg_type t, pg_namespace n '
-            . 'where c.relname = %s and n.nspname = %s and a.attnum > 0 and a.attrelid = c.oid and a.atttypid = t.oid and n.oid = c.relnamespace '
+            . 'where c.relname = %s and n.nspname = %s and a.attnum > 0 and a.attrelid = c.oid and '
+            . 'a.atttypid = t.oid and n.oid = c.relnamespace '
             . 'order by a.attnum',
             $this->quoteString($table),
             $this->quoteString($schema)
@@ -289,8 +298,8 @@ class PostgresGrammar extends Grammar
             $command->column->autoIncrement
             && $value = $command->column->get('startingValue', $command->column->get('from'))
         ) {
-            return 'alter sequence ' . $blueprint->getTable(
-            ) . '_' . $command->column->name . '_seq restart with ' . $value;
+            return 'alter sequence ' . $blueprint->getTable() . '_' . $command->column->name . '_seq restart with ' .
+                $value;
         }
     }
 

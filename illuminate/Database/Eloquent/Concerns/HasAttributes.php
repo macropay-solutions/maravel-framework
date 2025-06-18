@@ -377,12 +377,10 @@ trait HasAttributes
             // collections to their proper array form and we'll set the values.
             if ($value instanceof Arrayable) {
                 $relation = $value->toArray();
-            }
-
-            // If the value is null, we'll still go ahead and set it in this list of
-            // attributes, since null is used to represent empty relationships if
-            // it has a has one or belongs to type relationships on the models.
-            elseif (is_null($value)) {
+            } elseif (is_null($value)) {
+                // If the value is null, we'll still go ahead and set it in this list of
+                // attributes, since null is used to represent empty relationships if
+                // it has a has one or belongs to type relationships on the models.
                 $relation = $value;
             }
 
@@ -599,7 +597,8 @@ trait HasAttributes
             if (is_null($relation)) {
                 throw new LogicException(
                     sprintf(
-                        '%s::%s must return a relationship instance, but "null" was returned. Was the "return" keyword used?',
+                        '%s::%s must return a relationship instance, but "null" was returned. Was the "return" ' .
+                            'keyword used?',
                         static::class,
                         $method
                     )
@@ -1001,12 +1000,10 @@ trait HasAttributes
             return $this->setMutatedAttributeValue($key, $value);
         } elseif ($this->hasAttributeSetMutator($key)) {
             return $this->setAttributeMarkedMutatedAttributeValue($key, $value);
-        }
-
-        // If an attribute is listed as a "date", we'll convert it from a DateTime
-        // instance into a form proper for storage on the database tables using
-        // the connection grammar's date format. We will auto set the values.
-        elseif (!is_null($value) && $this->isDateAttribute($key)) {
+        } elseif (!is_null($value) && $this->isDateAttribute($key)) {
+            // If an attribute is listed as a "date", we'll convert it from a DateTime
+            // instance into a form proper for storage on the database tables using
+            // the connection grammar's date format. We will auto set the values.
             $value = $this->fromDateTime($value);
         }
 
@@ -2158,15 +2155,21 @@ trait HasAttributes
 
         if ($attribute === $original) {
             return true;
-        } elseif (is_null($attribute)) {
+        }
+
+        if (is_null($attribute)) {
             return false;
-        } elseif ($this->isDateAttribute($key) || $this->isDateCastableWithCustomFormat($key)) {
-            return $this->fromDateTime($attribute) ===
-                $this->fromDateTime($original);
-        } elseif ($this->hasCast($key, ['object', 'collection'])) {
-            return $this->fromJson($attribute) ===
-                $this->fromJson($original);
-        } elseif ($this->hasCast($key, ['real', 'float', 'double'])) {
+        }
+
+        if ($this->isDateAttribute($key) || $this->isDateCastableWithCustomFormat($key)) {
+            return $this->fromDateTime($attribute) === $this->fromDateTime($original);
+        }
+
+        if ($this->hasCast($key, ['object', 'collection'])) {
+            return $this->fromJson($attribute) === $this->fromJson($original);
+        }
+
+        if ($this->hasCast($key, ['real', 'float', 'double'])) {
             if ($original === null) {
                 return false;
             }
@@ -2174,24 +2177,31 @@ trait HasAttributes
             return abs(
                 $this->castAttribute($key, $attribute) - $this->castAttribute($key, $original)
             ) < PHP_FLOAT_EPSILON * 4;
-        } elseif ($this->hasCast($key, static::$primitiveCastTypes)) {
-            return $this->castAttribute($key, $attribute) ===
-                $this->castAttribute($key, $original);
-        } elseif (
+        }
+
+        if ($this->hasCast($key, static::$primitiveCastTypes)) {
+            return $this->castAttribute($key, $attribute) === $this->castAttribute($key, $original);
+        }
+
+        if (
             $this->isClassCastable($key) && Str::startsWith(
                 $this->getCasts()[$key],
                 [AsArrayObject::class, AsCollection::class]
             )
         ) {
             return $this->fromJson($attribute) === $this->fromJson($original);
-        } elseif (
+        }
+
+        if (
             $this->isClassCastable($key) && Str::startsWith(
                 $this->getCasts()[$key],
                 [AsEnumArrayObject::class, AsEnumCollection::class]
             )
         ) {
             return $this->fromJson($attribute) === $this->fromJson($original);
-        } elseif (
+        }
+
+        if (
             $this->isClassCastable($key) && $original !== null && Str::startsWith(
                 $this->getCasts()[$key],
                 [AsEncryptedArrayObject::class, AsEncryptedCollection::class]
@@ -2200,8 +2210,7 @@ trait HasAttributes
             return $this->fromEncryptedString($attribute) === $this->fromEncryptedString($original);
         }
 
-        return is_numeric($attribute) && is_numeric($original)
-            && strcmp((string)$attribute, (string)$original) === 0;
+        return is_numeric($attribute) && is_numeric($original) && strcmp((string)$attribute, (string)$original) === 0;
     }
 
     /**

@@ -136,7 +136,12 @@ class Kernel implements KernelContract
 
             $this->symfonyDispatcher->addListener(ConsoleEvents::TERMINATE, function (ConsoleTerminateEvent $event) {
                 $this->app[Dispatcher::class]->dispatch(
-//                    new CommandFinished($event->getCommand()->getName(), $event->getInput(), $event->getOutput(), $event->getExitCode())
+                    //new CommandFinished(
+                    //$event->getCommand()->getName(),
+                    // $event->getInput(),
+                    // $event->getOutput(),
+                    // $event->getExitCode()
+                    //)
                     \app(
                         CommandFinished::class,
                         [

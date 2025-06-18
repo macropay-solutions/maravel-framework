@@ -203,7 +203,8 @@ class DynamoBatchRepository implements BatchRepository
         $update = 'SET total_jobs = total_jobs + :val, pending_jobs = pending_jobs + :val';
 
         if ($this->ttl) {
-            $update = "SET total_jobs = total_jobs + :val, pending_jobs = pending_jobs + :val, #{$this->ttlAttribute} = :ttl";
+            $update =
+                "SET total_jobs = total_jobs + :val, pending_jobs = pending_jobs + :val, #{$this->ttlAttribute} = :ttl";
         }
 
         $this->dynamoDbClient->updateItem(array_filter([
@@ -272,7 +273,8 @@ class DynamoBatchRepository implements BatchRepository
         $update = 'SET failed_jobs = failed_jobs + :inc, failed_job_ids = list_append(failed_job_ids, :jobId)';
 
         if ($this->ttl !== null) {
-            $update = "SET failed_jobs = failed_jobs + :inc, failed_job_ids = list_append(failed_job_ids, :jobId), #{$this->ttlAttribute} = :ttl";
+            $update = "SET failed_jobs = failed_jobs + :inc, failed_job_ids = " .
+                "list_append(failed_job_ids, :jobId), #{$this->ttlAttribute} = :ttl";
         }
 
         $batch = $this->dynamoDbClient->updateItem(array_filter([

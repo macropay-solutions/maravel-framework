@@ -15,7 +15,7 @@ use Traversable;
  *
  * @template-covariant TValue
  *
- * @extends \Illuminate\Contracts\Support\Arrayable<TKey, TValue>
+ * @extends Arrayable<TKey, TValue>
  * @extends \IteratorAggregate<TKey, TValue>
  */
 interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, JsonSerializable
@@ -26,7 +26,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * @template TMakeKey of array-key
      * @template TMakeValue
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TMakeKey, TMakeValue>|iterable<TMakeKey, TMakeValue>|null $items
+     * @param Arrayable<TMakeKey, TMakeValue>|iterable<TMakeKey, TMakeValue>|null $items
      * @return static<TMakeKey, TMakeValue>
      */
     public static function make($items = []);
@@ -168,7 +168,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * @template TCrossJoinKey
      * @template TCrossJoinValue
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TCrossJoinKey, TCrossJoinValue>|iterable<TCrossJoinKey, TCrossJoinValue> ...$lists
+     * @param Arrayable<TCrossJoinKey, TCrossJoinValue>|iterable<TCrossJoinKey, TCrossJoinValue> ...$lists
      * @return static<int, array<int, TValue|TCrossJoinValue>>
      */
     public function crossJoin(...$lists);
@@ -191,7 +191,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the items that are not present in the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
+     * @param Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
      * @return static
      */
     public function diff($items);
@@ -199,7 +199,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the items that are not present in the given items, using the callback.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
+     * @param Arrayable<array-key, TValue>|iterable<array-key, TValue> $items
      * @param callable(TValue, TValue): int $callback
      * @return static
      */
@@ -208,7 +208,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the items whose keys and values are not present in the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function diffAssoc($items);
@@ -216,7 +216,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the items whose keys and values are not present in the given items, using the callback.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @param callable(TKey, TKey): int $callback
      * @return static
      */
@@ -225,7 +225,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the items whose keys are not present in the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function diffKeys($items);
@@ -233,7 +233,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Get the items whose keys are not present in the given items, using the callback.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @param callable(TKey, TKey): int $callback
      * @return static
      */
@@ -405,7 +405,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Filter items by the given key value pair.
      *
      * @param string $key
-     * @param \Illuminate\Contracts\Support\Arrayable|iterable $values
+     * @param Arrayable|iterable $values
      * @param bool $strict
      * @return static
      */
@@ -415,7 +415,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Filter items by the given key value pair using strict comparison.
      *
      * @param string $key
-     * @param \Illuminate\Contracts\Support\Arrayable|iterable $values
+     * @param Arrayable|iterable $values
      * @return static
      */
     public function whereInStrict($key, $values);
@@ -424,7 +424,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Filter items such that the value of the given key is between the given values.
      *
      * @param string $key
-     * @param \Illuminate\Contracts\Support\Arrayable|iterable $values
+     * @param Arrayable|iterable $values
      * @return static
      */
     public function whereBetween($key, $values);
@@ -433,7 +433,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Filter items such that the value of the given key is not between the given values.
      *
      * @param string $key
-     * @param \Illuminate\Contracts\Support\Arrayable|iterable $values
+     * @param Arrayable|iterable $values
      * @return static
      */
     public function whereNotBetween($key, $values);
@@ -442,7 +442,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Filter items by the given key value pair.
      *
      * @param string $key
-     * @param \Illuminate\Contracts\Support\Arrayable|iterable $values
+     * @param Arrayable|iterable $values
      * @param bool $strict
      * @return static
      */
@@ -452,7 +452,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * Filter items by the given key value pair using strict comparison.
      *
      * @param string $key
-     * @param \Illuminate\Contracts\Support\Arrayable|iterable $values
+     * @param Arrayable|iterable $values
      * @return static
      */
     public function whereNotInStrict($key, $values);
@@ -559,7 +559,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Intersect the collection with the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function intersect($items);
@@ -567,7 +567,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Intersect the collection with the given items by key.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function intersectByKeys($items);
@@ -683,7 +683,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      * @template TFlatMapKey of array-key
      * @template TFlatMapValue
      *
-     * @param callable(TValue, TKey): (\Illuminate\Support\Collection<TFlatMapKey, TFlatMapValue>|array<TFlatMapKey, TFlatMapValue>) $callback
+     * @param callable(TValue, TKey):(Collection<TFlatMapKey, TFlatMapValue>|array<TFlatMapKey,TFlatMapValue>)$callback
      * @return static<TFlatMapKey, TFlatMapValue>
      */
     public function flatMap(callable $callback);
@@ -701,7 +701,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Merge the collection with the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function merge($items);
@@ -711,7 +711,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      *
      * @template TMergeRecursiveValue
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TMergeRecursiveValue>|iterable<TKey, TMergeRecursiveValue> $items
+     * @param Arrayable<TKey, TMergeRecursiveValue>|iterable<TKey, TMergeRecursiveValue> $items
      * @return static<TKey, TValue|TMergeRecursiveValue>
      */
     public function mergeRecursive($items);
@@ -721,7 +721,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      *
      * @template TCombineValue
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<array-key, TCombineValue>|iterable<array-key, TCombineValue> $values
+     * @param Arrayable<array-key, TCombineValue>|iterable<array-key, TCombineValue> $values
      * @return static<TValue, TCombineValue>
      */
     public function combine($values);
@@ -729,7 +729,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Union the collection with the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function union($items);
@@ -833,7 +833,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Replace the collection items with the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function replace($items);
@@ -841,7 +841,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Recursively replace the collection items with the given items.
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
+     * @param Arrayable<TKey, TValue>|iterable<TKey, TValue> $items
      * @return static
      */
     public function replaceRecursive($items);
@@ -1186,7 +1186,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
      *
      * @template TZipValue
      *
-     * @param \Illuminate\Contracts\Support\Arrayable<array-key, TZipValue>|iterable<array-key, TZipValue> ...$items
+     * @param Arrayable<array-key, TZipValue>|iterable<array-key, TZipValue> ...$items
      * @return static<int, static<int, TValue|TZipValue>>
      */
     public function zip($items);
@@ -1194,7 +1194,7 @@ interface Enumerable extends Arrayable, Countable, IteratorAggregate, Jsonable, 
     /**
      * Collect the values into a collection.
      *
-     * @return \Illuminate\Support\Collection<TKey, TValue>
+     * @return Collection<TKey, TValue>
      */
     public function collect();
 

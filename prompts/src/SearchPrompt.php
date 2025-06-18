@@ -38,9 +38,9 @@ class SearchPrompt extends Prompt
         }
 
         $this->trackTypedValue(submit: false, ignore: fn($key) => Key::oneOf(
-            [Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E],
-            $key
-        ) && $this->highlighted !== null);
+                [Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E],
+                $key
+            ) && $this->highlighted !== null);
 
         $this->initializeScrolling(null);
 
