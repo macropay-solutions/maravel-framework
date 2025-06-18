@@ -89,15 +89,18 @@ class ConsoleServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->registerCommands(array_merge(
-            $this->commands, $this->devCommands
-        ));
+        $this->registerCommands(
+            array_merge(
+                $this->commands,
+                $this->devCommands
+            )
+        );
     }
 
     /**
      * Register the given commands.
      *
-     * @param  array  $commands
+     * @param array $commands
      * @return void
      */
     protected function registerCommands(array $commands)
@@ -153,7 +156,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerClearResetsCommand()
     {
         $this->app->singleton('command.auth.resets.clear', function () {
-            return new ClearResetsCommand;
+            return new ClearResetsCommand();
         });
     }
 
@@ -208,7 +211,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerMigrateFreshCommand()
     {
         $this->app->singleton('command.migrate.fresh', function () {
-            return new MigrateFreshCommand;
+            return new MigrateFreshCommand();
         });
     }
 
@@ -220,7 +223,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerMigrateRefreshCommand()
     {
         $this->app->singleton('command.migrate.refresh', function () {
-            return new MigrateRefreshCommand;
+            return new MigrateRefreshCommand();
         });
     }
 
@@ -268,7 +271,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerQueueClearCommand()
     {
         $this->app->singleton('command.queue.clear', function () {
-            return new ClearQueueCommand;
+            return new ClearQueueCommand();
         });
     }
 
@@ -280,7 +283,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerQueueFailedCommand()
     {
         $this->app->singleton('command.queue.failed', function () {
-            return new ListFailedQueueCommand;
+            return new ListFailedQueueCommand();
         });
     }
 
@@ -292,7 +295,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerQueueForgetCommand()
     {
         $this->app->singleton('command.queue.forget', function () {
-            return new ForgetFailedQueueCommand;
+            return new ForgetFailedQueueCommand();
         });
     }
 
@@ -304,7 +307,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerQueueFlushCommand()
     {
         $this->app->singleton('command.queue.flush', function () {
-            return new FlushFailedQueueCommand;
+            return new FlushFailedQueueCommand();
         });
     }
 
@@ -340,7 +343,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerQueueRetryCommand()
     {
         $this->app->singleton('command.queue.retry', function () {
-            return new QueueRetryCommand;
+            return new QueueRetryCommand();
         });
     }
 
@@ -436,7 +439,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerScheduleFinishCommand()
     {
         $this->app->singleton('command.schedule.finish', function () {
-            return new ScheduleFinishCommand;
+            return new ScheduleFinishCommand();
         });
     }
 
@@ -448,7 +451,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerScheduleRunCommand()
     {
         $this->app->singleton('command.schedule.run', function () {
-            return new ScheduleRunCommand;
+            return new ScheduleRunCommand();
         });
     }
 
@@ -460,7 +463,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerScheduleWorkCommand()
     {
         $this->app->singleton('command.schedule.work', function () {
-            return new ScheduleWorkCommand;
+            return new ScheduleWorkCommand();
         });
     }
 
@@ -472,7 +475,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerSchemaDumpCommand()
     {
         $this->app->singleton('command.schema.dump', function () {
-            return new DumpCommand;
+            return new DumpCommand();
         });
     }
 

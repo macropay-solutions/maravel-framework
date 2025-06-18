@@ -73,7 +73,7 @@ class Native implements Serializable
     /**
      * Creates a new serializable closure instance.
      *
-     * @param  \Closure  $closure
+     * @param \Closure $closure
      * @return void
      */
     public function __construct(Closure $closure)
@@ -150,7 +150,7 @@ class Native implements Serializable
             'self' => $this->reference,
         ];
 
-        if (! --$this->scope->serializations && ! --$this->scope->toSerialize) {
+        if (!--$this->scope->serializations && !--$this->scope->toSerialize) {
             $this->scope = null;
         }
 
@@ -160,7 +160,7 @@ class Native implements Serializable
     /**
      * Restore the closure after serialization.
      *
-     * @param  array  $data
+     * @param array $data
      * @return void
      */
     public function __unserialize($data)
@@ -186,7 +186,7 @@ class Native implements Serializable
             $this->scope = null;
         }
 
-        $this->closure = include ClosureStream::STREAM_PROTO.'://'.$this->code['function'];
+        $this->closure = include ClosureStream::STREAM_PROTO . '://' . $this->code['function'];
 
         if ($this->code['this'] === $this) {
             $this->code['this'] = null;
@@ -194,7 +194,7 @@ class Native implements Serializable
 
         $this->closure = $this->closure->bindTo($this->code['this'], $this->code['scope']);
 
-        if (! empty($this->code['objects'])) {
+        if (!empty($this->code['objects'])) {
             foreach ($this->code['objects'] as $item) {
                 $item['property']->setValue($item['instance'], $item['object']->getClosure());
             }
@@ -206,8 +206,8 @@ class Native implements Serializable
     /**
      * Ensures the given closures are serializable.
      *
-     * @param  mixed  $data
-     * @param  \Laravel\SerializableClosure\Support\ClosureScope  $storage
+     * @param mixed $data
+     * @param \Laravel\SerializableClosure\Support\ClosureScope $storage
      * @return void
      */
     public static function wrapClosures(&$data, $storage)
@@ -244,7 +244,7 @@ class Native implements Serializable
             }
 
             unset($value);
-        } elseif (is_object($data) && ! $data instanceof static && ! $data instanceof UnitEnum) {
+        } elseif (is_object($data) && !$data instanceof static && !$data instanceof UnitEnum) {
             if (isset($storage[$data])) {
                 $data = $storage[$data];
 
@@ -254,7 +254,7 @@ class Native implements Serializable
             $instance = $data;
             $reflection = new ReflectionObject($instance);
 
-            if (! $reflection->isUserDefined()) {
+            if (!$reflection->isUserDefined()) {
                 $storage[$instance] = $data;
 
                 return;
@@ -263,18 +263,18 @@ class Native implements Serializable
             $storage[$instance] = $data = $reflection->newInstanceWithoutConstructor();
 
             do {
-                if (! $reflection->isUserDefined()) {
+                if (!$reflection->isUserDefined()) {
                     break;
                 }
 
                 foreach ($reflection->getProperties() as $property) {
-                    if ($property->isStatic() || ! $property->getDeclaringClass()->isUserDefined()) {
+                    if ($property->isStatic() || !$property->getDeclaringClass()->isUserDefined()) {
                         continue;
                     }
 
                     $property->setAccessible(true);
 
-                    if (PHP_VERSION >= 7.4 && ! $property->isInitialized($instance)) {
+                    if (PHP_VERSION >= 7.4 && !$property->isInitialized($instance)) {
                         continue;
                     }
 
@@ -308,7 +308,7 @@ class Native implements Serializable
     /**
      * Internal method used to map closure pointers.
      *
-     * @param  mixed  $data
+     * @param mixed $data
      * @return void
      */
     protected function mapPointers(&$data)
@@ -354,7 +354,7 @@ class Native implements Serializable
             }
 
             unset($value);
-        } elseif (is_object($data) && ! ($data instanceof Closure)) {
+        } elseif (is_object($data) && !($data instanceof Closure)) {
             if (isset($scope[$data])) {
                 return;
             }
@@ -363,18 +363,18 @@ class Native implements Serializable
             $reflection = new ReflectionObject($data);
 
             do {
-                if (! $reflection->isUserDefined()) {
+                if (!$reflection->isUserDefined()) {
                     break;
                 }
 
                 foreach ($reflection->getProperties() as $property) {
-                    if ($property->isStatic() || ! $property->getDeclaringClass()->isUserDefined()) {
+                    if ($property->isStatic() || !$property->getDeclaringClass()->isUserDefined()) {
                         continue;
                     }
 
                     $property->setAccessible(true);
 
-                    if (PHP_VERSION >= 7.4 && ! $property->isInitialized($data)) {
+                    if (PHP_VERSION >= 7.4 && !$property->isInitialized($data)) {
                         continue;
                     }
 
@@ -402,7 +402,7 @@ class Native implements Serializable
     /**
      * Internal method used to map closures by reference.
      *
-     * @param  mixed  $data
+     * @param mixed $data
      * @return void
      */
     protected function mapByReference(&$data)
@@ -457,7 +457,11 @@ class Native implements Serializable
             }
 
             unset($value);
-        } elseif (is_object($data) && ! $data instanceof SerializableClosure && ! $data instanceof UnsignedSerializableClosure) {
+        } elseif (
+            is_object(
+                $data
+            ) && !$data instanceof SerializableClosure && !$data instanceof UnsignedSerializableClosure
+        ) {
             if (isset($this->scope[$data])) {
                 $data = $this->scope[$data];
 
@@ -480,7 +484,7 @@ class Native implements Serializable
 
             $reflection = new ReflectionObject($data);
 
-            if (! $reflection->isUserDefined()) {
+            if (!$reflection->isUserDefined()) {
                 $this->scope[$instance] = $data;
 
                 return;
@@ -489,18 +493,18 @@ class Native implements Serializable
             $this->scope[$instance] = $data = $reflection->newInstanceWithoutConstructor();
 
             do {
-                if (! $reflection->isUserDefined()) {
+                if (!$reflection->isUserDefined()) {
                     break;
                 }
 
                 foreach ($reflection->getProperties() as $property) {
-                    if ($property->isStatic() || ! $property->getDeclaringClass()->isUserDefined()) {
+                    if ($property->isStatic() || !$property->getDeclaringClass()->isUserDefined()) {
                         continue;
                     }
 
                     $property->setAccessible(true);
 
-                    if (PHP_VERSION >= 7.4 && ! $property->isInitialized($instance)) {
+                    if (PHP_VERSION >= 7.4 && !$property->isInitialized($instance)) {
                         continue;
                     }
 

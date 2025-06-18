@@ -28,7 +28,7 @@ class SuggestPrompt extends Prompt
     /**
      * Create a new SuggestPrompt instance.
      *
-     * @param  array<string>|Collection<int, string>|Closure(string): (array<string>|Collection<int, string>)  $options
+     * @param array<string>|Collection<int, string>|Closure(string): (array<string>|Collection<int, string>) $options
      */
     public function __construct(
         public string $label,
@@ -45,13 +45,19 @@ class SuggestPrompt extends Prompt
 
         $this->initializeScrolling(null);
 
-        $this->on('key', fn ($key) => match ($key) {
-            Key::UP, Key::UP_ARROW, Key::SHIFT_TAB, Key::CTRL_P => $this->highlightPrevious(count($this->matches()), true),
+        $this->on('key', fn($key) => match ($key) {
+            Key::UP, Key::UP_ARROW, Key::SHIFT_TAB, Key::CTRL_P => $this->highlightPrevious(
+                count($this->matches()),
+                true
+            ),
             Key::DOWN, Key::DOWN_ARROW, Key::TAB, Key::CTRL_N => $this->highlightNext(count($this->matches()), true),
             Key::oneOf([Key::HOME, Key::CTRL_A], $key) => $this->highlighted !== null ? $this->highlight(0) : null,
-            Key::oneOf([Key::END, Key::CTRL_E], $key) => $this->highlighted !== null ? $this->highlight(count($this->matches()) - 1) : null,
+            Key::oneOf([Key::END, Key::CTRL_E], $key) => $this->highlighted !== null ? $this->highlight(
+                count($this->matches()) - 1
+            ) : null,
             Key::ENTER => $this->selectHighlighted(),
-            Key::oneOf([Key::LEFT, Key::LEFT_ARROW, Key::RIGHT, Key::RIGHT_ARROW, Key::CTRL_B, Key::CTRL_F], $key) => $this->highlighted = null,
+            Key::oneOf([Key::LEFT, Key::LEFT_ARROW, Key::RIGHT, Key::RIGHT_ARROW, Key::CTRL_B, Key::CTRL_F],
+                $key) => $this->highlighted = null,
             default => (function () {
                 $this->highlighted = null;
                 $this->matches = null;
@@ -59,7 +65,10 @@ class SuggestPrompt extends Prompt
             })(),
         });
 
-        $this->trackTypedValue($default, ignore: fn ($key) => Key::oneOf([Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
+        $this->trackTypedValue($default, ignore: fn($key) => Key::oneOf(
+            [Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E],
+            $key
+        ) && $this->highlighted !== null);
     }
 
     /**

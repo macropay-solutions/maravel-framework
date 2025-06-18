@@ -16,8 +16,8 @@ class NoteRenderer extends Renderer
         switch ($note->type) {
             case 'intro':
             case 'outro':
-                $lines = $lines->map(fn ($line) => " {$line} ");
-                $longest = $lines->map(fn ($line) => strlen($line))->max();
+                $lines = $lines->map(fn($line) => " {$line} ");
+                $longest = $lines->map(fn($line) => strlen($line))->max();
 
                 $lines
                     ->each(function ($line) use ($longest) {
@@ -28,27 +28,27 @@ class NoteRenderer extends Renderer
                 return $this;
 
             case 'warning':
-                $lines->each(fn ($line) => $this->line($this->yellow(" {$line}")));
+                $lines->each(fn($line) => $this->line($this->yellow(" {$line}")));
 
                 return $this;
 
             case 'error':
-                $lines->each(fn ($line) => $this->line($this->red(" {$line}")));
+                $lines->each(fn($line) => $this->line($this->red(" {$line}")));
 
                 return $this;
 
             case 'alert':
-                $lines->each(fn ($line) => $this->line(" {$this->bgRed($this->white(" {$line} "))}"));
+                $lines->each(fn($line) => $this->line(" {$this->bgRed($this->white(" {$line} "))}"));
 
                 return $this;
 
             case 'info':
-                $lines->each(fn ($line) => $this->line($this->green(" {$line}")));
+                $lines->each(fn($line) => $this->line($this->green(" {$line}")));
 
                 return $this;
 
             default:
-                $lines->each(fn ($line) => $this->line(" {$line}"));
+                $lines->each(fn($line) => $this->line(" {$line}"));
 
                 return $this;
         }

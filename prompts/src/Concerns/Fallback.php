@@ -38,7 +38,7 @@ trait Fallback
     /**
      * Set the fallback implementation.
      *
-     * @param  Closure($this): mixed  $fallback
+     * @param Closure($this): mixed $fallback
      */
     public static function fallbackUsing(Closure $fallback): void
     {
@@ -53,7 +53,7 @@ trait Fallback
         $fallback = static::$fallbacks[static::class] ?? null;
 
         if ($fallback === null) {
-            throw new RuntimeException('No fallback implementation registered for ['.static::class.']');
+            throw new RuntimeException('No fallback implementation registered for [' . static::class . ']');
         }
 
         return $fallback($this);

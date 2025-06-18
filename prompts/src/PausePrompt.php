@@ -12,7 +12,7 @@ class PausePrompt extends Prompt
         $this->required = false;
         $this->validate = null;
 
-        $this->on('key', fn ($key) => match ($key) {
+        $this->on('key', fn($key) => match ($key) {
             Key::ENTER => $this->submit(),
             default => null,
         });

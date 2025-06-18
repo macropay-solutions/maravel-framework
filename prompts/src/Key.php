@@ -95,7 +95,7 @@ class Key
     /**
      * Checks for the constant values for the given match and returns the match
      *
-     * @param  array<string|array<string>>  $keys
+     * @param array<string|array<string>> $keys
      */
     public static function oneOf(array $keys, string $match): ?string
     {

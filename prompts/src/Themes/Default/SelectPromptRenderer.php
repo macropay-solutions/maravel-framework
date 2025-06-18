@@ -47,8 +47,8 @@ class SelectPromptRenderer extends Renderer implements Scrolling
                 )
                 ->when(
                     $prompt->hint,
-                    fn () => $this->hint($prompt->hint),
-                    fn () => $this->newLine() // Space for errors
+                    fn() => $this->hint($prompt->hint),
+                    fn() => $this->newLine() // Space for errors
                 ),
         };
     }
@@ -60,14 +60,15 @@ class SelectPromptRenderer extends Renderer implements Scrolling
     {
         return $this->scrollbar(
             collect($prompt->visible())
-                ->map(fn ($label) => $this->truncate($label, $prompt->terminal()->cols() - 12))
+                ->map(fn($label) => $this->truncate($label, $prompt->terminal()->cols() - 12))
                 ->map(function ($label, $key) use ($prompt) {
                     $index = array_search($key, array_keys($prompt->options));
 
                     if ($prompt->state === 'cancel') {
-                        return $this->dim($prompt->highlighted === $index
-                            ? "› ● {$this->strikethrough($label)}  "
-                            : "  ○ {$this->strikethrough($label)}  "
+                        return $this->dim(
+                            $prompt->highlighted === $index
+                                ? "› ● {$this->strikethrough($label)}  "
+                                : "  ○ {$this->strikethrough($label)}  "
                         );
                     }
 

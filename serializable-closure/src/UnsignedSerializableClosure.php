@@ -17,7 +17,7 @@ class UnsignedSerializableClosure
     /**
      * Creates a new serializable closure instance.
      *
-     * @param  \Closure  $closure
+     * @param \Closure $closure
      * @return void
      */
     public function __construct(Closure $closure)
@@ -72,7 +72,7 @@ class UnsignedSerializableClosure
     /**
      * Restore the closure after serialization.
      *
-     * @param  array  $data
+     * @param array $data
      * @return void
      */
     public function __unserialize($data)

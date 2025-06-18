@@ -27,7 +27,9 @@ class SuggestPromptRenderer extends Renderer implements Scrolling
             'cancel' => $this
                 ->box(
                     $this->dim($this->truncate($prompt->label, $prompt->terminal()->cols() - 6)),
-                    $this->strikethrough($this->dim($this->truncate($prompt->value() ?: $prompt->placeholder, $maxWidth))),
+                    $this->strikethrough(
+                        $this->dim($this->truncate($prompt->value() ?: $prompt->placeholder, $maxWidth))
+                    ),
                     color: 'red',
                 )
                 ->error($prompt->cancelMessage),
@@ -49,8 +51,8 @@ class SuggestPromptRenderer extends Renderer implements Scrolling
                 )
                 ->when(
                     $prompt->hint,
-                    fn () => $this->hint($prompt->hint),
-                    fn () => $this->newLine() // Space for errors
+                    fn() => $this->hint($prompt->hint),
+                    fn() => $this->newLine() // Space for errors
                 )
                 ->spaceForDropdown($prompt),
         };
@@ -68,7 +70,10 @@ class SuggestPromptRenderer extends Renderer implements Scrolling
         return preg_replace(
             '/\s$/',
             $this->cyan('⌄'),
-            $this->pad($prompt->valueWithCursor($maxWidth - 1).'  ', min($this->longest($prompt->matches(), padding: 2), $maxWidth))
+            $this->pad(
+                $prompt->valueWithCursor($maxWidth - 1) . '  ',
+                min($this->longest($prompt->matches(), padding: 2), $maxWidth)
+            )
         );
     }
 
@@ -78,11 +83,13 @@ class SuggestPromptRenderer extends Renderer implements Scrolling
     protected function spaceForDropdown(SuggestPrompt $prompt): self
     {
         if ($prompt->value() === '' && $prompt->highlighted === null) {
-            $this->newLine(min(
-                count($prompt->matches()),
-                $prompt->scroll,
-                $prompt->terminal()->lines() - 7
-            ) + 1);
+            $this->newLine(
+                min(
+                    count($prompt->matches()),
+                    $prompt->scroll,
+                    $prompt->terminal()->lines() - 7
+                ) + 1
+            );
         }
 
         return $this;
@@ -99,11 +106,10 @@ class SuggestPromptRenderer extends Renderer implements Scrolling
 
         return $this->scrollbar(
             collect($prompt->visible())
-                ->map(fn ($label) => $this->truncate($label, $prompt->terminal()->cols() - 10))
-                ->map(fn ($label, $key) => $prompt->highlighted === $key
+                ->map(fn($label) => $this->truncate($label, $prompt->terminal()->cols() - 10))
+                ->map(fn($label, $key) => $prompt->highlighted === $key
                     ? "{$this->cyan('›')} {$label}  "
-                    : "  {$this->dim($label)}  "
-                ),
+                    : "  {$this->dim($label)}  "),
             $prompt->firstVisible,
             $prompt->scroll,
             count($prompt->matches()),

@@ -32,7 +32,7 @@ class MultiSearchPrompt extends Prompt
     /**
      * Create a new MultiSearchPrompt instance.
      *
-     * @param  Closure(string): array<int|string, string>  $options
+     * @param Closure(string): array<int|string, string> $options
      */
     public function __construct(
         public string $label,
@@ -44,15 +44,20 @@ class MultiSearchPrompt extends Prompt
         public string $hint = '',
         public ?Closure $transform = null,
     ) {
-        $this->trackTypedValue(submit: false, ignore: fn ($key) => Key::oneOf([Key::SPACE, Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E], $key) && $this->highlighted !== null);
+        $this->trackTypedValue(submit: false, ignore: fn($key) => Key::oneOf(
+            [Key::SPACE, Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E],
+            $key
+        ) && $this->highlighted !== null);
 
         $this->initializeScrolling(null);
 
-        $this->on('key', fn ($key) => match ($key) {
+        $this->on('key', fn($key) => match ($key) {
             Key::UP, Key::UP_ARROW, Key::SHIFT_TAB => $this->highlightPrevious(count($this->matches), true),
             Key::DOWN, Key::DOWN_ARROW, Key::TAB => $this->highlightNext(count($this->matches), true),
             Key::oneOf(Key::HOME, $key) => $this->highlighted !== null ? $this->highlight(0) : null,
-            Key::oneOf(Key::END, $key) => $this->highlighted !== null ? $this->highlight(count($this->matches()) - 1) : null,
+            Key::oneOf(Key::END, $key) => $this->highlighted !== null ? $this->highlight(
+                count($this->matches()) - 1
+            ) : null,
             Key::SPACE => $this->highlighted !== null ? $this->toggleHighlighted() : null,
             Key::CTRL_A => $this->highlighted !== null ? $this->toggleAll() : null,
             Key::CTRL_E => null,
@@ -106,13 +111,13 @@ class MultiSearchPrompt extends Prompt
 
         $matches = ($this->options)($this->typedValue);
 
-        if (! isset($this->isList) && count($matches) > 0) {
+        if (!isset($this->isList) && count($matches) > 0) {
             // This needs to be captured the first time we receive matches so
             // we know what we're dealing with later if matches is empty.
             $this->isList = array_is_list($matches);
         }
 
-        if (! isset($this->isList)) {
+        if (!isset($this->isList)) {
             return $this->matches = [];
         }
 
@@ -140,15 +145,14 @@ class MultiSearchPrompt extends Prompt
      */
     protected function toggleAll(): void
     {
-        $allMatchesSelected = collect($this->matches)->every(fn ($label, $key) => $this->isList()
+        $allMatchesSelected = collect($this->matches)->every(fn($label, $key) => $this->isList()
             ? array_key_exists($label, $this->values)
             : array_key_exists($key, $this->values));
 
         if ($allMatchesSelected) {
-            $this->values = array_filter($this->values, fn ($value) => $this->isList()
-                ? ! in_array($value, $this->matches)
-                : ! array_key_exists(array_search($value, $this->matches), $this->matches)
-            );
+            $this->values = array_filter($this->values, fn($value) => $this->isList()
+                ? !in_array($value, $this->matches)
+                : !array_key_exists(array_search($value, $this->matches), $this->matches));
         } else {
             $this->values = $this->isList()
                 ? array_merge($this->values, array_combine(array_values($this->matches), array_values($this->matches)))

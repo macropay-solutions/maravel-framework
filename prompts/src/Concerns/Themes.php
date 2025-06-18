@@ -74,7 +74,7 @@ trait Themes
             return static::$theme;
         }
 
-        if (! isset(static::$themes[$name])) {
+        if (!isset(static::$themes[$name])) {
             throw new InvalidArgumentException("Prompt theme [{$name}] not found.");
         }
 
@@ -84,7 +84,7 @@ trait Themes
     /**
      * Add a new theme.
      *
-     * @param  array<class-string<\Laravel\Prompts\Prompt>, class-string<object&callable>>  $renderers
+     * @param array<class-string<\Laravel\Prompts\Prompt>, class-string<object&callable>> $renderers
      */
     public static function addTheme(string $name, array $renderers): void
     {
