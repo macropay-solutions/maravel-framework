@@ -42,8 +42,14 @@ class SetCacheHeaders
     {
         $response = $next($request);
 
-        if (!$request->isMethodCacheable() || (!$response->getContent(
-                ) && !$response instanceof BinaryFileResponse && !$response instanceof StreamedResponse)) {
+        if (
+            !$request->isMethodCacheable()
+            || (
+                !$response->getContent()
+                && !$response instanceof BinaryFileResponse
+                && !$response instanceof StreamedResponse
+            )
+        ) {
             return $response;
         }
 

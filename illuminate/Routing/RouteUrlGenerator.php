@@ -277,10 +277,7 @@ class RouteUrlGenerator
         // parameters that are in the array and add them to the query string or we
         // will make the initial query string if it wasn't started with strings.
         if (count($keyed) < count($parameters)) {
-            $query .= '&' . implode(
-                    '&',
-                    $this->getNumericParameters($parameters)
-                );
+            $query .= '&' . implode('&', $this->getNumericParameters($parameters));
         }
 
         $query = trim($query, '&');

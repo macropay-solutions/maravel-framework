@@ -144,8 +144,10 @@ class RoutingServiceProvider extends ServiceProvider
                     (new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory))
                         ->createRequest($illuminateRequest = $app->make('request')),
                     function (ServerRequestInterface $request) use ($illuminateRequest) {
-                        if ($illuminateRequest->getContentTypeFormat() !== 'json' && $illuminateRequest->request->count(
-                            ) === 0) {
+                        if (
+                            $illuminateRequest->getContentTypeFormat() !== 'json'
+                            && $illuminateRequest->request->count() === 0
+                        ) {
                             return $request;
                         }
 
@@ -156,9 +158,8 @@ class RoutingServiceProvider extends ServiceProvider
                 );
             }
 
-            throw new BindingResolutionException(
-                'Unable to resolve PSR request. Please install the symfony/psr-http-message-bridge and nyholm/psr7 packages.'
-            );
+            throw new BindingResolutionException('Unable to resolve PSR request. ' .
+                'Please install the symfony/psr-http-message-bridge and nyholm/psr7 packages.');
         });
     }
 

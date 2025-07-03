@@ -80,9 +80,9 @@ class Composer
 
         return 0 === $this->getProcess($command, ['COMPOSER_MEMORY_LIMIT' => '-1'])
                 ->run(
-                    $output instanceof OutputInterface ? function ($type, $line) use ($output) {
+                    $output instanceof OutputInterface ? function ($type, $line) use ($output): void {
                         $output->write('    ' . $line);
-                    }: $output
+                    } : $output
                 );
     }
 

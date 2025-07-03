@@ -198,10 +198,8 @@ class AboutCommand extends Command
                     return value(
                         static::format(
                             value: $logChannel,
-                            console: fn($value
-                            ) => '<fg=yellow;options=bold>' . $value . '</> <fg=gray;options=bold>/</> ' . $secondary->implode(
-                                    ', '
-                                ),
+                            console: fn($value): string => '<fg=yellow;options=bold>' . $value .
+                                '</> <fg=gray;options=bold>/</> ' . $secondary->implode(', '),
                             json: fn() => $secondary->all(),
                         ),
                         $json

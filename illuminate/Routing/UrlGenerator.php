@@ -234,10 +234,7 @@ class UrlGenerator implements UrlGeneratorContract
 
         [$path, $query] = $this->extractQueryString($path);
 
-        return $this->format(
-                $root,
-                '/' . trim($path . '/' . $tail, '/')
-            ) . $query;
+        return $this->format($root, '/' . trim($path . '/' . $tail, '/')) . $query;
     }
 
     /**

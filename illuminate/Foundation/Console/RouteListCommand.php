@@ -389,9 +389,11 @@ class RouteListCommand extends Command
 
             $dots = empty($dots) ? $dots : " $dots";
 
-            if ($action && !$this->output->isVerbose() && mb_strlen(
-                    $method . $spaces . $uri . $action . $dots
-                ) > ($terminalWidth - 6)) {
+            if (
+                $action
+                && !$this->output->isVerbose()
+                && mb_strlen($method . $spaces . $uri . $action . $dots) > ($terminalWidth - 6)
+            ) {
                 $action = substr($action, 0, $terminalWidth - 7 - mb_strlen($method . $spaces . $uri . $dots)) . '…';
             }
 
@@ -443,10 +445,10 @@ class RouteListCommand extends Command
 
         $actionClass = explode('@', $action)[0];
 
-        if (class_exists($actionClass) && str_starts_with(
-                (new ReflectionClass($actionClass))->getFilename(),
-                base_path('vendor')
-            )) {
+        if (
+            class_exists($actionClass)
+            && str_starts_with((new ReflectionClass($actionClass))->getFilename(), base_path('vendor'))
+        ) {
             $actionCollection = collect(explode('\\', $action));
 
             return $name . $actionCollection->take(2)->implode('\\') . '   ' . $actionCollection->last();

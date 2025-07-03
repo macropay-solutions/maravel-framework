@@ -615,9 +615,9 @@ class Grammar extends BaseGrammar
         $not = $where['not'] ? 'not ' : '';
 
         return $not . $this->compileJsonContains(
-                $where['column'],
-                $this->parameter($where['value'])
-            );
+            $where['column'],
+            $this->parameter($where['value'])
+        );
     }
 
     /**
@@ -656,9 +656,7 @@ class Grammar extends BaseGrammar
     {
         $not = $where['not'] ? 'not ' : '';
 
-        return $not . $this->compileJsonContainsKey(
-                $where['column']
-            );
+        return $not . $this->compileJsonContainsKey($where['column']);
     }
 
     /**
@@ -761,10 +759,10 @@ class Grammar extends BaseGrammar
     protected function compileHavings(Builder $query)
     {
         return 'having ' . $this->removeLeadingBoolean(
-                collect($query->havings)->map(function ($having) {
-                    return $having['boolean'] . ' ' . $this->compileHaving($having);
-                })->implode(' ')
-            );
+            collect($query->havings)->map(function (array $having): string {
+                return $having['boolean'] . ' ' . $this->compileHaving($having);
+            })->implode(' ')
+        );
     }
 
     /**

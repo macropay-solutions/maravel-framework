@@ -55,10 +55,10 @@ class PusherBroadcaster extends Broadcaster
         $decodedString = "{$request->socket_id}::user::{$encodedUser}";
 
         $auth = $settings['auth_key'] . ':' . hash_hmac(
-                'sha256',
-                $decodedString,
-                $settings['secret']
-            );
+            'sha256',
+            $decodedString,
+            $settings['secret']
+        );
 
         return [
             'auth' => $auth,
@@ -122,17 +122,17 @@ class PusherBroadcaster extends Broadcaster
             $request,
             method_exists($this->pusher, 'authorizePresenceChannel')
                 ? $this->pusher->authorizePresenceChannel(
-                $request->channel_name,
-                $request->socket_id,
-                $broadcastIdentifier,
-                $result
-            )
+                    $request->channel_name,
+                    $request->socket_id,
+                    $broadcastIdentifier,
+                    $result
+                )
                 : $this->pusher->presence_auth(
-                $request->channel_name,
-                $request->socket_id,
-                $broadcastIdentifier,
-                $result
-            )
+                    $request->channel_name,
+                    $request->socket_id,
+                    $broadcastIdentifier,
+                    $result
+                )
         );
     }
 

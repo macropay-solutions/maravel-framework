@@ -24,8 +24,15 @@ use JsonException;
 use JsonSerializable;
 use LogicException;
 
-abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToString, HasBroadcastChannel, Jsonable,
-                                JsonSerializable, QueueableEntity, UrlRoutable
+abstract class Model implements
+    Arrayable,
+    ArrayAccess,
+    CanBeEscapedWhenCastToString,
+    HasBroadcastChannel,
+    Jsonable,
+    JsonSerializable,
+    QueueableEntity,
+    UrlRoutable
 {
     use Concerns\HasAttributes;
     use Concerns\HasEvents;

@@ -259,9 +259,9 @@ class DocsCommand extends Command
                 Str::slug($page['title'], ' '),
                 Str::slug($search, ' ')
             ))->keys()->first() ?? $this->pages()->map(fn($page) => similar_text(
-            Str::slug($page['title'], ' '),
-            Str::slug($search, ' '),
-        ))
+                Str::slug($page['title'], ' '),
+                Str::slug($search, ' '),
+            ))
             ->filter(fn($score) => $score >= min(3, Str::length($search)))
             ->sortDesc()
             ->keys()
@@ -308,9 +308,9 @@ class DocsCommand extends Command
                 Str::slug($section['title'], ' '),
                 Str::slug($this->argument('section'), ' ')
             ))->keys()->first() ?? $this->sectionsFor($page)->map(fn($section) => similar_text(
-            Str::slug($section['title'], ' '),
-            Str::slug($this->argument('section'), ' '),
-        ))
+                Str::slug($section['title'], ' '),
+                Str::slug($this->argument('section'), ' '),
+            ))
             ->filter(fn($score) => $score >= min(3, Str::length($this->argument('section'))))
             ->sortDesc()
             ->keys()

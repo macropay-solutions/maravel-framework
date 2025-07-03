@@ -106,12 +106,10 @@ class ConcurrencyLimiter
             return $this->name . $i;
         }, range(1, $this->maxLocks));
 
-        return $this->redis->eval(
-            ...array_merge(
+        return $this->redis->eval(...array_merge(
             [$this->lockScript(), count($slots)],
             array_merge($slots, [$this->name, $this->releaseAfter, $id])
-        )
-        );
+        ));
     }
 
     /**

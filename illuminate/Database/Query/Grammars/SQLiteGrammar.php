@@ -169,8 +169,8 @@ class SQLiteGrammar extends Grammar
         [$field, $path] = $this->wrapJsonFieldAndPath($column);
 
         return 'exists (select 1 from json_each(' . $field . $path . ') where ' . $this->wrap(
-                'json_each.value'
-            ) . ' is ' . $value . ')';
+            'json_each.value'
+        ) . ' is ' . $value . ')';
     }
 
     /**
