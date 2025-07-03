@@ -65,8 +65,10 @@ class SuggestPrompt extends Prompt
             })(),
         });
 
-        $this->trackTypedValue($default, ignore: fn($key) => Key::oneOf([Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E],
-                $key) && $this->highlighted !== null);
+        $this->trackTypedValue($default, ignore: fn(string $key): ?string => Key::oneOf(
+            [Key::HOME, Key::END, Key::CTRL_A, Key::CTRL_E],
+            $key
+        ) && $this->highlighted !== null);
     }
 
     /**

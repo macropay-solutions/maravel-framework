@@ -384,7 +384,11 @@ class Native implements Serializable
 
                     $item = $property->getValue($data);
 
-                    if ($item instanceof SerializableClosure || $item instanceof UnsignedSerializableClosure || ($item instanceof SelfReference && $item->hash === $this->code['self'])) {
+                    if (
+                        $item instanceof SerializableClosure ||
+                        $item instanceof UnsignedSerializableClosure ||
+                        ($item instanceof SelfReference && $item->hash === $this->code['self'])
+                    ) {
                         $this->code['objects'][] = [
                             'instance' => $data,
                             'property' => $property,
@@ -457,9 +461,10 @@ class Native implements Serializable
             }
 
             unset($value);
-        } elseif (is_object(
-                $data
-            ) && !$data instanceof SerializableClosure && !$data instanceof UnsignedSerializableClosure) {
+        } elseif (
+            \is_object($data)
+            && !$data instanceof SerializableClosure && !$data instanceof UnsignedSerializableClosure
+        ) {
             if (isset($this->scope[$data])) {
                 $data = $this->scope[$data];
 
