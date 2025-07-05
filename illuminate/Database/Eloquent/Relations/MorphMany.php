@@ -12,7 +12,7 @@ class MorphMany extends MorphOneOrMany
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
-    public function one()
+    public function one(string $relationName)
     {
 //        return MorphOne::noConstraints(fn () => new MorphOne(
         return MorphOne::noConstraints(fn() => \app(MorphOne::class, [
@@ -21,7 +21,7 @@ class MorphMany extends MorphOneOrMany
             $this->morphType,
             $this->foreignKey,
             $this->localKey,
-        ]));
+        ]), $relationName);
     }
 
     /**
