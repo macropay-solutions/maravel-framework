@@ -18,7 +18,7 @@ class MorphMany extends MorphOneOrMany
         $relationName = Str::uuid()->toString();
 
 //        return MorphOne::noConstraints(fn () => new MorphOne(
-        return MorphOne::noConstraints(function() use ($relationName): MorphOne {
+        return MorphOne::noConstraints(function () use ($relationName): MorphOne {
             $this->getParent()->nowEagerLoadingRelationNameWithNoConstraints = $relationName;
 
             return \app(MorphOne::class, [
