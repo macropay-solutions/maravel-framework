@@ -104,7 +104,7 @@ class HasManyThrough extends Relation
             $this->farParent->nowEagerLoadingRelationNameWithNoConstraints = $relationName;
 
             return \app(HasOneThrough::class, [
-                \tap($this->getQuery(), fn (Builder $query): array => $query->getQuery()->joins = []),
+                \tap($this->getQuery()->clone(), fn (Builder $query): array => $query->getQuery()->joins = []),
                 $this->farParent,
                 $this->throughParent,
                 $this->getFirstKeyName(),
