@@ -20,9 +20,11 @@ class MorphMany extends MorphOneOrMany
 //        return MorphOne::noConstraints(fn () => new MorphOne(
         return MorphOne::noConstraints(function () use ($relationName): MorphOne {
             $this->getParent()->nowEagerLoadingRelationNameWithNoConstraints = $relationName;
+            $builder = $this->getQuery()->clone();
+            $builder->setQuery($builder->getQuery()->clone());
 
             return \app(MorphOne::class, [
-                $this->getQuery(),
+                $builder,
                 $this->getParent(),
                 $this->morphType,
                 $this->foreignKey,

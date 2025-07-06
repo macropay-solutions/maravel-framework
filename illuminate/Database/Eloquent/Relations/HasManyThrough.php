@@ -102,7 +102,6 @@ class HasManyThrough extends Relation
 //        return HasOneThrough::noConstraints(fn () => new HasOneThrough(
         return HasOneThrough::noConstraints(function () use ($relationName): HasOneThrough {
             $this->farParent->nowEagerLoadingRelationNameWithNoConstraints = $relationName;
-
             $builder = $this->getQuery()->clone();
             $builder->setQuery($builder->getQuery()->clone());
 

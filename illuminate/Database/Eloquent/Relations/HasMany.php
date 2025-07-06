@@ -19,9 +19,11 @@ class HasMany extends HasOneOrMany
 //        return HasOne::noConstraints(fn () => new HasOne(
         return HasOne::noConstraints(function () use ($relationName): HasOne {
             $this->parent->nowEagerLoadingRelationNameWithNoConstraints = $relationName;
+            $builder = $this->getQuery()->clone();
+            $builder->setQuery($builder->getQuery()->clone());
 
             return \app(HasOne::class, [
-                $this->getQuery(),
+                $builder,
                 $this->parent,
                 $this->foreignKey,
                 $this->localKey,
