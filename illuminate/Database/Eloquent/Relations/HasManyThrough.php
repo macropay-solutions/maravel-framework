@@ -103,8 +103,11 @@ class HasManyThrough extends Relation
         return HasOneThrough::noConstraints(function () use ($relationName): HasOneThrough {
             $this->farParent->nowEagerLoadingRelationNameWithNoConstraints = $relationName;
 
+            $builder = $this->getQuery()->clone();
+            $builder->setQuery($builder->getQuery()->clone());
+
             return \app(HasOneThrough::class, [
-                \tap($this->getQuery()->clone(), fn (Builder $query): array => $query->getQuery()->joins = []),
+                \tap($builder, fn (Builder $query): array => $query->getQuery()->joins = []),
                 $this->farParent,
                 $this->throughParent,
                 $this->getFirstKeyName(),
