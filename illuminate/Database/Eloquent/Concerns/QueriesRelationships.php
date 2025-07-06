@@ -277,12 +277,16 @@ trait QueriesRelationships
     protected function getBelongsToRelation(MorphTo $relation, $type)
     {
         $belongsTo = Relation::noConstraints(function () use ($relation, $type) {
-            return $this->model->belongsTo(
+            $model = $this->getModel();
+            $model->nowEagerLoadingRelationNameWithNoConstraints = $relation->getRelationName();
+
+            return $model->belongsTo(
                 $type,
                 $relation->getForeignKeyName(),
-                $relation->getOwnerKeyName()
+                $relation->getOwnerKeyName(),
+                $relation->getRelationName(),
             );
-        });
+        }, $relation->getRelationName());
 
         $belongsTo->getQuery()->mergeConstraintsFrom($relation->getQuery());
 
@@ -895,8 +899,11 @@ trait QueriesRelationships
     protected function getRelationWithoutConstraints($relation)
     {
         return Relation::noConstraints(function () use ($relation) {
-            return $this->getModel()->{$relation}();
-        });
+            $model = $this->getModel();
+            $model->nowEagerLoadingRelationNameWithNoConstraints = $relation;
+
+            return $model->{$relation}();
+        }, $relation);
     }
 
     /**

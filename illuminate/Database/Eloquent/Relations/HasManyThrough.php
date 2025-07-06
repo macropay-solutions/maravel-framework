@@ -86,7 +86,7 @@ class HasManyThrough extends Relation
         $this->throughParent = $throughParent;
         $this->secondLocalKey = $secondLocalKey;
 
-        parent::__construct($query, $throughParent);
+        parent::__construct($query, $throughParent, $farParent);
     }
 
     /**
@@ -94,7 +94,7 @@ class HasManyThrough extends Relation
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
      */
-    public function one()
+    public function one(string $relationName)
     {
 //        return HasOneThrough::noConstraints(fn () => new HasOneThrough(
         return HasOneThrough::noConstraints(fn() => \app(HasOneThrough::class, [
@@ -105,7 +105,7 @@ class HasManyThrough extends Relation
             $this->secondKey,
             $this->getLocalKeyName(),
             $this->getSecondLocalKeyName(),
-        ]));
+        ]), $relationName);
     }
 
     /**

@@ -11,7 +11,7 @@ class HasMany extends HasOneOrMany
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function one()
+    public function one(string $relationName)
     {
 //        return HasOne::noConstraints(fn () => new HasOne(
         return HasOne::noConstraints(fn() => \app(HasOne::class, [
@@ -19,7 +19,7 @@ class HasMany extends HasOneOrMany
             $this->parent,
             $this->foreignKey,
             $this->localKey,
-        ]));
+        ]), $relationName);
     }
 
     /**

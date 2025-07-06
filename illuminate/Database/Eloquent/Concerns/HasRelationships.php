@@ -25,6 +25,8 @@ use Illuminate\Support\Str;
 
 trait HasRelationships
 {
+    public ?string $nowEagerLoadingRelationNameWithNoConstraints = null;
+
     /**
      * The loaded relationships for the model.
      *
