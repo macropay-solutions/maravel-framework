@@ -2,7 +2,6 @@
 
 namespace Illuminate\Database\Eloquent\Relations;
 
-use Closure;
 use Illuminate\Contracts\Database\Eloquent\Builder as BuilderContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -76,18 +75,51 @@ abstract class Relation implements BuilderContract
      */
     protected static $selfJoinCount = 0;
 
+    protected static ?string $noConstraintsForRelationName = null;
+
     /**
      * Create a new relation instance.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Illuminate\Database\Eloquent\Model $parent
+     * @param \Illuminate\Database\Eloquent\Model|null $resourceModel
      * @return void
      */
-    public function __construct(Builder $query, Model $parent)
+    public function __construct(Builder $query, Model $parent, ?Model $resourceModel = null)
     {
         $this->query = $query;
         $this->parent = $parent;
         $this->related = $query->getModel();
+        $resourceModel ??= $parent;
+
+        if (
+            '' !== (string)static::$noConstraintsForRelationName
+            || '' !== (string)$resourceModel->nowEagerLoadingRelationNameWithNoConstraints
+        ) {
+            /**
+             *   1st execution is for ExampleModel $exampleModel on 'rel' relation
+             * with nowEagerLoadingRelationNameWithNoConstraints = 'rel'
+             *           and with $noConstraintsForRelationName = 'rel'
+             */
+            /*   2nd execution is for UserModel $userModel on 'categories' relation
+                with nowEagerLoadingRelationNameWithNoConstraints = null
+                         and with $noConstraintsForRelationName = 'rel' */
+
+
+            /*    1st execution is for ExampleModel $exampleModel on 'children' relation
+                with nowEagerLoadingRelationNameWithNoConstraints = null
+                          and with $noConstraintsForRelationName = 'rel' */
+            /**
+             *   2nd execution is for ExampleModel $exampleModel on 'rel' relation
+             * with nowEagerLoadingRelationNameWithNoConstraints = 'rel'
+             *           and with $noConstraintsForRelationName = 'rel'
+             */
+            /* 3rd execution is for UserModel $userModel on 'categories' relation
+                with nowEagerLoadingRelationNameWithNoConstraints = null
+                   and with $noConstraintsForRelationName = 'rel' */
+            static::$constraints =
+                static::$noConstraintsForRelationName !== $resourceModel->nowEagerLoadingRelationNameWithNoConstraints;
+        }
 
         $this->addConstraints();
     }
@@ -95,22 +127,19 @@ abstract class Relation implements BuilderContract
     /**
      * Run a callback with constraints disabled on the relation.
      *
-     * @param \Closure $callback
      * @return mixed
      */
-    public static function noConstraints(Closure $callback)
+    public static function noConstraints(\Closure $callback, string $relationName)
     {
         $previous = static::$constraints;
+        $previousNoConstraintsForRelationName = static::$noConstraintsForRelationName;
+        static::$noConstraintsForRelationName = $relationName;
 
-        static::$constraints = false;
-
-        // When resetting the relation where clause, we want to shift the first element
-        // off of the bindings, leaving only the constraints that the developers put
-        // as "extra" on the relationships, and not original relation constraints.
         try {
             return $callback();
         } finally {
             static::$constraints = $previous;
+            static::$noConstraintsForRelationName = $previousNoConstraintsForRelationName;
         }
     }
 

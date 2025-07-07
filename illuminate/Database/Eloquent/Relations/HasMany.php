@@ -3,6 +3,7 @@
 namespace Illuminate\Database\Eloquent\Relations;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 
 class HasMany extends HasOneOrMany
 {
@@ -13,13 +14,21 @@ class HasMany extends HasOneOrMany
      */
     public function one()
     {
+        $relationName = Str::uuid()->toString();
+
 //        return HasOne::noConstraints(fn () => new HasOne(
-        return HasOne::noConstraints(fn() => \app(HasOne::class, [
-            $this->getQuery(),
-            $this->parent,
-            $this->foreignKey,
-            $this->localKey,
-        ]));
+        return HasOne::noConstraints(function () use ($relationName): HasOne {
+            $this->parent->nowEagerLoadingRelationNameWithNoConstraints = $relationName;
+            $builder = $this->getQuery()->clone();
+            $builder->setQuery($builder->getQuery()->clone());
+
+            return \app(HasOne::class, [
+                $builder,
+                $this->parent,
+                $this->foreignKey,
+                $this->localKey,
+            ]);
+        }, $relationName);
     }
 
     /**

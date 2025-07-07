@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithDictionary;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Str;
 
 class HasManyThrough extends Relation
 {
@@ -86,7 +87,7 @@ class HasManyThrough extends Relation
         $this->throughParent = $throughParent;
         $this->secondLocalKey = $secondLocalKey;
 
-        parent::__construct($query, $throughParent);
+        parent::__construct($query, $throughParent, $farParent);
     }
 
     /**
@@ -96,16 +97,24 @@ class HasManyThrough extends Relation
      */
     public function one()
     {
+        $relationName = Str::uuid()->toString();
+
 //        return HasOneThrough::noConstraints(fn () => new HasOneThrough(
-        return HasOneThrough::noConstraints(fn() => \app(HasOneThrough::class, [
-            $this->getQuery(),
-            $this->farParent,
-            $this->throughParent,
-            $this->getFirstKeyName(),
-            $this->secondKey,
-            $this->getLocalKeyName(),
-            $this->getSecondLocalKeyName(),
-        ]));
+        return HasOneThrough::noConstraints(function () use ($relationName): HasOneThrough {
+            $this->farParent->nowEagerLoadingRelationNameWithNoConstraints = $relationName;
+            $builder = $this->getQuery()->clone();
+            $builder->setQuery($builder->getQuery()->clone());
+
+            return \app(HasOneThrough::class, [
+                \tap($builder, fn (Builder $query): array => $query->getQuery()->joins = []),
+                $this->farParent,
+                $this->throughParent,
+                $this->getFirstKeyName(),
+                $this->secondKey,
+                $this->getLocalKeyName(),
+                $this->getSecondLocalKeyName(),
+            ]);
+        }, $relationName);
     }
 
     /**

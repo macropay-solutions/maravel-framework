@@ -4,6 +4,7 @@ namespace Illuminate\Database\Eloquent\Relations;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class MorphMany extends MorphOneOrMany
 {
@@ -14,14 +15,22 @@ class MorphMany extends MorphOneOrMany
      */
     public function one()
     {
+        $relationName = Str::uuid()->toString();
+
 //        return MorphOne::noConstraints(fn () => new MorphOne(
-        return MorphOne::noConstraints(fn() => \app(MorphOne::class, [
-            $this->getQuery(),
-            $this->getParent(),
-            $this->morphType,
-            $this->foreignKey,
-            $this->localKey,
-        ]));
+        return MorphOne::noConstraints(function () use ($relationName): MorphOne {
+            $this->getParent()->nowEagerLoadingRelationNameWithNoConstraints = $relationName;
+            $builder = $this->getQuery()->clone();
+            $builder->setQuery($builder->getQuery()->clone());
+
+            return \app(MorphOne::class, [
+                $builder,
+                $this->getParent(),
+                $this->morphType,
+                $this->foreignKey,
+                $this->localKey,
+            ]);
+        }, $relationName);
     }
 
     /**
