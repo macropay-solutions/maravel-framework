@@ -865,7 +865,7 @@ class Container implements ArrayAccess, ContainerContract
         // given abstract type. So, we will need to check if any aliases exist with this
         // type and then spin through them and check for contextual bindings on these.
         if (empty($this->abstractAliases[$abstract])) {
-            return;
+            return null;
         }
 
         foreach ($this->abstractAliases[$abstract] as $alias) {
@@ -906,14 +906,25 @@ class Container implements ArrayAccess, ContainerContract
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      * @throws \Illuminate\Contracts\Container\CircularDependencyException
+     * @throws ReflectionException
      */
-    public function build($concrete)
+    public function build($concrete): mixed
     {
+        $lastParameterOverride = $this->getLastParameterOverride();
+
         // If the concrete type is actually a Closure, we will just execute it and
         // hand back the results of the functions, which allows functions to be
         // used as resolvers for more fine-tuned resolution of these objects.
         if ($concrete instanceof Closure) {
-            return $concrete($this, $this->getLastParameterOverride());
+            return $concrete($this, $lastParameterOverride);
+        }
+
+        if ($lastParameterOverride === [] || $this->arrayIsList($lastParameterOverride)) {
+            try {
+                // try to avoid reflection
+                return new $concrete(...$lastParameterOverride);
+            } catch (\Throwable) {
+            }
         }
 
         try {
@@ -927,8 +938,6 @@ class Container implements ArrayAccess, ContainerContract
         // no binding registered for the abstractions so we need to bail out.
         if (!$reflector->isInstantiable()) {
             $this->notInstantiable($concrete);
-
-            return null;
         }
 
         $this->buildStack[] = $concrete;
@@ -944,13 +953,11 @@ class Container implements ArrayAccess, ContainerContract
             return new $concrete();
         }
 
-        $dependencies = $constructor->getParameters();
-
         // Once we have all the constructor's parameters we can create each of the
         // dependency instances and then use the reflection instances to make a
         // new instance of this class, injecting the created dependencies in.
         try {
-            $instances = $this->resolveDependencies($dependencies);
+            $instances = $this->resolveDependencies($constructor->getParameters(), $lastParameterOverride);
         } catch (BindingResolutionException $e) {
             array_pop($this->buildStack);
 
@@ -966,14 +973,12 @@ class Container implements ArrayAccess, ContainerContract
      * Resolve all of the dependencies from the ReflectionParameters.
      *
      * @param \ReflectionParameter[] $dependencies
-     * @return array
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function resolveDependencies(array $dependencies)
+    protected function resolveDependencies(array $dependencies, array $lastParameterOverride): array
     {
         $results = [];
-        $lastParameterOverride = $this->getLastParameterOverride();
 
         foreach ($dependencies as $indexKey => $dependency) {
             // If the dependency has an override for this particular build we will use
@@ -1012,7 +1017,7 @@ class Container implements ArrayAccess, ContainerContract
         int $indexKey,
         array $lastParameterOverride
     ): mixed {
-        if (!$dependency->isVariadic() && \array_values($lastParameterOverride) === $lastParameterOverride) {
+        if (!$dependency->isVariadic() && $this->arrayIsList($lastParameterOverride)) {
             if (\array_key_exists($indexKey, $lastParameterOverride)) {
                 return $lastParameterOverride[$indexKey];
             }
@@ -1509,5 +1514,10 @@ class Container implements ArrayAccess, ContainerContract
     public function __set($key, $value)
     {
         $this[$key] = $value;
+    }
+
+    protected function arrayIsList(array $data): bool
+    {
+        return \array_values($data) === $data;
     }
 }
