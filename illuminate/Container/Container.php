@@ -919,7 +919,7 @@ class Container implements ArrayAccess, ContainerContract
             return $concrete($this, $lastParameterOverride);
         }
 
-        if ($lastParameterOverride === [] || $this->arrayIsList($lastParameterOverride)) {
+        if ($this->arrayIsList($lastParameterOverride)) {
             try {
                 // try to avoid reflection
                 return new $concrete(...$lastParameterOverride);
@@ -1518,6 +1518,6 @@ class Container implements ArrayAccess, ContainerContract
 
     protected function arrayIsList(array $data): bool
     {
-        return \array_values($data) === $data;
+        return $data === [] || \array_values($data) === $data;
     }
 }
