@@ -919,7 +919,10 @@ class Container implements ArrayAccess, ContainerContract
             return $concrete($this, $lastParameterOverride);
         }
 
-        if ($this->arrayIsList($lastParameterOverride)) {
+        $isListLastParameterOverride = $lastParameterOverride === []
+            || \array_values($lastParameterOverride) === $lastParameterOverride;
+
+        if ($isListLastParameterOverride) {
             try {
                 // try to avoid reflection
                 return new $concrete(...$lastParameterOverride);
@@ -957,7 +960,11 @@ class Container implements ArrayAccess, ContainerContract
         // dependency instances and then use the reflection instances to make a
         // new instance of this class, injecting the created dependencies in.
         try {
-            $instances = $this->resolveDependencies($constructor->getParameters(), $lastParameterOverride);
+            $instances = $this->resolveDependencies(
+                $constructor->getParameters(),
+                $lastParameterOverride,
+                $isListLastParameterOverride
+            );
         } catch (BindingResolutionException $e) {
             array_pop($this->buildStack);
 
@@ -976,8 +983,11 @@ class Container implements ArrayAccess, ContainerContract
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function resolveDependencies(array $dependencies, array $lastParameterOverride): array
-    {
+    protected function resolveDependencies(
+        array $dependencies,
+        array $lastParameterOverride,
+        bool $isListLastParameterOverride
+    ): array {
         $results = [];
 
         foreach ($dependencies as $indexKey => $dependency) {
@@ -985,7 +995,12 @@ class Container implements ArrayAccess, ContainerContract
             // that instead as the value. Otherwise, we will continue with this run
             // of resolutions and let reflection attempt to determine the result.
             try {
-                $results[] = $this->getParameterOverride($dependency, $indexKey, $lastParameterOverride);
+                $results[] = $this->getParameterOverride(
+                    $dependency,
+                    $indexKey,
+                    $lastParameterOverride,
+                    $isListLastParameterOverride
+                );
 
                 continue;
             } catch (\Throwable) {
@@ -1015,9 +1030,10 @@ class Container implements ArrayAccess, ContainerContract
     protected function getParameterOverride(
         ReflectionParameter $dependency,
         int $indexKey,
-        array $lastParameterOverride
+        array $lastParameterOverride,
+        bool $isListLastParameterOverride
     ): mixed {
-        if (!$dependency->isVariadic() && $this->arrayIsList($lastParameterOverride)) {
+        if (!$dependency->isVariadic() && $isListLastParameterOverride) {
             if (\array_key_exists($indexKey, $lastParameterOverride)) {
                 return $lastParameterOverride[$indexKey];
             }
@@ -1514,10 +1530,5 @@ class Container implements ArrayAccess, ContainerContract
     public function __set($key, $value)
     {
         $this[$key] = $value;
-    }
-
-    protected function arrayIsList(array $data): bool
-    {
-        return $data === [] || \array_values($data) === $data;
     }
 }
