@@ -10,6 +10,7 @@ use Illuminate\Contracts\Routing\UrlRoutable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface as Resolver;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -1145,19 +1146,16 @@ abstract class Model implements
         // that is already in this database using the current IDs in this "where"
         // clause to only update this model. Otherwise, we'll just insert them.
         if ($this->exists) {
-            $saved = $this->isDirty() ?
-                $this->performUpdate($query) : true;
-        }
-
-        // If the model is brand new, we'll insert it into our database and set the
-        // ID attribute on the model to the value of the newly inserted row's ID
-        // which is typically an auto-increment value managed by the database.
-        else {
+            $saved = $this->isDirty() ? $this->performUpdate($query) : null;
+        } else {
+            // If the model is brand new, we'll insert it into our database and set the
+            // ID attribute on the model to the value of the newly inserted row's ID
+            // which is typically an auto-increment value managed by the database.
             $saved = $this->performInsert($query);
 
             if (
-                !$this->getConnectionName() &&
-                $connection = $query->getConnection()
+                '' === (string)$this->getConnectionName() &&
+                ($connection = $query->getConnection()) instanceof Connection
             ) {
                 $this->setConnection($connection->getName());
             }
@@ -1166,11 +1164,11 @@ abstract class Model implements
         // If the model is successfully saved, we need to do a few more things once
         // that is done. We will call the "saved" method here to run any actions
         // we need to happen after a model gets successfully saved right here.
-        if ($saved) {
+        if (true === $saved) {
             $this->finishSave($options);
         }
 
-        return $saved;
+        return $saved ?? true;
     }
 
     /**
@@ -1317,12 +1315,10 @@ abstract class Model implements
 
         if ($this->getIncrementing()) {
             $this->insertAndSetId($query, $attributes);
-        }
-
-        // If the table isn't incrementing we'll simply insert these attributes as they
-        // are. These attribute arrays must contain an "id" column previously placed
-        // there by the developer as the manually determined key for these models.
-        else {
+        } else {
+            // If the table isn't incrementing we'll simply insert these attributes as they
+            // are. These attribute arrays must contain an "id" column previously placed
+            // there by the developer as the manually determined key for these models.
             if (empty($attributes)) {
                 return true;
             }
@@ -1413,7 +1409,7 @@ abstract class Model implements
         // immediately and not do anything else. Otherwise, we will continue with a
         // deletion process on the model, firing the proper events, and so forth.
         if (!$this->exists) {
-            return;
+            return null;
         }
 
         if ($this->fireModelEvent('deleting') === false) {
@@ -1697,7 +1693,7 @@ abstract class Model implements
     public function fresh($with = [])
     {
         if (!$this->exists) {
-            return;
+            return null;
         }
 
         return $this->setKeysForSelectQuery($this->newQueryWithoutScopes())
