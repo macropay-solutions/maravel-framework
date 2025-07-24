@@ -199,6 +199,8 @@ class Worker
                 $job
             );
 
+            unset($job);
+
             if (!is_null($status)) {
                 return $this->stop($status, $options);
             }
