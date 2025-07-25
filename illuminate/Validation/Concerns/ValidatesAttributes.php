@@ -1388,7 +1388,7 @@ trait ValidatesAttributes
      */
     public function validateInteger($attribute, $value)
     {
-        return filter_var($value, FILTER_VALIDATE_INT) !== false;
+        return \is_numeric($value) && filter_var($value, FILTER_VALIDATE_INT) !== false;
     }
 
     /**
